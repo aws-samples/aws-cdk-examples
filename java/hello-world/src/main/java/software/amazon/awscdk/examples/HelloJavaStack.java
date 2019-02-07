@@ -2,19 +2,13 @@ package software.amazon.awscdk.examples;
 
 import software.amazon.awscdk.App;
 import software.amazon.awscdk.Stack;
-import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.Construct;
-import software.amazon.awscdk.services.ec2.AutoScalingGroup;
-import software.amazon.awscdk.services.ec2.AutoScalingGroupProps;
+import software.amazon.awscdk.services.autoscaling.AutoScalingGroup;
+import software.amazon.awscdk.services.autoscaling.AutoScalingGroupProps;
+import software.amazon.awscdk.services.ec2.AmazonLinuxImage;
 import software.amazon.awscdk.services.ec2.InstanceType;
 import software.amazon.awscdk.services.ec2.VpcNetwork;
-import software.amazon.awscdk.services.ec2.WindowsImage;
-import software.amazon.awscdk.services.ec2.WindowsVersion;
-import software.amazon.awscdk.services.s3.cloudformation.BucketResource;
-import software.amazon.awscdk.services.s3.cloudformation.BucketResourceProps;
 import software.amazon.awscdk.services.sns.Topic;
-import software.amazon.awscdk.services.sqs.Queue;
-import software.amazon.awscdk.services.sqs.QueueProps;
 
 import java.util.Collections;
 import java.util.List;
@@ -52,7 +46,7 @@ class HelloJavaStack extends Stack {
 
             new AutoScalingGroup(this, "Compute", AutoScalingGroupProps.builder()
                 .withInstanceType(new InstanceType("t2.micro"))
-                .withMachineImage(new WindowsImage(WindowsVersion.WindowsServer2016EnglishNanoBase))
+                .withMachineImage(new AmazonLinuxImage())
                 .withVpc(props.vpc)
                 .build());
         }
