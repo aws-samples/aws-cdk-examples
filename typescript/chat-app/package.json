@@ -1,0 +1,28 @@
+{
+  "name": "chat-app",
+  "version": "0.23.0",
+  "description": "A serverless chat application using Cognito",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "author": {
+    "name": "Amazon Web Services",
+    "url": "https://aws.amazon.com",
+    "organization": true
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/node": "^8.10.38",
+    "typescript": "^3.2.4"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-cognito": "^0.23.0",
+    "@aws-cdk/aws-lambda": "^0.23.0",
+    "@aws-cdk/aws-dynamodb": "^0.23.0",
+    "@aws-cdk/aws-s3": "^0.23.0",
+    "@aws-cdk/cdk": "^0.23.0"
+  }
+}
