@@ -16,8 +16,8 @@ $ cdk synth
 
 | Example | Description |
 |---------|-------------|
-| [ecs-load-balanced-fargate-service](typescript/ecs-load-balanced-fargate-service) | Starting a container fronted by a load balancer on ECS |
-| [fargate-load-balanced-fargate-service](typescript/fargate-load-balanced-fargate-service) | Starting a container fronted by a load balancer on Fargate |
+| [ecs-load-balanced-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs-load-balanced-service/) | Starting a container fronted by a load balancer on ECS |
+| [fargate-load-balanced-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/fargate-load-balanced-service/) | Starting a container fronted by a load balancer on Fargate |
 
 ## Java examples
 
@@ -31,7 +31,7 @@ $ cdk synth
 
 | Example | Description |
 |---------|-------------|
-| [hello-world](java/hello-world) | A demo application that uses the CDK in Java |
+| [hello-world](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/hello-world/) | A demo application that uses the CDK in Java |
 
 
 # License
