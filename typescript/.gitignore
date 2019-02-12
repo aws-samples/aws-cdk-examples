@@ -1,3 +1,4 @@
 .LAST_BUILD
 *.snk
 *.js
+*.swp
