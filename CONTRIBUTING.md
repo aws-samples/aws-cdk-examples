@@ -39,6 +39,72 @@ To send us a pull request, please:
 GitHub provides additional document on [forking a repository](https://help.github.com/articles/fork-a-repo/) and
 [creating a pull request](https://help.github.com/articles/creating-a-pull-request/).
 
+## Adding an example
+
+Create a directory with a name that is descriptive of the resource type or workflow you are trying to create, e.g. ecs-load-balanced-service. You will need to create the following four files in your example:
+1. `index.ts`, containing your CDK application code.
+2. `cdk.json`, containing:
+
+```
+{
+    "app": "node index"
+}
+```
+
+3. `tsconfig.json`, containing:
+
+```
+{
+    "compilerOptions": {
+        "target":"ES2018",
+        "module": "commonjs",
+        "lib": ["es2016", "es2017.object", "es2017.string"],
+        "strict": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": false,
+        "inlineSourceMap": true,
+        "inlineSources": true,
+        "experimentalDecorators": true,
+        "strictPropertyInitialization":false
+    }
+}
+```
+
+4. `package.json`, containing a manifest of your depenedencies. Fill in the name and description of your application, and any dependencies on CDK construct libraries under `dependencies` :
+
+```
+{
+  "name": [name of your application],
+  "version": "0.23.0",
+  "description": [description of your application],
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "author": {
+    "name": "Amazon Web Services",
+    "url": "https://aws.amazon.com",
+    "organization": true
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/node": "^8.10.38",
+    "typescript": "^3.2.4"
+  },
+  "dependencies": {
+    ...
+    "@aws-cdk/cdk": "^0.23.0"
+  }
+}
+```
 
 ## Finding contributions to work on
 Looking at the existing issues is a great way to find something to contribute on. As our projects, by default, use the default GitHub issue labels (enhancement/bug/duplicate/help wanted/invalid/question/wontfix), looking at any ['help wanted'](https://github.com/aws-samples/aws-cdk-examples/labels/help%20wanted) issues is a great place to start.
