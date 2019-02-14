@@ -1,0 +1,26 @@
+{
+  "name": "static-site",
+  "version": "0.24.1",
+  "description": "Infrastructure for an HTTPS static site using S3 and CloudFront",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "author": {
+    "name": "Amazon Web Services",
+    "url": "https://aws.amazon.com",
+    "organization": true
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/node": "^10.9.4",
+    "typescript": "^3.2.4"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-cloudfront": "^0.24.1",
+    "@aws-cdk/aws-route53": "^0.24.1",
+    "@aws-cdk/aws-s3": "^0.24.1",
+    "@aws-cdk/cdk": "^0.24.1"
+  }
+}
