@@ -14,7 +14,7 @@ class ECSCluster extends cdk.Stack {
       instanceType: new InstanceType("t2.xlarge"),
       machineImage: new ec2.AmazonLinuxImage(),
       associatePublicIpAddress: true,
-      updateType: autoscalingUpdateType.ReplacingUpdate,
+      updateType: autoscaling.UpdateType.ReplacingUpdate,
       desiredCapacity: 3,
       vpc
     });
