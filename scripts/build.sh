@@ -7,6 +7,9 @@ npm install -g aws-cdk
 for pkgJson in $(find typescript -name package.json | grep -v node_modules); do
     (
         cd $(dirname $pkgJson)
+
+        if [[ -f DO_NOT_AUTOTEST ]]; then exit 0; fi
+
         npm install
         npm run build
         cdk synth
