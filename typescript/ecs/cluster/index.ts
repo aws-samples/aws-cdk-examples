@@ -12,7 +12,7 @@ class ECSCluster extends cdk.Stack {
 
     const asg = new autoscaling.AutoScalingGroup(this, 'MyFleet', {
       instanceType: new InstanceType("t2.xlarge"),
-      machineImage: new ec2.AmazonLinuxImage(),
+      machineImage: new ecs.EcsOptimizedAmi(),
       associatePublicIpAddress: true,
       updateType: autoscaling.UpdateType.ReplacingUpdate,
       desiredCapacity: 3,
@@ -20,7 +20,12 @@ class ECSCluster extends cdk.Stack {
     });
 
     const cluster = new ecs.Cluster(this, 'EcsCluster', { vpc });
-    cluster.addAutoScalingGroupCapacity(asg);
+    cluster.addAutoScalingGroup(asg);
+
+      cluster.addCapacity('DefaultAutoScalingGroup', {
+        instanceType: new ec2.InstanceType('t2.micro')
+      });
+
   }
 }
 
