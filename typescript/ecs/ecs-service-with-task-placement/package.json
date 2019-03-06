@@ -1,6 +1,6 @@
 {
   "name": "ec2-service-with-alb",
-  "version": "0.24.1",
+  "version": "0.25.1",
   "description": "EC2 Service with Application Load Balancer",
   "private": true,
   "scripts": {
@@ -19,9 +19,9 @@
     "typescript": "^3.2.4"
   },
   "dependencies": {
-    "@aws-cdk/aws-ec2": "^0.24.1",
-    "@aws-cdk/aws-ecs": "^0.24.1",
-    "@aws-cdk/aws-elasticloadbalancingv2": "^0.24.1",
-    "@aws-cdk/cdk": "^0.24.1"
+    "@aws-cdk/aws-ec2": "^0.25.1",
+    "@aws-cdk/aws-ecs": "^0.25.1",
+    "@aws-cdk/aws-elasticloadbalancingv2": "^0.25.1",
+    "@aws-cdk/cdk": "^0.25.1"
   }
 }
