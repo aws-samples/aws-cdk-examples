@@ -1,5 +1,4 @@
 import ec2 = require('@aws-cdk/aws-ec2');
-import { InstanceType } from '@aws-cdk/aws-ec2';
 import ecs = require('@aws-cdk/aws-ecs');
 import cdk = require('@aws-cdk/cdk');
 
@@ -13,9 +12,8 @@ class BonjourECS extends cdk.Stack {
     // and can iterate quickly on consuming stacks. Not doing that for now.
     const vpc = new ec2.VpcNetwork(this, 'MyVpc', { maxAZs: 2 });
     const cluster = new ecs.Cluster(this, 'Ec2Cluster', { vpc });
-    cluster.addDefaultAutoScalingGroupCapacity({
-      instanceType: new InstanceType("t2.xlarge"),
-      instanceCount: 3,
+    cluster.addCapacity('DefaultAutoScalingGroup', {
+      instanceType: new ec2.InstanceType('t2.micro')
     });
 
     // Instantiate ECS Service with just cluster and image
