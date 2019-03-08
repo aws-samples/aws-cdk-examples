@@ -51,19 +51,6 @@ $ cdk destroy
 |---------|-------------|
 | [hello-world](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/hello-world/) | A demo application that uses the CDK in Java |
 
-# FAQ
-
-* **What do I do with cdk.json**?
-
-These examples come with a `cdk.json` that specifies the entry point for the CDK application.
-Many of the examples will access your AWS account to determine availability zones or AMI IDs,
-and will save the results of that back to `cdk.json` under the `"context"` key.
-
-In a production application, you would check in the changes to `cdk.json` to ensure you have
-a repeatable build that doesn't access the network. For these example applications, ignore
-or unstage the changes.
-
-
 # License
 
 This library is licensed under the Apache 2.0 License.
