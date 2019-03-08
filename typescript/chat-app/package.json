@@ -19,10 +19,10 @@
     "typescript": "^3.2.4"
   },
   "dependencies": {
-    "@aws-cdk/aws-cognito": "^0.23.0",
-    "@aws-cdk/aws-lambda": "^0.23.0",
-    "@aws-cdk/aws-dynamodb": "^0.23.0",
-    "@aws-cdk/aws-s3": "^0.23.0",
-    "@aws-cdk/cdk": "^0.23.0"
+    "@aws-cdk/aws-cognito": "*",
+    "@aws-cdk/aws-lambda": "*",
+    "@aws-cdk/aws-dynamodb": "*",
+    "@aws-cdk/aws-s3": "*",
+    "@aws-cdk/cdk": "*"
   }
 }
