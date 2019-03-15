@@ -6,10 +6,6 @@ class WillkommenFargate extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // For better iteration speed, it might make sense to put this VPC into
-    // a separate stack and import it here. We then have two stacks to
-    // deploy, but VPC creation is slow so we'll only have to do that once
-    // and can iterate quickly on consuming stacks. Not doing that for now.
     const vpc = new ec2.VpcNetwork(this, 'MyVpc', { maxAZs: 2 });
     const cluster = new ecs.Cluster(this, 'Ec2Cluster', { vpc });
 
@@ -30,7 +26,7 @@ class WillkommenFargate extends cdk.Stack {
     // Instantiate ECS Service with just cluster and image
     new ecs.FargateService(this, "FargateService", {
       cluster,
-      taskDefinition: taskDef,
+      taskDefinition: taskDef
     });
 
   }
