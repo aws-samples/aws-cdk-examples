@@ -1,0 +1,26 @@
+{
+  "name": "cdk",
+  "version": "0.1.0",
+  "bin": {
+    "cdk": "bin/cdk.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@types/node": "8.10.40",
+    "typescript": "^3.3.3333",
+    "aws-cdk": "^0.25.3"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-elasticbeanstalk": "^0.25.3",
+    "@aws-cdk/aws-codepipeline": "^0.25.3",
+    "@aws-cdk/aws-aws-codecommit": "^0.25.3",
+    "@aws-cdk/aws-aws-lambda": "^0.25.3",
+    "@aws-cdk/aws-s3": "^0.25.3",
+    "@aws-cdk/cdk": "^0.25.3",
+    "source-map-support": "^0.5.9"
+  }
+}
