@@ -1,5 +1,4 @@
 {
-  "app": "node bin/cdk.js",
   "context": {
     "blue_env": "blue",
     "green_env": "green",
