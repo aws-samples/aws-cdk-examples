@@ -10,6 +10,8 @@ There are a couple of requirements to make this work:
 
 3. The Lambda execution role should have permissions to make calls to CodePipeline, and Elastic Beanstalk. 
 
+### Note: Leveraging L1 resources
+
 ### Instructions
 
 1. Change the name of the blue env, green env, and the EB application name in "cdk.json"

@@ -3,5 +3,6 @@
     "blue_env": "blue",
     "green_env": "green",
     "app_name": "myapp"
-}
+},
+"app": "node index"
 }

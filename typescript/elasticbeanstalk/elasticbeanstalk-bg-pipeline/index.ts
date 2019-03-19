@@ -9,8 +9,7 @@ export class CdkStack extends cdk.Stack {
 		super(scope, id, props);
 
 		//objects for access parameters
-		const construct = new cdk.Construct(this, 'construct');
-		const node = new cdk.ConstructNode(construct, this, 'node');
+		const node = this.node;
 
 		const blue_env  = node.getContext("blue_env");
 		const green_env = node.getContext("green_env");
@@ -62,3 +61,9 @@ export class CdkStack extends cdk.Stack {
 
 
 	}}
+
+const app = new cdk.App();
+
+new CdkStack(app, 'ElasticBeanstalkBG');
+
+app.run();
