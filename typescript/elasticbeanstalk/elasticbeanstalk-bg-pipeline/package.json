@@ -17,8 +17,8 @@
   "dependencies": {
     "@aws-cdk/aws-elasticbeanstalk": "^0.25.3",
     "@aws-cdk/aws-codepipeline": "^0.25.3",
-    "@aws-cdk/aws-aws-codecommit": "^0.25.3",
-    "@aws-cdk/aws-aws-lambda": "^0.25.3",
+    "@aws-cdk/aws-codecommit": "^0.25.3",
+    "@aws-cdk/aws-lambda": "^0.25.3",
     "@aws-cdk/aws-s3": "^0.25.3",
     "@aws-cdk/cdk": "^0.25.3",
     "source-map-support": "^0.5.9"
