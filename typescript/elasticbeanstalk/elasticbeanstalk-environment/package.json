@@ -12,11 +12,11 @@
   "devDependencies": {
     "@types/node": "8.10.40",
     "typescript": "^3.3.3333",
-    "aws-cdk": "^0.25.3"
+    "aws-cdk": "*"
   },
   "dependencies": {
-    "@aws-cdk/aws-elasticbeanstalk": "^0.25.3",
-    "@aws-cdk/cdk": "^0.25.3",
+    "@aws-cdk/aws-elasticbeanstalk": "*",
+    "@aws-cdk/cdk": "*",
     "source-map-support": "^0.5.9"
   }
 }
