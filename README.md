@@ -12,7 +12,6 @@ $ npm install -g aws-cdk
 $ cd typescript/my-widget-service
 $ npm install
 $ npm run build
-$ cdk synth   // Optional, to see what CloudFormation will deploy
 $ cdk deploy  // Deploys the CloudFormation template
 
 # Afterwards
