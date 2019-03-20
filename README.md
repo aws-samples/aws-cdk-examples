@@ -5,13 +5,14 @@ Kit](https://github.com/awslabs/aws-cdk).
 
 ## TypeScript examples
 
-To run the TypeScript examples:
+To run a TypeScript example, say my-widget-service:
 
 ```
 $ npm install -g aws-cdk
+$ cd typescript/my-widget-service
 $ npm install
 $ npm run build
-$ cdk deploy  // Deploys the Cloudformation template
+$ cdk deploy  // Deploys the CloudFormation template
 
 # Afterwards
 $ cdk destroy
