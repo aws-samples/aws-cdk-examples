@@ -13,7 +13,7 @@ class AutoScalingFargateService extends cdk.Stack {
     // Create Fargate Service
     const fargateService = new ecs.LoadBalancedFargateService(this, 'sample-app', {
       cluster,
-      image: ecs.ContainerImage.fromDockerHub("amazon/amazon-ecs-sample")
+      image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample")
     });
 
     // Setup AutoScaling policy
@@ -24,7 +24,7 @@ class AutoScalingFargateService extends cdk.Stack {
       scaleOutCooldownSec: 60
     });
 
-    new cdk.Output(this, 'LoadBalancerDNS', { value: fargateService.loadBalancer.dnsName, });
+    new cdk.CfnOutput(this, 'LoadBalancerDNS', { value: fargateService.loadBalancer.dnsName, });
   }
 }
 
