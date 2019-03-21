@@ -2,6 +2,7 @@
 import cloudfront = require('@aws-cdk/aws-cloudfront');
 import route53 = require('@aws-cdk/aws-route53');
 import s3 = require('@aws-cdk/aws-s3');
+import ssm = require('@aws-cdk/aws-ssm');
 import cdk = require('@aws-cdk/cdk');
 
 export interface StaticSiteProps {
@@ -31,12 +32,12 @@ export class StaticSite extends cdk.Construct {
             websiteErrorDocument: 'error.html',
             publicReadAccess: true
         });
-        new cdk.Output(this, 'Bucket', { value: siteBucket.bucketName });
+        new cdk.CfnOutput(this, 'Bucket', { value: siteBucket.bucketName });
 
         // Pre-existing ACM certificate, with the ARN stored in an SSM Parameter
-        const certificateArn = new cdk.SSMParameterProvider(this, {
+        const certificateArn = new ssm.ParameterStoreString(this, 'ArnParameter', {
             parameterName: 'CertificateArn-' + siteDomain
-        }).parameterValue();
+        }).stringValue;
 
         // CloudFront distribution that provides HTTPS
         const distribution = new cloudfront.CloudFrontWebDistribution(this, 'SiteDistribution', {
@@ -55,7 +56,7 @@ export class StaticSite extends cdk.Construct {
                 }
             ]
         });
-        new cdk.Output(this, 'DistributionId', { value: distribution.distributionId });
+        new cdk.CfnOutput(this, 'DistributionId', { value: distribution.distributionId });
 
         // Route53 alias record for the CloudFront distribution
         const zone = new route53.HostedZoneProvider(this, { domainName: props.domainName }).findAndImport(this, 'Zone');

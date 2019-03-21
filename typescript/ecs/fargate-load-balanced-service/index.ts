@@ -14,11 +14,11 @@ class BonjourFargate extends cdk.Stack {
     // Instantiate Fargate Service with just cluster and image
     const fargateService = new ecs.LoadBalancedFargateService(this, "FargateService", {
       cluster,
-      image: ecs.ContainerImage.fromDockerHub("amazon/amazon-ecs-sample"),
+      image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample"),
     });
 
     // Output the DNS where you can access your service
-    new cdk.Output(this, 'LoadBalancerDNS', { value: fargateService.loadBalancer.dnsName });
+    new cdk.CfnOutput(this, 'LoadBalancerDNS', { value: fargateService.loadBalancer.dnsName });
   }
 }
 

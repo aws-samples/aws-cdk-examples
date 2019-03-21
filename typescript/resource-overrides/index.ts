@@ -24,14 +24,14 @@ class ResourceOverridesExample extends cdk.Stack {
         //
 
         const bucketResource = bucket.node.findChild('Resource') as s3.CfnBucket;
-        const anotherWay = bucket.node.children.find(c => (c as cdk.Resource).resourceType === 'AWS::S3::Bucket') as s3.CfnBucket;
+        const anotherWay = bucket.node.children.find(c => (c as cdk.CfnResource).resourceType === 'AWS::S3::Bucket') as s3.CfnBucket;
         assert.equal(bucketResource, anotherWay);
 
         //
         // This is how to specify resource options such as dependencies, metadata, update policy
         //
 
-        bucketResource.node.addDependency(otherBucket.node.findChild('Resource') as cdk.Resource);
+        bucketResource.node.addDependency(otherBucket.node.findChild('Resource') as cdk.CfnResource);
         bucketResource.options.metadata = { MetadataKey: 'MetadataValue' };
         bucketResource.options.updatePolicy = {
             autoScalingRollingUpdate: {
