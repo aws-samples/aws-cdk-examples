@@ -5,6 +5,10 @@ npm install -g aws-cdk
 
 # Make sure that the package.json has * dependencies
 # for the @aws-cdk libraries.
+#
+# This looks weird, but we do it pre-1.0 to make sure
+# the examples are always up to date with the changing
+# API
 verify_star_dependencies() {
     broken=$(grep '@aws-cdk' package.json | grep -v '*' || true)
     if [[ "$broken" != "" ]]; then
@@ -25,6 +29,7 @@ for pkgJson in $(find typescript -name package.json | grep -v node_modules); do
 
         verify_star_dependencies
 
+        rm -rf package-lock.json node_modules
         npm install
         npm run build
 
