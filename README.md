@@ -54,6 +54,10 @@ $ cdk destroy
 |---------|-------------|
 | [hello-world](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/hello-world/) | A demo application that uses the CDK in Java |
 
+## JavaScript examples
+
+- [aws-cdk-changelogs-demo](https://github.com/aws-samples/aws-cdk-changelogs-demo) - A full serverless Node.js application stack deployed using CDK. It uses AWS Lambda, AWS Fargate, DynamoDB, Elasticache, S3, and CloudFront.
+
 # License
 
 This library is licensed under the Apache 2.0 License.
