@@ -57,7 +57,11 @@ $ cdk destroy
 
 ## JavaScript examples
 
-- [aws-cdk-changelogs-demo](https://github.com/aws-samples/aws-cdk-changelogs-demo) - A full serverless Node.js application stack deployed using CDK. It uses AWS Lambda, AWS Fargate, DynamoDB, Elasticache, S3, and CloudFront.
+Select the following link to see how to install and run the example.
+
+| Example | Description |
+|---------|-------------|
+| [aws-cdk-changelogs-demo](https://github.com/aws-samples/aws-cdk-changelogs-demo) | A full serverless Node.js application stack deployed using CDK. It uses AWS Lambda, AWS Fargate, DynamoDB, Elasticache, S3, and CloudFront. |
 
 # License
 
