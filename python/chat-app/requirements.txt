@@ -1,0 +1,9 @@
+aws-cdk.cdk
+
+aws-cdk.aws-cognito
+aws-cdk.aws-lambda
+aws-cdk.aws-dynamodb
+aws-cdk.aws-s3
+
+# Work around for jsii#413
+aws-cdk.aws-autoscaling-common
