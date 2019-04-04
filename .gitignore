@@ -4,3 +4,6 @@ node_modules
 cdk.context.json
 package-lock.json
 __pycache__
+.env
+*~
+
