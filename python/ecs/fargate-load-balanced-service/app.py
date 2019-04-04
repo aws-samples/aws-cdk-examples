@@ -5,11 +5,13 @@ from aws_cdk import (
 )
 
 
-class BonjourECS(cdk.Stack):
+class BonjourFargate(cdk.Stack):
 
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, *kwargs)
 
+        # Create VPC and Fargate Cluster
+        # NOTE: Limit AZs to avoid reaching resource quotas
         vpc = ec2.VpcNetwork(
             self, "MyVpc",
             max_a_zs=2
@@ -20,21 +22,17 @@ class BonjourECS(cdk.Stack):
             vpc=vpc
         )
 
-        cluster.add_capacity("DefaultAutoScalingGroup",
-                             instance_type=ec2.InstanceType("t2.micro"))
-
-        ecs_service = ecs.LoadBalancedEc2Service(
-            self, "Ec2Service",
+        fargate_service = ecs.LoadBalancedFargateService(
+            self, "FargateService",
             cluster=cluster,
-            memory_limit_mi_b=512,
             image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
         )
 
         cdk.CfnOutput(
             self, "LoadBalancerDNS",
-            value=ecs_service.load_balancer.dns_name
+            value=fargate_service.load_balancer.dns_name
         )
 
 app = cdk.App()
-BonjourECS(app, "Bonjour")
+BonjourFargate(app, "Bonjour")
 app.run()
