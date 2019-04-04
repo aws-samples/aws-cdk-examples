@@ -5,10 +5,10 @@ from aws_cdk import (
     cdk,
 )
 
-# Create a cluster
 app = cdk.App()
 stack = cdk.Stack(app, "aws-ec2-integ-ecs")
 
+# Create a cluster
 vpc = ec2.VpcNetwork(
     stack, "MyVpc",
     max_a_zs=2
@@ -22,7 +22,8 @@ cluster.add_capacity("DefaultAutoScalingGroup",
                      instance_type=ec2.InstanceType("t2.micro"))
 
 # Create Task Definition
-task_definition = ecs.Ec2TaskDefinition(stack, "TaskDef")
+task_definition = ecs.Ec2TaskDefinition(
+    stack, "TaskDef")
 container = task_definition.add_container(
     "web",
     image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
