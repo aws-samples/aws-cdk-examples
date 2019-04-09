@@ -11,16 +11,16 @@ class WillkommenFargate extends cdk.Stack {
 
     // create a task definition with CloudWatch Logs
     const logging = new ecs.AwsLogDriver(this, "AppLogging", {
-        streamPrefix: "myapp",
+      streamPrefix: "myapp",
     })
-    const taskDef = new ecs.TaskDefinition(this, "MyTaskDefinition", {
-        compatibility: ecs.Compatibility.Fargate,
-        memoryMiB: '512',
-        cpu: '256',
+
+    const taskDef = new ecs.FargateTaskDefinition(this, "MyTaskDefinition", {
+      memoryMiB: '512',
+      cpu: '256',
     })
     taskDef.addContainer("AppContainer", {
-        image: ecs.ContainerImage.fromDockerHub("amazon/amazon-ecs-sample"),
-        logging,
+      image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample"),
+      logging,
     })
 
     // Instantiate ECS Service with just cluster and image
@@ -28,7 +28,6 @@ class WillkommenFargate extends cdk.Stack {
       cluster,
       taskDefinition: taskDef
     });
-
   }
 }
 
