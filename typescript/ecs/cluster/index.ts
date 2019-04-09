@@ -13,7 +13,6 @@ class ECSCluster extends cdk.Stack {
     const asg = new autoscaling.AutoScalingGroup(this, 'MyFleet', {
       instanceType: new InstanceType("t2.xlarge"),
       machineImage: new ecs.EcsOptimizedAmi(),
-      associatePublicIpAddress: true,
       updateType: autoscaling.UpdateType.ReplacingUpdate,
       desiredCapacity: 3,
       vpc
