@@ -1,7 +1,7 @@
 {
-  "name": "fargate-load-image-from-ecr",
+  "name": "fargate-service-with-local-image",
   "version": "0.25.1",
-  "description": "Running a load balanced service on Fargate with an image loaded from ECR",
+  "description": "Running a load balanced service on Fargate with an image loaded locally",
   "private": true,
   "scripts": {
     "build": "tsc",
