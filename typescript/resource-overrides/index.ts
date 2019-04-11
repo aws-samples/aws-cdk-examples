@@ -50,26 +50,13 @@ class ResourceOverridesExample extends cdk.Stack {
             Bar: [ 'A', 'B' ]
         });
 
-        // addPropertyOverrides simply allows you to omit the "Properties." prefix
+        // addPropertyOverride simply allows you to omit the "Properties." prefix
         bucketResource.addPropertyOverride('VersioningConfiguration.Status', 'NewStatus');
-        bucketResource.addPropertyOverride('Foo', null);
+        // bucketResource.addPropertyOverride('Foo', null); // FIXME causes filterUndefined to error
         bucketResource.addPropertyOverride('Token', otherBucket.bucketArn); // use tokens
         bucketResource.addPropertyOverride('LoggingConfiguration.DestinationBucketName', otherBucket.bucketName);
 
-        //
-        // It is also possible to request a deletion of a value by either assigning
-        // `undefined` (in supported languages) or use the `addDeletionOverride` method
-        //
-
-        bucketResource.addDeletionOverride('Metadata');
-        bucketResource.addPropertyDeletionOverride('CorsConfiguration.Bar');
-
-        //
-        // It is also possible to specify overrides via a strong-typed property
-        // bag called `propertyOverrides`
-        //
-
-        bucketResource.propertyOverrides.analyticsConfigurations = [
+        bucketResource.addPropertyOverride('AnalyticsConfigurations', [
             {
                 id: 'config1',
                 storageClassAnalysis: {
@@ -82,16 +69,22 @@ class ResourceOverridesExample extends cdk.Stack {
                     }
                 }
             }
-        ];
+        ]);
 
-        bucketResource.propertyOverrides.corsConfiguration = {
-            corsRules: [
-                {
-                    allowedMethods: [ 'GET' ],
-                    allowedOrigins: [ '*' ]
-                }
-            ]
-        };
+        bucketResource.addPropertyOverride('CorsConfiguration.CorsRules', [
+            {
+                AllowedMethods: [ 'GET' ],
+                AllowedOrigins: [ '*' ]
+            }
+        ]);
+
+        //
+        // It is also possible to request a deletion of a value by either assigning
+        // `undefined` (in supported languages) or use the `addDeletionOverride` method
+        //
+
+        bucketResource.addDeletionOverride('Metadata');
+        bucketResource.addPropertyDeletionOverride('CorsConfiguration.Bar');
 
         const vpc = new ec2.VpcNetwork(this, 'VPC', { maxAZs: 1 });
         const asg = new autoscaling.AutoScalingGroup(this, 'ASG', {
