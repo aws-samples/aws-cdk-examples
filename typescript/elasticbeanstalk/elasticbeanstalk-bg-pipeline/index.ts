@@ -1,4 +1,5 @@
 import cdk = require('@aws-cdk/cdk');
+import cpactions = require('@aws-cdk/aws-codepipeline-actions');
 import cp = require('@aws-cdk/aws-codepipeline');
 import cc = require('@aws-cdk/aws-codecommit');
 import lambda = require('@aws-cdk/aws-lambda');
@@ -26,7 +27,7 @@ export class CdkStack extends cdk.Stack {
       }
     });
 
-    bucket.grantReadWrite(handler.role);
+    bucket.grantReadWrite(handler);
 
     const repo = new cc.Repository(this, 'Repository', {
       repositoryName: 'MyRepositoryName',
@@ -38,7 +39,7 @@ export class CdkStack extends cdk.Stack {
       name: 'Source'
     });
 
-    const sourceAction = new cc.PipelineSourceAction({
+    const sourceAction = new cpactions.CodeCommitSourceAction({
       actionName: 'CodeCommit',
       repository: repo,
     });
@@ -51,7 +52,7 @@ export class CdkStack extends cdk.Stack {
     });
 
 
-    const lambdaAction = new lambda.PipelineInvokeAction({
+    const lambdaAction = new cpactions.LambdaInvokeAction({
       actionName: 'InvokeAction',
       lambda: handler,
       userParameters: '{"blueEnvironment":"' + blue_env + '","greenEnvironment":"' + green_env + '", "application":"' + app_name + '"}'
