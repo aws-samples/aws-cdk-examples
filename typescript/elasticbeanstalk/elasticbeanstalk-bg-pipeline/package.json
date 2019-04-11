@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@aws-cdk/aws-elasticbeanstalk": "*",
+    "@aws-cdk/aws-codepipeline-actions": "*",
     "@aws-cdk/aws-codepipeline": "*",
     "@aws-cdk/aws-codecommit": "*",
     "@aws-cdk/aws-lambda": "*",
