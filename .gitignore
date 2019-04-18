@@ -3,3 +3,6 @@ node_modules
 *.swp
 cdk.context.json
 package-lock.json
+__pycache__
+.env
+*~
