@@ -15,14 +15,11 @@ const cluster = new ecs.Cluster(stack, 'Cluster', { vpc });
 // uploaded to an S3 staging bucket prior to being uploaded to ECR.
 // A new repository is created in ECR and the Fargate service is created
 // with the image from ECR.
-const fargateService = new ecs.LoadBalancedFargateService(stack, "FargateService", {
+new ecs.LoadBalancedFargateService(stack, "FargateService", {
   cluster,
   image: ecs.ContainerImage.fromAsset(stack, "local-image" , { 
     directory: path.join(__dirname, 'local-image') 
   })
 });
-
-// Output the DNS where you can access your service
-new cdk.CfnOutput(stack, 'LoadBalancerDNS', { value: fargateService.loadBalancer.dnsName });
 
 app.run();
