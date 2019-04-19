@@ -65,6 +65,27 @@ Select the following link to see how to install and run the example.
 |---------|-------------|
 | [aws-cdk-changelogs-demo](https://github.com/aws-samples/aws-cdk-changelogs-demo) | A full serverless Node.js application stack deployed using CDK. It uses AWS Lambda, AWS Fargate, DynamoDB, Elasticache, S3, and CloudFront. |
 
+
+## Python Examples
+
+Select the following link to see how to install and run the example.
+
+| Example | Description |
+|---------|-------------|
+| [application-load-balancer](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/application-load-balancer/) | Using an AutoScalingGroup with an Application Load Balancer |
+| [chat-app](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/chat-app/) | A serverless chat application using Cognito |
+| [classic-load-balancer](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/classic-load-balancer/) | Using an AutoScalingGroup with a Classic Load Balancer |
+| [custom-resource](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/custom-resource/) | Shows adding a Custom Resource to your CDK app |
+| [ecs-cluster](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/cluster/) | Provision an ECS Cluster with custom Autoscaling Group configuration |
+| [ecs-load-balanced-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/ecs-load-balanced-service/) | Starting a container fronted by a load balancer on ECS |
+| [ecs-service-with-advanced-alb-config](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/ecs-service-with-advanced-alb-config/) | Starting a container fronted by a load balancer on ECS with added load balancer configuration |
+| [ecs-service-with-task-networking](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/ecs-service-with-task-networking/) | Starting an ECS service with task networking, allowing ingress traffic to the task but blocking for the instance |
+| [ecs-service-with-task-placement](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/ecs-service-with-task-placement/) | Starting a container ECS with task placement specifications |
+| [fargate-load-balanced-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/fargate-load-balanced-service/) | Starting a container fronted by a load balancer on Fargate |
+| [fargate-service-with-auto-scaling](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/fargate-service-with-auto-scaling/) | Starting an ECS service of FARGATE launch type that auto scales based on average CPU Utilization |
+| [lambda-cron](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/lambda-cron/) | Running a Lambda on a schedule |
+| [stepfunctions](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/stepfunctions/) | A simple StepFunctions workflow |
+
 # License
 
 This library is licensed under the Apache 2.0 License.
