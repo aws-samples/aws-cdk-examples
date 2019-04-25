@@ -6,3 +6,4 @@ package-lock.json
 __pycache__
 .env
 *~
+.cdk.staging

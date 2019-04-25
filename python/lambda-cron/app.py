@@ -1,4 +1,4 @@
-from aws_cdk import aws_events as events, aws_lambda as lambda_, cdk
+from aws_cdk import aws_events as events, aws_lambda as lambda_, cdk, aws_events_targets as targets
 
 
 class LambdaCronStack(cdk.Stack):
@@ -22,7 +22,7 @@ class LambdaCronStack(cdk.Stack):
         rule = events.EventRule(
             self, "Rule", schedule_expression="cron(0 18 ? * MON-FRI *)"
         )
-        rule.add_target(lambdaFn)
+        rule.add_target(targets.LambdaFunction(lambdaFn))
 
 
 app = cdk.App()

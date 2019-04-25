@@ -1,4 +1,5 @@
 import events = require('@aws-cdk/aws-events');
+import targets = require('@aws-cdk/aws-events-targets');
 import lambda = require('@aws-cdk/aws-lambda');
 import cdk = require('@aws-cdk/cdk');
 
@@ -20,7 +21,8 @@ export class LambdaCronStack extends cdk.Stack {
     const rule = new events.EventRule(this, 'Rule', {
       scheduleExpression: 'cron(0 18 ? * MON-FRI *)',
     });
-    rule.addTarget(lambdaFn);
+
+    rule.addTarget(new targets.LambdaFunction(lambdaFn));
   }
 }
 
