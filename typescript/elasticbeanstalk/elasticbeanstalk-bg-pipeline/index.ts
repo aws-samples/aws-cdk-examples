@@ -39,9 +39,12 @@ export class CdkStack extends cdk.Stack {
       name: 'Source'
     });
 
+    const sourceArtifact = new cp.Artifact('Source');
+
     const sourceAction = new cpactions.CodeCommitSourceAction({
       actionName: 'CodeCommit',
       repository: repo,
+      output: sourceArtifact,
     });
 
     sourceStage.addAction(sourceAction);
@@ -55,7 +58,8 @@ export class CdkStack extends cdk.Stack {
     const lambdaAction = new cpactions.LambdaInvokeAction({
       actionName: 'InvokeAction',
       lambda: handler,
-      userParameters: '{"blueEnvironment":"' + blue_env + '","greenEnvironment":"' + green_env + '", "application":"' + app_name + '"}'
+      userParameters: '{"blueEnvironment":"' + blue_env + '","greenEnvironment":"' + green_env + '", "application":"' + app_name + '"}',
+      inputs: [sourceArtifact]
     });
 
     deployStage.addAction(lambdaAction);
