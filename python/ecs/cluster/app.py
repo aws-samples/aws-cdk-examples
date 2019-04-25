@@ -23,7 +23,8 @@ class ECSCluster(cdk.Stack):
             associate_public_ip_address=True,
             update_type=autoscaling.UpdateType.ReplacingUpdate,
             desired_capacity=3,
-            vpc=vpc
+            vpc=vpc,
+            vpc_subnets={'subnetType': ec2.SubnetType.Public}
         )
 
         cluster = ecs.Cluster(
@@ -31,7 +32,7 @@ class ECSCluster(cdk.Stack):
             vpc=vpc
         )
 
-        cluster.add_autoscaling_group(asg)
+        cluster.add_auto_scaling_group(asg)
         cluster.add_capacity("DefaultAutoScalingGroup",
                              instance_type=ec2.InstanceType("t2.micro"))
 
