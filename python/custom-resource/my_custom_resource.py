@@ -10,7 +10,8 @@ class MyCustomResource(cdk.Construct):
             code_body = fp.read()
 
         resource = cfn.CustomResource(
-            self, "Resource", lambda_provider=lambda_.SingletonFunction(
+            self, "Resource",
+            provider=cfn.CustomResourceProvider.lambda_(lambda_.SingletonFunction(
                 self,
                 "Singleton",
                 uuid="f7d4f730-4ee1-11e8-9c2d-fa7ae01bbebc",
@@ -18,7 +19,7 @@ class MyCustomResource(cdk.Construct):
                 handler="index.main",
                 timeout=300,
                 runtime=lambda_.Runtime.PYTHON27,
-            ),
+            )),
             properties=kwargs,
         )
 

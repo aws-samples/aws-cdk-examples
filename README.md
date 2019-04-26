@@ -83,7 +83,7 @@ $ cdk destroy
 | [fargate-load-balanced-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/fargate-load-balanced-service/) | Starting a container fronted by a load balancer on Fargate |
 | [fargate-service-with-auto-scaling](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/fargate-service-with-auto-scaling/) | Starting an ECS service of FARGATE launch type that auto scales based on average CPU Utilization |
 | [lambda-cron](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/lambda-cron/) | Running a Lambda on a schedule |
-| [stepfunctions-job-poller](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/stepfunctions-job-poller/) | A simple StepFunctions workflow |
+| [stepfunctions](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/stepfunctions/) | A simple StepFunctions workflow |
 
 ## JavaScript examples
 
