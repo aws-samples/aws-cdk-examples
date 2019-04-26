@@ -23,7 +23,7 @@ class JobPollerStack(cdk.Stack):
         )
         wait_x = sfn.Wait(
             self, "Wait X Seconds",
-            seconds_path="$.wait_time",
+            duration=sfn.WaitDuration.seconds_path('$.wait_time'),
         )
         get_status = sfn.Task(
             self, "Get Job Status",
