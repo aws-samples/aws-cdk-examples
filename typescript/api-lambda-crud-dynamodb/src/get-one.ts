@@ -2,13 +2,12 @@ const AWS = require('aws-sdk');
 const db = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = process.env.TABLE_NAME || '';
 const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
-const processResponse = require('./process-response.js');
 
 export const handler = async (event: any = {}) : Promise <any> => {
 
   const requestedItemId = event.pathParameters.id;
   if (!requestedItemId) {
-      return Promise.resolve(processResponse(true, `Error: You missing the id parameter`, 400));
+    return { statusCode: 400, body: `Error: You are missing the path parameter id` };
   }
 
   const params = {
@@ -20,8 +19,8 @@ export const handler = async (event: any = {}) : Promise <any> => {
 
   try {
     const response = await db.get(params).promise();
-    return processResponse(true, response.Item);
+    return { statusCode: 200, body: JSON.stringify(response.Item) };
   } catch (dbError) {
-    return processResponse(true, dbError, 500);
+    return { statusCode: 500, body: JSON.stringify(dbError) };
   }
 };
