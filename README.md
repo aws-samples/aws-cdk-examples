@@ -56,6 +56,7 @@ $ cdk destroy
 | Example | Description |
 |---------|-------------|
 | [hello-world](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/hello-world/) | A demo application that uses the CDK in Java |
+| [lambda-cron](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/lambda-cron/) | Running a Lambda on a schedule |
 
 ## Python examples
 
