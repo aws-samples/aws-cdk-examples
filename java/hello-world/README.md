@@ -1,11 +1,11 @@
 # CDK Java Example
 
-This an example of a CDK program written in Java.
+This is an example of a CDK program written in Java.
 
 ## Building
 
 To build this app, run `mvn compile`. This will download the required
-dependencies compile the Java code.
+dependencies to compile the Java code.
 
 You can use your IDE to write code and unit tests, but you will need to use the
 CDK toolkit if you wish to synthesize/deploy stacks.
@@ -17,7 +17,7 @@ instructions for the CDK toolkit on how to execute this program.
 
 Specifically, it will tell the toolkit to use the `mvn exec:java` command as the
 entry point of your application. After changing your Java code, you will be able
-to run the CDK toolkits commands as usual (Maven will recompile as needed):
+to run the CDK toolkit commands as usual (Maven will recompile as needed):
 
     $ cdk ls
     <list all stacks in this program>
