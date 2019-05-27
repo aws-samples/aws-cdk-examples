@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@aws-cdk/aws-stepfunctions": "*",
+    "@aws-cdk/aws-stepfunctions-tasks": "^0.32.0",
     "@aws-cdk/cdk": "*"
   }
 }
