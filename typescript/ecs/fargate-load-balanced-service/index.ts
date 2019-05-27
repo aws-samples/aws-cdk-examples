@@ -18,7 +18,7 @@ class BonjourFargate extends cdk.Stack {
     });
 
     // Output the DNS where you can access your service
-    new cdk.CfnOutput(this, 'LoadBalancerDNS', { value: fargateService.loadBalancer.dnsName });
+    new cdk.CfnOutput(this, 'LoadBalancerDNS', { value: fargateService.loadBalancer.loadBalancerDnsName });
   }
 }
 

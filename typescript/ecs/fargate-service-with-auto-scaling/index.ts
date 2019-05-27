@@ -24,7 +24,7 @@ class AutoScalingFargateService extends cdk.Stack {
       scaleOutCooldownSec: 60
     });
 
-    new cdk.CfnOutput(this, 'LoadBalancerDNS', { value: fargateService.loadBalancer.dnsName, });
+    new cdk.CfnOutput(this, 'LoadBalancerDNS', { value: fargateService.loadBalancer.loadBalancerDnsName, });
   }
 }
 
