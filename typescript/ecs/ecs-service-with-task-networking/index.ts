@@ -8,7 +8,7 @@ const app = new cdk.App();
 const stack = new cdk.Stack(app, 'ec2-service-with-task-networking');
 
 // Create the cluster
-const vpc = new ec2.VpcNetwork(stack, 'Vpc', { maxAZs: 2 });
+const vpc = new ec2.Vpc(stack, 'Vpc', { maxAZs: 2 });
 
 const cluster = new ecs.Cluster(stack, 'awsvpc-ecs-demo-cluster', { vpc });
 cluster.addCapacity('DefaultAutoScalingGroup', {
