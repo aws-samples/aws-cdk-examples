@@ -24,7 +24,7 @@ class BonjourECS extends cdk.Stack {
     });
 
     // Output the DNS where you can access your service
-    new cdk.CfnOutput(this, 'LoadBalancerDNS', { value: ecsService.loadBalancer.dnsName });
+    new cdk.CfnOutput(this, 'LoadBalancerDNS', { value: ecsService.loadBalancer.loadBalancerDnsName });
   }
 }
 
