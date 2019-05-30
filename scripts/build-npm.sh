@@ -32,6 +32,8 @@ for pkgJson in $(find typescript -name package.json | grep -v node_modules); do
         npm install
         npm run build
 
+        export AWS_DEFAULT_REGION="us-east-1"
+
         cp $scriptdir/fake.context.json cdk.context.json
         npx cdk synth
         rm cdk.context.json
