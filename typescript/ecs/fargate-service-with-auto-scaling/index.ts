@@ -1,4 +1,5 @@
 import ecs = require('@aws-cdk/aws-ecs');
+import ecs_patterns = require('@aws-cdk/aws-ecs-patterns');
 import ec2 = require('@aws-cdk/aws-ec2');
 import cdk = require('@aws-cdk/cdk');
 
@@ -7,11 +8,11 @@ class AutoScalingFargateService extends cdk.Stack {
     super(scope, id, props);
 
     // Create a cluster
-    const vpc = new ec2.VpcNetwork(this, 'Vpc', { maxAZs: 2 });
+    const vpc = new ec2.Vpc(this, 'Vpc', { maxAZs: 2 });
     const cluster = new ecs.Cluster(this, 'fargate-service-autoscaling', { vpc });
 
     // Create Fargate Service
-    const fargateService = new ecs.LoadBalancedFargateService(this, 'sample-app', {
+    const fargateService = new ecs_patterns.LoadBalancedFargateService(this, 'sample-app', {
       cluster,
       image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample")
     });
@@ -24,7 +25,7 @@ class AutoScalingFargateService extends cdk.Stack {
       scaleOutCooldownSec: 60
     });
 
-    new cdk.CfnOutput(this, 'LoadBalancerDNS', { value: fargateService.loadBalancer.dnsName, });
+    new cdk.CfnOutput(this, 'LoadBalancerDNS', { value: fargateService.loadBalancer.loadBalancerDnsName });
   }
 }
 

@@ -58,7 +58,11 @@ export class CdkStack extends cdk.Stack {
     const lambdaAction = new cpactions.LambdaInvokeAction({
       actionName: 'InvokeAction',
       lambda: handler,
-      userParameters: '{"blueEnvironment":"' + blue_env + '","greenEnvironment":"' + green_env + '", "application":"' + app_name + '"}',
+      userParameters: {
+        blueEnvironment: blue_env,
+        greenEnvironment: green_env,
+        application: app_name
+      },
       inputs: [sourceArtifact]
     });
 
