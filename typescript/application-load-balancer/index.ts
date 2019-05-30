@@ -8,7 +8,7 @@ class LoadBalancerStack extends cdk.Stack {
   constructor(app: cdk.App, id: string) {
     super(app, id);
 
-    const vpc = new ec2.VpcNetwork(this, 'VPC');
+    const vpc = new ec2.Vpc(this, 'VPC');
 
     const asg = new autoscaling.AutoScalingGroup(this, 'ASG', {
       vpc,

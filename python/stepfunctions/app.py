@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from aws_cdk import (
     aws_stepfunctions as sfn,
+    aws_stepfunctions_tasks as sfn_tasks,
     cdk,
 )
 
@@ -18,7 +19,7 @@ class JobPollerStack(cdk.Stack):
 
         submit_job = sfn.Task(
             self, "Submit Job",
-            resource=submit_job_activity,
+            task=sfn_tasks.InvokeActivity(submit_job_activity),
             result_path="$.guid",
         )
         wait_x = sfn.Wait(
@@ -27,7 +28,7 @@ class JobPollerStack(cdk.Stack):
         )
         get_status = sfn.Task(
             self, "Get Job Status",
-            resource=check_job_activity,
+            task=sfn_tasks.InvokeActivity(check_job_activity),
             input_path="$.guid",
             result_path="$.status",
         )
@@ -41,7 +42,7 @@ class JobPollerStack(cdk.Stack):
         )
         final_status = sfn.Task(
             self, "Get Final Job Status",
-            resource=check_job_activity,
+            task=sfn_tasks.InvokeActivity(check_job_activity),
             input_path="$.guid",
         )
 

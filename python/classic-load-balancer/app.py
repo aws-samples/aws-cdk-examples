@@ -10,7 +10,7 @@ class LoadBalancerStack(cdk.Stack):
     def __init__(self, app: cdk.App, id: str, **kwargs) -> None:
         super().__init__(app, id, **kwargs)
 
-        vpc = ec2.VpcNetwork(self, "VPC")
+        vpc = ec2.Vpc(self, "VPC")
 
         asg = autoscaling.AutoScalingGroup(
             self,

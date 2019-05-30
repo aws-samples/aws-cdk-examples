@@ -1,6 +1,7 @@
 from aws_cdk import (
     aws_ec2 as ec2,
     aws_ecs as ecs,
+    aws_ecs_patterns as ecs_patterns,
     cdk,
 )
 
@@ -10,7 +11,7 @@ class BonjourECS(cdk.Stack):
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, *kwargs)
 
-        vpc = ec2.VpcNetwork(
+        vpc = ec2.Vpc(
             self, "MyVpc",
             max_a_zs=2
         )
@@ -23,7 +24,7 @@ class BonjourECS(cdk.Stack):
         cluster.add_capacity("DefaultAutoScalingGroup",
                              instance_type=ec2.InstanceType("t2.micro"))
 
-        ecs_service = ecs.LoadBalancedEc2Service(
+        ecs_service = ecs_patterns.LoadBalancedEc2Service(
             self, "Ec2Service",
             cluster=cluster,
             memory_limit_mi_b=512,
