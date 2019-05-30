@@ -11,7 +11,7 @@ class ECSCluster(cdk.Stack):
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, *kwargs)
 
-        vpc = ec2.VpcNetwork(
+        vpc = ec2.Vpc(
             self, "MyVpc",
             max_a_zs=2
         )

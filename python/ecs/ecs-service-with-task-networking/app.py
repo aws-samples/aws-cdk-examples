@@ -11,7 +11,7 @@ app = cdk.App()
 stack = cdk.Stack(app, "ec2-service-with-task-networking")
 
 # Create a cluster
-vpc = ec2.VpcNetwork(
+vpc = ec2.Vpc(
     stack, "Vpc",
     max_a_zs=2
 )
