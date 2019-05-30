@@ -19,7 +19,7 @@ class LambdaCronStack(cdk.Stack):
 
         # Run every day at 6PM UTC
         # See https://docs.aws.amazon.com/lambda/latest/dg/tutorial-scheduled-events-schedule-expressions.html
-        rule = events.EventRule(
+        rule = events.Rule(
             self, "Rule", schedule_expression="cron(0 18 ? * MON-FRI *)"
         )
         rule.add_target(targets.LambdaFunction(lambdaFn))

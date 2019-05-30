@@ -6,7 +6,7 @@ const app = new cdk.App();
 const stack = new cdk.Stack(app, 'aws-ecs-integ-ecs');
 
 // Create a cluster
-const vpc = new ec2.VpcNetwork(stack, 'Vpc', { maxAZs: 2 });
+const vpc = new ec2.Vpc(stack, 'Vpc', { maxAZs: 2 });
 
 const cluster = new ecs.Cluster(stack, 'EcsCluster', { vpc });
 cluster.addCapacity('DefaultAutoScalingGroup', {
@@ -15,11 +15,7 @@ cluster.addCapacity('DefaultAutoScalingGroup', {
 
 // Create Task Definition with placement constraint
 const taskDefinition = new ecs.Ec2TaskDefinition(stack, 'TaskDef', {
-  placementConstraints: [
-    {
-      type: ecs.PlacementConstraintType.DistinctInstance
-    }
-  ]
+  placementConstraints: [ ecs.PlacementConstraint.distinctInstances() ]
 });
 
 const container = taskDefinition.addContainer('web', {

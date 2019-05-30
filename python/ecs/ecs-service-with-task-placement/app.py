@@ -9,7 +9,7 @@ app = cdk.App()
 stack = cdk.Stack(app, "aws-ecs-integ-ecs")
 
 # Create a cluster
-vpc = ec2.VpcNetwork(
+vpc = ec2.Vpc(
     stack, "Vpc",
     max_a_zs=2
 )

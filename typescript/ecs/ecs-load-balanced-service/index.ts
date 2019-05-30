@@ -1,5 +1,6 @@
 import ec2 = require('@aws-cdk/aws-ec2');
 import ecs = require('@aws-cdk/aws-ecs');
+import ecs_patterns = require('@aws-cdk/aws-ecs-patterns');
 import cdk = require('@aws-cdk/cdk');
 
 class BonjourECS extends cdk.Stack {
@@ -10,21 +11,21 @@ class BonjourECS extends cdk.Stack {
     // a separate stack and import it here. We then have two stacks to
     // deploy, but VPC creation is slow so we'll only have to do that once
     // and can iterate quickly on consuming stacks. Not doing that for now.
-    const vpc = new ec2.VpcNetwork(this, 'MyVpc', { maxAZs: 2 });
+    const vpc = new ec2.Vpc(this, 'MyVpc', { maxAZs: 2 });
     const cluster = new ecs.Cluster(this, 'Ec2Cluster', { vpc });
     cluster.addCapacity('DefaultAutoScalingGroup', {
       instanceType: new ec2.InstanceType('t2.micro')
     });
 
     // Instantiate ECS Service with just cluster and image
-    const ecsService = new ecs.LoadBalancedEc2Service(this, "Ec2Service", {
+    const ecsService = new ecs_patterns.LoadBalancedEc2Service(this, "Ec2Service", {
       cluster,
       memoryLimitMiB: 512,
       image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample"),
     });
 
     // Output the DNS where you can access your service
-    new cdk.CfnOutput(this, 'LoadBalancerDNS', { value: ecsService.loadBalancer.dnsName });
+    new cdk.CfnOutput(this, 'LoadBalancerDNS', { value: ecsService.loadBalancer.loadBalancerDnsName });
   }
 }
 

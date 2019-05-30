@@ -86,7 +86,7 @@ class ResourceOverridesExample extends cdk.Stack {
         bucketResource.addDeletionOverride('Metadata');
         bucketResource.addPropertyDeletionOverride('CorsConfiguration.Bar');
 
-        const vpc = new ec2.VpcNetwork(this, 'VPC', { maxAZs: 1 });
+        const vpc = new ec2.Vpc(this, 'VPC', { maxAZs: 1 });
         const asg = new autoscaling.AutoScalingGroup(this, 'ASG', {
             instanceType: new ec2.InstanceTypePair(ec2.InstanceClass.M4, ec2.InstanceSize.XLarge),
             machineImage: new ec2.AmazonLinuxImage(),
