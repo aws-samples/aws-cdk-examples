@@ -1,6 +1,7 @@
 from aws_cdk import (
     aws_ec2 as ec2,
     aws_ecs as ecs,
+    aws_ecs_patterns as ecs_patterns,
     cdk,
 )
 
@@ -12,7 +13,7 @@ class BonjourFargate(cdk.Stack):
 
         # Create VPC and Fargate Cluster
         # NOTE: Limit AZs to avoid reaching resource quotas
-        vpc = ec2.VpcNetwork(
+        vpc = ec2.Vpc(
             self, "MyVpc",
             max_a_zs=2
         )
@@ -22,7 +23,7 @@ class BonjourFargate(cdk.Stack):
             vpc=vpc
         )
 
-        fargate_service = ecs.LoadBalancedFargateService(
+        fargate_service = ecs_patterns.LoadBalancedFargateService(
             self, "FargateService",
             cluster=cluster,
             image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")

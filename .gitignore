@@ -7,3 +7,5 @@ __pycache__
 .env
 *~
 .cdk.staging
+cdk.out
+

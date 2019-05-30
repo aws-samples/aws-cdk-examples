@@ -1,6 +1,7 @@
 from aws_cdk import (
     aws_ec2 as ec2,
     aws_ecs as ecs,
+    aws_ecs_patterns as ecs_patterns,
     cdk,
 )
 
@@ -11,7 +12,7 @@ class AutoScalingFargateService(cdk.Stack):
         super().__init__(scope, id, *kwargs)
 
         # Create a cluster
-        vpc = ec2.VpcNetwork(
+        vpc = ec2.Vpc(
             self, "Vpc",
             max_a_zs=2
         )
@@ -22,7 +23,7 @@ class AutoScalingFargateService(cdk.Stack):
         )
 
         # Create Fargate Service
-        fargate_service = ecs.LoadBalancedFargateService(
+        fargate_service = ecs_patterns.LoadBalancedFargateService(
             self, "sample-app",
             cluster=cluster,
             image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
