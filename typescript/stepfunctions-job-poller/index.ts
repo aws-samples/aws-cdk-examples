@@ -1,6 +1,6 @@
 import cdk = require('@aws-cdk/cdk');
 import sfn = require('@aws-cdk/aws-stepfunctions');
-import tasks = require('@aws-cdk/aws-stepfunctions-tasks');
+import sfn_tasks = require('@aws-cdk/aws-stepfunctions-tasks');
 
 class JobPollerStack extends cdk.Stack {
     constructor(scope: cdk.App, id: string, props: cdk.StackProps = {}) {
@@ -10,12 +10,12 @@ class JobPollerStack extends cdk.Stack {
         const checkJobActivity = new sfn.Activity(this, 'CheckJob');
 
         const submitJob = new sfn.Task(this, 'Submit Job', {
-            task: new tasks.InvokeActivity(submitJobActivity),
+            task: new sfn_tasks.InvokeActivity(submitJobActivity),
             resultPath: '$.guid',
         });
         const waitX = new sfn.Wait(this, 'Wait X Seconds', { duration: sfn.WaitDuration.secondsPath('$.wait_time') });
         const getStatus = new sfn.Task(this, 'Get Job Status', {
-            task: new tasks.InvokeActivity(checkJobActivity),
+            task: new sfn_tasks.InvokeActivity(checkJobActivity),
             inputPath: '$.guid',
             resultPath: '$.status',
         });
@@ -25,7 +25,7 @@ class JobPollerStack extends cdk.Stack {
             error: 'DescribeJob returned FAILED',
         });
         const finalStatus = new sfn.Task(this, 'Get Final Job Status', {
-            task: new tasks.InvokeActivity(checkJobActivity),
+            task: new sfn_tasks.InvokeActivity(checkJobActivity),
             inputPath: '$.guid',
         });
 

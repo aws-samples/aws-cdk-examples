@@ -1,5 +1,6 @@
 import ec2 = require('@aws-cdk/aws-ec2');
 import ecs = require('@aws-cdk/aws-ecs');
+import ecs_patterns = require('@aws-cdk/aws-ecs-patterns');
 import cdk = require('@aws-cdk/cdk');
 import path = require('path');
 
@@ -15,7 +16,7 @@ const cluster = new ecs.Cluster(stack, 'Cluster', { vpc });
 // uploaded to an S3 staging bucket prior to being uploaded to ECR.
 // A new repository is created in ECR and the Fargate service is created
 // with the image from ECR.
-new ecs.LoadBalancedFargateService(stack, "FargateService", {
+new ecs_patterns.LoadBalancedFargateService(stack, "FargateService", {
   cluster,
   image: ecs.ContainerImage.fromAsset(stack, "local-image" , { 
     directory: path.join(__dirname, 'local-image') 

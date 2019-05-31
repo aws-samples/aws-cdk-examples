@@ -1,5 +1,6 @@
 import ec2 = require('@aws-cdk/aws-ec2');
 import ecs = require('@aws-cdk/aws-ecs');
+import ecs_patterns = require('@aws-cdk/aws-ecs-patterns');
 import cdk = require('@aws-cdk/cdk');
 
 class BonjourECS extends cdk.Stack {
@@ -17,7 +18,7 @@ class BonjourECS extends cdk.Stack {
     });
 
     // Instantiate ECS Service with just cluster and image
-    const ecsService = new ecs.LoadBalancedEc2Service(this, "Ec2Service", {
+    const ecsService = new ecs_patterns.LoadBalancedEc2Service(this, "Ec2Service", {
       cluster,
       memoryLimitMiB: 512,
       image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample"),

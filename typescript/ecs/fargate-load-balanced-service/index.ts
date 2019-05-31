@@ -1,5 +1,6 @@
 import ec2 = require('@aws-cdk/aws-ec2');
 import ecs = require('@aws-cdk/aws-ecs');
+import ecs_patterns = require('@aws-cdk/aws-ecs-patterns');
 import cdk = require('@aws-cdk/cdk');
 
 class BonjourFargate extends cdk.Stack {
@@ -12,7 +13,7 @@ class BonjourFargate extends cdk.Stack {
     const cluster = new ecs.Cluster(this, 'Cluster', { vpc });
 
     // Instantiate Fargate Service with just cluster and image
-    const fargateService = new ecs.LoadBalancedFargateService(this, "FargateService", {
+    const fargateService = new ecs_patterns.LoadBalancedFargateService(this, "FargateService", {
       cluster,
       image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample"),
     });

@@ -16,9 +16,7 @@ cluster.addCapacity('DefaultAutoScalingGroup', {
 
 // Create Task Definition with placement constraint
 const taskDefinition = new ecs.Ec2TaskDefinition(stack, 'TaskDef', {
-  placementConstraints: [
-    PlacementConstraint.distinctInstances()
-  ]
+  placementConstraints: [ ecs.PlacementConstraint.distinctInstances() ]
 });
 
 const container = taskDefinition.addContainer('web', {
