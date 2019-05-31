@@ -33,4 +33,3 @@ const app = new cdk.App();
 new ECSCluster(app, 'MyFirstEcsCluster');
 
 app.run();
-
