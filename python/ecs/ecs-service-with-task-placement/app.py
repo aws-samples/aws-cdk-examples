@@ -25,7 +25,7 @@ cluster.add_capacity("DefaultAutoScalingGroup",
 task_definition = ecs.Ec2TaskDefinition(
     stack, "TaskDef",
     placement_constraints=[
-        {"type": ecs.PlacementConstraintType.DistinctInstance}
+        ecs.PlacementConstraint.distinct_instances()
     ]
 )
 
