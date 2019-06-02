@@ -31,7 +31,7 @@ class BonjourFargate(cdk.Stack):
 
         cdk.CfnOutput(
             self, "LoadBalancerDNS",
-            value=fargate_service.load_balancer.dns_name
+            value=fargate_service.load_balancer.load_balancer_dns_name
         )
 
 app = cdk.App()
