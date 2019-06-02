@@ -68,7 +68,7 @@ listener.add_targets(
 
 cdk.CfnOutput(
     stack, "LoadBalancerDNS",
-    value=lb.dns_name
+    value=lb.load_balancer_dns_name
 )
 
 app.run()
