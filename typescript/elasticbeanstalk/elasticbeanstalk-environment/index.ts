@@ -10,7 +10,7 @@ export class CdkStack extends cdk.Stack {
     //objects for access parameters
     const node = this.node;
 
-    const platform = node.getContext("platform");
+    const platform = node.tryGetContext("platform");
 
 
     const app = new elasticbeanstalk.CfnApplication(this, 'Application', {
