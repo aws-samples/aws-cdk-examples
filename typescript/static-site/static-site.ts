@@ -4,6 +4,7 @@ import route53 = require('@aws-cdk/aws-route53');
 import s3 = require('@aws-cdk/aws-s3');
 import ssm = require('@aws-cdk/aws-ssm');
 import cdk = require('@aws-cdk/cdk');
+import targets = require('@aws-cdk/aws-route53-targets/lib');
 
 export interface StaticSiteProps {
     domainName: string;
@@ -60,9 +61,9 @@ export class StaticSite extends cdk.Construct {
 
         // Route53 alias record for the CloudFront distribution
         const zone = new route53.HostedZoneProvider(this, { domainName: props.domainName }).findAndImport(this, 'Zone');
-        new route53.AliasRecord(this, 'SiteAliasRecord', {
+        new route53.ARecord(this, 'SiteAliasRecord', {
             recordName: siteDomain,
-            target: distribution,
+            target: route53.AddressRecordTarget.fromAlias(new targets.CloudFrontTarget(distribution)),
             zone
         });
     }
