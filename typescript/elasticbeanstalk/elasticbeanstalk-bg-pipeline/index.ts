@@ -12,9 +12,9 @@ export class CdkStack extends cdk.Stack {
     //objects for access parameters
     const node = this.node;
 
-    const blue_env = node.getContext("blue_env");
-    const green_env = node.getContext("green_env");
-    const app_name = node.getContext("app_name");
+    const blue_env = node.tryGetContext("blue_env");
+    const green_env = node.tryGetContext("green_env");
+    const app_name = node.tryGetContext("app_name");
 
     const bucket = new s3.Bucket(this, 'BlueGreenBucket');
 
