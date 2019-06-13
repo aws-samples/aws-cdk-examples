@@ -28,4 +28,4 @@ export class LambdaCronStack extends cdk.Stack {
 
 const app = new cdk.App();
 new LambdaCronStack(app, 'LambdaCronExample');
-app.run();
+app.synth();

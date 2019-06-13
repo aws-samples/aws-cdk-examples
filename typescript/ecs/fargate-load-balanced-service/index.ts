@@ -27,4 +27,4 @@ const app = new cdk.App();
 
 new BonjourFargate(app, 'Bonjour');
 
-app.run();
+app.synth();

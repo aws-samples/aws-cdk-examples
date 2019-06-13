@@ -29,4 +29,4 @@ const app = new cdk.App();
 
 new CdkStack(app, 'ElasticBeanstalk');
 
-app.run();
+app.synth();

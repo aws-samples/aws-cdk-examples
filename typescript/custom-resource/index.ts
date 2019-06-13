@@ -22,4 +22,4 @@ class MyStack extends cdk.Stack {
 
 const app = new cdk.App();
 new MyStack(app, 'CustomResourceDemoStack');
-app.run();
+app.synth();

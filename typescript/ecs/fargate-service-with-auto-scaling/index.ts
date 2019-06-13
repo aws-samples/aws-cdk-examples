@@ -33,4 +33,4 @@ const app = new cdk.App();
 
 new AutoScalingFargateService(app, 'aws-fargate-application-autoscaling');
 
-app.run();
+app.synth();

@@ -127,4 +127,4 @@ export function addCorsOptions(apiResource: apigateway.IResource) {
 
 const app = new cdk.App();
 new ApiLambdaCrudDynamoDBStack(app, 'ApiLambdaCrudDynamoDBExample');
-app.run();
+app.synth();

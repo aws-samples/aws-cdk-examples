@@ -76,4 +76,4 @@ const app = new cdk.App();
 
 new CdkStack(app, 'ElasticBeanstalkBG');
 
-app.run();
+app.synth();
