@@ -12,4 +12,4 @@ export class MyWidgetServiceStack extends cdk.Stack {
 
 const app = new cdk.App();
 new MyWidgetServiceStack(app, 'MyWidgetServiceStack');
-app.run();
+app.synth();

@@ -35,4 +35,4 @@ const app = new cdk.App();
 
 new WillkommenFargate(app, 'Willkommen');
 
-app.run();
+app.synth();
