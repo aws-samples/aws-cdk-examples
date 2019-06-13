@@ -36,4 +36,4 @@ const app = new cdk.App();
 
 new WillkommenECS(app, 'Willkommen');
 
-app.run();
+app.synth();

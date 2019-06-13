@@ -142,4 +142,4 @@ export class AppSyncCdkStack extends cdk.Stack {
 
 const app = new cdk.App();
 new AppSyncCdkStack(app, 'AppSyncGraphQLDynamoDBExample');
-app.run();
+app.synth();

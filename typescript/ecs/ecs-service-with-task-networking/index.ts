@@ -47,4 +47,4 @@ new ecs.Ec2Service(stack, 'awsvpc-ecs-demo-service', {
   securityGroup,
 });
 
-app.run();
+app.synth();

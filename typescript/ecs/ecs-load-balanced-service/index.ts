@@ -33,4 +33,4 @@ const app = new cdk.App();
 
 new BonjourECS(app, 'Bonjour');
 
-app.run();
+app.synth();

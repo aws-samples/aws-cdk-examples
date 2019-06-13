@@ -28,4 +28,4 @@ const app = new cdk.App();
 
 new MyStaticSiteStack(app, 'MyStaticSite', { env: { region: 'us-east-1' } });
 
-app.run();
+app.synth();
