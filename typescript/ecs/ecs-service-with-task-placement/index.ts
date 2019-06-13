@@ -40,4 +40,4 @@ const service = new ecs.Ec2Service(stack, "Service", {
 service.placePackedBy(ecs.BinPackResource.Memory);
 service.placeSpreadAcross(ecs.BuiltInAttributes.AvailabilityZone);
 
-app.run();
+app.synth();
