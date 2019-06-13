@@ -106,4 +106,4 @@ class ResourceOverridesExample extends cdk.Stack {
 
 const app = new cdk.App();
 new ResourceOverridesExample(app, 'resource-overrides');
-app.run();
+app.synth();

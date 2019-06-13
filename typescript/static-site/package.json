@@ -20,6 +20,7 @@
   "dependencies": {
     "@aws-cdk/aws-cloudfront": "*",
     "@aws-cdk/aws-route53": "*",
+    "@aws-cdk/aws-route53-targets": "^0.34.0",
     "@aws-cdk/aws-s3": "*",
     "@aws-cdk/aws-ssm": "*",
     "@aws-cdk/cdk": "*"
