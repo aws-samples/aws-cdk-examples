@@ -75,6 +75,7 @@ $ cdk destroy
 
 | Example | Description |
 |---------|-------------|
+| [apigw-lambda-rds](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/apigw-lambda-rds/) | Creating an API Gateway with a lambda which connects to RDS instance |
 | [application-load-balancer](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/application-load-balancer/) | Using an AutoScalingGroup with an Application Load Balancer |
 | [classic-load-balancer](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/classic-load-balancer/) | Using an AutoScalingGroup with a Classic Load Balancer |
 | [custom-resource](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/custom-resource/) | Shows adding a Custom Resource to your CDK app |
