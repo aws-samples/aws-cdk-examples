@@ -14,6 +14,16 @@ npm run build
 
 This will install the necessary CDK, then this example's dependencies, and then build your TypeScript files and your CloudFormation template.
 
+## Pre-Deploy Prep
+
+Note that this stack uses assets, so the toolkit stack needs to be deployed to the environment. This is done using the cdk bootstrap:
+
+```bash
+cdk bootstrap aws://<your-aws-accountid>/<region>
+```
+
+*If you try to deploy the stack without the toolket it will give you an error & the required bootstrap command for your environment* 
+
 ## Deploy
 
 Run `cdk deploy`. This will deploy / redeploy your Stack to your AWS Account.
