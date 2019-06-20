@@ -18,7 +18,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     const getOneLambda = new lambda.Function(this, 'getOneItemFunction', {
       code: new lambda.AssetCode('src'),
       handler: 'get-one.handler',
-      runtime: lambda.Runtime.NodeJS810,
+      runtime: lambda.Runtime.Nodejs810,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
         PRIMARY_KEY: 'itemId'
@@ -28,7 +28,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     const getAllLambda = new lambda.Function(this, 'getAllItemsFunction', {
       code: new lambda.AssetCode('src'),
       handler: 'get-all.handler',
-      runtime: lambda.Runtime.NodeJS810,
+      runtime: lambda.Runtime.Nodejs810,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
         PRIMARY_KEY: 'itemId'
@@ -38,7 +38,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     const createOne = new lambda.Function(this, 'createItemFunction', {
       code: new lambda.AssetCode('src'),
       handler: 'create.handler',
-      runtime: lambda.Runtime.NodeJS810,
+      runtime: lambda.Runtime.Nodejs810,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
         PRIMARY_KEY: 'itemId'
@@ -48,7 +48,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     const updateOne = new lambda.Function(this, 'updateItemFunction', {
       code: new lambda.AssetCode('src'),
       handler: 'update-one.handler',
-      runtime: lambda.Runtime.NodeJS810,
+      runtime: lambda.Runtime.Nodejs810,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
         PRIMARY_KEY: 'itemId'
@@ -58,7 +58,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     const deleteOne = new lambda.Function(this, 'deleteItemFunction', {
       code: new lambda.AssetCode('src'),
       handler: 'delete-one.handler',
-      runtime: lambda.Runtime.NodeJS810,
+      runtime: lambda.Runtime.Nodejs810,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
         PRIMARY_KEY: 'itemId'
