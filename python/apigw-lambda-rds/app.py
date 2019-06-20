@@ -41,7 +41,7 @@ class ApiGwLambdaRds(cdk.Stack):
             environment={'SECRET_ARN': rds_instance.secret.secret_arn, 'DB_NAME': default_db_name},
             handler="cfn-custom-resource-rds.main",
             initial_policy=[
-                            iam.PolicyStatement().add_action("secretsmanager:GetSecretValue").add_resource(rds_instance.secret.secret_arn),
+                            iam.PolicyStatement(actions=["secretsmanager:GetSecretValue"], resources=[rds_instance.secret.secret_arn]),
                         ],
             timeout=300,
             runtime=lambda_.Runtime.PYTHON37,
@@ -56,7 +56,7 @@ class ApiGwLambdaRds(cdk.Stack):
             environment={'SECRET_ARN': rds_instance.secret.secret_arn, 'DB_NAME': default_db_name},
             handler="lambda-handler.main",
             initial_policy=[
-                            iam.PolicyStatement().add_action("secretsmanager:GetSecretValue").add_resource(rds_instance.secret.secret_arn),
+                            iam.PolicyStatement(actions=["secretsmanager:GetSecretValue"], resources=[rds_instance.secret.secret_arn]),
                         ],
             timeout=300,
             runtime=lambda_.Runtime.PYTHON37,
@@ -71,4 +71,4 @@ class ApiGwLambdaRds(cdk.Stack):
 
 app = cdk.App()
 ApiGwLambdaRds(app, "MyApiGwLambdaRds", "Transport")
-app.run()
+app.synth()
