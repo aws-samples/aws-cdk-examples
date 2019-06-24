@@ -1,0 +1,7 @@
+{
+  "app": "node index",
+  "context": {
+    "siteDomain": "example.com",
+    "dnsName": "example-service"
+  }
+}
