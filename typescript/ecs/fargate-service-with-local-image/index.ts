@@ -2,7 +2,6 @@ import ec2 = require('@aws-cdk/aws-ec2');
 import ecs = require('@aws-cdk/aws-ecs');
 import ecs_patterns = require('@aws-cdk/aws-ecs-patterns');
 import cdk = require('@aws-cdk/core');
-import path = require('path');
 
 const app = new cdk.App();
 const stack = new cdk.Stack(app, 'FargateServiceWithLocalImage');
@@ -18,7 +17,7 @@ const cluster = new ecs.Cluster(stack, 'Cluster', { vpc });
 // with the image from ECR.
 new ecs_patterns.LoadBalancedFargateService(stack, "FargateService", {
   cluster,
-  image: ecs.ContainerImage.fromAsset(path.resolve(__dirname, 'local-image'))
+  image: ecs.ContainerImage.fromAsset("local-image")
 });
 
 app.synth();
