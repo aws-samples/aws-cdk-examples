@@ -19,6 +19,16 @@ class ECSCluster extends cdk.Stack {
 
     const cluster = new ecs.Cluster(this, 'EcsCluster', { vpc });
     cluster.addAutoScalingGroup(asg);
+
+    /**
+     * This lines seem to break the synth with the following error:
+     * Error: There is already a Construct with name 'SsmParameterValue:/aws/service/ecs/optimized-ami/amazon-linux-2/recommended/image_id:C96584B6-F00A-464E-AD19-53AFF4B05118.Parameter' in ECSCluster [MyFirstEcsCluster]
+     * Hence, commenting out
+     */
+
+    // cluster.cap('DefaultAutoScalingGroup', {
+    //   instanceType: new ec2.InstanceType(ec2.InstanceSize.MICRO),
+    // });
   }
 }
 
