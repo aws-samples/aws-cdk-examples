@@ -1,4 +1,4 @@
-import cdk = require('@aws-cdk/cdk');
+import cdk = require('@aws-cdk/core');
 import cpactions = require('@aws-cdk/aws-codepipeline-actions');
 import cp = require('@aws-cdk/aws-codepipeline');
 import cc = require('@aws-cdk/aws-codecommit');

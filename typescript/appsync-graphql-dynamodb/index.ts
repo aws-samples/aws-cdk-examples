@@ -1,4 +1,4 @@
-import cdk = require('@aws-cdk/cdk');
+import cdk = require('@aws-cdk/core');
 import { CfnGraphQLApi, CfnApiKey, CfnGraphQLSchema, CfnDataSource, CfnResolver } from '@aws-cdk/aws-appsync';
 import { Table, AttributeType, StreamViewType, BillingMode } from '@aws-cdk/aws-dynamodb';
 import { Role, ServicePrincipal } from '@aws-cdk/aws-iam';

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import cdk = require('@aws-cdk/cdk');
+import cdk = require('@aws-cdk/core');
 import elasticbeanstalk = require('@aws-cdk/aws-elasticbeanstalk');
 
 
