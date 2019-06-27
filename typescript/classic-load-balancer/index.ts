@@ -12,7 +12,7 @@ class LoadBalancerStack extends cdk.Stack {
 
     const asg = new autoscaling.AutoScalingGroup(this, 'ASG', {
       vpc,
-      instanceType: new ec2.InstanceTypePair(ec2.InstanceClass.Burstable2, ec2.InstanceSize.Micro),
+      instanceType: new ec2.InstanceType(ec2.InstanceClass.BURSTABLE2),
       machineImage: new ec2.AmazonLinuxImage(),
     });
 

@@ -32,7 +32,7 @@ container.addPortMappings({
 // Create Service
 const service = new ecs.Ec2Service(stack, "Service", {
   cluster,
-  taskDefinition,
+  taskDefinition
 });
 
 // Specify binpack by memory and spread across availability zone as placement strategies.
