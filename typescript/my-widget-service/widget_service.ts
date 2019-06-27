@@ -27,7 +27,7 @@
 // OF ANY KIND, either express or implied. See the License for the specific
 // language governing permissions and limitations under the License.
 // snippet-start:[cdk.typescript.widget_service]
-import cdk = require("@aws-cdk/cdk");
+import cdk = require("@aws-cdk/core");
 import apigateway = require("@aws-cdk/aws-apigateway");
 import lambda = require("@aws-cdk/aws-lambda");
 import s3 = require("@aws-cdk/aws-s3");
