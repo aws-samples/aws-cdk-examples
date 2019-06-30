@@ -8,11 +8,13 @@ from aws_cdk import (
     aws_ec2 as ec2,
     aws_rds as rds,
     aws_iam as iam,
-    cdk,
+    core,
 )
+ 
 
-class ApiGwLambdaRds(cdk.Stack):
-    def __init__(self, scope: cdk.Construct, id: str, default_db_name: str, **kwargs) -> None:
+class ApiGwLambdaRds(core.Stack):
+    def __init__(self, scope: core.Construct, id: str, default_db_name: str, **kwargs) -> None:
+        
         super().__init__(scope, id, *kwargs)
 
         vpc = ec2.Vpc(
@@ -27,9 +29,9 @@ class ApiGwLambdaRds(cdk.Stack):
             master_username='admin',
             instance_class=ec2.InstanceType('t2.small'),
             database_name='Transport',
-            vpc=vpc,
+            vpc=vpc
         )
-        rds_instance._security_group.add_ingress_rule(ec2.CidrIPv4(cidr_ip='192.168.123.0/24'), ec2.TcpPort(3306))
+        rds_instance._security_group.add_ingress_rule(ec2.Peer.ipv4(cidr_ip='192.168.123.0/24'), ec2.Port.tcp(3306))
 
         CfnResource = cfn.CustomResource(
             self, "CfnResource",
@@ -43,8 +45,8 @@ class ApiGwLambdaRds(cdk.Stack):
             initial_policy=[
                             iam.PolicyStatement(actions=["secretsmanager:GetSecretValue"], resources=[rds_instance.secret.secret_arn]),
                         ],
-            timeout=300,
-            runtime=lambda_.Runtime.PYTHON37,
+            timeout=core.Duration.seconds(300),
+            runtime=lambda_.Runtime.PYTHON_3_7,
             vpc=vpc,
         ))
         )
@@ -58,8 +60,8 @@ class ApiGwLambdaRds(cdk.Stack):
             initial_policy=[
                             iam.PolicyStatement(actions=["secretsmanager:GetSecretValue"], resources=[rds_instance.secret.secret_arn]),
                         ],
-            timeout=300,
-            runtime=lambda_.Runtime.PYTHON37,
+            timeout=core.Duration.seconds(300),
+            runtime=lambda_.Runtime.PYTHON_3_7,
             vpc=vpc
         )
         
@@ -69,6 +71,6 @@ class ApiGwLambdaRds(cdk.Stack):
             proxy=True
         )
 
-app = cdk.App()
+app = core.App()
 ApiGwLambdaRds(app, "MyApiGwLambdaRds", "Transport")
 app.synth()
