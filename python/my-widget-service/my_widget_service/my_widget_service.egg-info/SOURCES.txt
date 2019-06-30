@@ -1,0 +1,7 @@
+README.md
+setup.py
+my_widget_service/my_widget_service.egg-info/PKG-INFO
+my_widget_service/my_widget_service.egg-info/SOURCES.txt
+my_widget_service/my_widget_service.egg-info/dependency_links.txt
+my_widget_service/my_widget_service.egg-info/requires.txt
+my_widget_service/my_widget_service.egg-info/top_level.txt
