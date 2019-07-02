@@ -1,7 +1,6 @@
-import cdk = require('@aws-cdk/cdk');
+import cdk = require('@aws-cdk/core');
 import ec2 = require('@aws-cdk/aws-ec2');
 import ecs = require('@aws-cdk/aws-ecs');
-import { Protocol } from '@aws-cdk/aws-ecs';
 
 // Based on https://aws.amazon.com/blogs/compute/introducing-cloud-native-networking-for-ecs-containers/
 const app = new cdk.App();
@@ -17,7 +16,7 @@ cluster.addCapacity('DefaultAutoScalingGroup', {
 
 // Create a task definition with its own elastic network interface
 const taskDefinition = new ecs.Ec2TaskDefinition(stack, 'nginx-awspvc', {
-  networkMode: ecs.NetworkMode.AwsVpc,
+  networkMode: ecs.NetworkMode.AWS_VPC,
 });
 
 const webContainer = taskDefinition.addContainer('nginx', {
@@ -29,7 +28,7 @@ const webContainer = taskDefinition.addContainer('nginx', {
 
 webContainer.addPortMappings({
   containerPort: 80,
-  protocol: Protocol.Tcp,
+  protocol: ecs.Protocol.TCP,
 });
 
 // Create a security group that allows HTTP traffic on port 80 for our containers without modifying the security group on the instance
@@ -38,7 +37,7 @@ const securityGroup = new ec2.SecurityGroup(stack, 'nginx--7623', {
   allowAllOutbound: false,
 });
 
-securityGroup.addIngressRule(new ec2.AnyIPv4(), new ec2.TcpPort(80));
+securityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(80));
 
 // Create the service
 new ecs.Ec2Service(stack, 'awsvpc-ecs-demo-service', {

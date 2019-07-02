@@ -1,6 +1,6 @@
 import ec2 = require('@aws-cdk/aws-ec2');
 import ecs = require('@aws-cdk/aws-ecs');
-import cdk = require('@aws-cdk/cdk');
+import cdk = require('@aws-cdk/core');
 
 class WillkommenECS extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
@@ -13,9 +13,7 @@ class WillkommenECS extends cdk.Stack {
     });
 
     // create a task definition with CloudWatch Logs
-    const logging = new ecs.AwsLogDriver(this, "AppLogging", {
-      streamPrefix: "myapp",
-    })
+    const logging = new ecs.AwsLogDriver({ streamPrefix: "myapp" })
 
     const taskDef = new ecs.Ec2TaskDefinition(this, "MyTaskDefinition");
     taskDef.addContainer("AppContainer", {

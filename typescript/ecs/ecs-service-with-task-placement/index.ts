@@ -1,6 +1,6 @@
 import ecs = require('@aws-cdk/aws-ecs');
 import ec2 = require('@aws-cdk/aws-ec2');
-import cdk = require('@aws-cdk/cdk');
+import cdk = require('@aws-cdk/core');
 
 const app = new cdk.App();
 const stack = new cdk.Stack(app, 'aws-ecs-integ-ecs');
@@ -26,7 +26,7 @@ const container = taskDefinition.addContainer('web', {
 container.addPortMappings({
   containerPort: 80,
   hostPort: 8080,
-  protocol: ecs.Protocol.Tcp
+  protocol: ecs.Protocol.TCP
 });
 
 // Create Service
@@ -35,9 +35,10 @@ const service = new ecs.Ec2Service(stack, "Service", {
   taskDefinition,
 });
 
-// Specify binpack by memory and spread across availability zone as  placement strategies.
+// Specify binpack by memory and spread across availability zone as placement strategies.
 // To place randomly, call: service.placeRandomly()
-service.placePackedBy(ecs.BinPackResource.Memory);
-service.placeSpreadAcross(ecs.BuiltInAttributes.AvailabilityZone);
+service.addPlacementStrategies(
+  ecs.PlacementStrategy.packedBy(ecs.BinPackResource.MEMORY), 
+  ecs.PlacementStrategy.spreadAcross(ecs.BuiltInAttributes.AVAILABILITY_ZONE));
 
 app.synth();

@@ -1,7 +1,7 @@
 import ecs = require('@aws-cdk/aws-ecs');
 import ecs_patterns = require('@aws-cdk/aws-ecs-patterns');
 import ec2 = require('@aws-cdk/aws-ec2');
-import cdk = require('@aws-cdk/cdk');
+import cdk = require('@aws-cdk/core');
 
 class AutoScalingFargateService extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
@@ -21,8 +21,8 @@ class AutoScalingFargateService extends cdk.Stack {
     const scaling = fargateService.service.autoScaleTaskCount({ maxCapacity: 2 });
     scaling.scaleOnCpuUtilization('CpuScaling', {
       targetUtilizationPercent: 50,
-      scaleInCooldownSec: 60,
-      scaleOutCooldownSec: 60
+      scaleInCooldown: cdk.Duration.seconds(60),
+      scaleOutCooldown: cdk.Duration.seconds(60)
     });
 
     new cdk.CfnOutput(this, 'LoadBalancerDNS', { value: fargateService.loadBalancer.loadBalancerDnsName });
