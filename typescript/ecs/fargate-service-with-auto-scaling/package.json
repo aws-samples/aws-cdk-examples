@@ -23,6 +23,6 @@
     "@aws-cdk/aws-ecs": "*",
     "@aws-cdk/aws-ecs-patterns": "*",
     "@aws-cdk/aws-elasticloadbalancingv2": "*",
-    "@aws-cdk/cdk": "*"
+    "@aws-cdk/core": "*"
   }
 }
