@@ -2,12 +2,12 @@
 from aws_cdk import (
     aws_stepfunctions as sfn,
     aws_stepfunctions_tasks as sfn_tasks,
-    cdk,
+    core,
 )
 
 
-class JobPollerStack(cdk.Stack):
-    def __init__(self, app: cdk.App, id: str, **kwargs) -> None:
+class JobPollerStack(core.Stack):
+    def __init__(self, app: core.App, id: str, **kwargs) -> None:
         super().__init__(app, id, **kwargs)
 
         submit_job_activity = sfn.Activity(
@@ -24,7 +24,7 @@ class JobPollerStack(cdk.Stack):
         )
         wait_x = sfn.Wait(
             self, "Wait X Seconds",
-            duration=sfn.WaitDuration.seconds_path('$.wait_time'),
+            time=sfn.WaitTime.seconds_path('$.wait_time'),
         )
         get_status = sfn.Task(
             self, "Get Job Status",
@@ -59,9 +59,9 @@ class JobPollerStack(cdk.Stack):
         sfn.StateMachine(
             self, "StateMachine",
             definition=definition,
-            timeout_sec=30,
+            timeout=core.Duration.seconds(30),
         )
 
-app = cdk.App()
+app = core.App()
 JobPollerStack(app, "aws-stepfunctions-integ")
-app.run()
+app.synth()
