@@ -101,7 +101,7 @@ Create a directory with a name that is descriptive of the resource type or workf
   },
   "dependencies": {
     ...
-    "@aws-cdk/cdk": "^0.23.0"
+    "@aws-cdk/core": "^0.36.0"
   }
 }
 ```

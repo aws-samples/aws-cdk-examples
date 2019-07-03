@@ -1,4 +1,4 @@
-import cdk = require('@aws-cdk/cdk');
+import cdk = require('@aws-cdk/core');
 import cpactions = require('@aws-cdk/aws-codepipeline-actions');
 import cp = require('@aws-cdk/aws-codepipeline');
 import cc = require('@aws-cdk/aws-codecommit');
@@ -19,8 +19,8 @@ export class CdkStack extends cdk.Stack {
     const bucket = new s3.Bucket(this, 'BlueGreenBucket');
 
     const handler = new lambda.Function(this, 'BlueGreenLambda', {
-      runtime: lambda.Runtime.Python36,
-      code: lambda.Code.directory('resources'),
+      runtime: lambda.Runtime.PYTHON_3_6,
+      code: lambda.Code.asset('resources'),
       handler: 'blue_green.lambda_handler',
       environment: {
         BUCKET: bucket.bucketName
@@ -36,7 +36,7 @@ export class CdkStack extends cdk.Stack {
     const pipeline = new cp.Pipeline(this, 'MyFirstPipeline');
 
     const sourceStage = pipeline.addStage({
-      name: 'Source'
+      stageName: 'Source'
     });
 
     const sourceArtifact = new cp.Artifact('Source');
@@ -51,7 +51,7 @@ export class CdkStack extends cdk.Stack {
 
 
     const deployStage = pipeline.addStage({
-      name: 'Deploy'
+      stageName: 'Deploy'
     });
 
 

@@ -2,7 +2,7 @@
 import autoscaling = require('@aws-cdk/aws-autoscaling');
 import ec2 = require('@aws-cdk/aws-ec2');
 import elbv2 = require('@aws-cdk/aws-elasticloadbalancingv2');
-import cdk = require('@aws-cdk/cdk');
+import cdk = require('@aws-cdk/core');
 
 class LoadBalancerStack extends cdk.Stack {
   constructor(app: cdk.App, id: string) {
@@ -12,7 +12,7 @@ class LoadBalancerStack extends cdk.Stack {
 
     const asg = new autoscaling.AutoScalingGroup(this, 'ASG', {
       vpc,
-      instanceType: new ec2.InstanceTypePair(ec2.InstanceClass.Burstable2, ec2.InstanceSize.Micro),
+      instanceType: ec2.InstanceType.of(ec2.InstanceClass.T2, ec2.InstanceSize.MICRO),
       machineImage: new ec2.AmazonLinuxImage(),
     });
 

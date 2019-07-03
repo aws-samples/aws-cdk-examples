@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@aws-cdk/aws-elasticbeanstalk": "*",
-    "@aws-cdk/cdk": "*",
+    "@aws-cdk/core": "*",
     "source-map-support": "^0.5.9"
   }
 }
