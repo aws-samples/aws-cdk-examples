@@ -20,7 +20,7 @@ export class CdkStack extends cdk.Stack {
 
     const handler = new lambda.Function(this, 'BlueGreenLambda', {
       runtime: lambda.Runtime.PYTHON_3_6,
-      code: lambda.AssetCode.asset('resources'),
+      code: lambda.Code.asset('resources'),
       handler: 'blue_green.lambda_handler',
       environment: {
         BUCKET: bucket.bucketName
