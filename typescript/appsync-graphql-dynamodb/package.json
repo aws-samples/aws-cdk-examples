@@ -21,6 +21,6 @@
     "@aws-cdk/aws-appsync": "*",
     "@aws-cdk/aws-dynamodb": "*",
     "@aws-cdk/aws-iam": "*",
-    "@aws-cdk/cdk": "*"
+    "@aws-cdk/core": "*"
   }
 }
