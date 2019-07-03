@@ -3,7 +3,13 @@
 This repository contains a set of example projects for the [AWS Cloud Development
 Kit](https://github.com/awslabs/aws-cdk).
 
-## TypeScript examples
+## Table of Contents
+1. [TypeScript examples](#TypeScript)
+2. [Java examples](#Java)
+3. [Python examples](#Python)
+4. [JavaScript examples](#JavaScript)
+
+## TypeScript examples <a name="TypeScript"></a>
 
 To run a TypeScript example, say my-widget-service:
 
@@ -41,7 +47,7 @@ $ cdk destroy
 | [ecs-service-with-logging](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-service-with-logging/) | Starting a container fronted by a load balancer on Fargate |
 | [fargate-service-with-logging](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/fargate-service-with-logging/) | Starting a container fronted by a load balancer on Fargate |
 
-## Java examples
+## Java examples <a name="Java"></a>
 
 To run the Java examples:
 
@@ -59,7 +65,7 @@ $ cdk destroy
 | [hello-world](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/hello-world/) | A demo application that uses the CDK in Java |
 | [lambda-cron](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/lambda-cron/) | Running a Lambda on a schedule |
 
-## Python examples
+## Python examples <a name="Python"></a>
 
 To run a Python example, say my-widget-service:
 
@@ -88,7 +94,7 @@ $ cdk destroy
 | [lambda-cron](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/lambda-cron/) | Running a Lambda on a schedule |
 | [stepfunctions](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/stepfunctions/) | A simple StepFunctions workflow |
 
-## JavaScript examples
+## JavaScript examples <a name="JavaScript"></a>
 
 Select the following link to see how to install and run the example.
 
