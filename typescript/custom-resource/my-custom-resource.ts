@@ -22,6 +22,7 @@ export class MyCustomResource extends cdk.Construct {
         uuid: 'f7d4f730-4ee1-11e8-9c2d-fa7ae01bbebc',
         code: new lambda.InlineCode(fs.readFileSync('custom-resource-handler.py', { encoding: 'utf-8' })),
         handler: 'index.main',
+        timeout: cdk.Duration.seconds(300),
         runtime: lambda.Runtime.PYTHON_2_7,
       })),
       properties: props
