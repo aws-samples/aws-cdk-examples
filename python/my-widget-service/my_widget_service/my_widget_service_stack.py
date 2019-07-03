@@ -1,5 +1,5 @@
-from aws_cdk import core
 from aws_cdk import (
+    core,
     aws_apigateway as apigw,
     aws_s3 as s3,
     aws_iam as iam
@@ -28,7 +28,6 @@ class MyWidgetServiceStack(core.Stack):
         )
 
         list_objects_response: apigw.IntegrationResponse = apigw.IntegrationResponse()
-        list_objects_response.update({"statusCode": "200"})
         list_objects_response.update({"statusCode": "200"})
 
         list_objects_integration_options: apigw.IntegrationOptions = apigw.IntegrationOptions()
