@@ -2,11 +2,11 @@ from aws_cdk import (
     aws_ec2 as ec2,
     aws_ecs as ecs,
     aws_elasticloadbalancingv2 as elbv2,
-    cdk,
+    core,
 )
 
-app = cdk.App()
-stack = cdk.Stack(app, "aws-ecs-integ-ecs")
+app = core.App()
+stack = core.Stack(app, "aws-ecs-integ-ecs")
 
 # Create a cluster
 vpc = ec2.Vpc(
@@ -37,7 +37,7 @@ container = task_definition.add_container(
 container.add_port_mappings(
     container_port=80,
     host_port=8080,
-    protocol=ecs.Protocol.Tcp
+    protocol=ecs.Protocol.TCP
 )
 
 # Create Service
@@ -46,7 +46,10 @@ service = ecs.Ec2Service(
     cluster=cluster,
     task_definition=task_definition,
 )
-service.place_packed_by(ecs.BinPackResource.Memory)
-service.place_spread_across(ecs.BuiltInAttributes.AVAILABILITY_ZONE)
 
-app.run()
+service.add_placement_strategies(
+    ecs.PlacementStrategy.packed_by(ecs.BinPackResource.MEMORY))
+service.add_placement_strategies(
+    ecs.PlacementStrategy.spread_across(
+        ecs.BuiltInAttributes.AVAILABILITY_ZONE))
+app.synth()
