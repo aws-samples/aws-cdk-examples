@@ -10,7 +10,7 @@ class WillkommenECS extends cdk.Stack {
     
     const cluster = new ecs.Cluster(this, 'Ec2Cluster', { vpc });
     cluster.addCapacity('DefaultAutoScalingGroup', {
-      instanceType: new ec2.InstanceType(ec2.InstanceSize.MICRO)
+      instanceType: new ec2.InstanceType('t2.micro')
     });
 
     // create a task definition with CloudWatch Logs
