@@ -21,6 +21,6 @@
   "dependencies": {
     "@aws-cdk/aws-cloudformation": "*",
     "@aws-cdk/aws-lambda": "*",
-    "@aws-cdk/cdk": "*"
+    "@aws-cdk/core": "*"
   }
 }

@@ -16,7 +16,7 @@
     "@aws-cdk/aws-apigateway": "*",
     "@aws-cdk/aws-lambda": "*",
     "@aws-cdk/aws-s3": "*",
-    "@aws-cdk/cdk": "*",
+    "@aws-cdk/core": "*",
     "source-map-support": "*"
   }
 }
