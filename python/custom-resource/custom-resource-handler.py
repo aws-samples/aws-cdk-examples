@@ -3,7 +3,8 @@ def main(event, context):
     import cfnresponse
     log.getLogger().setLevel(log.INFO)
 
-    # This needs to change if there are to be multiple resources in the same stack
+    # This needs to change if there are to be multiple resources
+    # in the same stack
     physical_id = 'TheOnlyCustomResource'
 
     try:
@@ -19,7 +20,8 @@ def main(event, context):
             'Response': 'You said "%s"' % message
         }
 
-        cfnresponse.send(event, context, cfnresponse.SUCCESS, attributes, physical_id)
+        cfnresponse.send(event, context, cfnresponse.SUCCESS,
+                         attributes, physical_id)
     except Exception as e:
         log.exception(e)
         # cfnresponse's error message is always "see CloudWatch"
