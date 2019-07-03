@@ -1,7 +1,7 @@
 import ec2 = require('@aws-cdk/aws-ec2');
 import ecs = require('@aws-cdk/aws-ecs');
 import ecs_patterns = require('@aws-cdk/aws-ecs-patterns');
-import cdk = require('@aws-cdk/cdk');
+import cdk = require('@aws-cdk/core');
 
 class BonjourECS extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {

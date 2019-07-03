@@ -2,7 +2,7 @@ import autoscaling = require('@aws-cdk/aws-autoscaling');
 import ec2 = require('@aws-cdk/aws-ec2');
 import { InstanceType } from '@aws-cdk/aws-ec2';
 import ecs = require('@aws-cdk/aws-ecs');
-import cdk = require('@aws-cdk/cdk');
+import cdk = require('@aws-cdk/core');
 
 class ECSCluster extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
@@ -13,7 +13,7 @@ class ECSCluster extends cdk.Stack {
     const asg = new autoscaling.AutoScalingGroup(this, 'MyFleet', {
       instanceType: new InstanceType("t2.xlarge"),
       machineImage: new ecs.EcsOptimizedAmi(),
-      updateType: autoscaling.UpdateType.ReplacingUpdate,
+      updateType: autoscaling.UpdateType.REPLACING_UPDATE,
       desiredCapacity: 3,
       vpc
     });
