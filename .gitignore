@@ -9,3 +9,4 @@ __pycache__
 .cdk.staging
 cdk.out
 .idea
+.vscode
