@@ -10,7 +10,7 @@ class ECSCluster extends cdk.Stack {
     const vpc = new ec2.Vpc(this, 'MyVpc', { maxAZs: 2 });
 
     const asg = new autoscaling.AutoScalingGroup(this, 'MyFleet', {
-      instanceType: new ec2.InstanceType('t2.xlarge'),
+      instanceType: ec2.InstanceType.of(ec2.InstanceClass.T2, ec2.InstanceSize.XLARGE),
       machineImage: new ecs.EcsOptimizedAmi(),
       updateType: autoscaling.UpdateType.REPLACING_UPDATE,
       desiredCapacity: 3,
@@ -26,8 +26,8 @@ class ECSCluster extends cdk.Stack {
      * Hence, commenting out
      */
 
-    // cluster.cap('DefaultAutoScalingGroup', {
-    //   instanceType: new ec2.InstanceType('t2.micro'),
+    // cluster.addCapacity('DefaultAutoScalingGroup', {
+    //   instanceType: ec2.InstanceType.of(ec2.InstanceClass.T2, ec2.InstanceSize.MICRO)
     // });
   }
 }
