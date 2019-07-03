@@ -2,7 +2,7 @@ import ec2 = require('@aws-cdk/aws-ec2');
 import ecs = require('@aws-cdk/aws-ecs');
 import ecs_patterns = require('@aws-cdk/aws-ecs-patterns');
 import cdk = require('@aws-cdk/core');
-import path = require('path');	
+import path = require('path');
 
 const app = new cdk.App();
 const stack = new cdk.Stack(app, 'FargateServiceWithLocalImage');
