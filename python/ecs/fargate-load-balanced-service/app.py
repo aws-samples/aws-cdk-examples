@@ -2,13 +2,13 @@ from aws_cdk import (
     aws_ec2 as ec2,
     aws_ecs as ecs,
     aws_ecs_patterns as ecs_patterns,
-    cdk,
+    core,
 )
 
 
-class BonjourFargate(cdk.Stack):
+class BonjourFargate(core.Stack):
 
-    def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, *kwargs)
 
         # Create VPC and Fargate Cluster
@@ -29,11 +29,11 @@ class BonjourFargate(cdk.Stack):
             image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
         )
 
-        cdk.CfnOutput(
+        core.CfnOutput(
             self, "LoadBalancerDNS",
             value=fargate_service.load_balancer.load_balancer_dns_name
         )
 
-app = cdk.App()
+app = core.App()
 BonjourFargate(app, "Bonjour")
-app.run()
+app.synth()

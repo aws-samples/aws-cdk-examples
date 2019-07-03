@@ -3,12 +3,12 @@ from aws_cdk import (
     aws_autoscaling as autoscaling,
     aws_ec2 as ec2,
     aws_elasticloadbalancingv2 as elbv2,
-    cdk,
+    core,
 )
 
 
-class LoadBalancerStack(cdk.Stack):
-    def __init__(self, app: cdk.App, id: str) -> None:
+class LoadBalancerStack(core.Stack):
+    def __init__(self, app: core.App, id: str) -> None:
         super().__init__(app, id)
 
         vpc = ec2.Vpc(self, "VPC")
@@ -17,13 +17,16 @@ class LoadBalancerStack(cdk.Stack):
             self,
             "ASG",
             vpc=vpc,
-            instance_type=ec2.InstanceTypePair(
-                ec2.InstanceClass.Burstable2, ec2.InstanceSize.Micro
+            instance_type=ec2.InstanceType.of(
+                ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.MICRO
             ),
             machine_image=ec2.AmazonLinuxImage(),
         )
 
-        lb = elbv2.ApplicationLoadBalancer(self, "LB", vpc=vpc, internet_facing=True)
+        lb = elbv2.ApplicationLoadBalancer(
+            self, "LB",
+            vpc=vpc,
+            internet_facing=True)
 
         listener = lb.add_listener("Listener", port=80)
         listener.add_targets("Target", port=80, targets=[asg])
@@ -32,6 +35,6 @@ class LoadBalancerStack(cdk.Stack):
         asg.scale_on_request_count("AModestLoad", target_requests_per_second=1)
 
 
-app = cdk.App()
+app = core.App()
 LoadBalancerStack(app, "LoadBalancerStack")
-app.run()
+app.synth()
