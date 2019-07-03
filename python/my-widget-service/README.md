@@ -1,7 +1,13 @@
 
-# Welcome to your CDK Python project!
+# Welcome to the MY Widget Service CDK Python project!
 
-This is a blank project for Python development with CDK.
+## Overview
+
+This project uses API Gateway's Service Integrations to expose a CRUD-like API to objects
+stored in S3. This project differs from the Typescript variant in that this project doesn't 
+utilize the Lambda proxy integration, but instead interacts directly with S3.
+
+## Setup
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 

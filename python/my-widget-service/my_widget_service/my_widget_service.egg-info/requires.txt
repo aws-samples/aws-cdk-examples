@@ -1,3 +1,0 @@
-aws-cdk.core
-aws-cdk.aws_apigateway
-aws-cdk.aws_s3
