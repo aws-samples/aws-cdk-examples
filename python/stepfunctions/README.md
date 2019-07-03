@@ -1,5 +1,5 @@
 
-# Welcome to your CDK Python project!
+# AWS Step Functions with Python CDK!
 
 ## Overview
 
