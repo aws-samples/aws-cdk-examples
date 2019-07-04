@@ -44,10 +44,10 @@ After building your TypeScript code, you will be able to run the CDK toolkits co
     <list all stacks in this program>
 
     $ cdk synth
-    <cloudformation template>
+    <generates and outputs cloudformation template>
 
     $ cdk deploy
-    <deploy stack to your account>
+    <deploys stack to your account>
 
     $ cdk diff
-    <diff against deployed stack>
+    <shows diff against deployed stack>
