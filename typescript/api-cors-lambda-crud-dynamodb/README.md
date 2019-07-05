@@ -31,7 +31,7 @@ The whole component contains:
 - Lambda pointing to `src/get-one.ts`, containing code for __getting an item__ from the DynamoDB table.
 - Lambda pointing to `src/update-one.ts`, containing code for __updating an item__ in the DynamoDB table.
 - A DynamoDB table `items` that stores the data.
-- Five LambdaIntegrations that connect these Lambdas to the API.
+- Five `LambdaIntegrations` that connect these Lambdas to the API.
 
 ## CDK Toolkit
 
