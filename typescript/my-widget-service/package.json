@@ -2,6 +2,7 @@
   "name": "my-widget-service",
   "version": "0.1.0",
   "description": "Use Lambda to serve up widgets.",
+  "private": true,
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
