@@ -15,7 +15,7 @@ class ResourceOverridesExample extends cdk.Stack {
             encryption: s3.BucketEncryption.KMS_MANAGED
         });
 
-        const bucketResource2 = bucket.node.findChild('Resource') as s3.CfnBucket;
+        const bucketResource2 = bucket.node.defaultChild as s3.CfnBucket;
         bucketResource2.addPropertyOverride('BucketEncryption.ServerSideEncryptionConfiguration.0.EncryptEverythingAndAlways', true);
         bucketResource2.addPropertyDeletionOverride('BucketEncryption.ServerSideEncryptionConfiguration.0.ServerSideEncryptionByDefault');
 
@@ -23,7 +23,7 @@ class ResourceOverridesExample extends cdk.Stack {
         // Accessing the L1 bucket resource from an L2 bucket
         //
 
-        const bucketResource = bucket.node.findChild('Resource') as s3.CfnBucket;
+        const bucketResource = bucket.node.defaultChild as s3.CfnBucket;
         const anotherWay = bucket.node.children.find(c => (c as cdk.CfnResource).cfnResourceType === 'AWS::S3::Bucket') as s3.CfnBucket;
         assert.equal(bucketResource, anotherWay);
 
@@ -31,7 +31,7 @@ class ResourceOverridesExample extends cdk.Stack {
         // This is how to specify resource options such as dependencies, metadata, update policy
         //
 
-        bucketResource.node.addDependency(otherBucket.node.findChild('Resource') as cdk.CfnResource);
+        bucketResource.node.addDependency(otherBucket.node.defaultChild as cdk.CfnResource);
         bucketResource.cfnOptions.metadata = { MetadataKey: 'MetadataValue' };
         bucketResource.cfnOptions.updatePolicy = {
             autoScalingRollingUpdate: {
@@ -56,7 +56,8 @@ class ResourceOverridesExample extends cdk.Stack {
         bucketResource.addPropertyOverride('Token', otherBucket.bucketArn); // use tokens
         bucketResource.addPropertyOverride('LoggingConfiguration.DestinationBucketName', otherBucket.bucketName);
 
-        bucketResource.addPropertyOverride('AnalyticsConfigurations', [
+        // Assign completely new property value
+        bucketResource.analyticsConfigurations = [
             {
                 id: 'config1',
                 storageClassAnalysis: {
@@ -69,8 +70,9 @@ class ResourceOverridesExample extends cdk.Stack {
                     }
                 }
             }
-        ]);
+        ];
 
+        // Or selectively override parts of it
         bucketResource.addPropertyOverride('CorsConfiguration.CorsRules', [
             {
                 AllowedMethods: [ 'GET' ],
