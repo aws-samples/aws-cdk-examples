@@ -11,7 +11,7 @@ stack = core.Stack(app, "aws-ecs-integ-ecs")
 # Create a cluster
 vpc = ec2.Vpc(
     stack, "Vpc",
-    max_a_zs=2
+    max_azs=2
 )
 
 cluster = ecs.Cluster(
@@ -32,13 +32,14 @@ task_definition = ecs.Ec2TaskDefinition(
 container = task_definition.add_container(
     "web",
     image=ecs.ContainerImage.from_registry("nginx:latest"),
-    memory_limit_mi_b=256,
+    memory_limit_mib=256,
 )
-container.add_port_mappings(
+port_mapping = ecs.PortMapping(
     container_port=80,
     host_port=8080,
     protocol=ecs.Protocol.TCP
 )
+container.add_port_mappings(port_mapping)
 
 # Create Service
 service = ecs.Ec2Service(
