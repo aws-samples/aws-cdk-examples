@@ -13,7 +13,7 @@ class ECSCluster(core.Stack):
 
         vpc = ec2.Vpc(
             self, "MyVpc",
-            max_a_zs=2
+            max_azs=2
         )
 
         asg = autoscaling.AutoScalingGroup(

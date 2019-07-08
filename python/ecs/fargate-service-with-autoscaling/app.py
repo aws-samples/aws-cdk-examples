@@ -14,7 +14,7 @@ class AutoScalingFargateService(core.Stack):
         # Create a cluster
         vpc = ec2.Vpc(
             self, "Vpc",
-            max_a_zs=2
+            max_azs=2
         )
 
         cluster = ecs.Cluster(
