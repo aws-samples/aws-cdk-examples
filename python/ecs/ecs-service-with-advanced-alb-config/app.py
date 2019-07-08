@@ -11,7 +11,7 @@ stack = core.Stack(app, "aws-ec2-integ-ecs")
 # Create a cluster
 vpc = ec2.Vpc(
     stack, "MyVpc",
-    max_a_zs=2
+    max_azs=2
 )
 
 cluster = ecs.Cluster(
@@ -19,7 +19,9 @@ cluster = ecs.Cluster(
     vpc=vpc
 )
 cluster.add_capacity("DefaultAutoScalingGroup",
-                     instance_type=ec2.InstanceType("t2.micro"))
+                     instance_type=ec2.InstanceType.of(
+                         ec2.InstanceClass.STANDARD5,
+                         ec2.InstanceSize.MICRO))
 
 # Create Task Definition
 task_definition = ecs.Ec2TaskDefinition(
@@ -27,13 +29,14 @@ task_definition = ecs.Ec2TaskDefinition(
 container = task_definition.add_container(
     "web",
     image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
-    memory_limit_mi_b=256
+    memory_limit_mib=256
 )
-container.add_port_mappings(
+port_mapping = ecs.PortMapping(
     container_port=80,
     host_port=8080,
     protocol=ecs.Protocol.TCP
 )
+container.add_port_mappings(port_mapping)
 
 # Create Service
 service = ecs.Ec2Service(
@@ -54,16 +57,18 @@ listener = lb.add_listener(
     open=True
 )
 
+health_check = elbv2.HealthCheck(
+    interval=core.Duration.seconds(60),
+    path="/health",
+    timeout=core.Duration.seconds(5)
+)
+
 # Attach ALB to ECS Service
 listener.add_targets(
     "ECS",
     port=80,
     targets=[service],
-    health_check={
-        "interval_secs": 60,
-        "path": "/health",
-        "timeout_seconds": 5
-    }
+    health_check=health_check,
 )
 
 core.CfnOutput(
