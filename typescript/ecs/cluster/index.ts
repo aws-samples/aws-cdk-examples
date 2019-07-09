@@ -7,7 +7,7 @@ class ECSCluster extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const vpc = new ec2.Vpc(this, 'MyVpc', { maxAZs: 2 });
+    const vpc = new ec2.Vpc(this, 'MyVpc', { maxAzs: 2 });
 
     const asg = new autoscaling.AutoScalingGroup(this, 'MyFleet', {
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.T2, ec2.InstanceSize.XLARGE),
