@@ -1,4 +1,15 @@
 # Lambda-Cron
+<!--BEGIN STABILITY BANNER-->
+---
+
+![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
+
+> **This is a stable example. It should successfully build out of the box**
+>
+> This examples does is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
+
+---
+<!--END STABILITY BANNER-->
 
 This example creates a new lambda function that executes every day at 6pm UTC, as dictated by a cron scheduled event.
 
