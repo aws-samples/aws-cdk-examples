@@ -20,7 +20,7 @@ class ApiGwLambdaRds(core.Stack):
         vpc = ec2.Vpc(
             self, 'MyVpc',
             cidr='192.168.123.0/24',
-            max_a_zs=2
+            max_azs=2
         )
 
         rds_instance = rds.DatabaseInstance(
