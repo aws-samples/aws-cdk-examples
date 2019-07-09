@@ -5,6 +5,7 @@ import s3 = require('@aws-cdk/aws-s3');
 import acm = require('@aws-cdk/aws-certificatemanager');
 import cdk = require('@aws-cdk/core');
 import targets = require('@aws-cdk/aws-route53-targets/lib');	
+import { Construct } from '@aws-cdk/core';
 
 export interface StaticSiteProps {
     domainName: string;
@@ -20,8 +21,8 @@ export interface StaticSiteProps {
  * The ACM certificate is expected to be created and validated outside of the CDK,
  * with the certificate ARN stored in an SSM Parameter.
  */
-export class StaticSite extends cdk.Construct {
-    constructor(parent: cdk.Construct, name: string, props: StaticSiteProps) {
+export class StaticSite extends Construct {
+    constructor(parent: Construct, name: string, props: StaticSiteProps) {
         super(parent, name);
 
         const siteDomain = props.siteSubDomain + '.' + props.domainName;
