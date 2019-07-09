@@ -2,9 +2,9 @@
 
 This example creates an API Gateway with a Lambda that will query data from the RDS Mysql Instance. 
 
-The DB is provisioned with some example data using a Cloudformation custom resource.
+After the RDS Instance is provisioned a Cloudformation custom resource is used to create a DB populate with some example data.
 
-The lambdas use Secrets Manager for storage & retrieval of DB connection details.
+The lambda function & custom resource use Secrets Manager for storage & retrieval of DB connection details.
 
 ## Prep
 

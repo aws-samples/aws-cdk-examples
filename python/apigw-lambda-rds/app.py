@@ -10,7 +10,7 @@ from aws_cdk import (
     aws_iam as iam,
     core,
 )
- 
+
 
 class ApiGwLambdaRds(core.Stack):
     def __init__(self, scope: core.Construct, id: str, default_db_name: str, **kwargs) -> None:
