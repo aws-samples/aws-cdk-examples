@@ -1,5 +1,15 @@
-Resource Override Example
-=========================
+# Resource Override
+<!--BEGIN STABILITY BANNER-->
+---
+
+![Stability: REFERENCE](https://img.shields.io/badge/stability-Reference-informational.svg?style=for-the-badge)
+
+> **This is a reference example. It may not build, and exists to demonstrate features*
+>
+> This example has code elements that will block a successful build, and should be used for reference only.
+
+---
+<!--END STABILITY BANNER-->
 
 This example shows the use of the resource overrides ("escape hatch") mechanism.
 We add an `AWS::S3::Bucket` resource, and then proceed to change the properties

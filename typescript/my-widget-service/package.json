@@ -2,11 +2,18 @@
   "name": "my-widget-service",
   "version": "0.1.0",
   "description": "Use Lambda to serve up widgets.",
+  "private": true,
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
     "cdk": "cdk"
   },
+  "author": {
+    "name": "Amazon Web Services",
+    "url": "https://aws.amazon.com",
+    "organization": true
+  },
+  "license": "Apache-2.0",
   "devDependencies": {
     "@types/node": "^8.9.4",
     "typescript": "^3.1.2",
