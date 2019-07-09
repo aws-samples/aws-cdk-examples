@@ -9,7 +9,7 @@ class BonjourFargate extends cdk.Stack {
 
     // Create VPC and Fargate Cluster
     // NOTE: Limit AZs to avoid reaching resource quotas
-    const vpc = new ec2.Vpc(this, 'MyVpc', { maxAZs: 2 });
+    const vpc = new ec2.Vpc(this, 'MyVpc', { maxAzs: 2 });
     const cluster = new ecs.Cluster(this, 'Cluster', { vpc });
 
     // Instantiate Fargate Service with just cluster and image

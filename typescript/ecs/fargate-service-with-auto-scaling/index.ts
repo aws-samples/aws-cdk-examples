@@ -8,7 +8,7 @@ class AutoScalingFargateService extends cdk.Stack {
     super(scope, id, props);
 
     // Create a cluster
-    const vpc = new ec2.Vpc(this, 'Vpc', { maxAZs: 2 });
+    const vpc = new ec2.Vpc(this, 'Vpc', { maxAzs: 2 });
     const cluster = new ecs.Cluster(this, 'fargate-service-autoscaling', { vpc });
 
     // Create Fargate Service
