@@ -1,7 +1,11 @@
 package software.amazon.awscdk.examples;
 
-import software.amazon.awscdk.App;
-import software.amazon.awscdk.Stack;
+import software.amazon.awscdk.core.App;
+import software.amazon.awscdk.core.ConstructNode;
+import software.amazon.awscdk.core.Duration;
+import software.amazon.awscdk.core.IConstruct;
+import software.amazon.awscdk.core.Stack;
+import software.amazon.awscdk.cxapi.CloudFormationStackArtifact;
 import software.amazon.awscdk.services.sns.Topic;
 import software.amazon.awscdk.services.sqs.QueueProps;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -31,7 +35,7 @@ public class SinkQueueTest {
         Stack stack = new Stack();
         new SinkQueue(stack, "MySinkQueue", SinkQueueProps.builder()
                 .withQueueProps(QueueProps.builder()
-                        .withVisibilityTimeoutSec(500)
+                        .withVisibilityTimeout(Duration.seconds(500))
                         .build())
                 .build());
         assertTemplate(stack, "{\n" +
@@ -92,7 +96,7 @@ public class SinkQueueTest {
             sink.subscribe(new Topic(stack, "Topic" + i));
         }
 
-        app.synthesizeStack(stack.getName());
+        getTemplate(stack);
     }
 
     private static void assertTemplate(final Stack stack, final URL expectedResource) throws IOException {
@@ -104,7 +108,7 @@ public class SinkQueueTest {
     }
 
     private static void assertTemplate(final Stack stack, final JsonNode expected) throws IOException {
-        JsonNode actual = JSON.valueToTree(stack.toCloudFormation());
+        JsonNode actual = JSON.valueToTree(getTemplate(stack));
 
         // print to stderr if non-equal, so it will be easy to grab
         if (expected == null || !expected.equals(actual)) {
@@ -113,5 +117,11 @@ public class SinkQueueTest {
         }
 
         assertEquals(expected, actual);
+    }
+
+    private static Object getTemplate(Stack stack) {
+        IConstruct root = stack.getNode().getRoot();
+        CloudFormationStackArtifact stackArtifact = ConstructNode.synth(root.getNode()).getStack(stack.getStackName());
+        return stackArtifact.getTemplate();
     }
 }

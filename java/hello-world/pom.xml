@@ -55,39 +55,44 @@
         <dependency>
             <groupId>software.amazon.jsii</groupId>
             <artifactId>jsii-runtime</artifactId>
-            <version>0.7.14</version>
+            <version>0.14.0</version>
         </dependency>
 
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
-            <artifactId>cdk</artifactId>
-            <version>0.23.0</version>
+            <artifactId>core</artifactId>
+            <version>1.0.0.DEVPREVIEW</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>autoscaling</artifactId>
-            <version>0.23.0</version>
+            <version>1.0.0.DEVPREVIEW</version>
         </dependency>
 
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>ec2</artifactId>
-            <version>0.23.0</version>
+            <version>1.0.0.DEVPREVIEW</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>s3</artifactId>
-            <version>0.23.0</version>
+            <version>1.0.0.DEVPREVIEW</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>sns</artifactId>
-            <version>0.23.0</version>
+            <version>1.0.0.DEVPREVIEW</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>sqs</artifactId>
-            <version>0.23.0</version>
+            <version>1.0.0.DEVPREVIEW</version>
+        </dependency>
+        <dependency>
+          <groupId>software.amazon.awscdk</groupId>
+          <artifactId>sns-subscriptions</artifactId>
+          <version>1.0.0.DEVPREVIEW</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
