@@ -81,7 +81,7 @@ Create a directory with a name that is descriptive of the resource type or workf
 ```
 {
   "name": [name of your application],
-  "version": "0.23.0",
+  "version": "1.0.0",
   "description": [description of your application],
   "private": true,
   "scripts": {
@@ -101,7 +101,7 @@ Create a directory with a name that is descriptive of the resource type or workf
   },
   "dependencies": {
     ...
-    "@aws-cdk/core": "^0.36.0"
+    "@aws-cdk/core": "^1.0.0"
   }
 }
 ```
