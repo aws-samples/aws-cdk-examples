@@ -53,12 +53,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>software.amazon.jsii</groupId>
-            <artifactId>jsii-runtime</artifactId>
-            <version>0.14.0</version>
-        </dependency>
-
-        <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>core</artifactId>
             <version>1.0.0.DEVPREVIEW</version>
