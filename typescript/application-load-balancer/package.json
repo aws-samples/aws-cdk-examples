@@ -1,6 +1,6 @@
 {
   "name": "application-load-balancer",
-  "version": "0.23.0",
+  "version": "1.0.0",
   "description": "Use of an Application Load Balancer with an AutoScaling Group",
   "private": true,
   "scripts": {

@@ -1,6 +1,6 @@
 {
   "name": "ec2-service-with-alb",
-  "version": "0.25.1",
+  "version": "1.0.0",
   "description": "EC2 Service with Application Load Balancer",
   "private": true,
   "scripts": {

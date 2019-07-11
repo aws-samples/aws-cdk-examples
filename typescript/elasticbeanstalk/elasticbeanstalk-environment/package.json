@@ -1,6 +1,6 @@
 {
   "name": "elasticbeanstalk-environment",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Creates a Blue/Green deployment to EBS",
   "private": true,
   "scripts": {

@@ -1,6 +1,6 @@
 {
   "name": "stepfunctions-job-poller",
-  "version": "0.23.0",
+  "version": "1.0.0",
   "description": "A simple StepFunctions demo",
   "private": true,
   "scripts": {

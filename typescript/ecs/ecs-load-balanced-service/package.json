@@ -1,6 +1,6 @@
 {
   "name": "ecs-load-balanced-service",
-  "version": "0.25.1",
+  "version": "1.0.0",
   "description": "Running a load balanced service on ECS",
   "private": true,
   "scripts": {
