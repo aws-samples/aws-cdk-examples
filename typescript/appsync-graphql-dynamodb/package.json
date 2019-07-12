@@ -1,6 +1,6 @@
 {
   "name": "appsync-graphql-dynamodb",
-  "version": "0.23.0",
+  "version": "1.0.0",
   "description": "Running a GraphQL API with four resolvers to do CRUD operations on DynamoDB",
   "private": true,
   "scripts": {

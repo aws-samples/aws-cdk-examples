@@ -1,6 +1,6 @@
 {
   "name": "ecs-service-with-logging",
-  "version": "0.23.0",
+  "version": "1.0.0",
   "description": "Running a load balanced service on ECS",
   "private": true,
   "scripts": {
