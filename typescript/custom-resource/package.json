@@ -1,6 +1,6 @@
 {
   "name": "custom-resource",
-  "version": "0.23.0",
+  "version": "1.0.0",
   "description": "Shows how to use a custom resource",
   "private": true,
   "scripts": {

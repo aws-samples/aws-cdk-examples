@@ -1,6 +1,6 @@
 {
   "name": "ecs-cluster",
-  "version": "0.25.1",
+  "version": "1.0.0",
   "description": "Basic ECS Cluster",
   "private": true,
   "scripts": {

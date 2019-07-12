@@ -1,7 +1,8 @@
 package software.amazon.awscdk.examples;
 
-import software.amazon.awscdk.Construct;
+import software.amazon.awscdk.core.Construct;
 import software.amazon.awscdk.services.sns.Topic;
+import software.amazon.awscdk.services.sns.subscriptions.SqsSubscription;
 import software.amazon.awscdk.services.sqs.Queue;
 import software.amazon.awscdk.services.sqs.QueueProps;
 
@@ -32,7 +33,7 @@ public class SinkQueue extends Construct {
 
         // defaults
         QueueProps queueProps = props.getQueueProps();
-        this.expectedTopicCount = props.getRequiredTopicCount() != null ? props.getRequiredTopicCount().intValue() : 10;
+        this.expectedTopicCount = props.getRequiredTopicCount() != null ? props.getRequiredTopicCount().intValue() : 0;
 
         // WORKAROUND: https://github.com/awslabs/aws-cdk/issues/157
         if (queueProps == null) {
@@ -58,10 +59,10 @@ public class SinkQueue extends Construct {
      */
     public void subscribe(final Topic... topics) {
         for (Topic topic: topics) {
-            if (actualTopicCount == expectedTopicCount) {
+            if (expectedTopicCount != 0 && actualTopicCount >= expectedTopicCount) {
                 throw new RuntimeException("Cannot add more topics to the sink. Maximum topics is configured to " + this.expectedTopicCount);
             }
-            topic.subscribeQueue(this.queue);
+            topic.addSubscription(new SqsSubscription(this.queue));
             actualTopicCount++;
         }
     }

@@ -1,6 +1,6 @@
 {
   "name": "classic-load-balancer",
-  "version": "0.23.0",
+  "version": "1.0.0",
   "description": "Use of a Classic Load Balancer with an AutoScaling Group",
   "private": true,
   "scripts": {

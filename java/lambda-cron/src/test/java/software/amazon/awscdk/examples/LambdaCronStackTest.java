@@ -3,8 +3,8 @@ package software.amazon.awscdk.examples;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.Before;
 import org.junit.Test;
-import software.amazon.awscdk.App;
-import software.amazon.awscdk.Stack;
+import software.amazon.awscdk.core.App;
+import software.amazon.awscdk.core.Stack;
 
 import java.io.IOException;
 import java.util.List;
