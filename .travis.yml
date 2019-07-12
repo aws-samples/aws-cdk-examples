@@ -1,7 +1,6 @@
-language: node_js
+language: generic
 node_js:
     - "8"
 
 install: echo Nothing to install
 script: scripts/build.sh
-
