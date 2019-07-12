@@ -69,7 +69,6 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     dynamoTable.grantReadWriteData(getOneLambda);
     dynamoTable.grantReadWriteData(createOne);
     dynamoTable.grantReadWriteData(updateOne);
-    dynamoTable.grantReadWriteData(createOne);
     dynamoTable.grantReadWriteData(deleteOne);
 
     const api = new apigateway.RestApi(this, 'itemsApi', {
