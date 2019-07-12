@@ -5,5 +5,5 @@ node_js:
 python:
     - "3.6"
 
-install: echo Nothing to install
+install: apt-get install python3.6-venv
 script: scripts/build.sh
