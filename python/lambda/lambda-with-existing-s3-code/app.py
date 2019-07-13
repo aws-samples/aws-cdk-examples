@@ -18,7 +18,6 @@ class LambdaS3Code(core.Stack):
         lambdaFn = lambda_.Function(
             self, 'Singleton',
             handler='index.main',
-            role=self.role,
             code=lambda_.S3Code(
                 bucket=lambda_code_bucket,
                 key='my-lambdaa.py'
