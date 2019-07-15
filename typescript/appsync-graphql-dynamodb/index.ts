@@ -1,6 +1,6 @@
 import cdk = require('@aws-cdk/core');
 import { CfnGraphQLApi, CfnApiKey, CfnGraphQLSchema, CfnDataSource, CfnResolver } from '@aws-cdk/aws-appsync';
-import { Table, AttributeType, StreamViewType, BillingMode } from '@aws-cdk/aws-dynamodb';
+import { CfnTable, AttributeType, BillingMode } from '@aws-cdk/aws-dynamodb';
 import { Role, ServicePrincipal, ManagedPolicy } from '@aws-cdk/aws-iam';
 
 
@@ -44,28 +44,38 @@ export class AppSyncCdkStack extends cdk.Stack {
       }`
     });
 
-    const itemsTable = new Table(this, 'ItemsTable', {
+    const itemsTable = new CfnTable(this, 'ItemsTable', {
       tableName: tableName,
-      partitionKey: {
-        name: `${tableName}Id`,
-        type: AttributeType.STRING
-      },
+      keySchema: [
+          {
+            attributeName: `${tableName}Id`,
+            keyType: "HASH",
+          }
+      ],
+      attributeDefinitions: [
+          {
+            attributeName: `${tableName}Id`,
+            attributeType: AttributeType.STRING,
+          }
+      ],
       billingMode: BillingMode.PAY_PER_REQUEST,
-      stream: StreamViewType.NEW_IMAGE
+      // streamSpecification: StreamViewType.NEW_IMAGE,
     });
+    itemsTable.cfnOptions.deletionPolicy = cdk.CfnDeletionPolicy.DELETE 
 
     const itemsTableRole = new Role(this, 'ItemsDynamoDBRole', {
       assumedBy: new ServicePrincipal('appsync.amazonaws.com')
     });
 
-    itemsTableRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess'));
+    itemsTableRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonDynamoDBFullAccess'));
+    apiSchema.addDependsOn(itemsTable)
 
     const dataSource = new CfnDataSource(this, 'ItemsDataSource', {
       apiId: itemsGraphQLApi.attrApiId,
       name: 'ItemsDynamoDataSource',
       type: 'AMAZON_DYNAMODB',
       dynamoDbConfig: {
-        tableName: itemsTable.tableName,
+        tableName: tableName,
         awsRegion: this.region
       },
       serviceRoleArn: itemsTableRole.roleArn
