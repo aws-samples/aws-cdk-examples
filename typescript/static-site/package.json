@@ -1,6 +1,6 @@
 {
   "name": "static-site",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Infrastructure for an HTTPS static site using S3 and CloudFront",
   "scripts": {
     "build": "tsc",

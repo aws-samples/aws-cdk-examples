@@ -1,6 +1,6 @@
 {
   "name": "resource-overrides",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Shows how to access the CloudFormation layer",
   "private": true,
   "scripts": {

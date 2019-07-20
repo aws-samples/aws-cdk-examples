@@ -1,6 +1,6 @@
 {
   "name": "fargate-service-with-local-image",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Running a load balanced service on Fargate with an image loaded locally",
   "private": true,
   "scripts": {
