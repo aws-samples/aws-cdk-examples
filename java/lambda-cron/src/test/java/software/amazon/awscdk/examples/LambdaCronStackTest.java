@@ -8,30 +8,31 @@ import software.amazon.awscdk.core.Stack;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 import static software.amazon.awscdk.examples.TestUtils.toCloudFormationJson;
 
 public class LambdaCronStackTest {
-    private App app;
-    private Stack stack;
     private JsonNode actualStack;
     private JsonNode expectedStack;
 
     @Before
     public void setUp() throws IOException {
-        app = new App();
-        stack = new LambdaCronStack(app, "lambdaResource-cdk-lambda-cron");
+        App app = new App();
+        Stack stack = new LambdaCronStack(app, "lambdaResource-cdk-lambda-cron");
         actualStack = toCloudFormationJson(stack).path("Resources");
         expectedStack = TestUtils.fromFileResource(getClass().getResource("testCronLambdaExpected.json")).path("Resources");
     }
 
     @Test()
     public void testTypes() {
-        List<JsonNode> actual = actualStack.findValues("Type");
-        List<JsonNode> expected = expectedStack.findValues("Type");
-        containsInAnyOrder(actual, expected);
+        List<String> actual = actualStack.findValues("Type")
+                .stream().map(JsonNode::textValue).collect(Collectors.toList());
+        String[] expected = expectedStack.findValues("Type")
+                .stream().map(JsonNode::textValue).toArray(String[]::new);
+        assertThat(actual, containsInAnyOrder(expected));
     }
 
     @Test
@@ -41,7 +42,7 @@ public class LambdaCronStackTest {
         JsonNode expected = TestUtils.getJsonNode(expectedStack, type);
         String[] keys = {"ManagedPolicyArns", "AssumeRolePolicyDocument"};
         for (String key : keys) {
-            assertEquals(actual.get(key), expected.get(key));
+            assertThat(actual.get(key), equalTo(expected.get(key)));
         }
     }
 
@@ -52,7 +53,7 @@ public class LambdaCronStackTest {
         JsonNode expected = TestUtils.getJsonNode(expectedStack, type);
         String[] keys = {"ManagedPolicyArns", "AssumeRolePolicyDocument"};
         for (String key : keys) {
-            assertEquals(actual.get(key), expected.get(key));
+            assertThat(actual.get(key), equalTo(expected.get(key)));
         }
     }
 
@@ -61,9 +62,9 @@ public class LambdaCronStackTest {
         final String type = "AWS::Lambda::Function";
         JsonNode actual = TestUtils.getJsonNode(actualStack, type);
         JsonNode expected = TestUtils.getJsonNode(expectedStack, type);
-        String[] keys = {"Runtime", "Description", "Timeout", "Handler", "Code"};
+        String[] keys = {"Runtime", "Description", "Timeout", "Handler", "Code", "FunctionName"};
         for (String key : keys) {
-            assertEquals(actual.get(key), expected.get(key));
+            assertThat(actual.get(key), equalTo(expected.get(key)));
         }
     }
 
@@ -74,8 +75,7 @@ public class LambdaCronStackTest {
         JsonNode expected = TestUtils.getJsonNode(expectedStack, type);
         String[] keys = {"ScheduleExpression", "Description", "State"};
         for (String key : keys) {
-            assertEquals(actual.get(key), expected.get(key));
+            assertThat(actual.get(key), equalTo(expected.get(key)));
         }
     }
-
 }
