@@ -7,12 +7,9 @@ import software.amazon.awscdk.services.events.Rule;
 import software.amazon.awscdk.services.events.RuleProps;
 import software.amazon.awscdk.services.events.Schedule;
 import software.amazon.awscdk.services.events.targets.LambdaFunction;
-import software.amazon.awscdk.services.lambda.Code;
+import software.amazon.awscdk.services.lambda.*;
 import software.amazon.awscdk.services.lambda.Runtime;
-import software.amazon.awscdk.services.lambda.SingletonFunction;
-import software.amazon.awscdk.services.lambda.SingletonFunctionProps;
 
-import java.util.UUID;
 
 /**
  * Lambda Cron CDK example for Java!
@@ -21,9 +18,9 @@ class LambdaCronStack extends Stack {
     public LambdaCronStack(final Construct parent, final String name) {
         super(parent, name);
 
-        SingletonFunction lambdaFunction = new SingletonFunction(this, "cdk-lambda-cron",
-                SingletonFunctionProps.builder()
-                        .withFunctionName("CDK Lambda Cron Example")
+        Function lambdaFunction = new Function(this, "cdk-lambda-cron",
+                FunctionProps.builder()
+                        .withFunctionName("cdk-lambda")
                         .withDescription("Lambda which prints \"I'm running\"")
                         .withCode(Code.inline(
                                 "def main(event, context):\n" +
@@ -31,7 +28,6 @@ class LambdaCronStack extends Stack {
                         .withHandler("index.main")
                         .withTimeout(Duration.seconds(300))
                         .withRuntime(Runtime.PYTHON_2_7)
-                        .withUuid(UUID.randomUUID().toString())
                         .build()
         );
 
