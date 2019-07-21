@@ -71,7 +71,7 @@ To run a Python example, say my-widget-service:
 
 ```
 $ npm install -g aws-cdk
-$ cd python/my-widget-service
+$ cd python/my-widget-service        # for example you can use lambda-cron so . cd python/lambda-cron/ 
 $ pip install -r requirements.txt    # Best to do this in a virtualenv
 $ cdk deploy                         # Deploys the CloudFormation template
 
