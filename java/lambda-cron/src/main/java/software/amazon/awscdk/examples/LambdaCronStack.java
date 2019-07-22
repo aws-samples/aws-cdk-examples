@@ -7,7 +7,10 @@ import software.amazon.awscdk.services.events.Rule;
 import software.amazon.awscdk.services.events.RuleProps;
 import software.amazon.awscdk.services.events.Schedule;
 import software.amazon.awscdk.services.events.targets.LambdaFunction;
-import software.amazon.awscdk.services.lambda.*;
+
+import software.amazon.awscdk.services.lambda.Code;
+import software.amazon.awscdk.services.lambda.Function;
+import software.amazon.awscdk.services.lambda.FunctionProps;
 import software.amazon.awscdk.services.lambda.Runtime;
 
 
