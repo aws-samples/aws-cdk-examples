@@ -10,7 +10,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static software.amazon.awscdk.examples.TestUtils.toCloudFormationJson;
 
@@ -26,7 +27,7 @@ public class LambdaCronStackTest {
         expectedStack = TestUtils.fromFileResource(getClass().getResource("testCronLambdaExpected.json")).path("Resources");
     }
 
-    @Test()
+    @Test
     public void testTypes() {
         List<String> actual = actualStack.findValues("Type")
                 .stream().map(JsonNode::textValue).collect(Collectors.toList());
