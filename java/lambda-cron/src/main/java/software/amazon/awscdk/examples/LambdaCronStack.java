@@ -23,7 +23,6 @@ class LambdaCronStack extends Stack {
 
         Function lambdaFunction = new Function(this, "cdk-lambda-cron",
                 FunctionProps.builder()
-                        .withFunctionName("cdk-lambda")
                         .withDescription("Lambda which prints \"I'm running\"")
                         .withCode(Code.inline(
                                 "def main(event, context):\n" +
