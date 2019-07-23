@@ -9,12 +9,12 @@
         "Targets" : [ {
           "Id" : "cdk-lambda-cron",
           "Arn" : {
-            "Fn::GetAtt" : [ "SingletonLambda0dc9f04c622c4059b399834a2c1ac15f9CB1DC29", "Arn" ]
+            "Fn::GetAtt" : [ "cdklambdacronE8ADB9B0", "Arn" ]
           }
         } ]
       }
     },
-    "SingletonLambda0dc9f04c622c4059b399834a2c1ac15fServiceRoleD59355BD" : {
+    "cdklambdacronServiceRoleD85BC41F" : {
       "Type" : "AWS::IAM::Role",
       "Properties" : {
         "ManagedPolicyArns" : [ {
@@ -38,11 +38,11 @@
         }
       }
     },
-    "SingletonLambda0dc9f04c622c4059b399834a2c1ac15fAllowEventRulelambdaResourcecdklambdacroncdklambdacronruleD22C5DC3B70D87DC" : {
+    "cdklambdacronAllowEventRulelambdaResourcecdklambdacroncdklambdacronruleD22C5DC3BDDE5CCA" : {
       "Type" : "AWS::Lambda::Permission",
       "Properties" : {
         "FunctionName" : {
-          "Ref" : "SingletonLambda0dc9f04c622c4059b399834a2c1ac15f9CB1DC29"
+          "Ref" : "cdklambdacronE8ADB9B0"
         },
         "Action" : "lambda:InvokeFunction",
         "SourceArn" : {
@@ -51,11 +51,11 @@
         "Principal" : "events.amazonaws.com"
       }
     },
-    "SingletonLambda0dc9f04c622c4059b399834a2c1ac15f9CB1DC29" : {
+    "cdklambdacronE8ADB9B0" : {
       "Type" : "AWS::Lambda::Function",
       "Properties" : {
         "Role" : {
-          "Fn::GetAtt" : [ "SingletonLambda0dc9f04c622c4059b399834a2c1ac15fServiceRoleD59355BD", "Arn" ]
+          "Fn::GetAtt" : [ "cdklambdacronServiceRoleD85BC41F", "Arn" ]
         },
         "Runtime" : "python2.7",
         "Description" : "Lambda which prints \"I'm running\"",
