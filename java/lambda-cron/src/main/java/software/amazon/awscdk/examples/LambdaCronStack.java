@@ -23,7 +23,7 @@ class LambdaCronStack extends Stack {
 
         SingletonFunction lambdaFunction = new SingletonFunction(this, "cdk-lambda-cron",
                 SingletonFunctionProps.builder()
-                        .withFunctionName("CDK Lambda Cron Example")
+                        .withFunctionName("CDKLambdaCronExample")
                         .withDescription("Lambda which prints \"I'm running\"")
                         .withCode(Code.inline(
                                 "def main(event, context):\n" +
