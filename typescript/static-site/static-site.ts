@@ -32,7 +32,12 @@ export class StaticSite extends Construct {
             bucketName: siteDomain,
             websiteIndexDocument: 'index.html',
             websiteErrorDocument: 'error.html',
-            publicReadAccess: true
+            publicReadAccess: true,
+
+            // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
+            // the new bucket, and it will remain in your account until manually deleted. By setting the policy to 
+            // DESTROY, cdk destroy will attempt to delete the bucket, but will error if the bucket is not empty.
+            removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
         });
         new cdk.CfnOutput(this, 'Bucket', { value: siteBucket.bucketName });
 
