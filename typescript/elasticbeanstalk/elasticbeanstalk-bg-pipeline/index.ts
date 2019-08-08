@@ -16,7 +16,12 @@ export class CdkStack extends cdk.Stack {
     const green_env = node.tryGetContext("green_env");
     const app_name = node.tryGetContext("app_name");
 
-    const bucket = new s3.Bucket(this, 'BlueGreenBucket');
+    const bucket = new s3.Bucket(this, 'BlueGreenBucket', {
+      // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
+      // the new bucket, and it will remain in your account until manually deleted. By setting the policy to 
+      // DESTROY, cdk destroy will attempt to delete the bucket, but will error if the bucket is not empty.
+      removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
+    });
 
     const handler = new lambda.Function(this, 'BlueGreenLambda', {
       runtime: lambda.Runtime.PYTHON_3_6,
