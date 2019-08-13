@@ -8,7 +8,7 @@ pull_request_rules:
       merge:
         strict: smart
         method: squash
-        strict_method: squash
+        strict_method: merge
       delete_head_brancH: {}
       dismiss_reviews: {}
     conditions:
