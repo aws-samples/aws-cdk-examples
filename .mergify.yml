@@ -22,20 +22,6 @@ pull_request_rules:
       - "#commented-reviews-by=0"
       - status-success=continuous-integration/travis-ci/pr
       - status-success=Semantic Pull Request
-  - name: comment checklist
-    actions:
-      comment:
-        message:
-        "### Pull Request Checklist
-        * [ ] Testing
-          - Unit test added (prefer not to modify an existing test, otherwise, it's probably a breaking change)
-        * [ ] Title and Description
-          - __Change type__: title prefixed with **fix**, **feat** and module name in parens, which will appear in changelog
-          - __Title__: use lower-case and doesn't end with a period
-          - __Breaking?__: last paragraph: 'BREAKING CHANGE: <describe what changed + link for details>'
-          - __Issues__: Indicate issues fixed via: '**Fixes #xxx**' or '**Closes #xxx**'"
-    conditions:
-      - base=master
   - name: remove stale reviews
     actions:
       dismiss_reviews: {}
