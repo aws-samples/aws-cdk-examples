@@ -28,29 +28,29 @@ public class ApplicationLoadBalancerStack extends Stack {
         super(parent, id, props);
 
         final VpcNetwork vpc = new VpcNetwork(this, "VPC");
-        final AutoScalingGroup asg = new AutoScalingGroup(this,
-                                                          "ASG",
-                                                          AutoScalingGroupProps.builder()
-                                                                               .withVpc(vpc)
-                                                                               .withInstanceType(new InstanceTypePair(InstanceClass.Burstable2,
-                                                                                                                      InstanceSize.Micro))
-                                                                               .withMachineImage(new AmazonLinuxImage())
-                                                                               .build());
-        final ApplicationLoadBalancer lb = new ApplicationLoadBalancer(this,
-                                                                       "LB",
-                                                                       ApplicationLoadBalancerProps.builder()
-                                                                                                   .withVpc(vpc)
-                                                                                                   .withInternetFacing(true)
-                                                                                                   .build());
+        final AutoScalingGroup asg = new AutoScalingGroup(this, "ASG",
+            AutoScalingGroupProps.builder()
+                .withVpc(vpc)
+                .withInstanceType(new InstanceTypePair(InstanceClass.Burstable2, InstanceSize.Micro))
+                .withMachineImage(new AmazonLinuxImage())
+                .build());
+
+        final ApplicationLoadBalancer lb = new ApplicationLoadBalancer(this, "LB",
+            ApplicationLoadBalancerProps.builder()
+                .withVpc(vpc)
+                .withInternetFacing(true)
+                .build());
+
         final ApplicationListener listener = lb.addListener("Listener",
-                                                            BaseApplicationListenerProps.builder()
-                                                                                        .withPort(80)
-                                                                                        .build());
+            BaseApplicationListenerProps.builder()
+                .withPort(80)
+                .build());
+
         listener.addTargets("Target",
-                            AddApplicationTargetsProps.builder()
-                                                      .withPort(80)
-                                                      .withTargets(Arrays.asList(asg))
-                                                      .build());
+            AddApplicationTargetsProps.builder()
+                .withPort(80)
+                .withTargets(Arrays.asList(asg))
+                .build());
         listener.getConnections().allowDefaultPortFromAnyIpv4("Open to the world");
         asg.scaleOnRequestCount("AModestLoad", RequestCountScalingProps.builder().withTargetRequestsPerSecond(1).build());
     }
