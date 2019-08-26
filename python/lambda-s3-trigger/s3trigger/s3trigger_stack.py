@@ -22,5 +22,5 @@ class S3TriggerStack(core.Stack):
         # create s3 notification for lambda function
         notification = aws_s3_notifications.LambdaDestination(function)
 
-        # assign notification for the s3 event type
+        # assign notification for the s3 event type (ex: OBJECT_CREATED)
         s3.add_event_notification(_s3.EventType.OBJECT_CREATED, notification)
