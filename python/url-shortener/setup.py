@@ -9,7 +9,7 @@ setuptools.setup(
     name="url_shortener",
     version="0.0.1",
 
-    description="An empty CDK Python app",
+    description="WaltersCo URL Shortener",
     long_description=long_description,
     long_description_content_type="text/markdown",
 
