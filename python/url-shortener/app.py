@@ -56,7 +56,7 @@ class TrafficGeneratorStack(WaltersCoStack):
         # define a traffic generator instance that hits the URL at 5 TPS
         # and hosted within the shared waltersco VPC
         GenGen(self, 'generator',
-               url='https://go.waltersco.co/75e12779',
+               url='https://yourdomain.com/eb4628b6',
                tps=5,
                vpc=self.waltersco_vpc)
 
