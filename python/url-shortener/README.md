@@ -8,7 +8,7 @@ The project is an implementation of a URL shortener service which demonstrates a
 - [app.py](./app.py) defines the URL shortener service using AWS Constructs for Lambda, API Gateway and DynamoDB.
 - The [waltersco_common](./waltersco_common/__init__.py) module includes a base
   CDK stack class that includes APIs for accessing shared resources such as a
-  domain name and a VPC (shared resources are deployed through the [shared-infra-app.py](./waltersco_common/shared-infra-app.py)).
+  domain name and a VPC.
 - [gengen.py](./gengen.py) uses AWS Fargate to create a custom construct for a traffic generator.
 - The app uses the [cdk-watchful](https://pypi.org/project/cdk-watchful/) 3rd
   party module which automatically defines a monitoring dashboard and alarms for

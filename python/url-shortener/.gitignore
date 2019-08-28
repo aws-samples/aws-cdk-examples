@@ -4,4 +4,3 @@ cdk.out
 cdk.context.json
 *.egg-info
 __pycache__
-/waltersco_common/
