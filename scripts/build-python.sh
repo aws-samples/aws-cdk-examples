@@ -21,8 +21,6 @@ for requirements in $(find $scriptdir/../python -name requirements.txt  -not -pa
         source /tmp/.venv/bin/activate
         pip install -r requirements.txt
 
-        cp $scriptdir/fake.context.json cdk.context.json
-        npx cdk synth
-        rm -f cdk.context.json
+        $scriptdir/synth.sh
     )
 done
