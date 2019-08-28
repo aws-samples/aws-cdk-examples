@@ -8,6 +8,13 @@ export AWS_DEFAULT_REGION="us-east-1"
 fake_context=false
 [ ! -f cdk.context.json ] && fake_context=true
 
-$fake_context && cp $scriptdir/fake.context.json cdk.context.json
+if $fake_context; then
+  cp $scriptdir/fake.context.json cdk.context.json
+fi
+
 npx cdk synth
-$fake_context && rm -f cdk.context.json
+
+if $fake_context; then
+  rm -f cdk.context.json
+fi
+
