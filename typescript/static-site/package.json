@@ -24,6 +24,7 @@
     "@aws-cdk/aws-route53": "*",
     "@aws-cdk/aws-route53-targets": "*",
     "@aws-cdk/aws-s3": "*",
+    "@aws-cdk/aws-s3-deployment": "*",
     "@aws-cdk/core": "*",
     "aws-cdk": "*"
   }
