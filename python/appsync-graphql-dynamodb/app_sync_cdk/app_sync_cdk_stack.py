@@ -175,3 +175,5 @@ class AppSyncCdkStack(core.Stack):
         )
 
         delete_resolver.add_depends_on(api_schema)
+
+
