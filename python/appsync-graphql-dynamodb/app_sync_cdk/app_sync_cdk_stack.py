@@ -19,6 +19,7 @@ from aws_cdk.aws_iam import (
     ManagedPolicy
 )
 
+
 class AppSyncCdkStack(core.Stack):
 
     def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
@@ -33,7 +34,7 @@ class AppSyncCdkStack(core.Stack):
         )
 
         CfnApiKey(
-            self, 'ItemsApiKey', 
+            self, 'ItemsApiKey',
             api_id=items_graphql_api.attr_api_id
         )
 
@@ -73,10 +74,12 @@ class AppSyncCdkStack(core.Stack):
             billing_mode=BillingMode.PAY_PER_REQUEST,
             stream=StreamViewType.NEW_IMAGE,
 
-            ## The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
-            ## the new table, and it will remain in your account until manually deleted. By setting the policy to 
-            ## DESTROY, cdk destroy will delete the table (even if it has data in it) 
-            removal_policy=core.RemovalPolicy.DESTROY ## NOT recommended for production code
+            # The default removal policy is RETAIN, which means that cdk
+            # destroy will not attempt to delete the new table, and it will
+            # remain in your account until manually deleted. By setting the
+            # policy to DESTROY, cdk destroy will delete the table (even if it
+            # has data in it)
+            removal_policy=core.RemovalPolicy.DESTROY # NOT recommended for production code
         )
 
         items_table_role = Role(
@@ -84,10 +87,14 @@ class AppSyncCdkStack(core.Stack):
             assumed_by=ServicePrincipal('appsync.amazonaws.com')
         )
 
-        items_table_role.add_managed_policy(ManagedPolicy.from_aws_managed_policy_name('arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess'))
+        items_table_role.add_managed_policy(
+            ManagedPolicy.from_aws_managed_policy_name(
+                'arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess'
+            )
+        )
 
         data_source = CfnDataSource(
-            self, 'ItemsDataSource', 
+            self, 'ItemsDataSource',
             api_id=items_graphql_api.attr_api_id,
             name='ItemsDynamoDataSource',
             type='AMAZON_DYNAMODB',
@@ -99,7 +106,7 @@ class AppSyncCdkStack(core.Stack):
         )
 
         get_one_resolver = CfnResolver(
-            self, 'GetOneQueryResolver', 
+            self, 'GetOneQueryResolver',
             api_id=items_graphql_api.attr_api_id,
             type_name='Query',
             field_name='getOne',
@@ -118,7 +125,7 @@ class AppSyncCdkStack(core.Stack):
         get_one_resolver.add_depends_on(api_schema)
 
         get_all_resolver = CfnResolver(
-            self, 'GetAllQueryResolver', 
+            self, 'GetAllQueryResolver',
             api_id=items_graphql_api.attr_api_id,
             type_name='Query',
             field_name='all',
@@ -136,7 +143,7 @@ class AppSyncCdkStack(core.Stack):
         get_all_resolver.add_depends_on(api_schema)
 
         save_resolver = CfnResolver(
-            self, 'SaveMutationResolver', 
+            self, 'SaveMutationResolver',
             api_id=items_graphql_api.attr_api_id,
             type_name='Mutation',
             field_name='save',
@@ -175,5 +182,3 @@ class AppSyncCdkStack(core.Stack):
         )
 
         delete_resolver.add_depends_on(api_schema)
-
-
