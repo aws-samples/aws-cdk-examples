@@ -63,7 +63,7 @@ export class AppSyncCdkStack extends cdk.Stack {
       assumedBy: new ServicePrincipal('appsync.amazonaws.com')
     });
 
-    itemsTableRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess'));
+    itemsTableRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonDynamoDBFullAccess'));
 
     const dataSource = new CfnDataSource(this, 'ItemsDataSource', {
       apiId: itemsGraphQLApi.attrApiId,
