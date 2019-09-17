@@ -1,6 +1,6 @@
 {
   "name": "lambda-cron",
-  "version": "0.23.0",
+  "version": "1.0.0",
   "description": "Running a Lambda on a schedule",
   "private": true,
   "scripts": {
@@ -22,6 +22,6 @@
     "@aws-cdk/aws-events": "*",
     "@aws-cdk/aws-events-targets": "*",
     "@aws-cdk/aws-lambda": "*",
-    "@aws-cdk/cdk": "*"
+    "@aws-cdk/core": "*"
   }
 }

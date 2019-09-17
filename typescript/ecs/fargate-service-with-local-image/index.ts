@@ -9,7 +9,7 @@ const stack = new cdk.Stack(app, 'FargateServiceWithLocalImage');
 
 // Create VPC and Fargate Cluster
 // NOTE: Limit AZs to avoid reaching resource quotas
-const vpc = new ec2.Vpc(stack, 'MyVpc', { maxAZs: 2 });
+const vpc = new ec2.Vpc(stack, 'MyVpc', { maxAzs: 2 });
 const cluster = new ecs.Cluster(stack, 'Cluster', { vpc });
 
 // Instantiate Fargate Service with a cluster and a local image that gets 

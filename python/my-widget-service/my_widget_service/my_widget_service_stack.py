@@ -24,33 +24,32 @@ class MyWidgetServiceStack(core.Stack):
             self,
             "RestAPIRole",
             assumed_by=iam.ServicePrincipal("apigateway.amazonaws.com"),
-            managed_policies=[iam.ManagedPolicy().from_aws_managed_policy_name("AmazonS3FullAccess")]
+            managed_policies=[iam.ManagedPolicy.from_aws_managed_policy_name("AmazonS3FullAccess")]
         )
 
-        list_objects_response: apigw.IntegrationResponse = apigw.IntegrationResponse()
-        list_objects_response.update({"statusCode": "200"})
+        list_objects_response: apigw.IntegrationResponse = apigw.IntegrationResponse(status_code="200")
 
-        list_objects_integration_options: apigw.IntegrationOptions = apigw.IntegrationOptions()
-        list_objects_integration_options.update({"credentialsRole": rest_api_role})
-        list_objects_integration_options.update({"integrationResponses": [list_objects_response]})
+        list_objects_integration_options: apigw.IntegrationOptions = apigw.IntegrationOptions(
+            credentials_role=rest_api_role,
+            integration_responses=[list_objects_response],
+        )
 
-        get_widget_integration_options: apigw.IntegrationOptions = apigw.IntegrationOptions()
-        get_widget_integration_options.update({"credentialsRole": rest_api_role})
-        get_widget_integration_options.update({"integrationResponses": [list_objects_response]})
-        get_widget_integration_options.update({"requestTemplates": {
-            "application/json": "#set($context.requestOverride.path.object = $input.params('id'))"
-        }})
+        get_widget_integration_options: apigw.IntegrationOptions = apigw.IntegrationOptions(
+            credentials_role=rest_api_role,
+            integration_responses=[list_objects_response],
+            request_templates={"application/json": "#set($context.requestOverride.path.object = $input.params('id'))"}
+        )
 
-        put_widget_integration_options: apigw.IntegrationOptions = apigw.IntegrationOptions()
-        put_widget_integration_options.update({"credentialsRole": rest_api_role})
-        put_widget_integration_options.update({"integrationResponses": [list_objects_response]})
-        put_widget_integration_options.update({"passthroughBehavior": apigw.PassthroughBehavior.NEVER})
-        put_widget_integration_options.update({"requestParameters": {"integration.request.path.object": "method.request.path.id"}})
-        put_widget_integration_options.update({"requestTemplates": {
-            "application/json": "#set($now=$context.requestTimeEpoch)\n"
-                                "#set($body=\"$input.params('id') created $now\")"
-                                "\n$util.base64Encode($body)"
-        }})
+        put_widget_integration_options: apigw.IntegrationOptions = apigw.IntegrationOptions(
+            credentials_role=rest_api_role,
+            integration_responses=[list_objects_response],
+            passthrough_behavior=apigw.PassthroughBehavior.NEVER,
+            request_parameters={"integration.request.path.object": "method.request.path.id"},
+            request_templates={
+                "application/json": "#set($now=$context.requestTimeEpoch)\n"
+                                    "#set($body=\"$input.params('id') created $now\")"
+                                    "\n$util.base64Encode($body)"}
+        )
 
         get_widgets_integration: apigw.AwsIntegration = apigw.AwsIntegration(
             service="s3",
@@ -80,8 +79,7 @@ class MyWidgetServiceStack(core.Stack):
             options=get_widget_integration_options
         )
 
-        method_response: apigw.MethodResponse = apigw.MethodResponse()
-        method_response.update({"statusCode": "200"})
+        method_response: apigw.MethodResponse = apigw.MethodResponse(status_code="200")
 
         api.root.add_method(
             "GET",

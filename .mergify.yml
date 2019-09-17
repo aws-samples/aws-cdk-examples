@@ -1,0 +1,36 @@
+# See https://doc.mergify.io
+
+pull_request_rules:
+  - name: automatic merge
+    actions:
+      comment:
+        message: Thank you for contributing! Your pull request is now being automatically merged.
+      merge:
+        strict: smart
+        method: squash
+        strict_method: merge
+      delete_head_branch: {}
+      dismiss_reviews: {}
+    conditions:
+      - -title~=(WIP|wip)
+      - -label~=^(blocked|do-not-merge)
+      - -merged
+      - -closed
+      - "#approved-reviews-by>=1"
+      - -approved-reviews-by~=author
+      - "#changes-requested-reviews-by=0"
+      - "#commented-reviews-by=0"
+      - status-success=continuous-integration/travis-ci/pr
+      - status-success=Semantic Pull Request
+  - name: remove stale reviews
+    actions:
+      dismiss_reviews: {}
+    conditions:
+      - base=master
+  - name: if fails conventional commits
+    actions:
+      comment:
+        message: Title does not follow the guidelines of [Conventional Commits](https://www.conventionalcommits.org). Please adjust title before merge.
+    conditions:
+      - -status-success=Semantic Pull Request
+      

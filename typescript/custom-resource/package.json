@@ -1,6 +1,6 @@
 {
   "name": "custom-resource",
-  "version": "0.23.0",
+  "version": "1.0.0",
   "description": "Shows how to use a custom resource",
   "private": true,
   "scripts": {
@@ -21,6 +21,6 @@
   "dependencies": {
     "@aws-cdk/aws-cloudformation": "*",
     "@aws-cdk/aws-lambda": "*",
-    "@aws-cdk/cdk": "*"
+    "@aws-cdk/core": "*"
   }
 }

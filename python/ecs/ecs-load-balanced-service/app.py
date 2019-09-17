@@ -13,7 +13,7 @@ class BonjourECS(core.Stack):
 
         vpc = ec2.Vpc(
             self, "MyVpc",
-            max_a_zs=2
+            max_azs=2
         )
 
         cluster = ecs.Cluster(
@@ -27,7 +27,7 @@ class BonjourECS(core.Stack):
         ecs_service = ecs_patterns.LoadBalancedEc2Service(
             self, "Ec2Service",
             cluster=cluster,
-            memory_limit_mi_b=512,
+            memory_limit_mib=512,
             image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
         )
 

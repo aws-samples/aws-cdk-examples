@@ -27,7 +27,7 @@
 // OF ANY KIND, either express or implied. See the License for the specific
 // language governing permissions and limitations under the License.
 // snippet-start:[cdk.typescript.widget_service]
-import cdk = require("@aws-cdk/cdk");
+import cdk = require("@aws-cdk/core");
 import apigateway = require("@aws-cdk/aws-apigateway");
 import lambda = require("@aws-cdk/aws-lambda");
 import s3 = require("@aws-cdk/aws-s3");
@@ -36,11 +36,16 @@ export class WidgetService extends cdk.Construct {
   constructor(scope: cdk.Construct, id: string) {
     super(scope, id);
 
-    const bucket = new s3.Bucket(this, "WidgetStore");
+    const bucket = new s3.Bucket(this, "WidgetStore", {
+      // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
+      // the new bucket, and it will remain in your account until manually deleted. By setting the policy to 
+      // DESTROY, cdk destroy will attempt to delete the bucket, but will error if the bucket is not empty.
+      removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
+    });
 
     const handler = new lambda.Function(this, "WidgetHandler", {
-      runtime: lambda.Runtime.NodeJS810, // So we can use async in widget.js
-      code: lambda.Code.directory("resources"),
+      runtime: lambda.Runtime.NODEJS_8_10, // So we can use async in widget.js
+      code: lambda.AssetCode.asset("resources"),
       handler: "widgets.main",
       environment: {
         BUCKET: bucket.bucketName
