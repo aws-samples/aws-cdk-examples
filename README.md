@@ -8,6 +8,7 @@ Kit](https://github.com/awslabs/aws-cdk). Some examples are only available in Ty
 2. [Java examples](#Java)
 3. [Python examples](#Python)
 4. [JavaScript examples](#JavaScript)
+4. [.NET examples](#dotnet)
 
 ## TypeScript examples <a name="TypeScript"></a>
 
@@ -105,6 +106,23 @@ Select the following link to see how to install and run the example.
 |---------|-------------|
 | [aws-cdk-changelogs-demo](https://github.com/aws-samples/aws-cdk-changelogs-demo) | A full serverless Node.js application stack deployed using CDK. It uses AWS Lambda, AWS Fargate, DynamoDB, Elasticache, S3, and CloudFront. |
 
+## .NET examples <a name="dotnet"></a>
+
+| Example | Description |
+|---------|-------------|
+| [my-widget-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/csharp/my-widget-service/) | Use Lambda to serve up widgets |
+
+To run a .NET example, say my-widget-service:
+
+```
+$ npm install -g aws-cdk
+$ cd csharp/my-widget-service
+$ dotnet build src
+$ cdk deploy  // Deploys the CloudFormation template
+
+# Afterwards
+$ cdk destroy
+```
 # License
 
 This library is licensed under the Apache 2.0 License.

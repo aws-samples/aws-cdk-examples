@@ -1,0 +1,3 @@
+{
+  "app": "dotnet src/MyWidgetService/bin/Debug/netcoreapp2.1/MyWidgetService.dll"
+}
