@@ -1,7 +1,7 @@
 # AWS CDK Examples
 
 This repository contains a set of example projects for the [AWS Cloud Development
-Kit](https://github.com/awslabs/aws-cdk).
+Kit](https://github.com/awslabs/aws-cdk). Some examples are only available in TypeScript, there is a guide on how to read TypeScript code and translate it to Python [here](https://docs.aws.amazon.com/cdk/latest/guide/multiple_languages.html).
 
 ## Table of Contents
 1. [TypeScript examples](#TypeScript)
