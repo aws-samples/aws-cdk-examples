@@ -23,7 +23,7 @@ class AutoScalingFargateService(core.Stack):
         )
 
         # Create Fargate Service
-        fargate_service = ecs_patterns.LoadBalancedFargateService(
+        fargate_service = ecs_patterns.NetworkLoadBalancedFargateService(
             self, "sample-app",
             cluster=cluster,
             image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
