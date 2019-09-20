@@ -76,7 +76,7 @@ export class StaticSite extends Construct {
 
         // Deploy site contents to S3 bucket
         new s3deploy.BucketDeployment(this, 'DeployWithInvalidation', {
-            source: s3deploy.Source.asset('./site-contents'),
+            sources: [ s3deploy.Source.asset('./site-contents') ],
             destinationBucket: siteBucket,
             distribution,
             distributionPaths: ['/*'],
