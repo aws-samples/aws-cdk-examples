@@ -13,21 +13,19 @@ class ElasticbeanstalkBgPipelineStack(core.Stack):
     def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        # objects for access parameters
-        node = self.node
-
-        blue_env = node.try_get_context("blue_env")
-        green_env = node.try_get_context("green_env")
-        app_name = node.try_get_context("app_name")
+        blue_env = self.node.try_get_context("blue_env")
+        green_env = self.node.try_get_context("green_env")
+        app_name = self.node.try_get_context("app_name")
 
         bucket = s3.Bucket(
             self, 'BlueGreenBucket',
-            # The default removal policy is RETAIN, which means that cdk 
+            # The default removal policy is RETAIN, which means that cdk
             # destroy will not attempt to delete the new bucket, and it will
             # remain in your account until manually deleted. By setting the
             # policy to DESTROY, cdk destroy will attempt to delete the bucket,
             # but will error if the bucket is not empty.
-            removal_policy=core.RemovalPolicy.DESTROY # NOT recommended for production code
+            removal_policy=core.RemovalPolicy.DESTROY
+            # NOT recommended for production code
         )
 
         handler = lmbda.Function(
@@ -63,11 +61,9 @@ class ElasticbeanstalkBgPipelineStack(core.Stack):
 
         source_stage.add_action(source_action)
 
-
         deploy_stage = pipeline.add_stage(
             stage_name='Deploy'
         )
-
 
         lambda_action = cpactions.LambdaInvokeAction(
           action_name='InvokeAction',
@@ -80,4 +76,4 @@ class ElasticbeanstalkBgPipelineStack(core.Stack):
           inputs=[source_artifact]
         )
 
-        deploy_stage.add_action(lambda_action);
+        deploy_stage.add_action(lambda_action)

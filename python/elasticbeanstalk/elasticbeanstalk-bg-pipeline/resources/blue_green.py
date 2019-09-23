@@ -1,12 +1,6 @@
-from __future__ import print_function
-from boto3.session import Session
-
 import json
 import urllib
 import boto3
-import zipfile
-import tempfile
-import botocore
 import traceback
 import time
 
@@ -14,6 +8,7 @@ print('Loading function')
 
 eb = boto3.client('elasticbeanstalk')
 code_pipeline = boto3.client('codepipeline')
+
 
 def put_job_success(job, message):
     """Notify CodePipeline of a successful job
@@ -30,6 +25,7 @@ def put_job_success(job, message):
     print(message)
     code_pipeline.put_job_success_result(jobId=job)
 
+
 def put_job_failure(job, message):
     """Notify CodePipeline of a failed job
 
@@ -43,13 +39,18 @@ def put_job_failure(job, message):
     """
     print('Putting job failure')
     print(message)
-    code_pipeline.put_job_failure_result(jobId=job, failureDetails={'message': message, 'type': 'JobFailed'})
+    code_pipeline.put_job_failure_result(
+        jobId=job,
+        failureDetails={'message': message, 'type': 'JobFailed'}
+    )
+
 
 def get_user_params(job_data):
     """Decodes the JSON user parameters and validates the required properties.
 
     Args:
-        job_data: The job data structure containing the UserParameters string which should be a valid JSON structure
+        job_data: The job data structure containing the UserParameters string
+        which should be a valid JSON structure
 
     Returns:
         The JSON parameters decoded as a dictionary.
@@ -59,11 +60,13 @@ def get_user_params(job_data):
 
     """
     try:
-        # Get the user parameters which contain the stack, artifact and file settings
-        user_parameters = job_data['actionConfiguration']['configuration']['UserParameters']
+        # Get the user parameters which contain the stack, artifact and file
+        # settings
+        user_parameters = \
+            job_data['actionConfiguration']['configuration']['UserParameters']
         decoded_parameters = json.loads(user_parameters)
 
-    except Exception as e:
+    except Exception:
         # We're expecting the user parameters to be encoded as JSON
         # so we can pass multiple values. If the JSON can't be decoded
         # then fail the job with a helpful message.
@@ -72,28 +75,33 @@ def get_user_params(job_data):
     if 'blueEnvironment' not in decoded_parameters:
         # Validate that the stack is provided, otherwise fail the job
         # with a helpful message.
-        raise Exception('Your UserParameters JSON must include the Blue environment name')
+        raise Exception(
+            'Your UserParameters JSON must include the Blue environment name'
+        )
 
     if 'greenEnvironment' not in decoded_parameters:
         # Validate that the stack is provided, otherwise fail the job
         # with a helpful message.
-        raise Exception('Your UserParameters JSON must include the Green environment name')
+        raise Exception(
+            'Your UserParameters JSON must include the Green environment name'
+        )
 
     if 'application' not in decoded_parameters:
         # Validate that the artifact name is provided, otherwise fail the job
         # with a helpful message.
-        raise Exception('Your UserParameters JSON must include the application name')
-
+        raise Exception(
+            'Your UserParameters JSON must include the application name'
+        )
 
     return decoded_parameters
 
 
 def describe_health(environmentName):
     response = eb.describe_environment_health(
-    EnvironmentName=environmentName,
-    AttributeNames=[
-        'Status',
-    ]
+        EnvironmentName=environmentName,
+        AttributeNames=[
+            'Status',
+        ]
     )
     return response['Status']
 
@@ -105,8 +113,9 @@ def describe_app_version(version, application):
             version,
         ]
     )
-    print ("App Version Status: ", response['ApplicationVersions'][0]['Status'])
+    print("App Version Status: ", response['ApplicationVersions'][0]['Status'])
     return response['ApplicationVersions'][0]['Status']
+
 
 def create_app_version(artifact, application):
     """
@@ -116,9 +125,9 @@ def create_app_version(artifact, application):
     key = artifact['location']['s3Location']['objectKey']
     version = artifact['revision'] + key
     version = version.replace("test/MyApp/", "")
-    print ("version: ", version)
+    print("version: ", version)
 
-    response = eb.create_application_version(
+    eb.create_application_version(
         ApplicationName=application,
         VersionLabel=version,
         SourceBundle={
@@ -134,9 +143,11 @@ def create_app_version(artifact, application):
             break
         else:
             time.sleep(60)
-    print ("App Version Created.")
+
+    print("App Version Created.")
 
     return version
+
 
 def update_blue_env(blueEnvironment, versionLabel, application):
     """
@@ -148,7 +159,8 @@ def update_blue_env(blueEnvironment, versionLabel, application):
         EnvironmentName=blueEnvironment,
         VersionLabel=versionLabel,
     )
-    print ("Blue Deploy result: ",response)
+
+    print("Blue Deploy result: ", response)
 
     while True:
         status = describe_health(blueEnvironment)
@@ -156,7 +168,9 @@ def update_blue_env(blueEnvironment, versionLabel, application):
             break
         else:
             time.sleep(60)
-    print ("Deployment to Blue complete.")
+
+    print("Deployment to Blue complete.")
+
 
 def swap_blue_green(blueEnvironment, greenEnvironment):
     """
@@ -166,7 +180,7 @@ def swap_blue_green(blueEnvironment, greenEnvironment):
         SourceEnvironmentName=blueEnvironment,
         DestinationEnvironmentName=greenEnvironment
     )
-    print ("Blue Green Swap result: ",response)
+    print("Blue Green Swap result: ", response)
 
 
 def lambda_handler(event, context):
@@ -195,7 +209,7 @@ def lambda_handler(event, context):
 
         # Get the list of artifacts passed to the function
         artifacts = job_data['inputArtifacts']
-        print ("artifacts are: ", artifacts[0])
+        print("artifacts are: ", artifacts[0])
 
         blueEnvironment = params['blueEnvironment']
         greenEnvironment = params['greenEnvironment']
@@ -209,8 +223,6 @@ def lambda_handler(event, context):
             put_job_success(job_id, 'Done')
         else:
             put_job_failure(job_id, 'Environment is not in Ready state')
-
-
 
     except Exception as e:
         # If any other exceptions which we didn't expect are raised

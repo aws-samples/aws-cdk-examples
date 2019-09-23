@@ -2,7 +2,9 @@
 
 from aws_cdk import core
 
-from elasticbeanstalk_environment.elasticbeanstalk_environment_stack import ElasticbeanstalkEnvironmentStack
+from elasticbeanstalk_environment.elasticbeanstalk_environment_stack import(
+    ElasticbeanstalkEnvironmentStack
+)
 
 
 app = core.App()
