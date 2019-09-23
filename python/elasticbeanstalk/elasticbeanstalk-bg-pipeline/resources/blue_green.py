@@ -65,11 +65,14 @@ def get_user_params(job_data):
             job_data['actionConfiguration']['configuration']['UserParameters']
         decoded_parameters = json.loads(user_parameters)
 
-    except Exception:
+    except json.JSONDecodeError:
         # We're expecting the user parameters to be encoded as JSON
         # so we can pass multiple values. If the JSON can't be decoded
         # then fail the job with a helpful message.
         raise Exception('UserParameters could not be decoded as JSON')
+
+    except Exception:
+        raise Exception('Unknown error')
 
     if 'blueEnvironment' not in decoded_parameters:
         # Validate that the stack is provided, otherwise fail the job
