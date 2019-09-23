@@ -1,5 +1,4 @@
 import json
-import urllib
 import boto3
 import traceback
 import time
