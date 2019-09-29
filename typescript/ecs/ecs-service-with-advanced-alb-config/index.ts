@@ -1,17 +1,17 @@
 import ecs = require('@aws-cdk/aws-ecs');
 import ec2 = require('@aws-cdk/aws-ec2');
 import elbv2 = require('@aws-cdk/aws-elasticloadbalancingv2');
-import cdk = require('@aws-cdk/cdk');
+import cdk = require('@aws-cdk/core');
 
 const app = new cdk.App();
 const stack = new cdk.Stack(app, 'aws-ecs-integ-ecs');
 
 // Create a cluster
-const vpc = new ec2.Vpc(stack, 'Vpc', { maxAZs: 2 });
+const vpc = new ec2.Vpc(stack, 'Vpc', { maxAzs: 2 });
 
 const cluster = new ecs.Cluster(stack, 'EcsCluster', { vpc });
 cluster.addCapacity('DefaultAutoScalingGroup', {
-  instanceType: new ec2.InstanceType('t2.micro')
+  instanceType: ec2.InstanceType.of(ec2.InstanceClass.T2, ec2.InstanceSize.MICRO)
 });
 
 // Create Task Definition
@@ -24,7 +24,7 @@ const container = taskDefinition.addContainer('web', {
 container.addPortMappings({
   containerPort: 80,
   hostPort: 8080,
-  protocol: ecs.Protocol.Tcp
+  protocol: ecs.Protocol.TCP
 });
 
 // Create Service
@@ -46,9 +46,9 @@ listener.addTargets('ECS', {
   targets: [service],
   // include health check (default is none)
   healthCheck: {
-    intervalSecs: 60,
+    interval: cdk.Duration.seconds(60),
     path: "/health",
-    timeoutSeconds: 5,
+    timeout: cdk.Duration.seconds(5),
   }
 });
 
