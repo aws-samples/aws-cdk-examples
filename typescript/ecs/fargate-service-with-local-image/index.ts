@@ -20,11 +20,7 @@ new ecs_patterns.NetworkLoadBalancedFargateService(stack, "FargateService", {
   cluster,
   taskImageOptions: {
     image: ecs.ContainerImage.fromAsset(path.resolve(__dirname, 'local-image'))
-<<<<<<< HEAD
-  }
-=======
   },
->>>>>>> Fix ecs-patterns examples to use the latest version of the cdk
 });
 
 app.synth();
