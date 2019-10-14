@@ -20,7 +20,7 @@ new ecs_patterns.NetworkLoadBalancedFargateService(stack, "FargateService", {
   cluster,
   taskImageOptions: {
     image: ecs.ContainerImage.fromAsset(path.resolve(__dirname, 'local-image'))
-  }
+  },
 });
 
 app.synth();
