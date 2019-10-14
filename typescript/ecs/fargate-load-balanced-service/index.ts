@@ -15,7 +15,9 @@ class BonjourFargate extends cdk.Stack {
     // Instantiate Fargate Service with just cluster and image
     const fargateService = new ecs_patterns.NetworkLoadBalancedFargateService(this, "FargateService", {
       cluster,
-      image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample"),
+      taskImageOptions: {
+        image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample"),
+      },
     });
 
     // Output the DNS where you can access your service

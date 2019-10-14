@@ -12,13 +12,15 @@ const stack = new cdk.Stack(app, 'FargateServiceWithLocalImage');
 const vpc = new ec2.Vpc(stack, 'MyVpc', { maxAzs: 2 });
 const cluster = new ecs.Cluster(stack, 'Cluster', { vpc });
 
-// Instantiate Fargate Service with a cluster and a local image that gets 
+// Instantiate Fargate Service with a cluster and a local image that gets
 // uploaded to an S3 staging bucket prior to being uploaded to ECR.
 // A new repository is created in ECR and the Fargate service is created
 // with the image from ECR.
 new ecs_patterns.NetworkLoadBalancedFargateService(stack, "FargateService", {
   cluster,
-  image: ecs.ContainerImage.fromAsset(path.resolve(__dirname, 'local-image'))
+  taskImageOptions: {
+    image: ecs.ContainerImage.fromAsset(path.resolve(__dirname, 'local-image'))
+  }
 });
 
 app.synth();

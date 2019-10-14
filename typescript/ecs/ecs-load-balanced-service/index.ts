@@ -21,7 +21,9 @@ class BonjourECS extends cdk.Stack {
     const ecsService = new ecs_patterns.NetworkLoadBalancedEc2Service(this, "Ec2Service", {
       cluster,
       memoryLimitMiB: 512,
-      image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample"),
+      taskImageOptions: {
+        image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample"),
+      }
     });
 
     // Output the DNS where you can access your service

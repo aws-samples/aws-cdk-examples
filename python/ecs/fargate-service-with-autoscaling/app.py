@@ -26,7 +26,9 @@ class AutoScalingFargateService(core.Stack):
         fargate_service = ecs_patterns.NetworkLoadBalancedFargateService(
             self, "sample-app",
             cluster=cluster,
-            image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
+            task_image_options={
+                'image': ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
+            }
         )
 
         # Setup AutoScaling policy
