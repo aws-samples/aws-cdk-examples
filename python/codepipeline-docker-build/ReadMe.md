@@ -1,4 +1,4 @@
-# CDK Python Codepipeline Example
+# CDK Python CodePipeline Example
 * This is an example of a CodePipeline project that uses CodeBuild to Build a Docker Image and push to ECR.
 * This example uses multiple stacks for the purpose of demonstrating ways of passing in objects from different stacks
 * push.sh will trigger the pipeline via an S3 Upload. 

@@ -6,7 +6,6 @@ from aws_cdk import (
     core,
 )
 
-
 class Base(core.Stack):
     def __init__(self, app: core.App, id: str, props, **kwargs) -> None:
         super().__init__(app, id, **kwargs)
@@ -14,27 +13,26 @@ class Base(core.Stack):
         # pipeline requires versioned bucket
         bucket = aws_s3.Bucket(
             self, "SourceBucket",
-            bucket_name=f"{props.namespace.lower()}-{core.Aws.ACCOUNT_ID}",
+            bucket_name=f"{props['namespace'].lower()}-{core.Aws.ACCOUNT_ID}",
             versioned=True,
             removal_policy=core.RemovalPolicy.DESTROY)
-        # ssm parameter to get bucket name laster
+        # ssm parameter to get bucket name later
         bucket_param = aws_ssm.StringParameter(
             self, "ParameterB",
-            parameter_name=f"{props.namespace}-bucket",
+            parameter_name=f"{props['namespace']}-bucket",
             string_value=bucket.bucket_name,
             description='cdk pipeline bucket'
         )
         # ecr repo to push docker container into
         ecr = aws_ecr.Repository(
             self, "ECR",
-            repository_name=f"{props.namespace}",
+            repository_name=f"{props['namespace']}",
             removal_policy=core.RemovalPolicy.DESTROY
         )
-
         # codebuild project meant to run in pipeline
         cb_docker_build = aws_codebuild.PipelineProject(
             self, "DockerBuild",
-            project_name=f"{props.namespace}-Docker-Build",
+            project_name=f"{props['namespace']}-Docker-Build",
             build_spec=aws_codebuild.BuildSpec.from_source_filename(
                 filename='pipeline_delivery/docker_build_buildspec.yml'),
             environment=aws_codebuild.BuildEnvironment(
@@ -57,15 +55,25 @@ class Base(core.Stack):
         # codebuild permissions to interact with ecr
         ecr.grant_pull_push(cb_docker_build)
 
-        # update props to pass objects to another stack
-        props.bucket_name = bucket.bucket_name
-        props.bucket_arn = bucket.bucket_arn
-        props.bucket_obj = bucket
-        props.cb_docker_build = cb_docker_build
-        self.output_props = props
+        core.CfnOutput(
+            self, "ECRURI",
+            description="ECR URI",
+            value=ecr.repository_uri,
+        )
+        core.CfnOutput(
+            self, "S3Bucket",
+            description="S3 Bucket",
+            value=bucket.bucket_name
+        )
+
+        self.output_props = props.copy()
+
+        self.output_props['bucket']= bucket
+        self.output_props['cb_docker_build'] = cb_docker_build
+
+
 
     # pass objects to another stack
     @property
     def outputs(self):
-        props = self.output_props
-        return props
+        return self.output_props

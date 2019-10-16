@@ -8,4 +8,4 @@ export REGION='us-east-1'
 
 zip -r source.zip .
 aws s3 cp source.zip s3://${source_bucket}/source.zip
-aws codepipeline start-pipeline-execution --name ${pipeline_name}
+#aws codepipeline start-pipeline-execution --name ${pipeline_name}
