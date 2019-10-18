@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Amazon.CDK" Version="1.2.0-devpreview" />
-    <PackageReference Include="Amazon.CDK.AWS.ApiGateway" Version="1.2.0-devpreview" />
-    <PackageReference Include="Amazon.CDK.AWS.Lambda" Version="1.2.0-devpreview" />
-    <PackageReference Include="Amazon.CDK.AWS.S3" Version="1.2.0-devpreview" />
+    <PackageReference Include="Amazon.CDK" Version="1.13.1-devpreview" />
+    <PackageReference Include="Amazon.CDK.AWS.ApiGateway" Version="1.13.1-devpreview" />
+    <PackageReference Include="Amazon.CDK.AWS.Lambda" Version="1.13.1-devpreview" />
+    <PackageReference Include="Amazon.CDK.AWS.S3" Version="1.13.1-devpreview" />
   </ItemGroup>
 
 </Project>

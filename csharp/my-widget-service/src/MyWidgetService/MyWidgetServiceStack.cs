@@ -13,10 +13,10 @@ namespace MyWidgetService
             var bucket = new Bucket(this, "WidgetStore", null);
 
             var handler = new Function(this, "WidgetHandler", new FunctionProps {
-                Runtime = Runtime.NODEJS_8_10,
-                Code = AssetCode.Asset("src/MyWidgetService/resources"),
+                Runtime = Runtime.NODEJS_10_X,
+                Code = AssetCode.FromAsset("src/MyWidgetService/resources"),
                 Handler = "widgets.main",
-                Environment = new Dictionary<string, object>{
+                Environment = new Dictionary<string, string>{
                     { "BUCKET", bucket.BucketName }
                 }
             });
