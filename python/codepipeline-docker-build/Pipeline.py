@@ -44,16 +44,17 @@ class Pipeline(core.Stack):
             ]
 
         )
-        print(props['bucket'])
+        # give pipelinerole read write to the bucket
         props['bucket'].grant_read_write(pipeline.role)
 
-        # pipeline param to get the
+        #pipeline param to get the
         pipeline_param = aws_ssm.StringParameter(
-            self, "ParameterP",
+            self, "PPipeline",
             parameter_name=f"{props['namespace']}-pipeline",
             string_value=pipeline.pipeline_name,
             description='cdk pipeline bucket'
         )
+        # cfn output
         core.CfnOutput(
             self, "PipelineOut",
             description="Pipeline",

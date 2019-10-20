@@ -37,7 +37,6 @@ class Base(core.Stack):
                 filename='pipeline_delivery/docker_build_buildspec.yml'),
             environment=aws_codebuild.BuildEnvironment(
                 privileged=True,
-
             ),
             # pass the ecr repo uri into the codebuild project so codebuild knows where to push
             environment_variables={
@@ -67,11 +66,8 @@ class Base(core.Stack):
         )
 
         self.output_props = props.copy()
-
         self.output_props['bucket']= bucket
         self.output_props['cb_docker_build'] = cb_docker_build
-
-
 
     # pass objects to another stack
     @property
