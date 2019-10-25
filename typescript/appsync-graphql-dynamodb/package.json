@@ -14,8 +14,8 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^8.10.38",
-    "typescript": "^3.2.4"
+    "@types/node": "^10.17.0",
+    "typescript": "~3.6.4"
   },
   "dependencies": {
     "@aws-cdk/aws-appsync": "*",
