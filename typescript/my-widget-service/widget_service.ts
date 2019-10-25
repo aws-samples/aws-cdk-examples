@@ -44,7 +44,7 @@ export class WidgetService extends cdk.Construct {
     });
 
     const handler = new lambda.Function(this, "WidgetHandler", {
-      runtime: lambda.Runtime.NODEJS_8_10, // So we can use async in widget.js
+      runtime: lambda.Runtime.NODEJS_10_X, // So we can use async in widget.js
       code: lambda.AssetCode.asset("resources"),
       handler: "widgets.main",
       environment: {
