@@ -22,7 +22,7 @@ class LambdaS3Code(core.Stack):
                 bucket=lambda_code_bucket,
                 key='my-lambda.py'
             ),
-            runtime=lambda_.Runtime.PYTHON_3_7,
+            runtime=lambda_.Runtime.PYTHON_3_6,
             timeout=core.Duration.seconds(300)
         )
 

@@ -30,7 +30,7 @@ class LambdaWithKinesisTrigger(core.Stack):
             self, 'Singleton',
             handler='index.main',
             code=lambda_.InlineCode(handler_code),
-            runtime=lambda_.Runtime.PYTHON_3_7,
+            runtime=lambda_.Runtime.PYTHON_3_6,
             timeout=core.Duration.seconds(300)
         )
         
