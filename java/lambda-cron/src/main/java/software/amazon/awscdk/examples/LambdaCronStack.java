@@ -29,7 +29,7 @@ class LambdaCronStack extends Stack {
                                         "    print(\"I'm running!\")\n"))
                         .withHandler("index.main")
                         .withTimeout(Duration.seconds(300))
-                        .withRuntime(Runtime.PYTHON_2_7)
+                        .withRuntime(Runtime.PYTHON_3_7)
                         .withUuid(UUID.randomUUID().toString())
                         .build()
         );
