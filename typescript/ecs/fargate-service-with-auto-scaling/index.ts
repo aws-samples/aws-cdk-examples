@@ -12,9 +12,11 @@ class AutoScalingFargateService extends cdk.Stack {
     const cluster = new ecs.Cluster(this, 'fargate-service-autoscaling', { vpc });
 
     // Create Fargate Service
-    const fargateService = new ecs_patterns.ApplicationLoadBalancedFargateService(this, 'sample-app', {
+    const fargateService = new ecs_patterns.NetworkLoadBalancedFargateService(this, 'sample-app', {
       cluster,
-      image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample")
+      taskImageOptions: {
+        image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample")
+      },
     });
 
     // Setup AutoScaling policy
