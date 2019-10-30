@@ -1,0 +1,32 @@
+
+version: 0.2
+
+env:
+  variables:
+    CI: "true"
+
+phases:
+  build:
+    commands:
+      - npm run release
+  post_build:
+    commands:
+      #======================================================================
+      # Download and execute the tracking-info-collector script. DO NOT REMOVE
+      # These commands are necessary for artifact tracking in GatedGarden
+      # grab the script from s3
+      - wget https://s3-us-west-2.amazonaws.com/gatedgarden-cortado-codebuild-tracking-script-vending-prod/tracking-info-collector.sh
+      # make it executable
+      - chmod +x tracking-info-collector.sh
+      # run the script
+      - ./tracking-info-collector.sh
+      # cleanup the script
+      - rm tracking-info-collector.sh
+      #======================================================================
+artifacts:
+  base-directory: packages
+  files:
+    - "infrastructure/build/**/*"
+    - "website/build/**/*"
+    - "lambda/src/**/*"  
+    - "lambda/node_modules/**/*"
