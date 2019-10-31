@@ -49,7 +49,7 @@ class Pipeline(core.Stack):
 
         #pipeline param to get the
         pipeline_param = aws_ssm.StringParameter(
-            self, "PPipeline",
+            self, "Pipeline",
             parameter_name=f"{props['namespace']}-pipeline",
             string_value=pipeline.pipeline_name,
             description='cdk pipeline bucket'
