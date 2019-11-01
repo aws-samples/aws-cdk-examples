@@ -23,21 +23,21 @@ class LambdaCronStack extends Stack {
 
         SingletonFunction lambdaFunction = new SingletonFunction(this, "cdk-lambda-cron",
                 SingletonFunctionProps.builder()
-                        .withDescription("Lambda which prints \"I'm running\"")
-                        .withCode(Code.inline(
+                        .description("Lambda which prints \"I'm running\"")
+                        .code(Code.fromInline(
                                 "def main(event, context):\n" +
                                         "    print(\"I'm running!\")\n"))
-                        .withHandler("index.main")
-                        .withTimeout(Duration.seconds(300))
-                        .withRuntime(Runtime.PYTHON_2_7)
-                        .withUuid(UUID.randomUUID().toString())
+                        .handler("index.main")
+                        .timeout(Duration.seconds(300))
+                        .runtime(Runtime.PYTHON_2_7)
+                        .uuid(UUID.randomUUID().toString())
                         .build()
         );
 
         Rule rule = new Rule(this, "cdk-lambda-cron-rule",
                 RuleProps.builder()
-                        .withDescription("Run every day at 6PM UTC")
-                        .withSchedule(Schedule.expression("cron(0 18 ? * MON-FRI *)"))
+                        .description("Run every day at 6PM UTC")
+                        .schedule(Schedule.expression("cron(0 18 ? * MON-FRI *)"))
                         .build()
         );
 
