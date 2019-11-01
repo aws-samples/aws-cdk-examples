@@ -43,7 +43,10 @@ const listener = lb.addListener('PublicListener', { port: 80, open: true });
 // Attach ALB to ECS Service
 listener.addTargets('ECS', {
   port: 80,
-  targets: [service],
+  targets: [service.loadBalancerTarget({
+    containerName: 'web',
+    containerPort: 80
+  })],
   // include health check (default is none)
   healthCheck: {
     interval: cdk.Duration.seconds(60),
