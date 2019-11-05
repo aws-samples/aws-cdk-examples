@@ -1,6 +1,6 @@
 {
   "name": "fargate-service-with-auto-scaling",
-  "version": "0.25.2",
+  "version": "1.0.0",
   "description": "ECS Service of launch type FARGATE with Application Auto Scaling",
   "private": true,
   "scripts": {
@@ -21,7 +21,8 @@
   "dependencies": {
     "@aws-cdk/aws-ec2": "*",
     "@aws-cdk/aws-ecs": "*",
+    "@aws-cdk/aws-ecs-patterns": "*",
     "@aws-cdk/aws-elasticloadbalancingv2": "*",
-    "@aws-cdk/cdk": "*"
+    "@aws-cdk/core": "*"
   }
 }

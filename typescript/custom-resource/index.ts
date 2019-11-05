@@ -1,4 +1,4 @@
-import cdk = require('@aws-cdk/cdk');
+import cdk = require('@aws-cdk/core');
 import { MyCustomResource } from './my-custom-resource';
 
 /**
@@ -22,4 +22,4 @@ class MyStack extends cdk.Stack {
 
 const app = new cdk.App();
 new MyStack(app, 'CustomResourceDemoStack');
-app.run();
+app.synth();

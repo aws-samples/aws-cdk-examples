@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import cdk = require('@aws-cdk/cdk');
+import cdk = require('@aws-cdk/core');
 import widget_service = require('./widget_service');
 
 export class MyWidgetServiceStack extends cdk.Stack {
@@ -12,4 +12,4 @@ export class MyWidgetServiceStack extends cdk.Stack {
 
 const app = new cdk.App();
 new MyWidgetServiceStack(app, 'MyWidgetServiceStack');
-app.run();
+app.synth();

@@ -1,6 +1,6 @@
 import cfn = require('@aws-cdk/aws-cloudformation');
 import lambda = require('@aws-cdk/aws-lambda');
-import cdk = require('@aws-cdk/cdk');
+import cdk = require('@aws-cdk/core');
 
 import fs = require('fs');
 
@@ -18,13 +18,13 @@ export class MyCustomResource extends cdk.Construct {
     super(scope, id);
 
     const resource = new cfn.CustomResource(this, 'Resource', {
-      lambdaProvider: new lambda.SingletonFunction(this, 'Singleton', {
+      provider: cfn.CustomResourceProvider.lambda(new lambda.SingletonFunction(this, 'Singleton', {
         uuid: 'f7d4f730-4ee1-11e8-9c2d-fa7ae01bbebc',
         code: new lambda.InlineCode(fs.readFileSync('custom-resource-handler.py', { encoding: 'utf-8' })),
         handler: 'index.main',
-        timeout: 300,
-        runtime: lambda.Runtime.Python27,
-      }),
+        timeout: cdk.Duration.seconds(300),
+        runtime: lambda.Runtime.PYTHON_3_6,
+      })),
       properties: props
     });
 

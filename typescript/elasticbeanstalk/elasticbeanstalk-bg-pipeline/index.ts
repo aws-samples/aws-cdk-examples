@@ -1,4 +1,5 @@
-import cdk = require('@aws-cdk/cdk');
+import cdk = require('@aws-cdk/core');
+import cpactions = require('@aws-cdk/aws-codepipeline-actions');
 import cp = require('@aws-cdk/aws-codepipeline');
 import cc = require('@aws-cdk/aws-codecommit');
 import lambda = require('@aws-cdk/aws-lambda');
@@ -11,22 +12,27 @@ export class CdkStack extends cdk.Stack {
     //objects for access parameters
     const node = this.node;
 
-    const blue_env = node.getContext("blue_env");
-    const green_env = node.getContext("green_env");
-    const app_name = node.getContext("app_name");
+    const blue_env = node.tryGetContext("blue_env");
+    const green_env = node.tryGetContext("green_env");
+    const app_name = node.tryGetContext("app_name");
 
-    const bucket = new s3.Bucket(this, 'BlueGreenBucket');
+    const bucket = new s3.Bucket(this, 'BlueGreenBucket', {
+      // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
+      // the new bucket, and it will remain in your account until manually deleted. By setting the policy to 
+      // DESTROY, cdk destroy will attempt to delete the bucket, but will error if the bucket is not empty.
+      removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
+    });
 
     const handler = new lambda.Function(this, 'BlueGreenLambda', {
-      runtime: lambda.Runtime.Python36,
-      code: lambda.Code.directory('resources'),
+      runtime: lambda.Runtime.PYTHON_3_6,
+      code: lambda.Code.asset('resources'),
       handler: 'blue_green.lambda_handler',
       environment: {
         BUCKET: bucket.bucketName
       }
     });
 
-    bucket.grantReadWrite(handler.role);
+    bucket.grantReadWrite(handler);
 
     const repo = new cc.Repository(this, 'Repository', {
       repositoryName: 'MyRepositoryName',
@@ -35,26 +41,34 @@ export class CdkStack extends cdk.Stack {
     const pipeline = new cp.Pipeline(this, 'MyFirstPipeline');
 
     const sourceStage = pipeline.addStage({
-      name: 'Source'
+      stageName: 'Source'
     });
 
-    const sourceAction = new cc.PipelineSourceAction({
+    const sourceArtifact = new cp.Artifact('Source');
+
+    const sourceAction = new cpactions.CodeCommitSourceAction({
       actionName: 'CodeCommit',
       repository: repo,
+      output: sourceArtifact,
     });
 
     sourceStage.addAction(sourceAction);
 
 
     const deployStage = pipeline.addStage({
-      name: 'Deploy'
+      stageName: 'Deploy'
     });
 
 
-    const lambdaAction = new lambda.PipelineInvokeAction({
+    const lambdaAction = new cpactions.LambdaInvokeAction({
       actionName: 'InvokeAction',
       lambda: handler,
-      userParameters: '{"blueEnvironment":"' + blue_env + '","greenEnvironment":"' + green_env + '", "application":"' + app_name + '"}'
+      userParameters: {
+        blueEnvironment: blue_env,
+        greenEnvironment: green_env,
+        application: app_name
+      },
+      inputs: [sourceArtifact]
     });
 
     deployStage.addAction(lambdaAction);
@@ -67,4 +81,4 @@ const app = new cdk.App();
 
 new CdkStack(app, 'ElasticBeanstalkBG');
 
-app.run();
+app.synth();
