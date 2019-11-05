@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace MyWidgetService
 {
-    class Program
+    public sealed class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            var app = new App(null);
+            var app = new App();
             new MyWidgetServiceStack(app, "MyWidgetServiceStack", new StackProps());
             app.Synth();
         }

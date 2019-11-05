@@ -44,9 +44,9 @@ class HelloJavaStack extends Stack {
             super(parent, name);
 
             new AutoScalingGroup(this, "Compute", AutoScalingGroupProps.builder()
-                .withInstanceType(new InstanceType("t2.micro"))
-                .withMachineImage(new AmazonLinuxImage())
-                .withVpc(props.vpc)
+                .instanceType(new InstanceType("t2.micro"))
+                .machineImage(new AmazonLinuxImage())
+                .vpc(props.vpc)
                 .build());
         }
 

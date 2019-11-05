@@ -35,7 +35,7 @@ public class SinkQueueTest {
         Stack stack = new Stack();
         new SinkQueue(stack, "MySinkQueue", SinkQueueProps.builder()
                 .withQueueProps(QueueProps.builder()
-                        .withVisibilityTimeout(Duration.seconds(500))
+                        .visibilityTimeout(Duration.seconds(500))
                         .build())
                 .build());
         assertTemplate(stack, "{\n" +
