@@ -1,6 +1,6 @@
 package software.amazon.awscdk.examples;
 
-import software.amazon.awscdk.App;
+import software.amazon.awscdk.core.App;
 
 public class HelloJavaApp {
     public static void main(final String[] args) {
@@ -8,6 +8,6 @@ public class HelloJavaApp {
 
         new HelloJavaStack(app, "hello-cdk");
 
-        app.run();
+        app.synth();
     }
 }

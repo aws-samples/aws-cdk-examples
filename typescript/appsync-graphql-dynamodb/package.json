@@ -1,6 +1,6 @@
 {
   "name": "appsync-graphql-dynamodb",
-  "version": "0.23.0",
+  "version": "1.0.0",
   "description": "Running a GraphQL API with four resolvers to do CRUD operations on DynamoDB",
   "private": true,
   "scripts": {
@@ -14,13 +14,13 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^8.10.38",
-    "typescript": "^3.2.4"
+    "@types/node": "^10.17.0",
+    "typescript": "~3.6.4"
   },
   "dependencies": {
     "@aws-cdk/aws-appsync": "*",
     "@aws-cdk/aws-dynamodb": "*",
     "@aws-cdk/aws-iam": "*",
-    "@aws-cdk/cdk": "*"
+    "@aws-cdk/core": "*"
   }
 }

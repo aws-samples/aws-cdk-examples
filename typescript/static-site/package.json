@@ -1,6 +1,6 @@
 {
   "name": "static-site",
-  "version": "0.24.1",
+  "version": "1.0.0",
   "description": "Infrastructure for an HTTPS static site using S3 and CloudFront",
   "scripts": {
     "build": "tsc",
@@ -14,15 +14,18 @@
   },
   "license": "Apache-2.0",
   "devDependencies": {
-    "@types/node": "^10.9.4",
-    "typescript": "^3.2.4"
+    "@types/node": "^10.17.0",
+    "typescript": "~3.6.4"
   },
   "dependencies": {
+    "@aws-cdk/aws-certificatemanager": "*",
     "@aws-cdk/aws-cloudfront": "*",
+    "@aws-cdk/aws-iam": "*",
     "@aws-cdk/aws-route53": "*",
-    "@aws-cdk/aws-route53-targets": "^0.34.0",
+    "@aws-cdk/aws-route53-targets": "*",
     "@aws-cdk/aws-s3": "*",
-    "@aws-cdk/aws-ssm": "*",
-    "@aws-cdk/cdk": "*"
+    "@aws-cdk/aws-s3-deployment": "*",
+    "@aws-cdk/core": "*",
+    "aws-cdk": "*"
   }
 }

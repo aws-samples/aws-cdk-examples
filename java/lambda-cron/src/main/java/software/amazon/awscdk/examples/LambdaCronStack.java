@@ -1,9 +1,12 @@
 package software.amazon.awscdk.examples;
 
-import software.amazon.awscdk.App;
-import software.amazon.awscdk.Stack;
-import software.amazon.awscdk.services.events.EventRule;
-import software.amazon.awscdk.services.events.EventRuleProps;
+import software.amazon.awscdk.core.Construct;
+import software.amazon.awscdk.core.Duration;
+import software.amazon.awscdk.core.Stack;
+import software.amazon.awscdk.services.events.Rule;
+import software.amazon.awscdk.services.events.RuleProps;
+import software.amazon.awscdk.services.events.Schedule;
+import software.amazon.awscdk.services.events.targets.LambdaFunction;
 import software.amazon.awscdk.services.lambda.Code;
 import software.amazon.awscdk.services.lambda.Runtime;
 import software.amazon.awscdk.services.lambda.SingletonFunction;
@@ -15,30 +18,29 @@ import java.util.UUID;
  * Lambda Cron CDK example for Java!
  */
 class LambdaCronStack extends Stack {
-    public LambdaCronStack(final App parent, final String name) {
+    public LambdaCronStack(final Construct parent, final String name) {
         super(parent, name);
 
         SingletonFunction lambdaFunction = new SingletonFunction(this, "cdk-lambda-cron",
                 SingletonFunctionProps.builder()
-                        .withFunctionName("CDK Lambda Cron Example")
-                        .withDescription("Lambda which prints \"I'm running\"")
-                        .withCode(Code.inline(
+                        .description("Lambda which prints \"I'm running\"")
+                        .code(Code.fromInline(
                                 "def main(event, context):\n" +
                                         "    print(\"I'm running!\")\n"))
-                        .withHandler("index.main")
-                        .withTimeout(300)
-                        .withRuntime(Runtime.PYTHON27)
-                        .withUuid(UUID.randomUUID().toString())
+                        .handler("index.main")
+                        .timeout(Duration.seconds(300))
+                        .runtime(Runtime.PYTHON_2_7)
+                        .uuid(UUID.randomUUID().toString())
                         .build()
         );
 
-        EventRule rule = new EventRule(this, "cdk-lambda-cron-rule",
-                EventRuleProps.builder()
-                        .withDescription("Run every day at 6PM UTC")
-                        .withScheduleExpression("cron(0 18 ? * MON-FRI *)")
+        Rule rule = new Rule(this, "cdk-lambda-cron-rule",
+                RuleProps.builder()
+                        .description("Run every day at 6PM UTC")
+                        .schedule(Schedule.expression("cron(0 18 ? * MON-FRI *)"))
                         .build()
         );
 
-        rule.addTarget(lambdaFunction);
+        rule.addTarget(new LambdaFunction(lambdaFunction));
     }
 }
