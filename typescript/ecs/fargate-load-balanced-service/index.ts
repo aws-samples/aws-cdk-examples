@@ -20,6 +20,8 @@ class BonjourFargate extends cdk.Stack {
       },
     });
 
+    fargateService.service.connections.allowFromAnyIpv4(ec2.Port.tcp(80));
+
     // Output the DNS where you can access your service
     new cdk.CfnOutput(this, 'LoadBalancerDNS', { value: fargateService.loadBalancer.loadBalancerDnsName });
   }
