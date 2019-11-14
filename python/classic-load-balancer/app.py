@@ -1,29 +1,31 @@
-from aws_cdk import cdk
 from aws_cdk import (
     aws_autoscaling as autoscaling,
     aws_ec2 as ec2,
     aws_elasticloadbalancing as elb,
+    core
 )
 
 
-class LoadBalancerStack(cdk.Stack):
-    def __init__(self, app: cdk.App, id: str, **kwargs) -> None:
+class LoadBalancerStack(core.Stack):
+    def __init__(self, app: core.App, id: str, **kwargs) -> None:
         super().__init__(app, id, **kwargs)
 
         vpc = ec2.Vpc(self, "VPC")
 
         asg = autoscaling.AutoScalingGroup(
-            self,
-            "ASG",
+            self, "ASG",
             vpc=vpc,
-            instance_type=ec2.InstanceTypePair(
-                ec2.InstanceClass.Burstable2, ec2.InstanceSize.Micro
+            instance_type=ec2.InstanceType.of(
+                ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.MICRO
             ),
             machine_image=ec2.AmazonLinuxImage(),
         )
 
         lb = elb.LoadBalancer(
-            self, "LB", vpc=vpc, internet_facing=True, health_check={"port": 80}
+            self, "LB",
+            vpc=vpc,
+            internet_facing=True,
+            health_check={"port": 80}
         )
         lb.add_target(asg)
 
@@ -31,6 +33,6 @@ class LoadBalancerStack(cdk.Stack):
         listener.connections.allow_default_port_from_any_ipv4("Open to the world")
 
 
-app = cdk.App()
+app = core.App()
 LoadBalancerStack(app, "LoadBalancerStack")
-app.run()
+app.synth()

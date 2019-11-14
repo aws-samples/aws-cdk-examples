@@ -1,6 +1,17 @@
-# API GW with CORS five Lambdas CRUD with DynamoDB
+# APIGateway with CORS, Lambdas, and CRUD on DynamoDB
+<!--BEGIN STABILITY BANNER-->
+---
 
-This an example of an API GW with CORS enabled, pointing to five Lambdas doing CRUD operations with a single DynamoDB table.
+![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
+
+> **This is a stable example. It should successfully build out of the box**
+>
+> This examples does is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
+
+---
+<!--END STABILITY BANNER-->
+
+This an example of an APIGateway with CORS enabled, pointing to five Lambdas executing CRUD operations on a single DynamoDB table.
 
 ## Build
 
@@ -24,14 +35,14 @@ After the deployment you will see the API's URL, which represents the url you ca
 
 The whole component contains:
 
-- an API, with CORS enabled on all HTTTP Methods. (Use with caution, for production apps you will want to enable only a certain domain origin to be able to query your API.)
-- Lambda pointing to `src/create.ts`, containing code for storing an item  into the DynamoDB table.
-- Lambda pointing to `src/delete-one.ts`, containing code for deleting an item from the DynamoDB table.
-- Lambda pointing to `src/get-all.ts`, containing code for getting all items from the DynamoDB table.
-- Lambda pointing to `src/get-one.ts`, containing code for getting an item from the DynamoDB table.
-- Lambda pointing to `src/update-one.ts`, containing code for updating an item in the DynamoDB table.
-- a DynamoDB table `items` that stores the data.
-- five LambdaIntegrations that connect these Lambdas to the API.
+- An API, with CORS enabled on all HTTTP Methods. (Use with caution, for production apps you will want to enable only a certain domain origin to be able to query your API.)
+- Lambda pointing to `src/create.ts`, containing code for __storing__ an item  into the DynamoDB table.
+- Lambda pointing to `src/delete-one.ts`, containing code for __deleting__ an item from the DynamoDB table.
+- Lambda pointing to `src/get-all.ts`, containing code for __getting all items__ from the DynamoDB table.
+- Lambda pointing to `src/get-one.ts`, containing code for __getting an item__ from the DynamoDB table.
+- Lambda pointing to `src/update-one.ts`, containing code for __updating an item__ in the DynamoDB table.
+- A DynamoDB table `items` that stores the data.
+- Five `LambdaIntegrations` that connect these Lambdas to the API.
 
 ## CDK Toolkit
 
@@ -44,10 +55,10 @@ After building your TypeScript code, you will be able to run the CDK toolkits co
     <list all stacks in this program>
 
     $ cdk synth
-    <cloudformation template>
+    <generates and outputs cloudformation template>
 
     $ cdk deploy
-    <deploy stack to your account>
+    <deploys stack to your account>
 
     $ cdk diff
-    <diff against deployed stack>
+    <shows diff against deployed stack>

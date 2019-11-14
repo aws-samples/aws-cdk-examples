@@ -1,6 +1,6 @@
 {
   "name": "ecs-service-with-task-networking",
-  "version": "0.25.1",
+  "version": "1.0.0",
   "description": "ECS Service with Task Networking",
   "private": true,
   "scripts": {
@@ -22,6 +22,6 @@
     "@aws-cdk/aws-ec2": "*",
     "@aws-cdk/aws-ecs": "*",
     "@aws-cdk/aws-elasticloadbalancingv2": "*",
-    "@aws-cdk/cdk": "*"
+    "@aws-cdk/core": "*"
   }
 }
