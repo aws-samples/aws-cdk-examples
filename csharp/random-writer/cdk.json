@@ -1,0 +1,3 @@
+{
+  "app": "dotnet run --project src/RandomWriter/RandomWriter.csproj"
+}
