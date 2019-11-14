@@ -16,7 +16,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -55,52 +55,38 @@
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>core</artifactId>
-            <version>1.0.0.DEVPREVIEW</version>
+            <version>1.14.0.DEVPREVIEW</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>autoscaling</artifactId>
-            <version>1.0.0.DEVPREVIEW</version>
+            <version>1.14.0.DEVPREVIEW</version>
         </dependency>
 
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>ec2</artifactId>
-            <version>1.0.0.DEVPREVIEW</version>
+            <version>1.14.0.DEVPREVIEW</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>s3</artifactId>
-            <version>1.0.0.DEVPREVIEW</version>
+            <version>1.14.0.DEVPREVIEW</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>sns</artifactId>
-            <version>1.0.0.DEVPREVIEW</version>
+            <version>1.14.0.DEVPREVIEW</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>sqs</artifactId>
-            <version>1.0.0.DEVPREVIEW</version>
+            <version>1.14.0.DEVPREVIEW</version>
         </dependency>
         <dependency>
           <groupId>software.amazon.awscdk</groupId>
           <artifactId>sns-subscriptions</artifactId>
-          <version>1.0.0.DEVPREVIEW</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>2.9.8</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.9.8</version>
+          <version>1.14.0.DEVPREVIEW</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/junit/junit -->

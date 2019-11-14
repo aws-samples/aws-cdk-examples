@@ -24,11 +24,13 @@ class BonjourECS(core.Stack):
         cluster.add_capacity("DefaultAutoScalingGroup",
                              instance_type=ec2.InstanceType("t2.micro"))
 
-        ecs_service = ecs_patterns.LoadBalancedEc2Service(
+        ecs_service = ecs_patterns.NetworkLoadBalancedEc2Service(
             self, "Ec2Service",
             cluster=cluster,
             memory_limit_mib=512,
-            image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
+            task_image_options={
+                'image': ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
+            }
         )
 
         core.CfnOutput(

@@ -12,8 +12,6 @@ for pomFile in $(find $scriptdir/../java -name pom.xml); do
         cd $(dirname $pomFile)
         mvn compile test
 
-        cp $scriptdir/fake.context.json cdk.context.json
-        npx cdk synth
-        rm cdk.context.json
+        $scriptdir/synth.sh
     )
 done

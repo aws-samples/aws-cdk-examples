@@ -23,10 +23,12 @@ class BonjourFargate(core.Stack):
             vpc=vpc
         )
 
-        fargate_service = ecs_patterns.LoadBalancedFargateService(
+        fargate_service = ecs_patterns.NetworkLoadBalancedFargateService(
             self, "FargateService",
             cluster=cluster,
-            image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
+            task_image_options={
+                'image': ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
+            }
         )
 
         core.CfnOutput(

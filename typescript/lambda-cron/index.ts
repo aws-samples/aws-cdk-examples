@@ -13,7 +13,7 @@ export class LambdaCronStack extends cdk.Stack {
       code: new lambda.InlineCode(fs.readFileSync('lambda-handler.py', { encoding: 'utf-8' })),
       handler: 'index.main',
       timeout: cdk.Duration.seconds(300),
-      runtime: lambda.Runtime.PYTHON_2_7,
+      runtime: lambda.Runtime.PYTHON_3_6,
     });
 
     // Run every day at 6PM UTC
