@@ -22,8 +22,10 @@ public class ECSFargateLoadBalancedStack extends Stack {
         // Create VPC with a AZ limit of two.
         Vpc vpc = new Vpc(this, "MyVpc", VpcProps.builder().maxAzs(2).build());
 
+        // Create the ECS Service
         Cluster cluster = new Cluster(this, "Ec2Cluster", ClusterProps.builder().vpc(vpc).build());
 
+        // Use the ECS Network Load Balanced Fargate Service construct to create a ECS service
         NetworkLoadBalancedFargateService fargateService = new NetworkLoadBalancedFargateService(
                 this,
                 "FargateService",
