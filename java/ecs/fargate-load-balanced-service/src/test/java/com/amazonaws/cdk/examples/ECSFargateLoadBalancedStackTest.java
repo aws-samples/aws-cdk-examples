@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import static junit.framework.TestCase.assertEquals;
 
-public class HelloStackTest {
+public class ECSFargateLoadBalancedStackTest {
     private final static ObjectMapper JSON =
         new ObjectMapper().configure(SerializationFeature.INDENT_OUTPUT, true);
 
