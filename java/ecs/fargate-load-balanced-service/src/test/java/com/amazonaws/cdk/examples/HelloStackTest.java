@@ -1,4 +1,4 @@
-package com.myorg;
+package com.amazonaws.cdk.examples;
 
 import software.amazon.awscdk.core.App;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -17,7 +17,7 @@ public class HelloStackTest {
     @Test
     public void testStack() throws IOException {
         App app = new App();
-        HelloStack stack = new HelloStack(app, "test");
+        ECSFargateLoadBalancedStack stack = new ECSFargateLoadBalancedStack(app, "test");
 
         // synthesize the stack to a CloudFormation template and compare against
         // a checked-in JSON file.
