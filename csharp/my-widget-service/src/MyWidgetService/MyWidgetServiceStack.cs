@@ -6,22 +6,22 @@ using System.Collections.Generic;
 
 namespace MyWidgetService
 {
-    public class MyWidgetServiceStack : Stack
+    internal sealed class MyWidgetServiceStack : Stack
     {
         public MyWidgetServiceStack(Construct parent, string id, IStackProps props) : base(parent, id, props)
         {
-            var bucket = new Bucket(this, "WidgetStore", null);
+            var bucket = new Bucket(this, "WidgetStore");
 
             var handler = new Function(this, "WidgetHandler", new FunctionProps {
-                Runtime = Runtime.NODEJS_8_10,
-                Code = AssetCode.Asset("src/MyWidgetService/resources"),
+                Runtime = Runtime.NODEJS_10_X,
+                Code = Code.FromAsset("src/MyWidgetService/resources"),
                 Handler = "widgets.main",
-                Environment = new Dictionary<string, object>{
+                Environment = new Dictionary<string, string>{
                     { "BUCKET", bucket.BucketName }
                 }
             });
 
-            bucket.GrantReadWrite(handler, null);
+            bucket.GrantReadWrite(handler);
 
             var api = new RestApi(this, "widgets-api", new RestApiProps {
                 RestApiName = "Widget Service",
@@ -34,17 +34,17 @@ namespace MyWidgetService
                 },
             });
 
-            api.Root.AddMethod("GET", getWidgetsIntegration, null);
+            api.Root.AddMethod("GET", getWidgetsIntegration);
 
-            var widget = api.Root.AddResource("{id}", null);
+            var widget = api.Root.AddResource("{id}");
 
-            var postWidgetIntegration = new LambdaIntegration(handler, null);
-            var getWidgetIntegration = new LambdaIntegration(handler, null);
-            var deleteWidgetIntegration = new LambdaIntegration(handler, null);
+            var postWidgetIntegration = new LambdaIntegration(handler);
+            var getWidgetIntegration = new LambdaIntegration(handler);
+            var deleteWidgetIntegration = new LambdaIntegration(handler);
 
-            widget.AddMethod("POST", postWidgetIntegration, null);
-            widget.AddMethod("GET", getWidgetIntegration, null);
-            widget.AddMethod("DELETE", deleteWidgetIntegration, null);
+            widget.AddMethod("POST", postWidgetIntegration);
+            widget.AddMethod("GET", getWidgetIntegration);
+            widget.AddMethod("DELETE", deleteWidgetIntegration);
         }
     }
 }
