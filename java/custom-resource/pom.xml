@@ -55,7 +55,7 @@
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>core</artifactId>
-            <version>1.16.3.DEVPREVIEW</version>
+            <version>1.17.1.DEVPREVIEW</version>
         </dependency>
 
         <!-- Respective AWS Construct Libraries -->
