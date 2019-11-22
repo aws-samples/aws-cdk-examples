@@ -24,7 +24,7 @@ class ECSCluster(core.Stack):
             update_type=autoscaling.UpdateType.REPLACING_UPDATE,
             desired_capacity=3,
             vpc=vpc,
-            vpc_subnets={'subnetType': ec2.SubnetType.PUBLIC}
+            vpc_subnets={ 'subnet_type': ec2.SubnetType.PUBLIC },
         )
 
         cluster = ecs.Cluster(
