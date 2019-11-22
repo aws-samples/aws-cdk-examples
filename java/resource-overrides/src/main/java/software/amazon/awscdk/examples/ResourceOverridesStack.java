@@ -4,12 +4,10 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import software.amazon.awscdk.core.*;
 import software.amazon.awscdk.services.autoscaling.AutoScalingGroup;
-import software.amazon.awscdk.services.autoscaling.AutoScalingGroupProps;
 import software.amazon.awscdk.services.autoscaling.CfnLaunchConfiguration;
 import software.amazon.awscdk.services.ec2.*;
 import software.amazon.awscdk.services.s3.Bucket;
 import software.amazon.awscdk.services.s3.BucketEncryption;
-import software.amazon.awscdk.services.s3.BucketProps;
 import software.amazon.awscdk.services.s3.CfnBucket;
 
 import java.util.Collections;
@@ -17,22 +15,25 @@ import java.util.Collections;
 /**
  * This is an example of how to override properties of underlying CloudFormation resource of
  * high-level CDK construct.
- *
+ * <p>
  * Note: this is just a reference code to show examples of how to use L1 resources.
  * Running `cdk deploy` on this app will fail, however you can still run `cdk synth` and explore
  * CloudFormation template that gets generated.
+ * <p>
+ * Note: this code shows how to access L1 resources, however you shouldn't do it unless you really need to.
+ * As you can see below, doing some is quite cumbersome (especially in Java) and not very clean, but still possible.
  */
 class ResourceOverridesStack extends Stack {
-    public ResourceOverridesStack(final Construct parent, final String name) {
-        super(parent, name);
+    public ResourceOverridesStack(final Construct scope, final String name) {
+        super(scope, name);
 
-        Bucket otherBucket = new Bucket(this, "Other");
+        Bucket otherBucket = Bucket.Builder.create(this, "Other").build();
 
-        Bucket bucket = new Bucket(this, "MyBucket", BucketProps.builder()
+        Bucket bucket = Bucket.Builder.create(this, "MyBucket")
                 .versioned(true)
                 .encryption(BucketEncryption.KMS_MANAGED)
-                .build()
-        );
+                .build();
+
         CfnBucket bucketResource = (CfnBucket) bucket.getNode().getDefaultChild();
 
         //
@@ -102,13 +103,18 @@ class ResourceOverridesStack extends Stack {
         bucketResource.addOverride("Metadata", null);
         bucketResource.addPropertyDeletionOverride("CorsConfiguration.Bar");
 
-        Vpc vpc = new Vpc(this, "VPC", VpcProps.builder().maxAzs(1).build());
-        AutoScalingGroup asg = new AutoScalingGroup(this, "ASG", AutoScalingGroupProps.builder()
+        //
+        // Example of constructs that have more L1 underlying resources and how to access them
+        //
+        Vpc vpc = Vpc.Builder.create(this, "VPC")
+                .maxAzs(1)
+                .build();
+
+        AutoScalingGroup asg = AutoScalingGroup.Builder.create(this, "ASG")
                 .vpc(vpc)
                 .instanceType(InstanceType.of(InstanceClass.MEMORY4, InstanceSize.XLARGE))
                 .machineImage(new AmazonLinuxImage())
-                .build()
-        );
+                .build();
 
         //
         // The default child resource is called `Resource`, but secondary resources, such as
