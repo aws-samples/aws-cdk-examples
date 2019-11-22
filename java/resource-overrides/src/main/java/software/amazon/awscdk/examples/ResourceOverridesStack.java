@@ -114,6 +114,7 @@ class ResourceOverridesStack extends Stack {
         // The default child resource is called `Resource`, but secondary resources, such as
         // an LaunchConfig, InstanceRole will have a different ID.
         // See https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_core.ConstructNode.html#defaultchild
+        // You can see all the resources under given construct by running `cdk synth` and looking for `aws:cdk:path`
         //
         CfnLaunchConfiguration launchConfiguration = (CfnLaunchConfiguration) asg.getNode().findChild("LaunchConfig");
         launchConfiguration.addPropertyOverride("Foo.Bar", "Hello");
