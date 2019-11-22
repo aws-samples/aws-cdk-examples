@@ -1,22 +1,32 @@
+# My Widget Service
 
-Welcome to your CDK Java project!
+This example uses lambda to serve-up widgets.
 
-It is a Maven-based project, so you can open this directory with any Maven-compatible Java IDE,
-and you should be able to build and run tests from your IDE.
+## Building
 
-You should explore the contents of this template. It demonstrates a CDK app with two instances of
-a stack (`HelloStack`) which also uses a user-defined construct (`HelloConstruct`).
+To build this app, run `mvn compile`. This will download the required
+dependencies to compile the Java code.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app. This example relies on maven
-to do that.
+You can use your IDE to write code and unit tests, but you will need to use the
+CDK toolkit if you wish to synthesize/deploy stacks.
 
-# Useful commands
+## CDK Toolkit
 
- * `mvn package`     compile and run tests
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk docs`        open CDK documentation
+The [`cdk.json`](./cdk.json) file in the root of this repository includes
+instructions for the CDK toolkit on how to execute this program.
 
-Enjoy!
+Specifically, it will tell the toolkit to use the `mvn exec:java` command as the
+entry point of your application. After changing your Java code, you will be able
+to run the CDK toolkit commands as usual (Maven will recompile as needed):
+
+    $ cdk ls
+    <list all stacks in this program>
+
+    $ cdk synth
+    <cloudformation template>
+
+    $ cdk deploy
+    <deploy stack to your account>
+
+    $ cdk diff
+    <diff against deployed stack>
