@@ -1,7 +1,6 @@
 package software.amazon.awscdk.examples;
 
 import software.amazon.awscdk.core.CfnOutput;
-import software.amazon.awscdk.core.CfnOutputProps;
 import software.amazon.awscdk.core.Construct;
 import software.amazon.awscdk.core.Duration;
 import software.amazon.awscdk.core.Stack;
@@ -15,8 +14,8 @@ import java.nio.file.*;
 
 public class CustomResourceStack extends Stack {
 
-    public CustomResourceStack(final Construct parent, final String id) {
-        super(parent, id);
+    public CustomResourceStack(final Construct scope, final String id) {
+        super(scope, id);
         
         try {
 
@@ -24,30 +23,28 @@ public class CustomResourceStack extends Stack {
             String LambdaContent = readFileAsString("./lambda/custom-resource-handler.py");
             
             // Sample Lambda Function Resource
-            final SingletonFunction lambdaFunction = new SingletonFunction(this, "cdk-lambda-customresource",
-                    SingletonFunctionProps.builder()
-                            .description("My Custom Resource Lambda")
-                            .code(Code.fromInline(LambdaContent))
-                            .handler("index.handler")
-                            .timeout(Duration.seconds(300))
-                            .runtime(Runtime.PYTHON_2_7)
-                            .uuid(UUID.randomUUID().toString())
-                            .build()
-            );
-
+            final SingletonFunction lambdaFunction = SingletonFunction.Builder.create(this, "cdk-lambda-customresource")
+                                                            .description("My Custom Resource Lambda")
+                                                            .code(Code.fromInline(LambdaContent))
+                                                            .handler("index.handler")
+                                                            .timeout(Duration.seconds(300))
+                                                            .runtime(Runtime.PYTHON_2_7)
+                                                            .uuid(UUID.randomUUID().toString())
+                                                            .build();
+            
             // Sample Property to send to Lambda Function
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("Message", "AWS CDK");
             
-            final CustomResource myCustomResource = new CustomResource(this, "MyCustomResource",CustomResourceProps.builder()
-                    .provider(CustomResourceProvider.fromLambda(lambdaFunction))
-                    .properties(map).build());
+            final CustomResource myCustomResource = CustomResource.Builder.create(this, "MyCustomResource")
+                                                    .provider(CustomResourceProvider.fromLambda(lambdaFunction))
+                                                    .properties(map).build();
 
             
             // Publish the custom resource output
-            CfnOutput cfnoutput = new CfnOutput(this, "MyCustomResourceOutput", 
-                                        CfnOutputProps.builder().description("The message that came back from the Custom Resource")
-                                        .value(myCustomResource.getAtt("Response").toString()).build());
+            CfnOutput cfnoutput = CfnOutput.Builder.create(this, "MyCustomResourceOutput")
+                                    .description("The message that came back from the Custom Resource")
+                                    .value(myCustomResource.getAtt("Response").toString()).build();
             
             
         } catch (Exception e) {
