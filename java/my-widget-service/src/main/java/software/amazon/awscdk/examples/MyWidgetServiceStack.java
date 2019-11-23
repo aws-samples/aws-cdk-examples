@@ -40,8 +40,8 @@ public class MyWidgetServiceStack extends Stack {
 
 		Role restApiRole = new Role(this, "RestAPIRole",RoleProps.builder()
 				.assumedBy(new ServicePrincipal("apigateway.amazonaws.com"))
-				.managedPolicies(managedPolicyArray).
-				build());
+				.managedPolicies(managedPolicyArray)
+				.build());
 
 		Map<String, String> environmentVariables = new HashMap<String, String>();
 		environmentVariables.put("BUCKET", bucket.getBucketName());
