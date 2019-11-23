@@ -35,7 +35,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>com.amazonaws.cdk.examples.MyWidgetServiceStack</mainClass>
+                            <mainClass>com.amazonaws.cdk.examples.MyWidgetServiceApp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
