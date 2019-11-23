@@ -1,6 +1,0 @@
-{
-  "app": "mvn -q exec:java",
-  "context": {
-    "@aws-cdk/core:enableStackNameDuplicates": "true"
-  }
-}
