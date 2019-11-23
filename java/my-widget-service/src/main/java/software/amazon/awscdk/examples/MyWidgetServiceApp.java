@@ -3,6 +3,7 @@ package software.amazon.awscdk.examples;
 import software.amazon.awscdk.core.App;
 
 
+
 import java.util.Arrays;
 
 public class MyWidgetServiceApp {

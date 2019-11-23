@@ -30,10 +30,8 @@ public class MyWidgetServiceStack extends Stack {
 
 		Bucket bucket = new Bucket(this, "WidgetStore");
 
-         RestApi api = new RestApi(this, "widgets-api",RestApiProps.builder()
-                 .restApiName("Widget Service")
-                 .description("This service serves widgets.")
-                 .build());
+		RestApi api = new RestApi(this, "widgets-api", RestApiProps.builder().restApiName("Widget Service")
+				.description("This service serves widgets.").build());
 
 		List<IManagedPolicy> managedPolicyArray = new ArrayList<IManagedPolicy>();
 		managedPolicyArray.add((IManagedPolicy) ManagedPolicy.fromAwsManagedPolicyName("AmazonS3FullAccess"));
@@ -44,34 +42,30 @@ public class MyWidgetServiceStack extends Stack {
 
 		Map<String, String> environmentVariables = new HashMap<String, String>();
 		environmentVariables.put("BUCKET", bucket.getBucketName());
-		
+
 		Function lambdaFunction = new Function(this, "WidgetHandler",
 				FunctionProps.builder().code(Code.fromAsset("resources")).handler("widgets.main")
-						.timeout(Duration.seconds(300)).runtime(Runtime.NODEJS_10_X)
-						.environment(environmentVariables).build());
-		
-		bucket.grantReadWrite(lambdaFunction); 
-				
+						.timeout(Duration.seconds(300)).runtime(Runtime.NODEJS_10_X).environment(environmentVariables)
+						.build());
+
+		bucket.grantReadWrite(lambdaFunction);
+
 		Map<String, String> lambdaIntegrationMap = new HashMap<String, String>();
 		lambdaIntegrationMap.put("application/json", "{ \"statusCode\": \"200\" }");
-		
-		LambdaIntegration getWidgetIntegration = new LambdaIntegration(lambdaFunction,LambdaIntegrationOptions.builder()
-				.requestTemplates(lambdaIntegrationMap)
-				.build());
-		
-		api.getRoot().addMethod("GET", getWidgetIntegration);		
-		
-				
+
+		LambdaIntegration getWidgetIntegration = new LambdaIntegration(lambdaFunction,
+				LambdaIntegrationOptions.builder().requestTemplates(lambdaIntegrationMap).build());
+
+		api.getRoot().addMethod("GET", getWidgetIntegration);
+
 		LambdaIntegration postWidgetIntegration = new LambdaIntegration(lambdaFunction);
 		LambdaIntegration deleteWidgetIntegration = new LambdaIntegration(lambdaFunction);
 
 		Resource widget = api.getRoot().addResource("{id}");
-		
+
 		widget.addMethod("POST", postWidgetIntegration);
 		widget.addMethod("GET", getWidgetIntegration);
 		widget.addMethod("DELETE", deleteWidgetIntegration);
-		
-		
-       
+
 	}
 }
