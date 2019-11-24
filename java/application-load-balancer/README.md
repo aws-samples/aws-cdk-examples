@@ -1,11 +1,11 @@
 
-# CDK Java Example
+# CDK Java Example - Application Load Balancer
 
 This is an example of a CDK program written in Java.
 
 It is a Maven-based project, so you can open this directory with any Maven-compatible Java IDE, and you should be able to build and run tests from your IDE.
 
-It demonstrates a CDK app with an Application Load Balancer stack which has a listener configured with targets. The Targets are pointed to an Auto Scaling Group of T2 Micro Amazon Linux based Instances. The stack is called (`LoadBalancerStack`).
+It demonstrates a CDK app with an Application Load Balancer stack which has a listener configured with targets. The Targets are point to an Auto Scaling Group of T2 Micro Amazon Linux based Instances. The stack is called (`LoadBalancerStack`).
 
 ## Building
 
