@@ -5,7 +5,7 @@ This is an example of a CDK program written in Java.
 
 It is a Maven-based project, so you can open this directory with any Maven-compatible Java IDE, and you should be able to build and run tests from your IDE.
 
-It demonstrates a CDK app called (`MyFirstECSCluster`). The app invokes a stack called (`ECSClusterStack`). This Stack has multiple constructs which create an ECS Cluster in a VPC. This Cluster contains EC2 instances in an Auto Scaling Group. The EC2 instances are based on Amazon Linux ECS Optimized images. 
+It demonstrates a CDK app called (`ECSClusterApp`). The app invokes a stack called (`MyFirstECSCluster`). This Stack has multiple constructs which create an ECS Cluster in a VPC. This Cluster contains EC2 instances in an Auto Scaling Group. The EC2 instances are based on Amazon Linux ECS Optimized images. 
 
 ## Building
 

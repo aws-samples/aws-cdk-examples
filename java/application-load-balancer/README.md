@@ -5,7 +5,7 @@ This is an example of a CDK program written in Java.
 
 It is a Maven-based project, so you can open this directory with any Maven-compatible Java IDE, and you should be able to build and run tests from your IDE.
 
-It demonstrates a CDK app with an Application Load Balancer stack which has a listener configured with targets. The Targets are point to an Auto Scaling Group of T2 Micro Amazon Linux based Instances. The stack is called (`LoadBalancerStack`).
+It demonstrates a CDK app called (`ApplicationLoadBalancerApp`). The app invokes a stack called (`LoadBalancerStack`). This Stack has multiple constructs which create an Application Load Balancer. In addition, a listener is created which listens to targets which point to instances in an Auto Scaling Group. The instances in the Auto Scaling Group are based on Amazon Linux AMIs. All of these constructs are created in a new VPC.
 
 ## Building
 
@@ -25,10 +25,10 @@ to run the CDK toolkit commands as usual (Maven will recompile as needed):
     $ cdk ls
     <list all stacks in this program>
 
-    $ cdk synth
+    $ cdk synth LoadBalancerStack
     <cloudformation template>
 
-    $ cdk deploy
+    $ cdk deploy LoadBalancerStack
     <deploy stack to your account>
 
     $ cdk diff
