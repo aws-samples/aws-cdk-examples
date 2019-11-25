@@ -1,11 +1,11 @@
 
-# CDK Java Example - ECS NLB Pattern
+# CDK Java Example - ECS with Advanced ALB Configuration
 
 This is an example of a CDK program written in Java.
 
 It is a Maven-based project, so you can open this directory with any Maven-compatible Java IDE, and you should be able to build and run tests from your IDE.
 
-It demonstrates a CDK app called (`ECSNLBPatternApp`). The app invokes a stack called (`ECSNLBPatternStack`). This Stack demonstrates the usage of an ECS Pattern. This Pattern is used to deploy a Network Load Balanced ECS Service with just one construct. This Construct creates an ECS Service with EC2 instances which are behind a Network Load Balancer in a new VPC. The EC2 instances are based on Amazon Linux ECS Optimized images and are in an Auto Scaling Group. Patterns inherently apply all the permissions that are needed as well. 
+It demonstrates a CDK app called (`ECSAdvancedALBApp`). The app invokes a stack called (`ECSAdvancedALBStack`). This Stack demonstrates the creation of multiple constructs which create an ECS Service on a Cluster in a new VPC. An Application Load Balancer is also created with a listener pointing to the ECS Service. A Health Check is configured on the ALB as well.   
 
 ## Building
 
@@ -24,10 +24,10 @@ to run the CDK toolkit commands as usual (Maven will recompile as needed):
     $ cdk ls
     <list all stacks in this program>
 
-    $ cdk synth MyFirstEECSNLBPatternStackCSCluster
+    $ cdk synth ECSAdvancedALBStack
     <cloudformation template>
 
-    $ cdk deploy ECSNLBPatternStack
+    $ cdk deploy ECSAdvancedALBStack
     <deploy stack to your account>
 
     $ cdk diff

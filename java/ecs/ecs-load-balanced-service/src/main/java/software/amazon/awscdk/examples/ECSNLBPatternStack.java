@@ -13,12 +13,12 @@ import software.amazon.awscdk.services.ec2.*;
 import software.amazon.awscdk.services.ecs.*;
 import software.amazon.awscdk.services.ecs.patterns.*;
 
-public class ECSLoadBalancedStack extends Stack {
-    public ECSLoadBalancedStack(final Construct parent, final String id) {
+public class ECSNLBPatternStack extends Stack {
+    public ECSNLBPatternStack(final Construct parent, final String id) {
         this(parent, id, null);
     }
 
-    public ECSLoadBalancedStack(final Construct parent, final String id, final StackProps props) {
+    public ECSNLBPatternStack(final Construct parent, final String id, final StackProps props) {
         super(parent, id, props);
         
         Vpc vpc = new Vpc(this, "VPC", VpcProps.builder().maxAzs(2).build());
@@ -30,10 +30,10 @@ public class ECSLoadBalancedStack extends Stack {
         
         //Using ECS Patterns to instantiate a new ECS Service with cluster and image
         NetworkLoadBalancedEc2Service ecsService = new NetworkLoadBalancedEc2Service(this, "Ec2Service", NetworkLoadBalancedEc2ServiceProps.builder()
-        		.cluster(cluster)
-        		.memoryLimitMiB(512)
-        		.taskImageOptions(NetworkLoadBalancedTaskImageOptions.builder().image(ContainerImage.fromRegistry("amazon/amazon-ecs-sample")).build())
-        		.build());
+        													.cluster(cluster)
+        													.memoryLimitMiB(512)
+        													.taskImageOptions(NetworkLoadBalancedTaskImageOptions.builder().image(ContainerImage.fromRegistry("amazon/amazon-ecs-sample")).build())
+        													.build());
         
         new CfnOutput(this, "LoadBalancerDNS", CfnOutputProps.builder().value(ecsService.getLoadBalancer().getLoadBalancerDnsName()).build());
         
