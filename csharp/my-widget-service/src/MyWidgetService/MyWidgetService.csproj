@@ -6,10 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Amazon.CDK" Version="1.14.0-devpreview" />
-    <PackageReference Include="Amazon.CDK.AWS.ApiGateway" Version="1.14.0-devpreview" />
-    <PackageReference Include="Amazon.CDK.AWS.Lambda" Version="1.14.0-devpreview" />
-    <PackageReference Include="Amazon.CDK.AWS.S3" Version="1.14.0-devpreview" />
+    <PackageReference Include="Amazon.CDK" Version="1.18.0-devpreview" />
+    <PackageReference Include="Amazon.CDK.AWS.ApiGateway" Version="1.18.0-devpreview" />
+    <PackageReference Include="Amazon.CDK.AWS.Lambda" Version="1.18.0-devpreview" />
+    <PackageReference Include="Amazon.CDK.AWS.S3" Version="1.18.0-devpreview" />
     <PackageReference Include="Amazon.JSII.Analyzers" Version="0.19.0" PrivateAssets="all" />
   </ItemGroup>
 
