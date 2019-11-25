@@ -3,7 +3,6 @@ package software.amazon.awscdk.examples;
 import software.amazon.awscdk.core.Stack;
 import software.amazon.awscdk.core.Construct;
 import software.amazon.awscdk.services.autoscaling.AutoScalingGroup;
-import software.amazon.awscdk.services.autoscaling.AutoScalingGroupProps;
 import software.amazon.awscdk.services.ec2.AmazonLinuxImage;
 import software.amazon.awscdk.services.ec2.InstanceType;
 import software.amazon.awscdk.services.ec2.Vpc;
@@ -19,7 +18,7 @@ class HelloJavaStack extends Stack {
     public HelloJavaStack(final Construct parent, final String name) {
         super(parent, name);
 
-        Vpc vpc = new Vpc(this, "VPC");
+        Vpc vpc = Vpc.Builder.create(this, "VPC").build();
 
         MyAutoScalingGroupProps autoScalingGroupProps = new MyAutoScalingGroupProps();
         autoScalingGroupProps.vpc = vpc;
@@ -43,11 +42,11 @@ class HelloJavaStack extends Stack {
         MyAutoScalingGroup(final Construct parent, final String name, final MyAutoScalingGroupProps props) {
             super(parent, name);
 
-            new AutoScalingGroup(this, "Compute", AutoScalingGroupProps.builder()
+            AutoScalingGroup.Builder.create(this, "Compute")
                 .instanceType(new InstanceType("t2.micro"))
                 .machineImage(new AmazonLinuxImage())
                 .vpc(props.vpc)
-                .build());
+                .build();
         }
 
         @Override
