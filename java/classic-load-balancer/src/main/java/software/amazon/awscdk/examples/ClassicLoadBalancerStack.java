@@ -16,18 +16,6 @@ import software.amazon.awscdk.services.elasticloadbalancing.LoadBalancerListener
 import software.amazon.awscdk.services.elasticloadbalancing.ListenerPort;
 
 
-/*
-import software.amazon.awscdk.services.events.Rule;
-import software.amazon.awscdk.services.events.RuleProps;
-import software.amazon.awscdk.services.events.Schedule;
-import software.amazon.awscdk.services.events.targets.LambdaFunction;
-import software.amazon.awscdk.services.lambda.Code;
-import software.amazon.awscdk.services.lambda.Runtime;
-import software.amazon.awscdk.services.lambda.SingletonFunction;
-
-import java.util.UUID;
-*/
-
 /**
  * Lambda Cron CDK example for Java!
  */
@@ -36,7 +24,6 @@ class ClassicLoadBalancerStack extends Stack {
         super(parent, name);
 	Vpc vpc = new Vpc(this, "VPC");
 	
-	//AmazonLinuxImage amazonLinuxImage = AmazonLinuxImage.Builder.create()
 	AutoScalingGroup asg = AutoScalingGroup.Builder.create(this,"ASG")
 					.vpc(vpc)
 					.instanceType(InstanceType.of(InstanceClass.BURSTABLE2, InstanceSize.MICRO))
