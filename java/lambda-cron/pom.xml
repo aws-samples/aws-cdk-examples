@@ -55,19 +55,19 @@
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>core</artifactId>
-            <version>1.12.0.DEVPREVIEW</version>
+            <version>[1.17.0.DEVPREVIEW, 2)</version>
         </dependency>
 
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>lambda</artifactId>
-            <version>1.12.0.DEVPREVIEW</version>
+            <version>[1.17.0.DEVPREVIEW, 2)</version>
         </dependency>
 
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>events-targets</artifactId>
-            <version>1.12.0.DEVPREVIEW</version>
+            <version>[1.17.0.DEVPREVIEW, 2)</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/junit/junit -->
