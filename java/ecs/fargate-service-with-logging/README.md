@@ -1,11 +1,11 @@
 
-# CDK Java Example - ECS with Task Placement
+# CDK Java Example - Fargate with Logging
 
 This is an example of a CDK program written in Java.
 
 It is a Maven-based project, so you can open this directory with any Maven-compatible Java IDE, and you should be able to build and run tests from your IDE.
 
-It demonstrates a CDK app called (`ECSTaskPlacementApp`). The app invokes a stack called (`ECSTaskPlacementStack`). This Stack demonstrates the creation of multiple constructs which create an ECS Service on a Cluster in a new VPC. This Stack adds a Distinct Instances Placement Constraint and two placement strategies to the ECS Service - BinPack Memory and Spread Across Availability Zone.   
+It demonstrates a CDK app called (`FargateWithLoggingApp`). The app invokes a stack called (`FargateWithLoggingStack`). This Stack demonstrates the creation of multiple constructs which create an ECS Service in Fargate Mode. Logging is also enabled for services that provisioned.    
 
 ## Building
 
@@ -24,10 +24,10 @@ to run the CDK toolkit commands as usual (Maven will recompile as needed):
     $ cdk ls
     <list all stacks in this program>
 
-    $ cdk synth ECSTaskPlacementStack
+    $ cdk synth FargateWithLoggingStack
     <cloudformation template>
 
-    $ cdk deploy ECSTaskPlacementStack
+    $ cdk deploy FargateWithLoggingStack
     <deploy stack to your account>
 
     $ cdk diff
