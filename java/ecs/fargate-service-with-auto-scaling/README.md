@@ -5,7 +5,7 @@ This is an example of a CDK program written in Java.
 
 It is a Maven-based project, so you can open this directory with any Maven-compatible Java IDE, and you should be able to build and run tests from your IDE.
 
-It demonstrates a CDK app called (`FargateAutoScalingApp`). The app invokes a stack called (`FargateAutoScalingStack`). This Stack demonstrates the creation of multiple constructs which create an ECS Service on a Cluster in a new VPC. An Application Load Balancer is also created with a listener pointing to the ECS Service. A Health Check is configured on the ALB as well.   
+It demonstrates a CDK app called (`FargateAutoScalingApp`). The app invokes a stack called (`FargateAutoScalingStack`). This Stack demonstrates the usage of a Pattern which creates a Fargate Service with a Network Load Balancer. It also enables Auto Scaling for the Fargate Service based on CPU Utilization.  
 
 ## Building
 
