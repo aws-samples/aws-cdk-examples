@@ -21,14 +21,11 @@ public class FargateNLBPatternStack extends Stack {
         
         Cluster cluster = new Cluster(this, "ECSCluster", ClusterProps.builder().vpc(vpc).build());
         
-        cluster.addCapacity("DefaultAutoScalingGroup", AddCapacityOptions.builder()
-        		.instanceType(InstanceType.of(InstanceClass.BURSTABLE2, InstanceSize.MICRO)).build());
-        
         //Using ECS Patterns to instantiate a new ECS Service with cluster and image
         NetworkLoadBalancedFargateService fargateService = new NetworkLoadBalancedFargateService(this, "FargatePatternService", NetworkLoadBalancedFargateServiceProps.builder()
         													.cluster(cluster)
-        													.memoryLimitMiB(512)
-        													.taskImageOptions(NetworkLoadBalancedTaskImageOptions.builder().image(ContainerImage.fromRegistry("amazon/amazon-ecs-sample")).build())
+        													.taskImageOptions(NetworkLoadBalancedTaskImageOptions.builder()
+        															.image(ContainerImage.fromRegistry("amazon/amazon-ecs-sample")).build())
         													.build());
         
         new CfnOutput(this, "LoadBalancerDNS", CfnOutputProps.builder().value(fargateService.getLoadBalancer().getLoadBalancerDnsName()).build());
