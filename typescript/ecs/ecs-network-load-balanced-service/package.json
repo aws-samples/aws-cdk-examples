@@ -1,7 +1,7 @@
 {
-  "name": "ecs-load-balanced-service",
+  "name": "ecs-network-load-balanced-service",
   "version": "1.0.0",
-  "description": "Running a load balanced service on ECS",
+  "description": "Running a network load balanced service on ECS",
   "private": true,
   "scripts": {
     "build": "tsc",
