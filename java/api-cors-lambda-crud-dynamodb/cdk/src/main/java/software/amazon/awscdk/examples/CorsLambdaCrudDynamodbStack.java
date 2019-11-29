@@ -136,7 +136,7 @@ class CorsLambdaCrudDynamodbStack extends Stack {
 
     private FunctionProps getLambdaFunctionProps(Map<String, String> lambdaEnvMap, String handler) {
         return FunctionProps.builder()
-                    .code(Code.fromAsset("./lib/lambda-1.0.0-jar-with-dependencies.jar"))
+                    .code(Code.fromAsset("./asset/lambda-1.0.0-jar-with-dependencies.jar"))
                     .handler(handler)
                     .runtime(Runtime.JAVA_8)
                     .environment(lambdaEnvMap)
