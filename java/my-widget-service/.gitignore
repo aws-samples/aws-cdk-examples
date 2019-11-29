@@ -12,5 +12,5 @@ target
 cdk.out
 
 #Java bin directory
-bin
+*.class
 
