@@ -57,7 +57,7 @@ class CorsLambdaCrudDynamodbStack extends Stack {
         Function updateItemFunction = new Function(this, "updateItemFunction",
                 getLambdaFunctionProps(lambdaEnvMap, "software.amazon.awscdk.examples.lambda.UpdateItem"));
         Function deleteItemFunction = new Function(this, "deleteItemFunction",
-                getLambdaFunctionProps(lambdaEnvMap, "software.amazon.awscdk.examples.software.amazon.awscdk.examples.lambda.DeleteItem"));
+                getLambdaFunctionProps(lambdaEnvMap, "software.amazon.awscdk.examples.lambda.DeleteItem"));
 
 
 
