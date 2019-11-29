@@ -5,7 +5,12 @@
 
     <groupId>com.amazonaws.cdk</groupId>
     <artifactId>cors-lambda-crud-dynamodb</artifactId>
+    <packaging>pom</packaging>
     <version>1.0.0</version>
+    <modules>
+        <module>lambda</module>
+        <module>cdk</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -33,14 +38,14 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>com.amazonaws.cdk.examples.CorsLambdaCrudDynamodbStack</mainClass>
+                            <mainClass>com.amazonaws.cdk.examples.CorsLambdaCrudDynamodbApp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
-                        <phase>package</phase> <!-- bind to the packaging phase -->
+                        <id>make-assembly</id>
+                        <phase>package</phase>
                             <goals>
                             <goal>single</goal>
                         </goals>
@@ -51,77 +56,5 @@
         </plugins>
     </build>
 
-    <dependencies>
-        <dependency>
-            <groupId>software.amazon.awscdk</groupId>
-            <artifactId>core</artifactId>
-            <version>[1.17.0.DEVPREVIEW, 2)</version>
-        </dependency>
-        <dependency>
-            <groupId>software.amazon.awscdk</groupId>
-            <artifactId>apigateway</artifactId>
-            <version>[1.17.0.DEVPREVIEW, 2)</version>
-        </dependency>
-
-        <dependency>
-            <groupId>software.amazon.awscdk</groupId>
-            <artifactId>dynamodb</artifactId>
-            <version>[1.17.0.DEVPREVIEW, 2)</version>
-        </dependency>
-        <dependency>
-            <groupId>software.amazon.awscdk</groupId>
-            <artifactId>lambda</artifactId>
-            <version>[1.17.0.DEVPREVIEW, 2)</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-lambda-java-core</artifactId>
-            <version>1.2.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>dynamodb</artifactId>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.8.6</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/junit/junit -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.hamcrest</groupId>
-                    <artifactId>hamcrest-core</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-library</artifactId>
-            <version>1.3</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>software.amazon.awssdk</groupId>
-                <artifactId>bom</artifactId>
-                <version>2.10.24</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
 </project>
