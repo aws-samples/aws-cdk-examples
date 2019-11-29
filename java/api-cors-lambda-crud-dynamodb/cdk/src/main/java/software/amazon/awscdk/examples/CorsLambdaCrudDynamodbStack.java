@@ -49,15 +49,15 @@ class CorsLambdaCrudDynamodbStack extends Stack {
 
 
         Function getOneItemFunction = new Function(this, "getOneItemFunction",
-                getLambdaFunctionProps(lambdaEnvMap, "software.amazon.awscdk.examples.lambda.GetOneItem"));
+                getLambdaFunctionProps(lambdaEnvMap, "software.amazon.awscdk.examples.software.amazon.awscdk.examples.lambda.GetOneItem"));
         Function getAllItemsFunction = new Function(this, "getAllItemsFunction",
-                getLambdaFunctionProps(lambdaEnvMap, "software.amazon.awscdk.examples.lambda.GetAllItems"));
+                getLambdaFunctionProps(lambdaEnvMap, "software.amazon.awscdk.examples.software.amazon.awscdk.examples.lambda.GetAllItems"));
         Function createItemFunction = new Function(this, "createItemFunction",
-                getLambdaFunctionProps(lambdaEnvMap, "software.amazon.awscdk.examples.lambda.CreateItem"));
+                getLambdaFunctionProps(lambdaEnvMap, "software.amazon.awscdk.examples.software.amazon.awscdk.examples.lambda.CreateItem"));
         Function updateItemFunction = new Function(this, "updateItemFunction",
-                getLambdaFunctionProps(lambdaEnvMap, "software.amazon.awscdk.examples.lambda.UpdateItem"));
+                getLambdaFunctionProps(lambdaEnvMap, "software.amazon.awscdk.examples.software.amazon.awscdk.examples.lambda.UpdateItem"));
         Function deleteItemFunction = new Function(this, "deleteItemFunction",
-                getLambdaFunctionProps(lambdaEnvMap, "software.amazon.awscdk.examples.lambda.DeleteItem"));
+                getLambdaFunctionProps(lambdaEnvMap, "software.amazon.awscdk.examples.software.amazon.awscdk.examples.lambda.DeleteItem"));
 
 
 
@@ -136,7 +136,7 @@ class CorsLambdaCrudDynamodbStack extends Stack {
 
     private FunctionProps getLambdaFunctionProps(Map<String, String> lambdaEnvMap, String handler) {
         return FunctionProps.builder()
-                    .code(Code.fromAsset("target/cors-lambda-crud-dynamodb-1.0.0-jar-with-dependencies.jar"))
+                    .code(Code.fromAsset("./lib/lambda-1.0.0-jar-with-dependencies.jar"))
                     .handler(handler)
                     .runtime(Runtime.JAVA_8)
                     .environment(lambdaEnvMap)

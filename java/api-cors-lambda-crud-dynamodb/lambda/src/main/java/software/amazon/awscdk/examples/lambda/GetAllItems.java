@@ -17,7 +17,7 @@ public class GetAllItems implements RequestHandler<Object, GatewayResponse>{
     @Override
     public GatewayResponse handleRequest(Object input, Context context) {
         LambdaLogger logger = context.getLogger();
-        logger.log("Inside lambda: getAllItems ");
+        logger.log("Inside software.amazon.awscdk.examples.lambda: getAllItems ");
 
         String output = getData(context);
 

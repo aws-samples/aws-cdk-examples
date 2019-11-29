@@ -4,12 +4,14 @@ This is an example of a CDK program written in Java.
 
 ## Building
 
-To build this app, run `mvn package`. This will download the required
-dependencies to compile the Java code and create jar for associated lambda code.
+To build this app, run `mvn compile`. This will download the required
+dependencies to compile the Java code and create jar for associated software.amazon.awscdk.examples.lambda code.
 
 You can use your IDE to write code and unit tests, but you will need to use the
 CDK toolkit if you wish to synthesize/deploy stacks.
 
+If you need to modify the lambda code then do mvn package and copy the
+jar file to lib directory in the parent module
 ## CDK Toolkit
 
 The [`cdk.json`](./cdk.json) file in the root of this repository includes

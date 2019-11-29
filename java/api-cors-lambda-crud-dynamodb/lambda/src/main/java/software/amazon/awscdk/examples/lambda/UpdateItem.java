@@ -20,7 +20,7 @@ public class UpdateItem implements RequestHandler<Map<String,Object>, GatewayRes
     @Override
     public GatewayResponse handleRequest(Map<String, Object> input, Context context) {
         LambdaLogger logger = context.getLogger();
-        logger.log("Inside lambda: getOneItem "+input.getClass()+ " data:"+input);
+        logger.log("Inside software.amazon.awscdk.examples.lambda: getOneItem "+input.getClass()+ " data:"+input);
         Map<String, Object> pathParameters = (Map<String, Object>)input.get("pathParameters");
         String id=(String)pathParameters.get("id");
 

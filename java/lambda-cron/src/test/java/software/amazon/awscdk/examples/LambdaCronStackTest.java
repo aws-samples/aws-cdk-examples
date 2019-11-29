@@ -22,7 +22,7 @@ public class LambdaCronStackTest {
     @Before
     public void setUp() throws IOException {
         App app = new App();
-        Stack stack = new LambdaCronStack(app, "lambdaResource-cdk-lambda-cron");
+        Stack stack = new LambdaCronStack(app, "lambdaResource-cdk-software.amazon.awscdk.examples.lambda-cron");
         actualStack = toCloudFormationJson(stack).path("Resources");
         expectedStack = TestUtils.fromFileResource(getClass().getResource("testCronLambdaExpected.json")).path("Resources");
     }
