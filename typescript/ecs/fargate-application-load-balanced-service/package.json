@@ -1,7 +1,7 @@
 {
-  "name": "fargate-load-balanced-service",
+  "name": "fargate-application-load-balanced-service",
   "version": "1.0.0",
-  "description": "Running a load balanced service on Fargate",
+  "description": "Running an application load balanced service on Fargate",
   "private": true,
   "scripts": {
     "build": "tsc",
