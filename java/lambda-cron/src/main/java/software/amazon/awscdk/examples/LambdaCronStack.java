@@ -20,7 +20,7 @@ class LambdaCronStack extends Stack {
     public LambdaCronStack(final Construct parent, final String name) {
         super(parent, name);
 
-        SingletonFunction lambdaFunction = SingletonFunction.Builder.create(this, "cdk-software.amazon.awscdk.examples.lambda-cron")
+        SingletonFunction lambdaFunction = SingletonFunction.Builder.create(this, "cdk-lambda-cron")
                 .description("Lambda which prints \"I'm running\"")
                 .code(Code.fromInline(
                         "def main(event, context):\n" +
@@ -31,7 +31,7 @@ class LambdaCronStack extends Stack {
                 .uuid(UUID.randomUUID().toString())
                 .build();
 
-        Rule rule = Rule.Builder.create(this, "cdk-software.amazon.awscdk.examples.lambda-cron-rule")
+        Rule rule = Rule.Builder.create(this, "cdk-lambda-cron-rule")
                 .description("Run every day at 6PM UTC")
                 .schedule(Schedule.expression("cron(0 18 ? * MON-FRI *)"))
                 .build();

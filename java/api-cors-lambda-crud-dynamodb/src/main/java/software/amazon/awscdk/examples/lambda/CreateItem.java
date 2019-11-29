@@ -23,7 +23,7 @@ public class CreateItem implements RequestHandler<Map<String,Object>, GatewayRes
     @Override
     public GatewayResponse handleRequest(Map<String, Object> input, Context context) {
         LambdaLogger logger = context.getLogger();
-        logger.log("Inside software.amazon.awscdk.examples.lambda: getOneItem "+input.getClass()+ " data:"+input);
+        logger.log("Inside lambda: getOneItem "+input.getClass()+ " data:"+input);
 
 
         String body = (String)input.get("body");
