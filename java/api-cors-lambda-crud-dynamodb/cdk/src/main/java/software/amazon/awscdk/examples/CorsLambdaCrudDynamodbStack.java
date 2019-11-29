@@ -49,13 +49,13 @@ class CorsLambdaCrudDynamodbStack extends Stack {
 
 
         Function getOneItemFunction = new Function(this, "getOneItemFunction",
-                getLambdaFunctionProps(lambdaEnvMap, "software.amazon.awscdk.examples.software.amazon.awscdk.examples.lambda.GetOneItem"));
+                getLambdaFunctionProps(lambdaEnvMap, "software.amazon.awscdk.examples.lambda.GetOneItem"));
         Function getAllItemsFunction = new Function(this, "getAllItemsFunction",
-                getLambdaFunctionProps(lambdaEnvMap, "software.amazon.awscdk.examples.software.amazon.awscdk.examples.lambda.GetAllItems"));
+                getLambdaFunctionProps(lambdaEnvMap, "software.amazon.awscdk.examples.lambda.GetAllItems"));
         Function createItemFunction = new Function(this, "createItemFunction",
-                getLambdaFunctionProps(lambdaEnvMap, "software.amazon.awscdk.examples.software.amazon.awscdk.examples.lambda.CreateItem"));
+                getLambdaFunctionProps(lambdaEnvMap, "software.amazon.awscdk.examples.lambda.CreateItem"));
         Function updateItemFunction = new Function(this, "updateItemFunction",
-                getLambdaFunctionProps(lambdaEnvMap, "software.amazon.awscdk.examples.software.amazon.awscdk.examples.lambda.UpdateItem"));
+                getLambdaFunctionProps(lambdaEnvMap, "software.amazon.awscdk.examples.lambda.UpdateItem"));
         Function deleteItemFunction = new Function(this, "deleteItemFunction",
                 getLambdaFunctionProps(lambdaEnvMap, "software.amazon.awscdk.examples.software.amazon.awscdk.examples.lambda.DeleteItem"));
 
