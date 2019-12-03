@@ -20,11 +20,18 @@ namespace StaticSite
     {
         
         // A simple construct that contains a collection of AWS S3 buckets.
-        public StaticSiteConstruct(Construct parent, string id, StaticSiteConstructProps props) : base(parent, id)
+        public StaticSiteConstruct(Construct scope, string id, StaticSiteConstructProps props) : base(scope, id)
         {
-            var zone = HostedZone.FromLookup(this, "Zone", new HostedZoneProviderProps{DomainName = props.DomainName});
-            var siteDomain = (string) (props.SiteSubDomain + "." + props.DomainName);
-            new CfnOutput(this, "Site", new CfnOutputProps{Value = "https://" + siteDomain});
+            var zone = HostedZone.FromLookup(this, "Zone", new HostedZoneProviderProps
+            {
+                DomainName = props.DomainName
+            });
+
+            var siteDomain = (string) ($"{props.SiteSubDomain}.{props.DomainName}");
+            new CfnOutput(this, "Site", new CfnOutputProps
+            {
+                Value = $"https://{siteDomain}"
+            });
             
             var siteBucket = new Bucket(this, "SiteBucket", new BucketProps
             {
@@ -39,7 +46,10 @@ namespace StaticSite
                 RemovalPolicy = RemovalPolicy.DESTROY // NOT recommended for production code
             });
 
-            new CfnOutput(this, "Bucket", new CfnOutputProps{Value = siteBucket.BucketName});
+            new CfnOutput(this, "Bucket", new CfnOutputProps
+            {
+                Value = siteBucket.BucketName
+            });
 
             var certificateArn = new DnsValidatedCertificate(this, "SiteCertificate", new DnsValidatedCertificateProps
             {
@@ -63,8 +73,10 @@ namespace StaticSite
                 },
                 OriginConfigs = new ISourceConfiguration[]
                 {
-                    new SourceConfiguration{
-                        S3OriginSource = new S3OriginConfig{
+                    new SourceConfiguration
+                    {
+                        S3OriginSource = new S3OriginConfig
+                        {
                             S3BucketSource = siteBucket
                         },
                         Behaviors = new Behavior[] {behavior}
@@ -72,7 +84,10 @@ namespace StaticSite
                 }
             });
 
-            new CfnOutput(this, "DistributionId", new CfnOutputProps{Value = distribution.DistributionId});
+            new CfnOutput(this, "DistributionId", new CfnOutputProps
+            {
+                Value = distribution.DistributionId
+            });
 
             new ARecord(this, "SiteAliasRecord", new ARecordProps
             {

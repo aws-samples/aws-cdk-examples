@@ -15,10 +15,10 @@ namespace StaticSite
         //   }
         // }
         // 
-        public StaticSiteStack(Construct parent, string id, IStackProps props) : base(parent, id, props)
+        public StaticSiteStack(Construct scope, string id, IStackProps props = null) : base(scope, id, props)
         {
             // You can also define your own constructs and use them in your stack.
-            StaticSiteConstruct hello = new StaticSiteConstruct(this, "MyStaticSite", new StaticSiteConstructProps()
+            var hello = new StaticSiteConstruct(this, "MyStaticSite", new StaticSiteConstructProps
             {
                 DomainName= (string) this.Node.TryGetContext("domain"),
                 SiteSubDomain= (string) this.Node.TryGetContext("subdomain")
