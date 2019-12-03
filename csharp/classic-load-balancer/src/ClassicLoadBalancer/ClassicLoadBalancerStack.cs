@@ -7,20 +7,23 @@ namespace ClassicLoadBalancer
 {
     public class ClassicLoadBalancerStack : Stack
     {
-        public ClassicLoadBalancerStack(Construct parent, string id, IStackProps props) : base(parent, id, props)
+        public ClassicLoadBalancerStack(Construct scope, string id, IStackProps props = null) : base(scope, id, props)
         {
             var vpc = new Vpc(this, "VPC");
 
-            var asg = new AutoScalingGroup(this, "ASG", new AutoScalingGroupProps{
+            var asg = new AutoScalingGroup(this, "ASG", new AutoScalingGroupProps
+            {
                 Vpc = vpc,
                 InstanceType = InstanceType.Of(InstanceClass.BURSTABLE3, InstanceSize.MICRO),
                 MachineImage = new AmazonLinuxImage()
             });
 
-            var lb = new LoadBalancer(this, "LB", new LoadBalancerProps{
+            var lb = new LoadBalancer(this, "LB", new LoadBalancerProps
+            {
                 Vpc = vpc,
                 InternetFacing = true,
-                HealthCheck = new Amazon.CDK.AWS.ElasticLoadBalancing.HealthCheck{
+                HealthCheck = new Amazon.CDK.AWS.ElasticLoadBalancing.HealthCheck
+                {
                     Port = 80
                 }
             });
