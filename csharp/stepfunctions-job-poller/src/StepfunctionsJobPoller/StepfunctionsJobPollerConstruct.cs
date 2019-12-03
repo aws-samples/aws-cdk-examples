@@ -16,10 +16,10 @@ namespace StepfunctionsJobPoller
         private readonly IEnumerable<Bucket> _buckets;
         
         // A simple construct that contains a collection of AWS S3 buckets.
-        public StepfunctionsJobPollerConstruct(Construct parent, string id, StepfunctionsJobPollerConstructProps props) : base(parent, id)
+        public StepfunctionsJobPollerConstruct(Construct scope, string id, StepfunctionsJobPollerConstructProps props) : base(scope, id)
         {
             _buckets = Enumerable.Range(0, props.BucketCount)
-                .Select(i => new Bucket(this, $"Bucket{i}", new BucketProps()))
+                .Select(i => new Bucket(this, $"Bucket{i}"))
                 .ToList();
 
         }

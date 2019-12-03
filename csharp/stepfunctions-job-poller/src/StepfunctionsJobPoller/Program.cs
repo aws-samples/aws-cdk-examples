@@ -9,12 +9,9 @@ namespace StepfunctionsJobPoller
     {
         static void Main(string[] args)
         {
-            var app = new App(null);
+            var app = new App();
 
-            // A CDK app can contain multiple stacks. You can view a list of all the stacks in your
-            // app by typing `cdk list`.
-
-            new StepfunctionsJobPollerStack(app, "StepfunctionsJobPollerStack", new StackProps());
+            new StepfunctionsJobPollerStack(app, "StepfunctionsJobPollerStack");
 
             app.Synth();
         }
