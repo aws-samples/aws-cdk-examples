@@ -34,11 +34,11 @@ $ cdk destroy
 | [custom-resource](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/custom-resource/) | Shows adding a Custom Resource to your CDK app |
 | [elasticbeanstalk](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/elasticbeanstalk/) | Elastic Beanstalk example using L1 with a Blue/Green pipeline (community contributed) |
 | [ecs-cluster](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/cluster/) | Provision an ECS Cluster with custom Autoscaling Group configuration |
-| [ecs-load-balanced-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-load-balanced-service/) | Starting a container fronted by a load balancer on ECS |
+| [ecs-network-load-balanced-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-load-balanced-service/) | Starting a container fronted by a network load balancer on ECS |
 | [ecs-service-with-task-placement](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-service-with-task-placement/) | Starting a container ECS with task placement specifications |
 | [ecs-service-with-advanced-alb-config](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-service-with-advanced-alb-config/) | Starting a container fronted by a load balancer on ECS with added load balancer configuration |
 | [ecs-service-with-task-networking](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-service-with-task-networking/) | Starting an ECS service with task networking, allowing ingress traffic to the task but blocking for the instance |
-| [fargate-load-balanced-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/fargate-load-balanced-service/) | Starting a container fronted by a load balancer on Fargate |
+| [fargate-application-load-balanced-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/fargate-load-balanced-service/) | Starting a container fronted by an application load balancer on Fargate |
 | [fargate-service-with-auto-scaling](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/fargate-service-with-auto-scaling/) | Starting an ECS service of FARGATE launch type that auto scales based on average CPU Utilization |
 | [ecs-cross-stack-load-balancer](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/cross-stack-load-balancer/) | Shows how to use a single load balancer with services in other stacks |
 | [lambda-cron](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/lambda-cron/) | Running a Lambda on a schedule |
@@ -66,6 +66,7 @@ $ cdk destroy
 |---------|-------------|
 | [hello-world](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/hello-world/) | A demo application that uses the CDK in Java |
 | [lambda-cron](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/lambda-cron/) | Running a Lambda on a schedule |
+| [resource-overrides](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/resource-overrides/) | Use of the resource overrides (aka ["escape hatch"](https://docs.aws.amazon.com/cdk/latest/guide/cfn_layer.html)) mechanism. |
 
 ## Python examples <a name="Python"></a>
 
@@ -97,6 +98,7 @@ $ cdk destroy
 | [fargate-service-with-autoscaling](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/fargate-service-with-autoscaling/) | Starting an ECS service of FARGATE launch type that auto scales based on average CPU Utilization |
 | [lambda-cron](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/lambda-cron/) | Running a Lambda on a schedule |
 | [lambda-s3-trigger](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/lambda-s3-trigger/) | S3 trigger for Lambda |
+| [rds](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/rds/) | Creating a MySQL RDS database inside its dedicated VPC |
 | [stepfunctions](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/stepfunctions/) | A simple StepFunctions workflow |
 | [url-shortner](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/url-shortener) | Demo from the [Infrastructure ***is*** Code with the AWS CDK](https://youtu.be/ZWCvNFUN-sU) AWS Online Tech Talk |
 
@@ -113,6 +115,7 @@ Select the following link to see how to install and run the example.
 | Example | Description |
 |---------|-------------|
 | [my-widget-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/csharp/my-widget-service/) | Use Lambda to serve up widgets |
+| [random-writer](https://github.com/aws-samples/aws-cdk-examples/tree/master/csharp/random-writer/) | This sample application demonstrates some essential mechanisms of the AWS CDK for .NET. It uses AWS Lambda, DynamoDB, CloudWatch. |
 
 To run a .NET example, say my-widget-service:
 
