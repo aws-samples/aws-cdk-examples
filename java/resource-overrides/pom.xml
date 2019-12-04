@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.amazonaws.cdk</groupId>
-    <artifactId>lambda-cron</artifactId>
+    <artifactId>resource-overrides</artifactId>
     <version>1.0.0</version>
 
     <properties>
@@ -33,7 +34,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>com.amazonaws.cdk.examples.LambdaCronApp</mainClass>
+                            <mainClass>com.amazonaws.cdk.examples.ResourceOverridesApp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -41,33 +42,47 @@
                     <execution>
                         <id>make-assembly</id> <!-- this is used for inheritance merges -->
                         <phase>package</phase> <!-- bind to the packaging phase -->
-                            <goals>
+                        <goals>
                             <goal>single</goal>
                         </goals>
                     </execution>
-              </executions>
+                </executions>
             </plugin>
 
         </plugins>
     </build>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/software.amazon.awscdk/core -->
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>core</artifactId>
-            <version>[1.17.0.DEVPREVIEW, 2)</version>
+            <version>1.17.1.DEVPREVIEW</version>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/software.amazon.awscdk/s3 -->
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
-            <artifactId>lambda</artifactId>
-            <version>[1.17.0.DEVPREVIEW, 2)</version>
+            <artifactId>s3</artifactId>
+            <version>1.17.1.DEVPREVIEW</version>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/software.amazon.awscdk/ec2 -->
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
-            <artifactId>events-targets</artifactId>
-            <version>[1.17.0.DEVPREVIEW, 2)</version>
+            <artifactId>ec2</artifactId>
+            <version>1.17.1.DEVPREVIEW</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/software.amazon.awscdk/autoscaling -->
+        <dependency>
+            <groupId>software.amazon.awscdk</groupId>
+            <artifactId>autoscaling</artifactId>
+            <version>1.17.1.DEVPREVIEW</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>28.1-jre</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/junit/junit -->
@@ -76,19 +91,15 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.hamcrest</groupId>
-                    <artifactId>hamcrest-core</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.skyscreamer/jsonassert -->
         <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-library</artifactId>
-            <version>1.3</version>
+            <groupId>org.skyscreamer</groupId>
+            <artifactId>jsonassert</artifactId>
+            <version>1.5.0</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
 
