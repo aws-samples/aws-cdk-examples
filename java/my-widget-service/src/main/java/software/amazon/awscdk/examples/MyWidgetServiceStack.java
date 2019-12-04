@@ -28,40 +28,40 @@ public class MyWidgetServiceStack extends Stack {
 	public MyWidgetServiceStack(final Construct scope, final String id) {
 		super(scope, id, null);
 
-		Bucket bucket = new Bucket(this, "WidgetStore");
+		Bucket bucket = Bucket.Builder.create(this, "WidgetStore").build();
 
-		RestApi api = new RestApi(this, "widgets-api", RestApiProps.builder()
+		RestApi api = RestApi.Builder.create(this, "widgets-api")
 				.restApiName("Widget Service")
 				.description("This service serves widgets.")
-				.build());
+				.build();
 
 		List<IManagedPolicy> managedPolicyArray = new ArrayList<IManagedPolicy>();
 		managedPolicyArray.add((IManagedPolicy) ManagedPolicy.fromAwsManagedPolicyName("AmazonS3FullAccess"));
 
-		Role restApiRole = new Role(this, "RestAPIRole",RoleProps.builder()
+		Role restApiRole = Role.Builder.create(this, "RestAPIRole")
 				.assumedBy(new ServicePrincipal("apigateway.amazonaws.com"))
 				.managedPolicies(managedPolicyArray)
-				.build());
+				.build();
 
 		Map<String, String> environmentVariables = new HashMap<String, String>();
 		environmentVariables.put("BUCKET", bucket.getBucketName());
 
-		Function lambdaFunction = new Function(this, "WidgetHandler",FunctionProps.builder()
+		Function lambdaFunction = Function.Builder.create(this, "WidgetHandler")
 				.code(Code.fromAsset("resources"))
 				.handler("widgets.main")
 				.timeout(Duration.seconds(300))
 				.runtime(Runtime.NODEJS_10_X)
 				.environment(environmentVariables)
-				.build());
+				.build();
 
 		bucket.grantReadWrite(lambdaFunction);
 
 		Map<String, String> lambdaIntegrationMap = new HashMap<String, String>();
 		lambdaIntegrationMap.put("application/json", "{ \"statusCode\": \"200\" }");
 
-		LambdaIntegration getWidgetIntegration = new LambdaIntegration(lambdaFunction,LambdaIntegrationOptions.builder()
+		LambdaIntegration getWidgetIntegration = LambdaIntegration.Builder.create(lambdaFunction)
 				.requestTemplates(lambdaIntegrationMap)
-				.build());
+				.build();
 
 		api.getRoot().addMethod("GET", getWidgetIntegration);
 
