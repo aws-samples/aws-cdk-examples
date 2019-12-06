@@ -66,6 +66,9 @@ $ cdk destroy
 |---------|-------------|
 | [hello-world](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/hello-world/) | A demo application that uses the CDK in Java |
 | [lambda-cron](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/lambda-cron/) | Running a Lambda on a schedule |
+| [resource-overrides](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/resource-overrides/) | Use of the resource overrides (aka ["escape hatch"](https://docs.aws.amazon.com/cdk/latest/guide/cfn_layer.html)) mechanism. |
+| [stepfunctions-job-poller](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/stepfunctions-job-poller/) | A simple StepFunctions workflow |
+| [static-site](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/static-site/) | A static site using CloudFront |
 
 ## Python examples <a name="Python"></a>
 
@@ -114,6 +117,7 @@ Select the following link to see how to install and run the example.
 | Example | Description |
 |---------|-------------|
 | [my-widget-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/csharp/my-widget-service/) | Use Lambda to serve up widgets |
+| [random-writer](https://github.com/aws-samples/aws-cdk-examples/tree/master/csharp/random-writer/) | This sample application demonstrates some essential mechanisms of the AWS CDK for .NET. It uses AWS Lambda, DynamoDB, CloudWatch. |
 
 To run a .NET example, say my-widget-service:
 
