@@ -20,8 +20,8 @@ public class ResourceOverridesStackTest {
     App app = new App();
     Stack stack = new ResourceOverridesStack(app, "resource-overrides");
 
-    String actual = getStackTemplateJson(stack).toPrettyString();
-    String expected = readJsonFromResource("testResourceOverrides.expected.json").toPrettyString();
+    String actual = getStackTemplateJson(stack).toString();
+    String expected = readJsonFromResource("testResourceOverrides.expected.json").toString();
 
     JSONAssert.assertEquals(expected, actual, JSONCompareMode.LENIENT);
   }
