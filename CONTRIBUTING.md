@@ -106,6 +106,16 @@ Create a directory with a name that is descriptive of the resource type or workf
 }
 ```
 
+## Style and Formatting
+
+We strive to keep examples consistent in style and formatting. This hopefully makes navigating examples easier for users. Since the examples span different languages, we try to keep example code as idiomatic as possible.
+
+New guidelines for various languages will be added as we define them.
+
+### Java
+1. Use builders wherever possible. Some classes are unable to have builders generated in JSII but for those that do, prefer them over constructing by hand.
+2. Format your code with [google-java-format](https://github.com/google/google-java-format). If you're using visual studio code, [see this comment](https://github.com/redhat-developer/vscode-java/issues/419#issuecomment-360820321) to get a formatter task setup.
+
 ## Finding contributions to work on
 Looking at the existing issues is a great way to find something to contribute on. As our projects, by default, use the default GitHub issue labels (enhancement/bug/duplicate/help wanted/invalid/question/wontfix), looking at any ['help wanted'](https://github.com/aws-samples/aws-cdk-examples/labels/help%20wanted) issues is a great place to start.
 
