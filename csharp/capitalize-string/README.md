@@ -82,7 +82,7 @@ https://docs.aws.amazon.com/lambda/latest/dg/dotnet-programming-model.html
 
 6. In the CDK project, create an instance of `Function` class from the Lambda module.
 
-    Specify the `Runtime` to be one of the `DOT_NET` runtimes available and set the correct
+    Specify the `Runtime` to be one of the `DOTNET_CORE` runtimes available and set the correct
     handler value based on the name of your lambda function project, namespaces and class name.
 
     Specify an `Asset` against the `Code` property, pointing to the location of the Lambda project
