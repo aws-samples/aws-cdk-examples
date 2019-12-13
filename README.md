@@ -64,6 +64,7 @@ $ cdk destroy
 
 | Example | Description |
 |---------|-------------|
+| [fargate-load-balanced-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/ecs/fargate-load-balanced-service/) | Starting a container fronted by a load balancer on Fargate |
 | [hello-world](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/hello-world/) | A demo application that uses the CDK in Java |
 | [lambda-cron](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/lambda-cron/) | Running a Lambda on a schedule |
 | [resource-overrides](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/resource-overrides/) | Use of the resource overrides (aka ["escape hatch"](https://docs.aws.amazon.com/cdk/latest/guide/cfn_layer.html)) mechanism. |
