@@ -31,6 +31,12 @@ class BonjourFargate(core.Stack):
             }
         )
 
+        fargate_service.service.connections.security_groups[0].add_ingress_rule(
+            peer = ec2.Peer.ipv4(vpc.vpc_cidr_block),
+            connection = ec2.Port.tcp(80),
+            description="Allow http inbound from VPC"
+        )
+
         core.CfnOutput(
             self, "LoadBalancerDNS",
             value=fargate_service.load_balancer.load_balancer_dns_name
