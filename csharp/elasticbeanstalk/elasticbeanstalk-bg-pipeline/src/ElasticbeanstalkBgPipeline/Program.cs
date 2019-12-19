@@ -9,12 +9,9 @@ namespace ElasticbeanstalkBgPipeline
     {
         static void Main(string[] args)
         {
-            var app = new App(null);
+            var app = new App();
 
-            // A CDK app can contain multiple stacks. You can view a list of all the stacks in your
-            // app by typing `cdk list`.
-
-            new ElasticbeanstalkBgPipelineStack(app, "ElasticbeanstalkBgPipelineStack", new StackProps{});
+            new ElasticbeanstalkBgPipelineStack(app, "ElasticbeanstalkBgPipelineStack");
 
             app.Synth();
         }

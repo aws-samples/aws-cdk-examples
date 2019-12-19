@@ -9,12 +9,9 @@ namespace ElasticbeanstalkEnvironment
     {
         static void Main(string[] args)
         {
-            var app = new App(null);
+            var app = new App();
 
-            // A CDK app can contain multiple stacks. You can view a list of all the stacks in your
-            // app by typing `cdk list`.
-
-            new ElasticbeanstalkEnvironmentStack(app, "ElasticbeanstalkEnvironmentStack", new StackProps());
+            new ElasticbeanstalkEnvironmentStack(app, "ElasticbeanstalkEnvironmentStack");
 
             app.Synth();
         }
