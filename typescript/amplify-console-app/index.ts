@@ -1,8 +1,7 @@
-import cdk = require('@aws-cdk/cdk');
+import cdk = require('@aws-cdk/core');
 import { CfnApp, CfnBranch } from '@aws-cdk/aws-amplify';
 
 export class AmplifyConsoleAppCdkStack extends cdk.Stack {
-
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 

@@ -1,6 +1,6 @@
 {
   "name": "appsync-graphql-dynamodb",
-  "version": "0.23.0",
+  "version": "1.0.0",
   "description": "Running an Amplify Console App static site from a GitHub repository, with a trigger on the master branch",
   "private": true,
   "scripts": {
@@ -15,10 +15,10 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^8.10.38",
-    "typescript": "^3.2.4"
+    "typescript": "~3.7.2"
   },
   "dependencies": {
     "@aws-cdk/aws-amplify": "*",
-    "@aws-cdk/cdk": "*"
+    "@aws-cdk/core": "*"
   }
 }
