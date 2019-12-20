@@ -15,17 +15,17 @@
   },
   "license": "Apache-2.0",
   "devDependencies": {
-    "@aws-cdk/assert": "^1.18.0",
+    "@aws-cdk/assert": "^1.19.0",
     "@types/jest": "^24.0.22",
     "@types/node": "10.17.5",
     "jest": "^24.9.0",
     "ts-jest": "^24.1.0",
-    "aws-cdk": "^1.18.0",
+    "aws-cdk": "^1.19.0",
     "ts-node": "^8.1.0",
     "typescript": "~3.7.2"
   },
   "dependencies": {
-    "@aws-cdk/aws-iam": "^1.18.0",
-    "@aws-cdk/core": "^1.18.0"
+    "@aws-cdk/aws-iam": "^1.19.0",
+    "@aws-cdk/core": "^1.19.0"
   }
 }
