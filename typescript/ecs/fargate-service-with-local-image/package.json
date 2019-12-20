@@ -16,7 +16,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/node": "^8.10.38",
-    "typescript": "^3.2.4"
+    "typescript": "~3.7.2"
   },
   "dependencies": {
     "@aws-cdk/aws-ec2": "*",
