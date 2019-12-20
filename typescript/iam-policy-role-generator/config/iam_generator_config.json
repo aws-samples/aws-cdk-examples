@@ -1,0 +1,52 @@
+{
+    "policies": [     
+        {
+            "policy_name": "CodeCommitArchive",
+            "description": "CodeCommitArchive policy",
+            "policy_file": "CodeCommitArchive.json"
+        },
+        {
+            "policy_name": "KMSPolicy",
+            "description": "KMSPolicy policy",
+            "policy_file": "KMSPolicy.json"
+        },
+        {
+            "policy_name": "CreateServiceLinkedRoleECS",
+            "description": "CreateServiceLinkedRoleECS policy",
+            "policy_file": "CreateServiceLinkedRoleECS.json"
+        },
+        {
+            "policy_name": "DeployService1",
+            "description": "DeployService1 policy",
+            "policy_file": "DeployService1.json"
+        },
+        {
+            "policy_name": "DeployService2",
+            "description": "DeployService2 policy",
+            "policy_file": "DeployService2.json"
+        }
+    ],
+    "roles": [
+        {
+            "role_name": "TestRole1",
+            "trust_service_principal": ["apigateway.amazonaws.com","lambda.amazonaws.com"],
+            "customer_managed_policies": ["DeployService1","DeployService2","KMSPolicy"],
+            "aws_managed_policies": ["service-role/AmazonAPIGatewayPushToCloudWatchLogs"]
+        },
+        {
+            "role_name": "TestRole2",
+            "trust_service_principal": ["sns.amazonaws.com"],
+            "trust_account_principal": ["748669239283"],
+            "customer_managed_policies": ["CreateServiceLinkedRoleECS","CodeCommitArchive","KMSPolicy"],
+            "aws_managed_policies": ["service-role/AmazonAPIGatewayPushToCloudWatchLogs"]
+        },
+        {
+            "role_name": "TestRole3",
+            "trust_service_principal": ["ec2.amazonaws.com","sns.amazonaws.com"],
+            "trust_account_principal": ["748669239283"],
+            "customer_managed_policies": ["DeployService2","CodeCommitArchive","KMSPolicy"],
+            "aws_managed_policies": ["AWSLambdaFullAccess"]
+        }
+        
+    ]
+}

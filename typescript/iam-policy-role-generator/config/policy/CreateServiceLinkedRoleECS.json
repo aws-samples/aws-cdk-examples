@@ -1,0 +1,23 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+      {
+          "Condition": {
+              "StringLike": {
+                  "iam:AWSServiceName": "ecs.amazonaws.com.amazonaws.com"
+              }
+          },
+          "Action": "iam:CreateServiceLinkedRole",
+          "Resource": "arn:aws:iam::*:role/aws-service-role/ecs.amazonaws.com.amazonaws.com/*",
+          "Effect": "Allow"
+      },
+      {
+          "Action": [
+              "iam:AttachRolePolicy",
+              "iam:PutRolePolicy"
+          ],
+          "Resource": "arn:aws:iam::*:role/aws-service-role/ecs.amazonaws.com.amazonaws.com/*",
+          "Effect": "Allow"
+      }
+  ]
+}

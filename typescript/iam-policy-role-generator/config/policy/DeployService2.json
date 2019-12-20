@@ -1,0 +1,63 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+	{
+	  "Sid": "IAMPermissions",
+	  "Effect": "Allow",
+	  "Action": [
+		"iam:CreateRole",
+		"iam:DeleteRolePolicy",
+		"iam:AttachRolePolicy",
+		"iam:DetachRolePolicy",
+		"iam:PutRolePolicy",
+		"iam:PutRolePermissionsBoundary",
+		"iam:PassRole"
+	  ],
+	  "Resource": "*"
+	},
+	{
+	  "Sid": "VisualEditor0",
+	  "Effect": "Allow",
+	  "Action": [
+		"cloudfront:DeleteCloudFrontOriginAccessIdentity",
+		"s3:ReplicateTags",
+		"s3:CreateBucket",
+		"cloudfront:CreateInvalidation",
+		"cloudfront:CreateCloudFrontOriginAccessIdentity",
+		"s3:DeleteBucketWebsite",
+		"s3:PutBucketTagging",
+		"cloudfront:UpdateCloudFrontOriginAccessIdentity",
+		"cloudfront:UpdateDistribution",
+		"s3:PutObjectTagging",
+		"s3:DeleteBucket",
+		"cloudfront:UntagResource",
+		"s3:DeleteObjectTagging",
+		"cloudfront:TagResource",
+		"route53:ChangeResourceRecordSets",
+		"cloudfront:CreateDistributionWithTags",
+		"cloudfront:CreateDistribution",
+		"s3:PutBucketCORS",
+		"s3:DeleteObject",
+		"s3:DeleteBucketPolicy",
+		"s3:PutObject",
+		"s3:PutBucketNotification",
+		"s3:PutBucketWebsite",
+		"s3:PutBucketLogging",
+		"s3:PutBucketPolicy",
+		"cloudfront:DeleteDistribution"
+	  ],
+	  "Resource": "*"
+	},
+	{
+	  "Sid": "PreventBoundaryModify",
+	  "Effect": "Deny",
+	  "Action": [
+		"iam:CreatePolicy",
+		"iam:DeletePolicy",
+		"iam:CreatePolicyVersion",
+		"iam:DeletePolicyVersion"
+	  ],
+	  "Resource": "arn:aws:iam::*:policy/permission-boundary-auth-service"
+	}
+  ]
+}
