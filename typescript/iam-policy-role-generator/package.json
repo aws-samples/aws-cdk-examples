@@ -19,7 +19,7 @@
     "typescript": "~3.7.2"
   },
   "dependencies": {
-    "@aws-cdk/aws-iam": "^1.19.0",
-    "@aws-cdk/core": "^1.19.0"
+    "@aws-cdk/aws-iam": "*",
+    "@aws-cdk/core": "*"
   }
 }
