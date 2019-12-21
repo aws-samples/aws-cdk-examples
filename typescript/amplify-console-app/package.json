@@ -1,7 +1,7 @@
 {
-  "name": "api-lambda-crud-dynamodb",
+  "name": "appsync-graphql-dynamodb",
   "version": "1.0.0",
-  "description": "Running an API Gateway with four Lambdas to do CRUD operations on DynamoDB",
+  "description": "Running an Amplify Console App static site from a GitHub repository, with a trigger on the master branch",
   "private": true,
   "scripts": {
     "build": "tsc",
@@ -14,13 +14,11 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^10.17.0",
+    "@types/node": "^8.10.38",
     "typescript": "~3.7.2"
   },
   "dependencies": {
-    "@aws-cdk/aws-apigateway": "*",
-    "@aws-cdk/aws-dynamodb": "*",
-    "@aws-cdk/aws-lambda": "*",
+    "@aws-cdk/aws-amplify": "*",
     "@aws-cdk/core": "*"
   }
 }
