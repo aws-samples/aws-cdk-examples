@@ -1,4 +1,15 @@
 # Custom Logical Names
+<!--BEGIN STABILITY BANNER-->
+---
+
+![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
+
+> **This is a stable example. It should successfully build out of the box**
+>
+> This examples does is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
+
+---
+<!--END STABILITY BANNER-->
 
 This sample shows how you can override the behavior for allocating
 logical names for CloudFormation resources in the CDK.
@@ -18,6 +29,22 @@ common and recommended pattern for reusing policy within an organization.
 
 Then, any stack that derives from `BaseStack` will automatically have this
 behavior.
+
+## Build
+
+To build this app, you need to be in this example's root folder. Then run the following:
+
+```bash
+npm install -g aws-cdk
+npm install
+npm run build
+```
+
+This will install the necessary CDK, then this example's dependencies, and then build your TypeScript files and your CloudFormation template.
+
+## Deploy
+
+Run `cdk deploy --context prefix=PREFIX`. This will deploy / redeploy your Stack to your AWS Account.
 
 ## Example
 
