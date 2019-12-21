@@ -1,0 +1,24 @@
+{
+  "name": "appsync-graphql-dynamodb",
+  "version": "1.0.0",
+  "description": "Running an Amplify Console App static site from a GitHub repository, with a trigger on the master branch",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "author": {
+    "name": "Aleksandar Simovic <alexander.simovic@gmail.com>",
+    "url": "https://serverless.pub"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^8.10.38",
+    "typescript": "~3.7.2"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-amplify": "*",
+    "@aws-cdk/core": "*"
+  }
+}
