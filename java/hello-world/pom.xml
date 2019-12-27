@@ -55,38 +55,38 @@
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>core</artifactId>
-            <version>1.14.0.DEVPREVIEW</version>
+            <version>[1.17.0.DEVPREVIEW, 2)</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>autoscaling</artifactId>
-            <version>1.14.0.DEVPREVIEW</version>
+            <version>[1.17.0.DEVPREVIEW, 2)</version>
         </dependency>
 
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>ec2</artifactId>
-            <version>1.14.0.DEVPREVIEW</version>
+            <version>[1.17.0.DEVPREVIEW, 2)</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>s3</artifactId>
-            <version>1.14.0.DEVPREVIEW</version>
+            <version>[1.17.0.DEVPREVIEW, 2)</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>sns</artifactId>
-            <version>1.14.0.DEVPREVIEW</version>
+            <version>[1.17.0.DEVPREVIEW, 2)</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>sqs</artifactId>
-            <version>1.14.0.DEVPREVIEW</version>
+            <version>[1.17.0.DEVPREVIEW, 2)</version>
         </dependency>
         <dependency>
           <groupId>software.amazon.awscdk</groupId>
           <artifactId>sns-subscriptions</artifactId>
-          <version>1.14.0.DEVPREVIEW</version>
+          <version>[1.17.0.DEVPREVIEW, 2)</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/junit/junit -->
