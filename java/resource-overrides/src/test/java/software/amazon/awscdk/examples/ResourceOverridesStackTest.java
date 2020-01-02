@@ -3,8 +3,6 @@ package software.amazon.awscdk.examples;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-
-import org.junit.Before;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
@@ -17,20 +15,14 @@ import software.amazon.awscdk.cxapi.CloudFormationStackArtifact;
 public class ResourceOverridesStackTest {
   private static final ObjectMapper JSON = new ObjectMapper();
 
-  private String actual;
-  private String expected;
-
-  @Before
-  public void setUp() throws IOException {
-    App app = new App();
-    actual = getStackTemplateJson(new ResourceOverridesStack(app, "resource-overrides"))
-      .toString();
-
-    expected = readJsonFromResource("testResourceOverrides.expected.json").toString();
-  }
-
   @Test
   public void shouldGenerateValidCloudFormationTemplate() throws Exception {
+    App app = new App();
+    Stack stack = new ResourceOverridesStack(app, "resource-overrides");
+
+    String actual = getStackTemplateJson(stack).toString();
+    String expected = readJsonFromResource("testResourceOverrides.expected.json").toString();
+
     JSONAssert.assertEquals(expected, actual, JSONCompareMode.LENIENT);
   }
 
