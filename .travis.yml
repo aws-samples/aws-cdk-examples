@@ -5,7 +5,7 @@ node_js:
 python:
     - "3.6"
 jdk:
-    - "openjdk8"
+    - "openjdk13"
 
 install: sudo apt-get install python3.6-venv
 script: scripts/build.sh
