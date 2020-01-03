@@ -5,4 +5,4 @@ services:
   - docker
 
 script:
-  - docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain -c "scripts/build.sh"
+  - docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain /bin/bash -c "scripts/build.sh"
