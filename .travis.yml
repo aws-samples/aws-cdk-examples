@@ -1,9 +1,8 @@
 language: generic
 dist: bionic
-node_js:
-    - "8"
-python:
-    - "3.6"
 
-install: sudo apt-get install python3.6-venv
-script: scripts/build.sh
+services:
+  - docker
+
+script:
+  - docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain /bin/bash -c "scripts/build.sh"

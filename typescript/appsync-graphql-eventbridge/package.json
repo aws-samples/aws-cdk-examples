@@ -1,0 +1,30 @@
+{
+  "name": "appsync-graphql-eventbridge",
+  "version": "1.0.0",
+  "description": "Sends events to Event Bridge via an AppSync GraphQL API",
+  "private": true,
+  "bin": {
+    "cdk": "bin/cdk.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "10.17.0",
+    "typescript": "~3.7.2",
+    "ts-node": "^8.1.0",
+    "aws-cdk": "^1.18.0"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-appsync": "*",
+    "@aws-cdk/aws-iam": "*",
+    "@aws-cdk/aws-events": "*",
+    "@aws-cdk/aws-events-targets": "*",
+    "@aws-cdk/aws-lambda": "*",
+    "@aws-cdk/core": "*",
+    "source-map-support": "^0.5.9"
+  }
+}
