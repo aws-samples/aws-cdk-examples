@@ -1,4 +1,4 @@
-language: java
+language: generic
 dist: bionic
 
 services:
