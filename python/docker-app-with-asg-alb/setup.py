@@ -9,7 +9,7 @@ setuptools.setup(
     name="dockerized_app_cdk",
     version="1.0.0",
 
-    description="An empty CDK Python app",
+    description="An AWS CDK app to launch a dockerized app into 3-tier architecture.",
     long_description=long_description,
     long_description_content_type="text/markdown",
 
