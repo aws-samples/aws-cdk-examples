@@ -77,9 +77,9 @@ class JobPollerStack(core.Stack):
             .next(get_status) \
             .next(is_complete
                   .when(sfn.Condition.string_equals(
-            "$.status", "FAILED"), job_failed)
+                    "$.status", "FAILED"), job_failed)
                   .when(sfn.Condition.string_equals(
-            "$.status", "SUCCEEDED"), final_status)
+                    "$.status", "SUCCEEDED"), final_status)
                   .otherwise(wait_x))
 
         sfn.StateMachine(
