@@ -7,13 +7,13 @@ with open("README.md") as fp:
 
 setuptools.setup(
     name="dockerized_app_cdk",
-    version="0.0.1",
+    version="1.0.0",
 
     description="An empty CDK Python app",
     long_description=long_description,
     long_description_content_type="text/markdown",
 
-    author="author",
+    author="Evan Ng",
 
     package_dir={"": "dockerized_app_cdk"},
     packages=setuptools.find_packages(where="dockerized_app_cdk"),
