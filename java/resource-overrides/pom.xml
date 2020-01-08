@@ -57,25 +57,25 @@
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>core</artifactId>
-            <version>1.17.1.DEVPREVIEW</version>
+            <version>[1.19.0, 2)</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/software.amazon.awscdk/s3 -->
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>s3</artifactId>
-            <version>1.17.1.DEVPREVIEW</version>
+            <version>[1.19.0, 2)</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/software.amazon.awscdk/ec2 -->
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>ec2</artifactId>
-            <version>1.17.1.DEVPREVIEW</version>
+            <version>[1.19.0, 2)</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/software.amazon.awscdk/autoscaling -->
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>autoscaling</artifactId>
-            <version>1.17.1.DEVPREVIEW</version>
+            <version>[1.19.0, 2)</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
