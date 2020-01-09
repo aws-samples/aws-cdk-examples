@@ -48,6 +48,7 @@ $ cdk destroy
 | [stepfunctions-job-poller](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/stepfunctions-job-poller/) | A simple StepFunctions workflow |
 | [ecs-service-with-logging](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-service-with-logging/) | Starting a container fronted by a load balancer on ECS |
 | [fargate-service-with-logging](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/fargate-service-with-logging/) | Starting a container fronted by a load balancer on Fargate |
+| [custom-logical-names](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/custom-logical-names/) | Example of how to override logical name allocation |
 
 ## Java examples <a name="Java"></a>
 
