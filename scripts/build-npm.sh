@@ -22,6 +22,7 @@ verify_star_dependencies() {
 # Find and build all NPM projects
 for pkgJson in $(find typescript -name package.json | grep -v node_modules); do
     (
+        echo "Building project at $(dirname $pkgJson)"
         cd $(dirname $pkgJson)
 
         if [[ -f DO_NOT_AUTOTEST ]]; then exit 0; fi
