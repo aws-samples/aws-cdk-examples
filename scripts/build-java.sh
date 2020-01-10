@@ -10,6 +10,7 @@ npm install
 for pomFile in $(find $scriptdir/../java -name pom.xml); do
     (
         cd $(dirname $pomFile)
+        echo "Building project at $(dirname $pomFile)"
         mvn compile test
 
         $scriptdir/synth.sh
