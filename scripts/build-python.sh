@@ -16,6 +16,7 @@ for requirements in $(find $scriptdir/../python -name requirements.txt  -not -pa
         echo "=============================="
 
         cd $(dirname $requirements)
+        echo "Building project at $(dirname $requirements)"
         [[ ! -f DO_NOT_AUTOTEST ]] || exit 0
 
         source /tmp/.venv/bin/activate
