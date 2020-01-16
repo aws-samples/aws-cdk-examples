@@ -55,7 +55,7 @@
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>core</artifactId>
-            <version>1.17.1.DEVPREVIEW</version>
+            <version>[1.19.0, 2)</version>
         </dependency>
 
         <!-- Respective AWS Construct Libraries -->
@@ -63,32 +63,32 @@
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>cloudfront</artifactId>
-            <version>1.17.1.DEVPREVIEW</version>
+            <version>[1.19.0, 2)</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>route53</artifactId>
-            <version>1.17.1.DEVPREVIEW</version>
+            <version>[1.19.0, 2)</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>route53-targets</artifactId>
-            <version>1.17.1.DEVPREVIEW</version>
+            <version>[1.19.0, 2)</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>s3</artifactId>
-            <version>1.17.1.DEVPREVIEW</version>
+            <version>[1.19.0, 2)</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>s3-deployment</artifactId>
-            <version>1.17.1.DEVPREVIEW</version>
+            <version>[1.19.0, 2)</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>certificatemanager</artifactId>
-            <version>1.17.1.DEVPREVIEW</version>
+            <version>[1.19.0, 2)</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/junit/junit -->
