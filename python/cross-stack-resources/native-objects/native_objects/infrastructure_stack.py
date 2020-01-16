@@ -16,7 +16,7 @@ class InfrastructureStack(core.Stack):
             runtime=lambda_.Runtime.PYTHON_3_7
         )
         
-        # We assign the function's arn to a local variable for the Object.
+        # We assign the function to a local variable for the Object.
         self._function = my_main_func
     
     # Using the property decorator 
