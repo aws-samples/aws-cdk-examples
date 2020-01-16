@@ -23,7 +23,7 @@ verify_star_dependencies() {
 for pkgJson in $(find typescript -name package.json | grep -v node_modules); do
     (
         echo "=============================="
-        echo "building project: $pkgJson"
+        echo "building project: $(dirname $pkgJson)"
         echo "=============================="
 
         cd $(dirname $pkgJson)
