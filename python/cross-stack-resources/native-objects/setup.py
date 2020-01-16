@@ -7,13 +7,13 @@ with open("README.md") as fp:
 
 setuptools.setup(
     name="native-objects",
-    version="0.0.1",
+    version="1.0.0",
 
-    description="A sample CDK Python app",
+    description="A python CDK example for passing resources between stacks",
     long_description=long_description,
     long_description_content_type="text/markdown",
 
-    author="author",
+    author="Richard Boyd",
 
     package_dir={"": "native_objects"},
     packages=setuptools.find_packages(where="native_objects"),
