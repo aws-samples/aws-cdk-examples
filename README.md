@@ -38,7 +38,7 @@ $ cdk destroy
 | [ecs-service-with-task-placement](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-service-with-task-placement/) | Starting a container ECS with task placement specifications |
 | [ecs-service-with-advanced-alb-config](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-service-with-advanced-alb-config/) | Starting a container fronted by a load balancer on ECS with added load balancer configuration |
 | [ecs-service-with-task-networking](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-service-with-task-networking/) | Starting an ECS service with task networking, allowing ingress traffic to the task but blocking for the instance |
-| [fargate-application-load-balanced-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/fargate-load-balanced-service/) | Starting a container fronted by an application load balancer on Fargate |
+| [fargate-application-load-balanced-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/fargate-application-load-balanced-service/) | Starting a container fronted by an application load balancer on Fargate |
 | [fargate-service-with-auto-scaling](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/fargate-service-with-auto-scaling/) | Starting an ECS service of FARGATE launch type that auto scales based on average CPU Utilization |
 | [ecs-cross-stack-load-balancer](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/cross-stack-load-balancer/) | Shows how to use a single load balancer with services in other stacks |
 | [lambda-cron](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/lambda-cron/) | Running a Lambda on a schedule |
@@ -48,6 +48,7 @@ $ cdk destroy
 | [stepfunctions-job-poller](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/stepfunctions-job-poller/) | A simple StepFunctions workflow |
 | [ecs-service-with-logging](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-service-with-logging/) | Starting a container fronted by a load balancer on ECS |
 | [fargate-service-with-logging](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/fargate-service-with-logging/) | Starting a container fronted by a load balancer on Fargate |
+| [custom-logical-names](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/custom-logical-names/) | Example of how to override logical name allocation |
 
 ## Java examples <a name="Java"></a>
 
@@ -92,6 +93,7 @@ $ cdk destroy
 | [appsync-graphql-dynamodb](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/appsync-graphql-dynamodb/) | Creating a single GraphQL API with an API Key, and four Resolvers doing CRUD operations over a single DynamoDB |
 | [classic-load-balancer](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/classic-load-balancer/) | Using an AutoScalingGroup with a Classic Load Balancer |
 | [custom-resource](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/custom-resource/) | Shows adding a Custom Resource to your CDK app |
+| [dockerized-app](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/docker-app-with-asg-alb/) | Deploys a containerized app into 3 tiers with userdata in an autoscaling group |
 | [ecs-cluster](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/cluster/) | Provision an ECS Cluster with custom Autoscaling Group configuration |
 | [ecs-load-balanced-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/ecs-load-balanced-service/) | Starting a container fronted by a load balancer on ECS |
 | [ecs-service-with-task-placement](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/ecs-service-with-task-placement/) | Starting a container ECS with task placement specifications |

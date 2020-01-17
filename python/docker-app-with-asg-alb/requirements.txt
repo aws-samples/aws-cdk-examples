@@ -1,0 +1,6 @@
+-e .
+aws-cdk.aws-ec2
+aws-cdk.aws-autoscaling
+aws-cdk.aws-elasticloadbalancingv2
+aws-cdk.aws-rds
+aws-cdk.aws-efs
