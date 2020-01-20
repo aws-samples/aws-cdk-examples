@@ -1,12 +1,12 @@
 from aws_cdk import core
 import aws_cdk.aws_ec2 as ec2
 
-vpc_id = "vpc-111111"  # Import an Exist VPC
-ec2_type = "m5.xlarge"
+vpc_id = "MY-VPC-ID"  # Import an Exist VPC
+ec2_type = "t2.micro"
 key_name = "id_rsa"
 linux_ami = ec2.GenericLinuxImage({
-    "cn-northwest-1": "ami-0f62e91915e16cfc2",
-    "eu-west-1": "ami-1111111"
+    "cn-northwest-1": "AMI-ID-IN-cn-northwest-1-REGION",  # Refer to an Exist AMI
+    "eu-west-1": "AMI-ID-IN-eu-west-1-REGION"
 })
 with open("./user_data/user_data.sh") as f:
     user_data = f.read()
@@ -31,7 +31,7 @@ class CdkVpcEc2Stack(core.Stack):
                                 subnet_type=ec2.SubnetType.PUBLIC),
                             user_data=ec2.UserData.custom(user_data)
                             )
-        # ec2.Instance has no property of BlockDeviceMappings. Add via lower layer:
+        # ec2.Instance has no property of BlockDeviceMappings, add via lower layer cdk api:
         host.instance.add_property_override("BlockDeviceMappings", [{
             "DeviceName": "/dev/xvda",
             "Ebs": {
@@ -44,7 +44,7 @@ class CdkVpcEc2Stack(core.Stack):
             "DeviceName": "/dev/sdb",
             "Ebs": {"VolumeSize": "30"}
         }
-        ])
+        ])  # by default VolumeType is gp2, VolumeSize 8GB
         host.connections.allow_from_any_ipv4(
             ec2.Port.tcp(22), "Allow ssh from internet")
         host.connections.allow_from_any_ipv4(
