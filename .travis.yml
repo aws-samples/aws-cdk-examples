@@ -1,7 +1,8 @@
-language: node_js
-node_js:
-    - "8"
+language: generic
+dist: bionic
 
-install: echo Nothing to install
-script: scripts/build-npm.sh
+services:
+  - docker
 
+script:
+  - docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain /bin/bash -c "scripts/build.sh"

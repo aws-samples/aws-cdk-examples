@@ -6,7 +6,7 @@
     "MySinkQueueEFCD79C2" : {
       "Type" : "AWS::SQS::Queue"
     },
-    "Topic1ResourceSubscriptionD55B1556" : {
+    "MySinkQueueTopic1CE70DEAE" : {
       "Type" : "AWS::SNS::Subscription",
       "Properties" : {
         "Endpoint" : {
@@ -78,7 +78,7 @@
         } ]
       }
     },
-    "Topic3ResourceSubscriptionA1D64BEE" : {
+    "MySinkQueueTopic30DEF4035" : {
       "Type" : "AWS::SNS::Subscription",
       "Properties" : {
         "Endpoint" : {
@@ -93,7 +93,7 @@
     "Topic269377B75" : {
       "Type" : "AWS::SNS::Topic"
     },
-    "Topic2ResourceSubscription88B54B51" : {
+    "MySinkQueueTopic227CE18C6" : {
       "Type" : "AWS::SNS::Subscription",
       "Properties" : {
         "Endpoint" : {

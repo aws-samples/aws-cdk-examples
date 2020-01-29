@@ -1,22 +1,27 @@
 {
-  "name": "cdk",
-  "version": "0.1.0",
-  "bin": {
-    "cdk": "bin/cdk.js"
-  },
+  "name": "elasticbeanstalk-environment",
+  "version": "1.0.0",
+  "description": "Creates a Blue/Green deployment to EBS",
+  "private": true,
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
     "cdk": "cdk"
   },
+  "author": {
+    "name": "Amazon Web Services",
+    "url": "https://aws.amazon.com",
+    "organization": true
+  },
+  "license": "Apache-2.0",
   "devDependencies": {
-    "@types/node": "8.10.40",
-    "typescript": "^3.3.3333",
+    "@types/node": "^8.10.40",
+    "typescript": "~3.7.2",
     "aws-cdk": "*"
   },
   "dependencies": {
     "@aws-cdk/aws-elasticbeanstalk": "*",
-    "@aws-cdk/cdk": "*",
+    "@aws-cdk/core": "*",
     "source-map-support": "^0.5.9"
   }
 }

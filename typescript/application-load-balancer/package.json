@@ -1,6 +1,6 @@
 {
   "name": "application-load-balancer",
-  "version": "0.23.0",
+  "version": "1.0.0",
   "description": "Use of an Application Load Balancer with an AutoScaling Group",
   "private": true,
   "scripts": {
@@ -15,13 +15,13 @@
   },
   "license": "Apache-2.0",
   "devDependencies": {
-    "@types/node": "^8.10.38",
-    "typescript": "^3.2.4"
+    "@types/node": "^10.17.0",
+    "typescript": "~3.7.2"
   },
   "dependencies": {
     "@aws-cdk/aws-autoscaling": "*",
     "@aws-cdk/aws-ec2": "*",
     "@aws-cdk/aws-elasticloadbalancingv2": "*",
-    "@aws-cdk/cdk": "*"
+    "@aws-cdk/core": "*"
   }
 }

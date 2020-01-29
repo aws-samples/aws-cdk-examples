@@ -1,0 +1,4 @@
+aws-cdk.core
+aws-cdk.aws-appsync
+aws-cdk.aws-dynamodb
+aws-cdk.aws-iam

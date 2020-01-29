@@ -1,20 +1,21 @@
 from aws_cdk import (
     aws_ec2 as ec2,
     aws_ecs as ecs,
-    cdk,
+    aws_ecs_patterns as ecs_patterns,
+    core,
 )
 
 
-class BonjourFargate(cdk.Stack):
+class BonjourFargate(core.Stack):
 
-    def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, *kwargs)
 
         # Create VPC and Fargate Cluster
         # NOTE: Limit AZs to avoid reaching resource quotas
-        vpc = ec2.VpcNetwork(
+        vpc = ec2.Vpc(
             self, "MyVpc",
-            max_a_zs=2
+            max_azs=2
         )
 
         cluster = ecs.Cluster(
@@ -22,17 +23,25 @@ class BonjourFargate(cdk.Stack):
             vpc=vpc
         )
 
-        fargate_service = ecs.LoadBalancedFargateService(
+        fargate_service = ecs_patterns.NetworkLoadBalancedFargateService(
             self, "FargateService",
             cluster=cluster,
-            image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
+            task_image_options={
+                'image': ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
+            }
         )
 
-        cdk.CfnOutput(
+        fargate_service.service.connections.security_groups[0].add_ingress_rule(
+            peer = ec2.Peer.ipv4(vpc.vpc_cidr_block),
+            connection = ec2.Port.tcp(80),
+            description="Allow http inbound from VPC"
+        )
+
+        core.CfnOutput(
             self, "LoadBalancerDNS",
-            value=fargate_service.load_balancer.dns_name
+            value=fargate_service.load_balancer.load_balancer_dns_name
         )
 
-app = cdk.App()
+app = core.App()
 BonjourFargate(app, "Bonjour")
-app.run()
+app.synth()

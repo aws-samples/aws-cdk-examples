@@ -1,7 +1,7 @@
 import autoscaling = require('@aws-cdk/aws-autoscaling');
 import ec2 = require('@aws-cdk/aws-ec2');
 import s3 = require('@aws-cdk/aws-s3');
-import cdk = require('@aws-cdk/cdk');
+import cdk = require('@aws-cdk/core');
 import assert = require('assert');
 
 class ResourceOverridesExample extends cdk.Stack {
@@ -12,10 +12,10 @@ class ResourceOverridesExample extends cdk.Stack {
 
         const bucket = new s3.Bucket(this, 'MyBucket', {
             versioned: true,
-            encryption: s3.BucketEncryption.KmsManaged
+            encryption: s3.BucketEncryption.KMS_MANAGED
         });
 
-        const bucketResource2 = bucket.node.findChild('Resource') as s3.CfnBucket;
+        const bucketResource2 = bucket.node.defaultChild as s3.CfnBucket;
         bucketResource2.addPropertyOverride('BucketEncryption.ServerSideEncryptionConfiguration.0.EncryptEverythingAndAlways', true);
         bucketResource2.addPropertyDeletionOverride('BucketEncryption.ServerSideEncryptionConfiguration.0.ServerSideEncryptionByDefault');
 
@@ -23,17 +23,17 @@ class ResourceOverridesExample extends cdk.Stack {
         // Accessing the L1 bucket resource from an L2 bucket
         //
 
-        const bucketResource = bucket.node.findChild('Resource') as s3.CfnBucket;
-        const anotherWay = bucket.node.children.find(c => (c as cdk.CfnResource).resourceType === 'AWS::S3::Bucket') as s3.CfnBucket;
+        const bucketResource = bucket.node.defaultChild as s3.CfnBucket;
+        const anotherWay = bucket.node.children.find(c => (c as cdk.CfnResource).cfnResourceType === 'AWS::S3::Bucket') as s3.CfnBucket;
         assert.equal(bucketResource, anotherWay);
 
         //
         // This is how to specify resource options such as dependencies, metadata, update policy
         //
 
-        bucketResource.node.addDependency(otherBucket.node.findChild('Resource') as cdk.CfnResource);
-        bucketResource.options.metadata = { MetadataKey: 'MetadataValue' };
-        bucketResource.options.updatePolicy = {
+        bucketResource.node.addDependency(otherBucket.node.defaultChild as cdk.CfnResource);
+        bucketResource.cfnOptions.metadata = { MetadataKey: 'MetadataValue' };
+        bucketResource.cfnOptions.updatePolicy = {
             autoScalingRollingUpdate: {
                 pauseTime: '390'
             }
@@ -56,7 +56,8 @@ class ResourceOverridesExample extends cdk.Stack {
         bucketResource.addPropertyOverride('Token', otherBucket.bucketArn); // use tokens
         bucketResource.addPropertyOverride('LoggingConfiguration.DestinationBucketName', otherBucket.bucketName);
 
-        bucketResource.addPropertyOverride('AnalyticsConfigurations', [
+        // Assign completely new property value
+        bucketResource.analyticsConfigurations = [
             {
                 id: 'config1',
                 storageClassAnalysis: {
@@ -69,8 +70,9 @@ class ResourceOverridesExample extends cdk.Stack {
                     }
                 }
             }
-        ]);
+        ];
 
+        // Or selectively override parts of it
         bucketResource.addPropertyOverride('CorsConfiguration.CorsRules', [
             {
                 AllowedMethods: [ 'GET' ],
@@ -86,9 +88,9 @@ class ResourceOverridesExample extends cdk.Stack {
         bucketResource.addDeletionOverride('Metadata');
         bucketResource.addPropertyDeletionOverride('CorsConfiguration.Bar');
 
-        const vpc = new ec2.VpcNetwork(this, 'VPC', { maxAZs: 1 });
+        const vpc = new ec2.Vpc(this, 'VPC', { maxAzs: 1 });
         const asg = new autoscaling.AutoScalingGroup(this, 'ASG', {
-            instanceType: new ec2.InstanceTypePair(ec2.InstanceClass.M4, ec2.InstanceSize.XLarge),
+            instanceType: ec2.InstanceType.of(ec2.InstanceClass.M4, ec2.InstanceSize.XLARGE),
             machineImage: new ec2.AmazonLinuxImage(),
             vpc
         });
@@ -106,4 +108,4 @@ class ResourceOverridesExample extends cdk.Stack {
 
 const app = new cdk.App();
 new ResourceOverridesExample(app, 'resource-overrides');
-app.run();
+app.synth();

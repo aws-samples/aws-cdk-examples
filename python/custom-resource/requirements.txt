@@ -1,4 +1,4 @@
-aws-cdk.cdk
+aws-cdk.core
 
 aws-cdk.aws-cloudformation
 aws-cdk.aws-lambda
