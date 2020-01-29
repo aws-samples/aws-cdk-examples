@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.myorg</groupId>
-    <artifactId>code_build_java_cdk</artifactId>
+    <artifactId>project</artifactId>
     <version>0.1</version>
 
     <properties>
@@ -28,7 +28,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.6.0</version>
                 <configuration>
-                    <mainClass>com.myorg.CodeBuildJavaCdkApp</mainClass>
+                    <mainClass>com.myorg.ProjectApp</mainClass>
                 </configuration>
             </plugin>
         </plugins>
@@ -39,13 +39,13 @@
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>core</artifactId>
-            <version>1.21.1</version>
+            <version>[1.21.0, 2)</version>
         </dependency>
 
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>codebuild</artifactId>
-            <version>1.21.1</version>
+            <version>[1.21.0, 2)</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/junit/junit -->

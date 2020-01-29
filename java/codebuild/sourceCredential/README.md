@@ -1,10 +1,10 @@
 # Welcome to your CDK Java project!
 
-This is a blank project for Java development with CDK.
+It is a Maven-based project, so you can open this directory with any Maven-compatible Java IDE, and you should be able to build and run tests from your IDE.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+You should explore the contents of this template. It demonstrates a CDK app to create a codebuild source credential cloud formation resource.
 
-It is a [Maven](https://maven.apache.org/) based project, so you can open this project with any Maven compatible Java IDE to build and run tests.
+The cdk.json file tells the CDK Toolkit how to execute your app. This example relies on maven to do that.
 
 ## Useful commands
 

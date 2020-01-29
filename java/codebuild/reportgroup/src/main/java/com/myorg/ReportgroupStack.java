@@ -6,28 +6,27 @@ import software.amazon.awscdk.core.StackProps;
 import software.amazon.awscdk.services.codebuild.CfnReportGroup;
 import software.amazon.awscdk.services.codebuild.CfnReportGroupProps;
 
-public class ReportGroupStack extends Stack {
-
-    public ReportGroupStack(final Construct scope, final String id) {
+public class ReportgroupStack extends Stack {
+    public ReportgroupStack(final Construct scope, final String id) {
         this(scope, id, null);
     }
 
-    public ReportGroupStack(final Construct scope, final String id, final StackProps props) {
+    public ReportgroupStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
 
         CfnReportGroup.S3ReportExportConfigProperty s3ReportExportConfigProperty
                 = CfnReportGroup.S3ReportExportConfigProperty.builder()
-                    .bucket("S3BucketName")
-                    .path("S3Path")
-                    .encryptionDisabled(true)
-                    .packaging("ZIP")
-                    .build();
+                .bucket("S3BucketName")
+                .path("S3Path")
+                .encryptionDisabled(true)
+                .packaging("ZIP")
+                .build();
 
         CfnReportGroup.ReportExportConfigProperty exportConfigProperty
                 = CfnReportGroup.ReportExportConfigProperty.builder()
-                    .exportConfigType("S3")
-                    .s3Destination(s3ReportExportConfigProperty)
-                    .build();
+                .exportConfigType("S3")
+                .s3Destination(s3ReportExportConfigProperty)
+                .build();
 
         CfnReportGroupProps reportGroupProps = CfnReportGroupProps.builder()
                 .exportConfig(exportConfigProperty)

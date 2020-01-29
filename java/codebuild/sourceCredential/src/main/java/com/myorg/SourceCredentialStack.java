@@ -7,7 +7,6 @@ import software.amazon.awscdk.services.codebuild.CfnSourceCredential;
 import software.amazon.awscdk.services.codebuild.CfnSourceCredentialProps;
 
 public class SourceCredentialStack extends Stack {
-
     public SourceCredentialStack(final Construct scope, final String id) {
         this(scope, id, null);
     }

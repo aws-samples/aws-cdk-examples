@@ -24,14 +24,13 @@ import software.amazon.awscdk.services.s3.IBucket;
 import java.util.HashMap;
 import java.util.Map;
 
+public class ProjectStack extends Stack {
 
-public class CodeBuildProjectStack extends Stack {
-
-    public CodeBuildProjectStack(final Construct scope, final String id) {
+    public ProjectStack(final Construct scope, final String id) {
         this(scope, id, null);
     }
 
-    public CodeBuildProjectStack(final Construct scope, final String id, final StackProps props) {
+    public ProjectStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
 
         BuildEnvironmentVariable buildEnvironmentVariable = new BuildEnvironmentVariable.Builder()
