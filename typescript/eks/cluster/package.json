@@ -1,0 +1,29 @@
+{
+  "name": "eks-cluster",
+  "version": "1.0.0",
+  "description": "Basic EKS cluster with VPC and self managed AutoScalingGroup",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "author": {
+    "name": "Andreas Lindh",
+    "url": "https://aws.amazon.com",
+    "organization": true
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/node": "^10.17.0",
+    "typescript": "~3.7.2"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-autoscaling": "*",
+    "@aws-cdk/aws-ec2": "*",
+    "@aws-cdk/aws-eks": "*",
+    "@aws-cdk/aws-iam": "*",
+    "@aws-cdk/core": "*",
+    "aws-cdk": "*"
+  }
+}

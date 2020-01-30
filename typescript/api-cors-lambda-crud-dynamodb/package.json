@@ -15,7 +15,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^10.17.0",
-    "typescript": "~3.6.4"
+    "typescript": "~3.7.2"
   },
   "dependencies": {
     "@aws-cdk/aws-apigateway": "*",
