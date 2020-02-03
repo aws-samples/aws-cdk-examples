@@ -3,6 +3,7 @@ package software.amazon.awscdk.examples;
 import software.amazon.awscdk.core.Construct;
 import software.amazon.awscdk.core.Duration;
 import software.amazon.awscdk.core.Stack;
+import software.amazon.awscdk.core.StackProps;
 import software.amazon.awscdk.services.ec2.Vpc;
 import software.amazon.awscdk.services.autoscaling.AutoScalingGroup;
 import software.amazon.awscdk.services.ec2.AmazonLinuxImage;
@@ -17,7 +18,7 @@ import software.amazon.awscdk.services.elasticloadbalancing.ListenerPort;
 
 
 /**
- * Lambda Cron CDK example for Java!
+ * Classic Load balance CDK example for Java!
  */
 class ClassicLoadBalancerStack extends Stack {
     public ClassicLoadBalancerStack(final Construct parent, final String name) {
