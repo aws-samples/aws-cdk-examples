@@ -22,7 +22,14 @@ import software.amazon.awscdk.services.elasticloadbalancing.ListenerPort;
  */
 class ClassicLoadBalancerStack extends Stack {
     public ClassicLoadBalancerStack(final Construct parent, final String name) {
-        super(parent, name);
+
+        super(scope, name, null); 
+    }
+
+    public ClassicLoadBalancerStack(final Construct parent, final String name, final StackProps props) {
+
+        super(scope, name, props);
+
 	Vpc vpc = new Vpc(this, "VPC");
 	
 	AutoScalingGroup asg = AutoScalingGroup.Builder.create(this,"ASG")
