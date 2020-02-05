@@ -16,10 +16,10 @@ class SharedALBFargateService extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props: SharedALBFargateServiceProps) {
     super(scope, id, props);
 
-    // take care of importing all required constructs 
+    // take care of importing all required constructs
     const vpc = ec2.Vpc.fromLookup(this, "vpc", {vpcId: props.vpcId});
     const lbSecurityGroup = ec2.SecurityGroup.fromSecurityGroupId(this, "sgId", props.loadBalancerSecurityGroupId);
-    const securityGroups = props.peerServiceSecurityGroups === undefined ? [] : 
+    const securityGroups = props.peerServiceSecurityGroups === undefined ? [] :
       props.peerServiceSecurityGroups.map((x) => {return ec2.SecurityGroup.fromSecurityGroupId(this, "imported-"+x, x)});
     const importedCluster = ecs.Cluster.fromClusterAttributes(this, "clusterImport", {
       clusterName: props.clusterName,
@@ -32,7 +32,7 @@ class SharedALBFargateService extends cdk.Stack {
     });
     const alb = elbv2.ApplicationLoadBalancer.fromApplicationLoadBalancerAttributes(this, "loadBalancer", {
       loadBalancerArn: props.loadBalancerArn,
-      securityGroupId: props.loadBalancerSecurityGroupId, 
+      securityGroupId: props.loadBalancerSecurityGroupId,
       securityGroupAllowsAllOutbound: false,
     });
 
@@ -47,9 +47,9 @@ class SharedALBFargateService extends cdk.Stack {
     container.addPortMappings({containerPort: 80})
 
     // Create a service -- this instance isn't particularly complex, since we only have
-    // one container image per service that we need to worry about. 
-    // We'll reuse the cluster from our first service but use our newly created 
-    // security group for this purpose. 
+    // one container image per service that we need to worry about.
+    // We'll reuse the cluster from our first service but use our newly created
+    // security group for this purpose.
     const service2 = new ecs.FargateService(this, "service2", {
       cluster: importedCluster,
       taskDefinition
@@ -60,10 +60,10 @@ class SharedALBFargateService extends cdk.Stack {
     alb.connections.allowTo(service2, ec2.Port.tcp(80));
     // Allow connections between services if necessary. This would require importing
     // any other service by attributes and ensuring that you specify its security group when
-    // importing the cluster. 
+    // importing the cluster.
 
     // Create a new target group for the service and add it to the listener, specifying
-    // a path, host, or IP pattern and a priority. 
+    // a path, host, or IP pattern and a priority.
     const tg = new elbv2.ApplicationTargetGroup(this, "targetgroup", {
       targets: [service2],
       protocol: elbv2.ApplicationProtocol.HTTP,
@@ -75,7 +75,6 @@ class SharedALBFargateService extends cdk.Stack {
       priority: 100
     });
 
-    new cdk.CfnOutput(this, "LoadBalancerDNS", {value: alb.loadBalancerDnsName})
   }
 }
 
@@ -88,6 +87,10 @@ const props = {
   loadBalancerArn: 'my-load-balancer-arn',
   listenerArn: 'my-listener-arn',
   peerServiceSecurityGroups: [],  
+  env: {
+    account: "my-account-id",
+    region: "my-region"
+  }
 }
 
 new SharedALBFargateService(app, 'fargate-service-with-imported-application-load-balancer', props);
