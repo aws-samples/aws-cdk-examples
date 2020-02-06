@@ -58,22 +58,22 @@
 		<dependency>
 			<groupId>software.amazon.awscdk</groupId>
 			<artifactId>core</artifactId>
-			<version>1.18.0</version>
+			<version>[1.19.0, 2)</version>
 		</dependency>
 		<dependency>
 			<groupId>software.amazon.awscdk</groupId>
 			<artifactId>s3</artifactId>
-			<version>1.18.0</version>
+			<version>[1.19.0, 2)</version>
 		</dependency>
 		<dependency>
 			<groupId>software.amazon.awscdk</groupId>
 			<artifactId>apigateway</artifactId>
-			<version>1.18.0</version>
+			<version>[1.19.0, 2)</version>
 		</dependency>
 		<dependency>
 			<groupId>software.amazon.awscdk</groupId>
 			<artifactId>iam</artifactId>
-			<version>1.18.0</version>
+			<version>[1.19.0, 2)</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/junit/junit -->
 		 <dependency>

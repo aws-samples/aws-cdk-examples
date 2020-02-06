@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- CDK Construct Library dependencies -->
+    <PackageReference Include="Amazon.CDK" Version="1.18.0" />
+    <PackageReference Include="Amazon.CDK.AWS.Codepipeline.Actions" Version="1.18.0" />
+    <PackageReference Include="Amazon.CDK.AWS.Codepipeline" Version="1.18.0" />
+    <PackageReference Include="Amazon.CDK.AWS.CodeCommit" Version="1.18.0" />
+    <PackageReference Include="Amazon.CDK.AWS.Lambda" Version="1.18.0" />
+    <PackageReference Include="Amazon.CDK.AWS.S3" Version="1.18.0" />
+  </ItemGroup>
+
+</Project>
