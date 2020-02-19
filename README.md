@@ -71,7 +71,8 @@ $ cdk destroy
 | [resource-overrides](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/resource-overrides/) | Use of the resource overrides (aka ["escape hatch"](https://docs.aws.amazon.com/cdk/latest/guide/cfn_layer.html)) mechanism. |
 | [stepfunctions-job-poller](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/stepfunctions-job-poller/) | A simple StepFunctions workflow |
 | [static-site](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/static-site/) | A static site using CloudFront |
-
+| [api-cors-lambda-crud-dynamodb](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/api-cors-lambda-crud-dynamodb/) | Creating a single API with CORS, and five Lambdas doing CRUD operations over a single DynamoDB |
+| [classic-load-balancer](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/classic-load-balancer/) | Using an AutoScalingGroup with a Classic Load Balancer |
 ## Python examples <a name="Python"></a>
 
 To run a Python example, say my-widget-service:
