@@ -15,7 +15,7 @@ class S3TriggerStack(core.Stack):
         function = _lambda.Function(self, "lambda_function",
                                     runtime=_lambda.Runtime.PYTHON_3_7,
                                     handler="lambda-handler.main",
-                                    code=_lambda.Code.asset("./lambda"))
+                                    code=_lambda.Code.fromAsset("./lambda"))
         # create s3 bucket
         s3 = _s3.Bucket(self, "s3bucket")
 

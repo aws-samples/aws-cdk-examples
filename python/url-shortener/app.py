@@ -22,7 +22,7 @@ class UrlShortenerStack(WaltersCoStack):
 
         # define the API gateway request handler. all API requests will go to the same function.
         handler = aws_lambda.Function(self, "UrlShortenerFunction",
-                                      code=aws_lambda.Code.asset("./lambda"),
+                                      code=aws_lambda.Code.fromAsset("./lambda"),
                                       handler="handler.main",
                                       timeout=Duration.minutes(5),
                                       runtime=aws_lambda.Runtime.PYTHON_3_7)

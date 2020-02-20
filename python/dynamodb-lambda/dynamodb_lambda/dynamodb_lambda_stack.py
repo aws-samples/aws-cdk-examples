@@ -25,7 +25,7 @@ class DynamodbLambdaStack(core.Stack):
         producer_lambda = aws_lambda.Function(self, "producer_lambda_function",
                                               runtime=aws_lambda.Runtime.PYTHON_3_6,
                                               handler="lambda_function.lambda_handler",
-                                              code=aws_lambda.Code.asset("./lambda/producer"))
+                                              code=aws_lambda.Code.fromAsset("./lambda/producer"))
 
         producer_lambda.add_environment("TABLE_NAME", demo_table.table_name)
 
@@ -36,7 +36,7 @@ class DynamodbLambdaStack(core.Stack):
         consumer_lambda = aws_lambda.Function(self, "consumer_lambda_function",
                                               runtime=aws_lambda.Runtime.PYTHON_3_6,
                                               handler="lambda_function.lambda_handler",
-                                              code=aws_lambda.Code.asset("./lambda/consumer"))
+                                              code=aws_lambda.Code.fromAsset("./lambda/consumer"))
 
         consumer_lambda.add_environment("TABLE_NAME", demo_table.table_name)
 
