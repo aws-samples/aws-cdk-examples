@@ -34,7 +34,7 @@ $ cdk destroy
 | [custom-resource](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/custom-resource/) | Shows adding a Custom Resource to your CDK app |
 | [elasticbeanstalk](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/elasticbeanstalk/) | Elastic Beanstalk example using L1 with a Blue/Green pipeline (community contributed) |
 | [ecs-cluster](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/cluster/) | Provision an ECS Cluster with custom Autoscaling Group configuration |
-| [ecs-network-load-balanced-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-load-balanced-service/) | Starting a container fronted by a network load balancer on ECS |
+| [ecs-network-load-balanced-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-network-load-balanced-service/) | Starting a container fronted by a network load balancer on ECS |
 | [ecs-service-with-task-placement](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-service-with-task-placement/) | Starting a container ECS with task placement specifications |
 | [ecs-service-with-advanced-alb-config](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-service-with-advanced-alb-config/) | Starting a container fronted by a load balancer on ECS with added load balancer configuration |
 | [ecs-service-with-task-networking](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-service-with-task-networking/) | Starting an ECS service with task networking, allowing ingress traffic to the task but blocking for the instance |
@@ -71,7 +71,8 @@ $ cdk destroy
 | [resource-overrides](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/resource-overrides/) | Use of the resource overrides (aka ["escape hatch"](https://docs.aws.amazon.com/cdk/latest/guide/cfn_layer.html)) mechanism. |
 | [stepfunctions-job-poller](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/stepfunctions-job-poller/) | A simple StepFunctions workflow |
 | [static-site](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/static-site/) | A static site using CloudFront |
-
+| [api-cors-lambda-crud-dynamodb](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/api-cors-lambda-crud-dynamodb/) | Creating a single API with CORS, and five Lambdas doing CRUD operations over a single DynamoDB |
+| [classic-load-balancer](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/classic-load-balancer/) | Using an AutoScalingGroup with a Classic Load Balancer |
 ## Python examples <a name="Python"></a>
 
 To run a Python example, say my-widget-service:
@@ -93,6 +94,7 @@ $ cdk destroy
 | [appsync-graphql-dynamodb](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/appsync-graphql-dynamodb/) | Creating a single GraphQL API with an API Key, and four Resolvers doing CRUD operations over a single DynamoDB |
 | [classic-load-balancer](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/classic-load-balancer/) | Using an AutoScalingGroup with a Classic Load Balancer |
 | [custom-resource](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/custom-resource/) | Shows adding a Custom Resource to your CDK app |
+| [dockerized-app](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/docker-app-with-asg-alb/) | Deploys a containerized app into 3 tiers with userdata in an autoscaling group |
 | [ecs-cluster](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/cluster/) | Provision an ECS Cluster with custom Autoscaling Group configuration |
 | [ecs-load-balanced-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/ecs-load-balanced-service/) | Starting a container fronted by a load balancer on ECS |
 | [ecs-service-with-task-placement](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/ecs-service-with-task-placement/) | Starting a container ECS with task placement specifications |
