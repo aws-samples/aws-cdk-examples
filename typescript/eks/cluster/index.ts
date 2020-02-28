@@ -17,7 +17,7 @@ class EKSCluster extends cdk.Stack {
 
     const eksCluster = new eks.Cluster(this, 'Cluster', {
       vpc: vpc,
-      kubectlEnabled: true,  // we want to be able to manage k8s resources using CDK
+      kubectlEnabled: true,  // we want to be able to manage k8s resources using kubectl
       defaultCapacity: 0  // we want to manage capacity our selves
     });
 
