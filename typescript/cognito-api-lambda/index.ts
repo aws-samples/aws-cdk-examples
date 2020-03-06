@@ -1,7 +1,7 @@
 import { LambdaRestApi, CfnAuthorizer, LambdaIntegration, AuthorizationType } from '@aws-cdk/aws-apigateway';
 import { AssetCode, Function, Runtime } from '@aws-cdk/aws-lambda';
 import { App, Stack } from '@aws-cdk/core';
-import { UserPool, SignInType } from '@aws-cdk/aws-cognito'
+import { UserPool } from '@aws-cdk/aws-cognito'
 
 export class CognitoProtectedApi extends Stack {
   constructor(app: App, id: string) {
@@ -23,7 +23,9 @@ export class CognitoProtectedApi extends Stack {
 
     // Cognito User Pool with Email Sign-in Type.
     const userPool = new UserPool(this, 'userPool', {
-      signInType: SignInType.EMAIL
+      signInAliases: {
+        email: true
+      }
     })
 
     // Authorizer for the Hello World API that uses the

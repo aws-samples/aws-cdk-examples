@@ -29,7 +29,7 @@ class EKSCluster extends cdk.Stack {
       instanceType: new ec2.InstanceType('t3.medium'),
       machineImage: new eks.EksOptimizedImage({
         kubernetesVersion: '1.14',
-        nodeType: eks.NodeType.STANDARD  // wihtout this, incorrect SSM parameter for AMI is resolved
+        nodeType: eks.NodeType.STANDARD  // without this, incorrect SSM parameter for AMI is resolved
       }),
       updateType: autoscaling.UpdateType.ROLLING_UPDATE
     });
