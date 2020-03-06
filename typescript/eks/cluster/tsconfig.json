@@ -16,5 +16,9 @@
       "inlineSources": true,
       "experimentalDecorators": true,
       "strictPropertyInitialization":false
-  }
+  },
+  "include": [ "**/*.ts" ],
+  "exclude": [
+    "**/*.d.ts"
+  ]
 }
