@@ -24,9 +24,9 @@ class Base(core.Stack):
             enable_dns_support=True,
             nat_gateways=4,  # default is 1 per az
             subnet_configuration=[
-                aws_ec2.SubnetConfiguration(name='PUBLIC,', subnet_type=aws_ec2.SubnetType.PUBLIC, cidr_mask=24),
-                aws_ec2.SubnetConfiguration(name='PRIVATE,', subnet_type=aws_ec2.SubnetType.PRIVATE, cidr_mask=24),
-                aws_ec2.SubnetConfiguration(name='ISOLATED,', subnet_type=aws_ec2.SubnetType.ISOLATED, cidr_mask=24)
+                aws_ec2.SubnetConfiguration(name='PUBLIC,', subnet_type=aws_ec2.SubnetType.PUBLIC, cidr_mask=23),
+                aws_ec2.SubnetConfiguration(name='PRIVATE,', subnet_type=aws_ec2.SubnetType.PRIVATE, cidr_mask=23),
+                aws_ec2.SubnetConfiguration(name='ISOLATED,', subnet_type=aws_ec2.SubnetType.ISOLATED, cidr_mask=23)
 
             ],
             gateway_endpoints={
@@ -41,7 +41,7 @@ class Base(core.Stack):
         vpc_subnets = vpc.public_subnets + vpc.private_subnets + vpc.isolated_subnets
         # for session manager
         ssm_private_link_endpoint = aws_ec2.InterfaceVpcEndpoint(
-            self, 'SSMEndpoint',
+            self, 'SSMMEndpoint',
             vpc=vpc,
             subnets=aws_ec2.SubnetSelection(subnet_type=aws_ec2.SubnetType.ISOLATED),
             service=aws_ec2.InterfaceVpcEndpointAwsService.SSM_MESSAGES,
@@ -52,7 +52,7 @@ class Base(core.Stack):
         # this will tag most of the resources in the vpc such as vpc, route tables, igw
         core.Tag.add(vpc, 'app_namespace', 'cdk-examples', exclude_resource_types=excluded_resources)
         core.Tag.add(vpc, 'namespace', 'cdk-examples', exclude_resource_types=excluded_resources)
-        import itertools
+
 
         # flatten list of lists
         vpc_subnets_list = [vpc.public_subnets, vpc.private_subnets, vpc.isolated_subnets]
