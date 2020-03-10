@@ -26,20 +26,19 @@ class Asteroids:
     """
 
     def execute(self, format):
-        """Serves as Interface to assign class attributes and execute class methods
+        """Serves as logical interface to assign class attributes and execute class methods
 
         Raises:
             Exception: If file format is not of .json or .csv file types.
         Notes:
             Have fun!
-
         """
         self.file_format=format
         self.today=date.today().strftime('%Y-%m-%d')
         # method call below used when Secrets Manager integrated. See get_secret.__doc__ for more.
         # self.api_key=get_secret('nasa_api_key')
         self.api_key=os.environ["NASA_KEY"]
-        self.endpoint=f"https://api.nasa.gov/neo/rest/v1/feed?start_date={self.today}&end_date={self.today}&api_key={self.api_key}"
+        self.endpoint=f"""https://api.nasa.gov/neo/rest/v1/feed?start_date={self.today}&end_date={self.today}&api_key={self.api_key}"""
         self.response_object=self.nasa_client(self.endpoint)
         self.processed_response=self.process_asteroids(self.response_object)
         if self.file_format == "json":
@@ -118,22 +117,22 @@ class Asteroids:
         """Gets secret from AWS Secrets Manager
 
         Notes:
-            Have yet to integrate into the CDK. Leaving as example code.
+            Not necessary for CDK example but required in regular envs
+            thus leaving for use
         """
-        secret_name = os.environ['TOKEN_SECRET_NAME']
-        region_name = os.environ['REGION']
-        session = boto3.session.Session()
-        client = session.client(service_name='secretsmanager', region_name=region_name)
         try:
-            get_secret_value_response = client.get_secret_value(SecretId=secret_name)
-        except ClientError as e:
-            raise e
-        else:
-            if 'SecretString' in get_secret_value_response:
-                secret = get_secret_value_response['SecretString']
+            session = boto3.session.Session()
+            client = session.client(service_name='secretsmanager'
+                , region_name=os.environ['REGION'])
+            SECRET = client.get_secret_value(SecretId=os.environ['LAMBDA_DWR_SECRET'])
+            if 'SecretString' in SECRET:
+                SECRETS = json.loads(SECRET['SecretString'])
             else:
-                secret = b64decode(get_secret_value_response['SecretBinary'])
-        return secret
+                SECRETS = json.loads(b64decode(SECRET['SecretBinary']))
+        except Exception:
+            logger.error("ERROR: Unable to GET/Process DWR Secret")
+
+        return SECRETS
 
     def write_to_s3(self):
         """Uploads both .json and .csv files to s3

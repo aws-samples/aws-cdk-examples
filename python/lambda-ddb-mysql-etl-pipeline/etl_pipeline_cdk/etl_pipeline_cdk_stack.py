@@ -59,8 +59,13 @@ class EtlPipelineCdkStack(core.Stack):
         # Lambdas and layers
         requests_layer = _lambda.LayerVersion(
             self, "requests",
-            code=_lambda.AssetCode('layers/requests.zip')
-        )
+            code=_lambda.AssetCode('layers/requests.zip'))
+        pandas_layer = _lambda.LayerVersion(
+            self, "pandas",
+            code=_lambda.AssetCode('layers/pandas.zip'))
+        pymysql_layer = _lambda.LayerVersion(
+            self, "pymysql",
+            code=_lambda.AssetCode('layers/pymysql.zip'))
 
         process_asteroid_data = _lambda.Function(
             self, "ProcessAsteroidsLambda",
@@ -78,10 +83,15 @@ class EtlPipelineCdkStack(core.Stack):
             self, "DbWriteLambda",
             runtime=_lambda.Runtime.PYTHON_3_7,
             handler="dbwrite.handler",
+            layers=[pandas_layer, pymysql_layer],
             code=_lambda.Code.asset('lambda'),
             environment={
                 "ASTEROIDS_TABLE": ddb_asteroids_table.table_name,
-                "S3_BUCKET": s3_bucket.bucket_name
+                "S3_BUCKET": s3_bucket.bucket_name,
+                "SCHEMA": self.node.try_get_context("SCHEMA"),
+                "REGION": self.node.try_get_context("REGION"),
+                "DB_SECRETS": self.node.try_get_context("DB_SECRETS_REF"),
+                "TOPIC_ARN": self.node.try_get_context("TOPIC_ARN")
             }
         )
 

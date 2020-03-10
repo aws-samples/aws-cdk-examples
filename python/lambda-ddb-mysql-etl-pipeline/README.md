@@ -27,10 +27,6 @@ I've also included additional links to useful documentation there as well.
 ## Project Directory Rundown
 `README.md` — The introductory README for this project.
 
-`params-preprod.json` - A configuration file for pre-production specific parameters.
-
-`params-prod.json` - A configuration file for production specific parameters.
-
 `etl_pipeline_cdk` — A Python module directory containing the core stack code.
 
 `etl_pipeline_cdk_stack.py` — A custom CDK stack construct that is the core of the CDK application. 
