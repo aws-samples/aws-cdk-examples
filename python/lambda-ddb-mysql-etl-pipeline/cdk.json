@@ -1,3 +1,9 @@
 {
+	"context": {
+		"STAGE":"preprod",
+		"REGION":"us-east-1",
+		"ACCTID":"<INSERTACCTID>",
+		"NASA_KEY":"<INSERTNASAKEY>"
+	},
     "app": "python3 app.py"
 }

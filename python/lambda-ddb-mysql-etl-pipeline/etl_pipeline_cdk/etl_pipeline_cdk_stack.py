@@ -70,7 +70,7 @@ class EtlPipelineCdkStack(core.Stack):
             layers=[requests_layer],
             environment={
                 "S3_BUCKET": s3_bucket.bucket_name,
-                "NASA_KEY": "<nasa_key_here>",
+                "NASA_KEY": self.node.try_get_context("NASA_KEY"),
             }
         )
 
