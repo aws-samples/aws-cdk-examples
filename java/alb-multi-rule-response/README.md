@@ -1,5 +1,5 @@
 # ALB using a combination of host and path based routing with Java AWS-CDK 
-### The ALB is backed by an EC2 instance acting as frontend client and built-in ALB response rules that simulates mobile and application api
+The ALB is backed by an EC2 instance acting as frontend client and built-in ALB response rules that simulates mobile and application api
 
 ## Testing the responses
 ### testing mobile produciton api
