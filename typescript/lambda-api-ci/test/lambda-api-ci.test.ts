@@ -1,6 +1,6 @@
 import { expect as expectCDK, matchTemplate, MatchStyle } from '@aws-cdk/assert';
 import cdk = require('@aws-cdk/core');
-import LambdaApiCi = require('../lib/lambda-api-ci-stack');
+import LambdaApiCi = require('../lib/ci-stack');
 
 test('Empty Stack', () => {
     const app = new cdk.App();
