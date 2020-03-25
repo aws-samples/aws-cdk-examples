@@ -11,7 +11,7 @@
   "profile":"",
   "region" : "",
   "configuration" : "Release",
-  "framework" : "netcoreapp2.1",
+  "framework" : "netcoreapp3.1",
   "function-runtime":"dotnetcore2.1",
   "function-memory-size" : 256,
   "function-timeout" : 30,

@@ -10,7 +10,7 @@ namespace CapitalizeString
             Function fn = new Function(this, "capitalizestring", new FunctionProps
             {
                 Runtime = Runtime.DOTNET_CORE_2_1,
-                Code = Code.FromAsset("./CapitalizeStringHandler/src/CapitalizeStringHandler/bin/Release/netcoreapp2.1/publish"),
+                Code = Code.FromAsset("./CapitalizeStringHandler/src/CapitalizeStringHandler/bin/Release/netcoreapp3.1/publish"),
                 Handler = "CapitalizeStringHandler::CapitalizeStringHandler.Function::FunctionHandler"
             });
         }
