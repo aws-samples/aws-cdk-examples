@@ -12,19 +12,24 @@
     "cdk": "cdk"
   },
   "devDependencies": {
-    "@aws-cdk/assert": "^1.28.0",
-    "@aws-cdk/aws-apigateway": "~1.28.0",
+    "aws-cdk": "1.31.0",
+    "@aws-cdk/core": "1.31.0",
+    "@aws-cdk/assert": "1.31.0",
+    "@aws-cdk/aws-apigateway": "1.31.0",
+    "@aws-cdk/aws-codebuild": "1.31.0",
+    "@aws-cdk/aws-codecommit": "1.31.0",
+    "@aws-cdk/aws-codepipeline": "1.31.0",
+    "@aws-cdk/aws-codepipeline-actions": "1.31.0",
+    "@aws-cdk/aws-cloudformation": "1.31.0",
     "@types/jest": "^24.0.18",
     "@types/node": "^13.7.0",
     "jest": "^24.9.0",
     "ts-jest": "^24.0.2",
-    "aws-cdk": "^1.28.0",
     "ts-node": "^8.1.0",
-    "typescript": "~3.8.3"
+    "typescript": "^3.8.3"
   },
   "dependencies": {
     "aws-sdk": "^2.617.0",
-    "@aws-cdk/core": "^1.28.0",
     "source-map-support": "^0.5.9"
   },
   "description": "* `npm run build`   compile typescript to js  * `npm run watch`   watch for changes and compile  * `npm run test`    perform the jest unit tests  * `cdk deploy`      deploy this stack to your default AWS account/region  * `cdk diff`        compare deployed stack with current state  * `cdk synth`       emits the synthesized CloudFormation template",

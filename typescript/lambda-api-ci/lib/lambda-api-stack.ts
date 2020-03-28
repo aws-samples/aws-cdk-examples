@@ -9,12 +9,16 @@ import { Function, Runtime, AssetCode, Code } from "@aws-cdk/aws-lambda"
 import {Construct, Duration, Stack, StackProps} from "@aws-cdk/core"
 import s3 = require("@aws-cdk/aws-s3");
 
+interface LambdaApiStackProps extends StackProps{
+  functionName: string
+}
+
 export class LambdaApiStack extends Stack {
   private restApi: RestApi
   private lambdaFunction: Function
   private bucket: s3.Bucket
 
-  constructor(scope: Construct, id: string, props?: StackProps) {
+  constructor(scope: Construct, id: string, props: LambdaApiStackProps) {
     super(scope, id, props);
 
     this.bucket = new s3.Bucket(this, "WidgetStore");
@@ -33,6 +37,7 @@ export class LambdaApiStack extends Stack {
     lambdaPolicy.addResources(this.bucket.bucketArn)
 
     this.lambdaFunction = new Function(this, "LambdaFunction", {
+      functionName: props.functionName,
       handler: "handler.handler",
       runtime: Runtime.NODEJS_10_X,
       code: new AssetCode(`./src`),
