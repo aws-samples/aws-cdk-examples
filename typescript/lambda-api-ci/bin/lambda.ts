@@ -4,4 +4,4 @@ import cdk = require('@aws-cdk/core');
 import { LambdaApiStack } from '../lib/lambda-api-stack';
 
 const app = new cdk.App();
-new LambdaApiStack(app, 'LambdaApiCiStack');
+new LambdaApiStack(app, 'LambdaApiStack');

@@ -5,7 +5,8 @@
     "lambda-api-ci": "bin/lambda-api-ci.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npm run build-lambda",
+    "build-lambda": "cd src && npm run build",
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk"
