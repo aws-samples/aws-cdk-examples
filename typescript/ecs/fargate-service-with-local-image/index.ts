@@ -16,7 +16,7 @@ const cluster = new ecs.Cluster(stack, 'Cluster', { vpc });
 // uploaded to an S3 staging bucket prior to being uploaded to ECR.
 // A new repository is created in ECR and the Fargate service is created
 // with the image from ECR.
-new ecs_patterns.NetworkLoadBalancedFargateService(stack, "FargateService", {
+new ecs_patterns.ApplicationLoadBalancedFargateService(stack, "FargateService", {
   cluster,
   taskImageOptions: {
     image: ecs.ContainerImage.fromAsset(path.resolve(__dirname, 'local-image'))
