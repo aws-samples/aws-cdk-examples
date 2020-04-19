@@ -70,7 +70,7 @@ export class StaticSite extends Construct {
         // Route53 alias record for the CloudFront distribution
         new route53.ARecord(this, 'SiteAliasRecord', {
             recordName: siteDomain,
-            target: route53.AddressRecordTarget.fromAlias(new targets.CloudFrontTarget(distribution)),
+            target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(distribution)),
             zone
         });
 
