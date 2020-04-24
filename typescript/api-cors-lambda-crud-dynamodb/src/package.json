@@ -1,0 +1,14 @@
+{
+  "name": "src",
+  "version": "1.0.0",
+  "description": "",
+  "main": "create.js",
+  "dependencies": {
+    "uuid": "^7.0.3"
+  },
+  "scripts": {
+    "build": "exit 0"
+  },
+  "author": "",
+  "license": "ISC"
+}
