@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 
 from aws_cdk import core
-
 from ec2_cloudwatch.ec2_cloudwatch_stack import Ec2CloudwatchStack
-import os
-
 
 app = core.App()
 

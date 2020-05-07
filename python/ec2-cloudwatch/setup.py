@@ -19,16 +19,15 @@ setuptools.setup(
     packages=setuptools.find_packages(where="ec2_cloudwatch"),
 
     install_requires=[
-        "aws-cdk.core==1.36.1",
-        "aws-cdk.aws-ec2==1.36.1",
-        "autopep8",
-        "aws-cdk.aws-backup==1.36.1",
-        "aws-cdk.aws-cloudwatch==1.36.1",
-        "aws-cdk.aws-events==1.36.1",
-        "aws-cdk.aws-events-targets==1.36.1",
-        "aws-cdk.aws-lambda==1.36.1",
-        "aws-cdk.aws-logs==1.36.1",
-        "aws-cdk.aws-iam==1.36.1"
+        "aws-cdk.core",
+        "aws-cdk.aws-ec2",
+        "aws-cdk.aws-backup",
+        "aws-cdk.aws-cloudwatch",
+        "aws-cdk.aws-events",
+        "aws-cdk.aws-events-targets",
+        "aws-cdk.aws-lambda",
+        "aws-cdk.aws-logs",
+        "aws-cdk.aws-iam"
     ],
 
     python_requires=">=3.6",
@@ -40,7 +39,7 @@ setuptools.setup(
 
         "License :: OSI Approved :: Apache Software License",
 
-        "Programming Language :: Python",
+        "Programming Language :: JavaScript",
         "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
