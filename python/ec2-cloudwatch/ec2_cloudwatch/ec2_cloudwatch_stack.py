@@ -23,6 +23,8 @@ class Ec2CloudwatchStack(core.Stack):
                                                 vpc=vpc_new,
                                                 subnet_selection=aws_ec2.SubnetSelection(subnet_type=aws_ec2.SubnetType.PUBLIC)
                                                 )
+
+        # write your own IP rang to access this bastion instead of 1.2.3.4/32
         host_bastion.allow_ssh_access_from(aws_ec2.Peer.ipv4("1.2.3.4/32"))
 
         # use amazon linux as OS
@@ -43,9 +45,9 @@ class Ec2CloudwatchStack(core.Stack):
 
         # set up an web instance in public subnet
         work_server = aws_ec2.Instance(
-            self, "WebInstance", instance_type=aws_ec2.InstanceType("t2.small"),
+            self, "WebInstance", instance_type=aws_ec2.InstanceType("Write a EC2 instance type"),
             machine_image=amzn_linux, vpc=vpc_new, vpc_subnets=aws_ec2.SubnetSelection(subnet_type=aws_ec2.SubnetType.PUBLIC),
-            security_group=my_security_group, key_name="You Key Name")
+            security_group=my_security_group, key_name="Your SSH key pair name")
 
         # allow web connect
         work_server.connections.allow_from_any_ipv4(aws_ec2.Port.tcp(80), "allow http from world")
@@ -60,7 +62,7 @@ class Ec2CloudwatchStack(core.Stack):
         }
         ])
 
-        # Cloudwatch event rule to stop instance every day in UCT 15
+        # Cloudwatch event rule to stop instances every day in UCT 15pm
         # they only use javascript SDK to call AWS API
         # https://docs.aws.amazon.com/cdk/api/latest/python/aws_cdk.aws_events_targets/AwsApi.html
         stop_EC2 = AwsApi(service="EC2", action="stopInstances", parameters={"InstanceIds": [work_server.instance_id, host_bastion.instance_id]})

@@ -5,9 +5,9 @@ This is project demonstrates:
 
  * Create a new VPC with S3 endpoint
  * Two Instances, a web server and a bastion host
- * A cloudwatch event rule to stop instances at UTC 15
+ * A cloudwatch event rule to stop instances at UTC 15pm everyday
  * A backup vault and a backup rule to protect resources 
- * Show output example
+ * Show some outputs example
 
 
 
