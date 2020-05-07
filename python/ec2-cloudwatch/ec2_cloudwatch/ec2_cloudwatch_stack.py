@@ -44,10 +44,13 @@ class Ec2CloudwatchStack(core.Stack):
         my_security_group.add_ingress_rule(aws_ec2.Peer.ipv4('10.0.0.0/16'), aws_ec2.Port.tcp(22), "allow ssh access from the VPC")
 
         # set up an web instance in public subnet
-        work_server = aws_ec2.Instance(
-            self, "WebInstance", instance_type=aws_ec2.InstanceType("Write a EC2 instance type"),
-            machine_image=amzn_linux, vpc=vpc_new, vpc_subnets=aws_ec2.SubnetSelection(subnet_type=aws_ec2.SubnetType.PUBLIC),
-            security_group=my_security_group, key_name="Your SSH key pair name")
+        work_server = aws_ec2.Instance(self, "WebInstance",
+                                       instance_type=aws_ec2.InstanceType("Write a EC2 instance type"),
+                                       machine_image=amzn_linux,
+                                       vpc=vpc_new,
+                                       vpc_subnets=aws_ec2.SubnetSelection(subnet_type=aws_ec2.SubnetType.PUBLIC),
+                                       security_group=my_security_group,
+                                       key_name="Your SSH key pair name")
 
         # allow web connect
         work_server.connections.allow_from_any_ipv4(aws_ec2.Port.tcp(80), "allow http from world")
@@ -59,13 +62,15 @@ class Ec2CloudwatchStack(core.Stack):
             "Ebs": {"VolumeSize": "30",
                     "VolumeType": "gp2",
                     "DeleteOnTermination": "true"}
-        }
-        ])
+        }])
 
         # Cloudwatch event rule to stop instances every day in UCT 15pm
         # they only use javascript SDK to call AWS API
         # https://docs.aws.amazon.com/cdk/api/latest/python/aws_cdk.aws_events_targets/AwsApi.html
-        stop_EC2 = AwsApi(service="EC2", action="stopInstances", parameters={"InstanceIds": [work_server.instance_id, host_bastion.instance_id]})
+        stop_EC2 = AwsApi(service="EC2",
+                          action="stopInstances",
+                          parameters={"InstanceIds": [work_server.instance_id, host_bastion.instance_id]})
+
         Rule(self, "ScheduleRule", schedule=Schedule.cron(minute="0", hour="15"), targets=[stop_EC2])
 
         # AWS backup part
@@ -82,13 +87,16 @@ class Ec2CloudwatchStack(core.Stack):
         ])
 
         # details with backup rules
-        plan.add_rule(backup.BackupPlanRule(backup_vault=vault, rule_name="CDK_Backup_Rule",
+        plan.add_rule(backup.BackupPlanRule(backup_vault=vault,
+                                            rule_name="CDK_Backup_Rule",
                                             schedule_expression=Schedule.cron(minute="0", hour="16", day="1", month="1-12"),
                                             delete_after=core.Duration.days(130),
                                             move_to_cold_storage_after=core.Duration.days(10)))
 
         # output information after deploy
         output = core.CfnOutput(self, "BastionHost_information",
-                                value=host_bastion.instance_public_ip, description="BastionHost's Public IP")
+                                value=host_bastion.instance_public_ip,
+                                description="BastionHost's Public IP")
         output = core.CfnOutput(self, "WebHost_information",
-                                value=work_server.instance_public_ip, description="Web server's Public IP")
+                                value=work_server.instance_public_ip,
+                                description="Web server's Public IP")
