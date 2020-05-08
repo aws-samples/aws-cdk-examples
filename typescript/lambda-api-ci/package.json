@@ -1,0 +1,46 @@
+{
+    "name": "lambda-api-ci",
+    "version": "0.1.0",
+    "bin": {
+        "lambda-api-ci": "bin/lambda-api-ci.js"
+    },
+    "scripts": {
+        "build": "npm run prettier && tsc && npm run build-lambda",
+        "build-lambda": "cd src && npm run build",
+        "watch": "tsc -w",
+        "test": "jest",
+        "cdk": "cdk",
+        "prettier": "prettier --write '**/{bin,lib,src,tst}/*.ts'"
+    },
+    "devDependencies": {
+        "aws-cdk": "*",
+        "@aws-cdk/core": "*",
+        "@aws-cdk/assert": "*",
+        "@aws-cdk/aws-apigateway": "*",
+        "@aws-cdk/aws-codebuild": "*",
+        "@aws-cdk/aws-codecommit": "*",
+        "@aws-cdk/aws-codepipeline": "*",
+        "@aws-cdk/aws-codepipeline-actions": "*",
+        "@aws-cdk/aws-cloudformation": "*",
+        "@types/jest": "^24.0.18",
+        "@types/node": "^13.7.0",
+        "jest": "^24.9.0",
+        "ts-jest": "^24.0.2",
+        "ts-node": "^8.1.0",
+        "typescript": "^3.8.3",
+        "prettier": "^2.0.4"
+    },
+    "dependencies": {
+        "aws-sdk": "^2.617.0",
+        "source-map-support": "^0.5.9"
+    },
+    "description": "* `npm run build`   compile typescript to js  * `npm run watch`   watch for changes and compile  * `npm run test`    perform the jest unit tests  * `cdk deploy`      deploy this stack to your default AWS account/region  * `cdk diff`        compare deployed stack with current state  * `cdk synth`       emits the synthesized CloudFormation template",
+    "main": "jest.config.js",
+    "directories": {
+        "lib": "lib",
+        "test": "test"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}

@@ -20,7 +20,7 @@ verify_star_dependencies() {
 }
 
 # Find and build all NPM projects
-for pkgJson in $(find typescript -name package.json | grep -v node_modules); do
+for pkgJson in $(find typescript -name cdk.json | grep -v node_modules); do
     (
         echo "=============================="
         echo "building project: $(dirname $pkgJson)"
