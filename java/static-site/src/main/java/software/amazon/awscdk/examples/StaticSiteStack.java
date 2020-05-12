@@ -6,6 +6,7 @@ import java.util.Map;
 import software.amazon.awscdk.core.CfnOutput;
 import software.amazon.awscdk.core.Construct;
 import software.amazon.awscdk.core.RemovalPolicy;
+import software.amazon.awscdk.core.Stack;
 import software.amazon.awscdk.services.certificatemanager.DnsValidatedCertificate;
 import software.amazon.awscdk.services.cloudfront.AliasConfiguration;
 import software.amazon.awscdk.services.cloudfront.Behavior;
@@ -25,7 +26,7 @@ import software.amazon.awscdk.services.s3.deployment.BucketDeployment;
 import software.amazon.awscdk.services.s3.deployment.ISource;
 import software.amazon.awscdk.services.s3.deployment.Source;
 
-public class StaticSiteStack extends Construct {
+public class StaticSiteStack extends Stack {
 
   /**
    * Static site infrastructure, which deploys site content to an S3 bucket.
