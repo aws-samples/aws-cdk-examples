@@ -10,10 +10,10 @@
   },
   "author": "Meruzhan Kerobyan <kerobyan.mk@gmail.com>",
   "devDependencies": {
-    "@aws-cdk/assert": "1.38.0",
+    "@aws-cdk/assert": "*",
     "@types/aws-lambda": "8.10.51",
     "@types/node": "13.13.5",
-    "aws-cdk": "1.38.0",
+    "aws-cdk": "*",
     "ts-node": "8.10.1",
     "typescript": "3.8.3"
   },
