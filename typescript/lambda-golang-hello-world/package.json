@@ -1,0 +1,25 @@
+{
+  "name": "lambda-golang-hello-world",
+  "version": "1.0.0",
+  "description": "Example of Hello World AWS Lambda in Golang, while infrastructure is in CDK Typescript",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "author": "Meruzhan Kerobyan <kerobyan.mk@gmail.com>",
+  "devDependencies": {
+    "@aws-cdk/assert": "1.38.0",
+    "@types/aws-lambda": "8.10.51",
+    "@types/node": "13.13.5",
+    "aws-cdk": "1.38.0",
+    "ts-node": "8.10.1",
+    "typescript": "3.8.3"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-lambda": "1.38.0",
+    "@aws-cdk/core": "1.38.0",
+    "source-map-support": "0.5.19"
+  }
+}

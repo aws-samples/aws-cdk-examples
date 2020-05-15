@@ -1,0 +1,15 @@
+*.js
+*.d.ts
+node_modules
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+coverage
+lambda_package
+
+# Parcel build directories
+.cache
+.build
+
+.idea

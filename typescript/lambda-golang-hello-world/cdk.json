@@ -1,0 +1,7 @@
+{
+  "app": "make all && npx ts-node cdk/app.ts",
+  "context": {
+    "@aws-cdk/core:enableStackNameDuplicates": "true",
+    "aws-cdk:enableDiffNoFail": "false"
+  }
+}
