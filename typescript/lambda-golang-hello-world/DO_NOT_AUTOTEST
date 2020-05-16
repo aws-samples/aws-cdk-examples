@@ -1,0 +1,2 @@
+This example depends on Golang compiler
+which is not present while testing at this moment.
