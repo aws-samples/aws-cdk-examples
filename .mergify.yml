@@ -20,7 +20,7 @@ pull_request_rules:
       - -approved-reviews-by~=author
       - "#changes-requested-reviews-by=0"
       - "#commented-reviews-by=0"
-      - status-success=continuous-integration/travis-ci/pr
+      - status-success=build
       - status-success=Semantic Pull Request
   - name: remove stale reviews
     actions:
