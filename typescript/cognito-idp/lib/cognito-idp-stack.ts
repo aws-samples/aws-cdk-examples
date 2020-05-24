@@ -145,11 +145,11 @@ export class CognitoIdpStack extends cdk.Stack {
 
         // Configure the identity provider
         const idpOptions = {};
-        const idp = cognito.UserPoolIdentityProvider.facebook(this, 'FacebookIDP', idpOptions);
+        // const idp = cognito.UserPoolIdentityProvider.facebook(this, 'FacebookIDP', idpOptions);
 
         // Configure the user pool client application 
         const cfnUserPoolClient = new cognito.CfnUserPoolClient(this, "CognitoAppClient", {
-            supportedIdentityProviders: ["COGNITO", 'AmazonFederate'],
+            supportedIdentityProviders: ["COGNITO", 'FacebookIDP'],
             clientName: "Web",
             allowedOAuthFlowsUserPoolClient: true,
             allowedOAuthFlows: ["code"],
@@ -162,7 +162,7 @@ export class CognitoIdpStack extends cdk.Stack {
         });
 
         // Make sure the user pool client is created after the IDP
-        cfnUserPoolClient.addDependsOn(idp);
+        // cfnUserPoolClient.addDependsOn(idp);
 
         // Our cognito domain name
         const cognitoDomainPrefix =
