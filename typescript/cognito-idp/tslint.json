@@ -1,0 +1,9 @@
+{
+    "extends": "tslint:recommended",
+    "rules": {
+        "no-floating-promises": true, 
+        "no-console": false, 
+        "no-var-requires": false, 
+        "no-trailing-whitespace": false
+    }
+}

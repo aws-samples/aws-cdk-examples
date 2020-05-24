@@ -1,0 +1,60 @@
+{
+  "name": "cognito-idp",
+  "version": "0.1.0",
+  "bin": {
+    "cognito-idp": "bin/cognito-idp.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "node clean.js",
+    "build-dist": "tsc && node create-config.js && browserify web/index.ts -p [ tsify --noImplicitAny ]  > web/dist/bundle.js && node web/dist/copy-dist.js",
+    "watch": "tsc -w",
+    "test": "jest",
+    "cdk": "cdk",
+    "unit-test": "jest --group=unit",
+    "database-test": "jest --group=database",
+    "cognito-test": "jest --group=cognito",
+    "api-test": "jest --group=api",
+    "handler-test": "jest --group=handler",
+    "deploy": "cdk deploy --require-approval never",
+    "link-cdk": "../../../aws-cdk/link-all.sh"
+  },
+  "devDependencies": {
+    "@aws-cdk/assert": "1.41.0",
+    "@aws-cdk/aws-apigateway": "^1.41.0",
+    "@aws-cdk/aws-cloudfront": "^1.41.0",
+    "@aws-cdk/aws-cognito": "^1.41.0",
+    "@aws-cdk/aws-dynamodb": "^1.41.0",
+    "@aws-cdk/aws-route53-targets": "^1.41.0",
+    "@aws-cdk/aws-s3-deployment": "^1.41.0",
+    "@aws-cdk/cx-api": "^1.41.0",
+    "@aws-cdk/region-info": "^1.41.0",
+    "@types/aws-lambda": "^8.10.51",
+    "@types/axios": "^0.14.0",
+    "@types/fs-extra": "^8.1.1",
+    "@types/jest": "^25.2.1",
+    "@types/node": "10.17.5",
+    "@types/qs": "^6.9.2",
+    "@types/uuid": "^7.0.3",
+    "aws-cdk": "1.41.0",
+    "axios": "^0.19.2",
+    "browserify": "^16.5.1",
+    "cross-env": "^7.0.2",
+    "dotenv": "^8.2.0",
+    "fs-extra": "^9.0.0",
+    "jest": "^25.5.0",
+    "jest-runner-groups": "^1.1.1",
+    "ts-jest": "^25.3.1",
+    "ts-node": "^8.1.0",
+    "tslint": "^6.1.2",
+    "typescript": "~3.7.2"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-secretsmanager": "^1.41.0",
+    "@aws-cdk/core": "^1.41.0",
+    "@types/facebook-js-sdk": "^3.3.0",
+    "aws-sdk": "^2.671.0",
+    "source-map-support": "^0.5.19",
+    "uuid": "^7.0.3"
+  }
+}

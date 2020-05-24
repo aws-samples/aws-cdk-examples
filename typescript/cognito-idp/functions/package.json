@@ -1,0 +1,22 @@
+{
+  "name": "functions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.656.0",
+    "axios": "^0.19.2",
+    "csv-writer": "^1.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "jwk-to-pem": "^2.0.3",
+    "qs": "^6.9.3"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^8.3.9"
+  }
+}
