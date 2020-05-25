@@ -10,10 +10,20 @@ It also demonstrates a somewhat opinionated way to organize your lambda function
 
 ## Prerequisites
 
+There is a bit of setup required before you can deploy this stack.
+
 - A domain that you control with Route53 in your development account
+    - https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/getting-started.html
+    - Be careful about Cognito reserved domains.
+        - You can't have 'aws' or 'cognito' anywhere in the domain name
 - A certicate that covers the web site and the API, created with ACM
     - For example, you own "example.com"
     - You have a certificate for "myapp.example.com" and "myapi.example.com"
+    - https://docs.aws.amazon.com/acm/latest/userguide/gs.html
+- A Facebook Developer account
+    - Create an app and put the app id into your .env
+    - Store the app secret in AWS Secrets Manager as facebook_app_secret
+    - https://developers.facebook.com/docs/facebook-login/
 
 ## Environment Variables
 
@@ -23,16 +33,24 @@ AWS_REGION=us-east-1
 AWS_ACCOUNT=123456789123
 WEB_DOMAIN=myapp.example.com
 API_DOMAIN=myapi.example.com
-CERTIFICATE_ARN=
+WEB_CERTIFICATE_ARN=
 FACEBOOK_APP_ID=
+FACBOOK_VERSION=v7.0
+FACEBOOK_SECRET_ARN=
 
-After your first deployment, in order to facilitate integration testing, add the following values to the .env file:
+After your first deployment, add the following values to the .env file:
+
+(TODO - Is there a way we can populate these during the first deployment?)
 
 COGNITO_REDIRECT_URI=
 COGNITO_POOL_ID=
 COGNITO_DOMAIN_PREFIX=
 COGNITO_APP_CLIENT_ID=
 COGNITO_REGION=
+
+Add this environment variable to enable api integration testing:
+
+JWT=
 
 ## Build and Deploy
 

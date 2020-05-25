@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "clean": "node clean.js",
-    "build-dist": "tsc && node create-config.js && browserify web/index.ts -p [ tsify --noImplicitAny ]  > web/dist/bundle.js && node web/dist/copy-dist.js",
+    "build-dist": "tsc && node build/create-config.js && browserify web/index.ts -p [ tsify --noImplicitAny ]  > web/dist/bundle.js && node build/copy-dist.js",
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
@@ -22,6 +22,7 @@
   "devDependencies": {
     "@aws-cdk/assert": "1.41.0",
     "@aws-cdk/aws-apigateway": "^1.41.0",
+    "@aws-cdk/aws-certificatemanager": "^1.41.0",
     "@aws-cdk/aws-cloudfront": "^1.41.0",
     "@aws-cdk/aws-cognito": "^1.41.0",
     "@aws-cdk/aws-dynamodb": "^1.41.0",
@@ -46,6 +47,7 @@
     "jest-runner-groups": "^1.1.1",
     "ts-jest": "^25.3.1",
     "ts-node": "^8.1.0",
+    "tsify": "^4.0.1",
     "tslint": "^6.1.2",
     "typescript": "~3.7.2"
   },

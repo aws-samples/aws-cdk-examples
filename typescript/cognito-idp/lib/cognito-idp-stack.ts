@@ -4,10 +4,12 @@ import * as apigw from '@aws-cdk/aws-apigateway';
 import * as iam from '@aws-cdk/aws-iam';
 import * as util from '../functions/util';
 import * as cognito from '@aws-cdk/aws-cognito';
+import * as acm from '@aws-cdk/aws-certificatemanager';
 import { StaticSite } from './static-site';
 import { AuthorizationType } from "@aws-cdk/aws-apigateway";
 import { EndpointHandler } from './endpoint-handler';
 import * as dynamodb from '@aws-cdk/aws-dynamodb';
+import * as secrets from '@aws-cdk/aws-secretsmanager';
 
 require('dotenv').config();
 
@@ -25,15 +27,25 @@ export class CognitoIdpStack extends cdk.Stack {
         // Read local environment variables from ./env
         const region = util.getEnv('AWS_REGION');
         const accountId = util.getEnv('AWS_ACCOUNT');
-        const domainName = util.getEnv('DOMAIN_NAME');
-        const certificateArn = util.getEnv('CERTIFICATE_ARN');
+        const domainName = util.getEnv('WEB_DOMAIN');
+        const webCertificateArn = util.getEnv('WEB_CERTIFICATE_ARN');
 
         // Users Table - Store basic user details we get from Cognito
         const userTable = new dynamodb.Table(this, 'UsersTable', {
             partitionKey: { name: 'id', type: dynamodb.AttributeType.STRING },
             billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-            pointInTimeRecovery: true, 
+            pointInTimeRecovery: true,
             removalPolicy: cdk.RemovalPolicy.RETAIN
+        });
+
+        // Index on username
+        userTable.addGlobalSecondaryIndex({
+            indexName: 'username-index', 
+            partitionKey: { 
+                name: 'username', 
+                type: dynamodb.AttributeType.STRING
+            },
+            projectionType: dynamodb.ProjectionType.ALL
         });
 
         // TODO - username-index
@@ -41,7 +53,7 @@ export class CognitoIdpStack extends cdk.Stack {
         // Output the name of the user table
         const userTableOut = new cdk.CfnOutput(this, 'UserTableName', {
             value: userTable.tableName,
-            exportName: 'UserTableName',
+            exportName: 'CognitoIdpUserTableName',
         });
 
         const contentPath = './web';
@@ -49,9 +61,12 @@ export class CognitoIdpStack extends cdk.Stack {
         // Static web site
         const site = new StaticSite(this, 'StaticSite', {
             domainName,
-            certificateArn,
+            certificateArn: webCertificateArn,
             contentPath
         });
+
+        const apiCert = acm.Certificate.fromCertificateArn(this, 'ApiCert', 
+            util.getEnv('API_CERTIFICATE_ARN'));
 
         // Configure options for API Gateway
         const apiOptions = {
@@ -60,12 +75,15 @@ export class CognitoIdpStack extends cdk.Stack {
                 allowMethods: apigw.Cors.ALL_METHODS
             },
             loggingLevel: apigw.MethodLoggingLevel.INFO,
-            dataTraceEnabled: true
+            dataTraceEnabled: true,
+            domainName: {
+                domainName: util.getEnv('API_DOMAIN'),
+                certificate: apiCert,
+            }
         }
 
-
-        // Private API - Authenticated calls only
-        const api = new apigw.RestApi(this, 'UpvoteAPI-Private', apiOptions);
+        // The REST API
+        const api = new apigw.RestApi(this, 'CognitoIDPRestApi', apiOptions);
 
         // Send CORS headers on expired token OPTIONS requests, 
         // or the browser won't know to refresh.
@@ -82,7 +100,7 @@ export class CognitoIdpStack extends cdk.Stack {
         });
 
         // Cognito User Pool
-        const userPool = new cognito.UserPool(this, 'MyUserPool', {
+        const userPool = new cognito.UserPool(this, 'CognitoIDPUserPool', {
             selfSignUpEnabled: false,
             signInAliases: {
                 email: true,
@@ -147,9 +165,38 @@ export class CognitoIdpStack extends cdk.Stack {
         const idpOptions = {};
         // const idp = cognito.UserPoolIdentityProvider.facebook(this, 'FacebookIDP', idpOptions);
 
+         // Amazon Federate Client Secret
+         const secret = secrets.Secret.fromSecretAttributes(this, 'FederateSecret', {
+            secretArn: util.getEnv('FACEBOOK_SECRET_ARN'),
+        });
+
+
+        // TODO! Replace this with the new L2 construct!
+
+        const fbProviderName = 'Facebook'; // ProviderType must match!
+
+        // Facebook IDP
+        const idp = new cognito.CfnUserPoolIdentityProvider(this,
+            'FacebookIDP', {
+            providerName: fbProviderName,
+            providerType: fbProviderName,
+            userPoolId: userPool.userPoolId,
+            idpIdentifiers: [],
+            attributeMapping: {
+                'email': 'EMAIL',
+                'given_name': 'GIVEN_NAME',
+                'family_name': 'FAMILY_NAME'
+            },
+            providerDetails: {
+                client_id: util.getEnv('FACEBOOK_APP_ID'),
+                client_secret: secret.secretValue,
+                authorize_scopes: "openid"
+            }
+        });
+
         // Configure the user pool client application 
         const cfnUserPoolClient = new cognito.CfnUserPoolClient(this, "CognitoAppClient", {
-            supportedIdentityProviders: ["COGNITO", 'FacebookIDP'],
+            supportedIdentityProviders: ["COGNITO", 'Facebook'],
             clientName: "Web",
             allowedOAuthFlowsUserPoolClient: true,
             allowedOAuthFlows: ["code"],
@@ -162,7 +209,7 @@ export class CognitoIdpStack extends cdk.Stack {
         });
 
         // Make sure the user pool client is created after the IDP
-        // cfnUserPoolClient.addDependsOn(idp);
+        cfnUserPoolClient.addDependsOn(idp);
 
         // Our cognito domain name
         const cognitoDomainPrefix =
@@ -202,14 +249,13 @@ export class CognitoIdpStack extends cdk.Stack {
                     resources: [`${table.tableArn}/index/*`],
                 }));
             }
-
         }
 
-        const h = new EndpointHandler(this, 
+        const h = new EndpointHandler(this,
             envVars, grantAccess, api, cfnAuthorizer);
 
         // Auth
-        h.addEndpoint('decode-verify-jwt', 'get', false, );
+        h.addEndpoint('decode-verify-jwt', 'get', false);
 
         // Users
         h.addEndpoint('users', 'get', true);

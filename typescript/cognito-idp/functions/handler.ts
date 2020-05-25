@@ -85,46 +85,6 @@ export abstract class Handler {
         }
         
         console.info({claims});
-
-        /*
-        
-        Cognito
-        {
-            at_hash: '',
-            sub: '',
-            email_verified: 'true',
-            iss: '',
-            phone_number_verified: 'true',
-            'cognito:username': 'ezbeard',
-            aud: '',
-            token_use: 'id',
-            auth_time: '1588117682',
-            phone_number: '+',
-            exp: 'Wed Apr 29 00:48:02 UTC 2020',
-            iat: 'Tue Apr 28 23:48:02 UTC 2020',
-            email: ''
-        }
-        
-        Federate
-         claims: {
-                at_hash: '',
-                sub: '',
-                'cognito:groups': 'us-west-2_DA5E8oKIx_AmazonFederate',
-                iss: 'https://cognito-idp.us-west-2.amazonaws.com/us-west-2_DA5E8oKIx',
-                'cognito:username': 'AmazonFederate_ezbeard',
-                given_name: 'Eric',
-                nonce: '',
-                aud: '',
-                identities: '{"dateCreated":"1588781152202","userId":"ezbeard","providerName":"AmazonFederate","providerType":"OIDC","issuer":null,"primary":"true"}',
-                token_use: 'id',
-                auth_time: '1588781180',
-                exp: 'Wed May 06 17:06:20 UTC 2020',
-                iat: 'Wed May 06 16:06:20 UTC 2020',
-                family_name: 'Beard',
-                email: 'ezbeard@amazon.com'
-              }
-            }
-        */
         
         let username = claims['cognito:username'] as string;
         username = username.replace('AmazonFederate_', '');
@@ -149,6 +109,14 @@ export abstract class Handler {
         }
         
         return user;
+    }
+
+    /**
+     * Returns true if the logged in user is a super admin.
+     */
+    async isSuperAdmin(event:APIGatewayEvent): Promise<boolean> {
+        const loggedInUser = await this.getLoggedInUser(event);
+        return loggedInUser?.isSuperAdmin || false;
     }
 
 }

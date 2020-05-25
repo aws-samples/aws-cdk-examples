@@ -62,7 +62,7 @@ export class EndpointHandler {
             handler: `${resourceName}-${verb}.handler`,
             memorySize: 1536,
             timeout: cdk.Duration.minutes(5),
-            description: `Upvote ${resourceName} ${verb}`,
+            description: `CognitoIdp ${resourceName} ${verb}`,
             environment: this.envVars
         });
 

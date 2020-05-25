@@ -29,7 +29,8 @@ export class Database {
             'username': item.username.S,
             'firstName': item.first_name.S,
             'lastName': item.last_name.S,
-            'emailAddress': item.email_address.S
+            'emailAddress': item.email_address.S,
+            'isSuperAdmin': item.is_super_admin ? item.is_super_admin.BOOL : false
         };
 
         if (item.created_on) {

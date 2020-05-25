@@ -9,4 +9,5 @@ export class User {
     emailAddress: string;
     createdOn?: string;
     updatedOn?: string;
+    isSuperAdmin?: boolean;
 }

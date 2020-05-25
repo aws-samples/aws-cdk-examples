@@ -3,15 +3,20 @@
 <body>
 
     <script src="bundle.js"></script>
-    <script>
 
-        window.fbAsyncInit = FacebookExample.init;
+    <h1>CDK Cognito IDP Example</h1>
 
-    </script>
+    <h2>Facebook Login</h2>
+    <div>
+        <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+        </fb:login-button>
+    </div>
 
-
-    <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
-    </fb:login-button>
+    <h2>Cognito Login</h2>
+    <div>
+        <a href="#" id="login">Login</a>
+        <a href="#" id="logout">Logout</a>
+    </div>
 
 </body>
 
