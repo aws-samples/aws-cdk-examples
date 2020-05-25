@@ -29,28 +29,35 @@ There is a bit of setup required before you can deploy this stack.
 
 Put the following into a .env file in the root folder for this example, replacing each placeholder value with your specific environment values.
 
+```
 AWS_REGION=us-east-1
 AWS_ACCOUNT=123456789123
 WEB_DOMAIN=myapp.example.com
 API_DOMAIN=myapi.example.com
 WEB_CERTIFICATE_ARN=
+API_CERTIFICATE_ARN=
 FACEBOOK_APP_ID=
 FACBOOK_VERSION=v7.0
 FACEBOOK_SECRET_ARN=
+```
 
 After your first deployment, add the following values to the .env file:
 
 (TODO - Is there a way we can populate these during the first deployment?)
 
+```
 COGNITO_REDIRECT_URI=
 COGNITO_POOL_ID=
 COGNITO_DOMAIN_PREFIX=
 COGNITO_APP_CLIENT_ID=
 COGNITO_REGION=
+```
 
 Add this environment variable to enable api integration testing:
 
+```
 JWT=
+```
 
 ## Build and Deploy
 
@@ -62,6 +69,7 @@ npm install
 npm run build
 npm run unit-test
 npm run deploy
+npm run database-test
 npm run handler-test
 npm run api-test
 ```
