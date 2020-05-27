@@ -64,7 +64,7 @@ class Ec2CloudwatchStack(core.Stack):
                     "DeleteOnTermination": "true"}
         }])
 
-        # Cloudwatch event rule to stop instances every day in UCT 15pm
+        # Cloudwatch event rule to stop instances every day in 15:00 UTC
         # they only use javascript SDK to call AWS API
         # https://docs.aws.amazon.com/cdk/api/latest/python/aws_cdk.aws_events_targets/AwsApi.html
         stop_EC2 = AwsApi(service="EC2",
