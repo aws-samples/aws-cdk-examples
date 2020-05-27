@@ -161,7 +161,7 @@ def dynamic_mysql_crud_ops(ast_list, t_suffix, mysql_attrs):
         final_attrs = [tuple(x) for x in df_attrs.values]
         final_attrs = final_attrs[0]
         # Extract rows from file and create tuples
-        df_tuples = pandas.read_csv(ast_list.read()), sep='|', na_values=None, keep_default_na=False, dtype=str)
+        df_tuples = pandas.read_csv(ast_list.read(), sep='|', na_values=None, keep_default_na=False, dtype=str)
         df_tuples = df_tuples.apply(tuple, axis=1)
         
         # Compare dwr attrs against s3 attrs to determine ALTER statement requirement and run, if necessary
