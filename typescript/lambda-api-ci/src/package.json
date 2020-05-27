@@ -1,0 +1,27 @@
+{
+  "name": "widgets-lambda",
+  "version": "1.0.0",
+  "description": "A simple Lambda function to fetch widgets. See https://docs.aws.amazon.com/cdk/latest/guide/serverless_example.html",
+  "main": "handler.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/node": "^13.7.0",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.0.2",
+    "ts-node": "^8.1.0",
+    "typescript": "~3.8.3"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.617.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/awsdocs/aws-cdk-guide/blob/master/doc_source/serverless_example.md"
+  },
+  "author": "",
+  "license": "ISC"
+}
