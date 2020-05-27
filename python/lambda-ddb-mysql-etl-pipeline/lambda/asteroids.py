@@ -153,4 +153,3 @@ def handler(event, context):
     """
     asteroids = Asteroids()
     asteroids.execute(event)
-    
