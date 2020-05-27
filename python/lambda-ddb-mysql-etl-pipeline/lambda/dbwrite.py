@@ -156,7 +156,7 @@ def dynamic_mysql_crud_ops(ast_list, t_suffix, mysql_attrs):
         }
     else:
         # Setting header to None to trick Pandas as it ignores them otherwise
-        df_attrs = pandas.read_csv(ast_list.read()), sep='|', header=None, index_col=False, dtype=str, keep_default_na=False, nrows=1)
+        df_attrs = pandas.read_csv(ast_list.read(), sep='|', header=None, index_col=False, dtype=str, keep_default_na=False, nrows=1)
         # Creates final tuple of attributes from dataframe attributes
         final_attrs = [tuple(x) for x in df_attrs.values]
         final_attrs = final_attrs[0]
