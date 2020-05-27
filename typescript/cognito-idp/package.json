@@ -5,9 +5,8 @@
     "cognito-idp": "bin/cognito-idp.js"
   },
   "scripts": {
-    "build": "tsc",
     "clean": "node clean.js",
-    "build-dist": "tsc && node build/create-config.js && browserify web/index.ts -p [ tsify --noImplicitAny ]  > web/dist/bundle.js && node build/copy-dist.js",
+    "build": "tsc && node build/create-config.js && browserify web/index.ts -p [ tsify --noImplicitAny ]  > web/dist/bundle.js && node build/copy-dist.js",
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
@@ -55,7 +54,7 @@
     "@aws-cdk/aws-secretsmanager": "^1.41.0",
     "@aws-cdk/core": "^1.41.0",
     "@types/facebook-js-sdk": "^3.3.0",
-    "aws-sdk": "^2.671.0",
+    "aws-sdk": "^2.684.0",
     "source-map-support": "^0.5.19",
     "uuid": "^7.0.3"
   }

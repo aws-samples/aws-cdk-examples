@@ -10,6 +10,8 @@ import { AuthorizationType } from "@aws-cdk/aws-apigateway";
 import { EndpointHandler } from './endpoint-handler';
 import * as dynamodb from '@aws-cdk/aws-dynamodb';
 import * as secrets from '@aws-cdk/aws-secretsmanager';
+import * as route53 from '@aws-cdk/aws-route53';
+import * as targets from '@aws-cdk/aws-route53-targets';
 
 require('dotenv').config();
 
@@ -40,15 +42,13 @@ export class CognitoIdpStack extends cdk.Stack {
 
         // Index on username
         userTable.addGlobalSecondaryIndex({
-            indexName: 'username-index', 
-            partitionKey: { 
-                name: 'username', 
+            indexName: 'username-index',
+            partitionKey: {
+                name: 'username',
                 type: dynamodb.AttributeType.STRING
             },
             projectionType: dynamodb.ProjectionType.ALL
         });
-
-        // TODO - username-index
 
         // Output the name of the user table
         const userTableOut = new cdk.CfnOutput(this, 'UserTableName', {
@@ -56,7 +56,7 @@ export class CognitoIdpStack extends cdk.Stack {
             exportName: 'CognitoIdpUserTableName',
         });
 
-        const contentPath = './web';
+        const contentPath = './dist/web';
 
         // Static web site
         const site = new StaticSite(this, 'StaticSite', {
@@ -65,7 +65,7 @@ export class CognitoIdpStack extends cdk.Stack {
             contentPath
         });
 
-        const apiCert = acm.Certificate.fromCertificateArn(this, 'ApiCert', 
+        const apiCert = acm.Certificate.fromCertificateArn(this, 'ApiCert',
             util.getEnv('API_CERTIFICATE_ARN'));
 
         // Configure options for API Gateway
@@ -82,8 +82,21 @@ export class CognitoIdpStack extends cdk.Stack {
             }
         }
 
+        // That creates the custom domain but does not create the A record...
+
+        // Look up the hosted zone from Route53 in your account
+        const apiZone = route53.HostedZone.fromLookup(this, 'Zone', {
+            domainName: util.getEnv('API_DOMAIN')
+        });
+
         // The REST API
         const api = new apigw.RestApi(this, 'CognitoIDPRestApi', apiOptions);
+
+        // Create the A record to map to the API Gateway custom domain
+        const apiARecord = new route53.ARecord(this, 'CognitoIDPCustomDomainAliasRecord', {
+            zone: apiZone,
+            target: route53.RecordTarget.fromAlias(new targets.ApiGateway(api))
+        });
 
         // Send CORS headers on expired token OPTIONS requests, 
         // or the browser won't know to refresh.
@@ -99,6 +112,8 @@ export class CognitoIdpStack extends cdk.Stack {
             type: apigw.ResponseType.EXPIRED_TOKEN
         });
 
+        // TODO - Can we include the above in the RestApi construct?
+
         // Cognito User Pool
         const userPool = new cognito.UserPool(this, 'CognitoIDPUserPool', {
             selfSignUpEnabled: false,
@@ -111,6 +126,12 @@ export class CognitoIdpStack extends cdk.Stack {
                 givenName: true,
                 familyName: true
             }
+        });
+
+        // Output the User Pool ID
+        const userPoolOut = new cdk.CfnOutput(this, 'CognitoIDPUserPoolOut', {
+            value: userPool.userPoolId,
+            exportName: 'CognitoIDPUserPoolId'
         });
 
         // This solves an error that can be very difficult to troubleshoot when using federation.
@@ -144,6 +165,8 @@ export class CognitoIdpStack extends cdk.Stack {
         },
         ];
 
+        // TODO - Can we do the above in the construct somehow?
+
         // Set up an admin group in the user pool
         const adminsGroup = new cognito.CfnUserPoolGroup(this, "AdminsGroup", {
             userPoolId: userPool.userPoolId
@@ -158,6 +181,8 @@ export class CognitoIdpStack extends cdk.Stack {
             providerArns: [userPool.userPoolArn]
         });
 
+        // TODO - L2 construct for the above?
+
         // We will ask the IDP to redirect back to our domain's index page
         const redirectUri = `https://${domainName}`;
 
@@ -165,11 +190,10 @@ export class CognitoIdpStack extends cdk.Stack {
         const idpOptions = {};
         // const idp = cognito.UserPoolIdentityProvider.facebook(this, 'FacebookIDP', idpOptions);
 
-         // Amazon Federate Client Secret
-         const secret = secrets.Secret.fromSecretAttributes(this, 'FederateSecret', {
+        // Amazon Federate Client Secret
+        const secret = secrets.Secret.fromSecretAttributes(this, 'FederateSecret', {
             secretArn: util.getEnv('FACEBOOK_SECRET_ARN'),
         });
-
 
         // TODO! Replace this with the new L2 construct!
 
@@ -190,7 +214,7 @@ export class CognitoIdpStack extends cdk.Stack {
             providerDetails: {
                 client_id: util.getEnv('FACEBOOK_APP_ID'),
                 client_secret: secret.secretValue,
-                authorize_scopes: "openid"
+                authorize_scopes: "profile"
             }
         });
 
@@ -206,6 +230,14 @@ export class CognitoIdpStack extends cdk.Stack {
             callbackUrLs: [redirectUri],
             logoutUrLs: [redirectUri],
             userPoolId: userPool.userPoolId
+        });
+
+        // TODO - L2 for above?
+
+        // Output the User Pool App Client ID
+        const userPoolClientOut = new cdk.CfnOutput(this, 'CognitoIDPUserPoolClientOut', {
+            value: cfnUserPoolClient.ref,
+            exportName: 'CognitoIDPUserPoolClientId'
         });
 
         // Make sure the user pool client is created after the IDP
@@ -228,7 +260,8 @@ export class CognitoIdpStack extends cdk.Stack {
             "COGNITO_REDIRECT_URI": `https://${domainName}`,
             "COGNITO_DOMAIN_PREFIX": cognitoDomainPrefix,
             "COGNITO_APP_CLIENT_ID": cfnUserPoolClient.ref, // <-- This is how you get the ID
-            "COGNITO_REGION": region
+            "COGNITO_REGION": region, 
+            "USER_TABLE": userTable.tableName
         };
 
         /**

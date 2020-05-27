@@ -4,5 +4,5 @@
 
 const fs = require('fs-extra');
 
-fs.emptyDirSync('web/dist');
+fs.emptyDirSync('dist');
 fs.emptyDirSync('build');

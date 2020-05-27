@@ -58,7 +58,7 @@ export class EndpointHandler {
 
         const lf = new lambda.Function(this.app, lambdaName, {
             runtime: lambda.Runtime.NODEJS_12_X,
-            code: lambda.Code.fromAsset('./functions'),
+            code: lambda.Code.fromAsset('./dist/lambda'),
             handler: `${resourceName}-${verb}.handler`,
             memorySize: 1536,
             timeout: cdk.Duration.minutes(5),

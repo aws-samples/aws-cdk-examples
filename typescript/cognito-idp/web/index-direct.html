@@ -31,15 +31,20 @@
 
 <body>
 
-    <script src="bundle.js"></script>
+    <script src="direct-bundle.js"></script>
 
     <h1>CDK Cognito IDP Example</h1>
 
-    <h2>Cognito Login</h2>
+    <em>This page shows how to log in directly to FB, skipping Cognito User Pools... There is a way to integrate with Identity Pools, but that's wasn't supposed to be the focus for this example.</em>
+
+    <h2>Facebook Login</h2>
     <div>
-        <a href="#" id="login">Login</a>
-        <a href="#" id="logout">Logout</a>
+        <div id="fb-status"></div>
+        
+        <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+        </fb:login-button>
     </div>
+
 
 </body>
 
