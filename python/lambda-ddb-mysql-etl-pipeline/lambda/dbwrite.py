@@ -125,7 +125,7 @@ def get_mysql_attrs(t_suffix):
             """
             cursor_obj.execute(get_attrs)
         
-            return [column[0] for column in dwr_cursor.fetchall()]
+            return [column[0] for column in cursor_obj.fetchall()]
         
         else:
             get_attrs = f"""
