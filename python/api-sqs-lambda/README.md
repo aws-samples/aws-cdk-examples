@@ -42,3 +42,17 @@ At this point you can now synthesize the CloudFormation template for this code.
 ```
 $ cdk synth
 ```
+
+Upon successful deployment, you should see an API Gateway REST API in your account. It can be tested from the console or the CLI:
+
+```
+$ aws apigateway test-invoke-method --rest-api-id <API ID> --resource-id <RESOURCE ID> --http-method POST --body {"key":"value"}
+```
+
+This request should complete with a 200 OK. The Lambda function should print the API Gateway request body in its CloudWatch logs. (https://docs.aws.amazon.com/lambda/latest/dg/monitoring-cloudwatchlogs.html)
+
+```
+2020-05-27T11:50:44.755-05:00           Received Message Body from API GW: {key:value}
+```
+	
+This message will also be visible in the SQS Queue metrics in CloudWatch. (https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-access-metrics.html)
