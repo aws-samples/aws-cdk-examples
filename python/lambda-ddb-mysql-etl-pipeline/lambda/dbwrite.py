@@ -6,6 +6,7 @@ import boto3
 import logging
 import pymysql 
 import pandas
+from base64 import b64decode
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
