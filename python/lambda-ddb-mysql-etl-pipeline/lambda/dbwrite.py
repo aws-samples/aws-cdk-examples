@@ -167,7 +167,7 @@ def dynamic_mysql_crud_ops(ast_list, t_suffix, mysql_attrs):
         # Compare dwr attrs against s3 attrs to determine ALTER statement requirement and run, if necessary
         for attr in final_attrs:
             if attr in mysql_attrs:
-            logger.info('No new attribute to record')
+                logger.info('No new attribute to record')
             else:
                 logger.info(attr)
                 alter_attr_statement = f"""
@@ -184,11 +184,11 @@ def dynamic_mysql_crud_ops(ast_list, t_suffix, mysql_attrs):
         attr_var_insert = ""
         for attr in final_attrs:
             if attr != final_attrs[len(final_attrs) -1]:
-        attr_str_insert += "`"+attr+"`, "
-        attr_var_insert += "%s,"
-        else:
-        attr_str_insert += "`"+attr+"`"
-        attr_var_insert += "%s"
+                attr_str_insert += "`"+attr+"`, "
+                attr_var_insert += "%s,"
+            else:
+                attr_str_insert += "`"+attr+"`"
+                attr_var_insert += "%s"
         
         # Dynamic Insert
         replace_statement = f"""
