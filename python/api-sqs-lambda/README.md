@@ -43,6 +43,8 @@ At this point you can now synthesize the CloudFormation template for this code.
 $ cdk synth
 ```
 
+## Testing the app
+
 Upon successful deployment, you should see an API Gateway REST API in your account. It can be tested from the console or the CLI:
 
 ```
