@@ -44,7 +44,8 @@ export class StaticSite extends Construct {
         // TLS certificate
         const certificateArn = new acm.DnsValidatedCertificate(this, 'SiteCertificate', {
             domainName: siteDomain,
-            hostedZone: zone
+            hostedZone: zone,
+            region: 'us-east-1', // Cloudfront only checks this region for certificates.
         }).certificateArn;
         new cdk.CfnOutput(this, 'Certificate', { value: certificateArn });
 
