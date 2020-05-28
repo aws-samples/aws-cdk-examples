@@ -1,5 +1,6 @@
 import * as axios from 'axios';
 import * as AWS from 'aws-sdk';
+import * as Cookies from 'js-cookie';
 
 /**
  * Get a config value from the generated config.js, which is based on .env
@@ -13,6 +14,23 @@ export const config = (name: string): string => {
  */
 class FacebookExample {
 
+    /**
+     * For local testing to connect to the API.
+     * 
+     * You need to log in to the version running in your account to get the JWT.
+     * 
+     * Use the refresh_token
+     */
+    localJwt = "";
+
+    /**
+     * The URL to the REST API.
+     */
+    apiUrl: string;
+
+    /**
+     * Initialize the page.
+     */
     async init() {
 
         // Load environment config
@@ -25,7 +43,10 @@ class FacebookExample {
         // tslint:disable-next-line: no-eval
         eval(configFile.data);
 
-        console.info('apiUrl: ', config('apiUrl'));
+        this.localJwt = config('JWT');
+        this.apiUrl = config('apiUrl');
+
+        console.info('apiUrl: ', this.apiUrl);
 
         // Cognito Login
         document.getElementById('login')?.addEventListener('click', () => {
@@ -38,7 +59,7 @@ class FacebookExample {
         document.getElementById('logout')?.addEventListener('click', () => {
             const federatedLogout = config('federatedLogout');
             console.info({ federatedLogout });
-            window.location.href = federatedLogout;
+            this.logout();
         });
 
         await this.checkAuthCode();
@@ -58,22 +79,178 @@ class FacebookExample {
     };
 
     /**
+     * Check to see if the user is logged in as an admin.
+     */
+    isLoggedIn() {
+        const c = Cookies.get("jwt.id");
+        if (c) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Log out.
+     */
+    logout() {
+        const self = this;
+
+        const cookies = ["username", "isSuperAdmin", "jwt.id", "jwt.refresh", "jwt.expires"];
+
+        for (const cookie of cookies) {
+            Cookies.remove(cookie);
+        }
+
+        if (Cookies.get('isLocalLogin')) {
+            Cookies.remove('isLocalLogin');
+        } else {
+            window.location.href = config('federatedLogout');
+        }
+    }
+
+    /**
+     * Save data from the JWT token.
+     */
+    setAuthCookies(data: any) {
+
+        const idToken = data.idToken;
+        const refreshToken = data.refreshToken;
+        Cookies.set('jwt.id', idToken);
+        Cookies.set('jwt.refresh', refreshToken);
+
+        const expiresIn = data.expiresIn;
+        const exp = new Date();
+        const totalSeconds = exp.getSeconds() + expiresIn;
+        exp.setSeconds(totalSeconds);
+        Cookies.set('jwt.expires', exp.toISOString());
+
+        Cookies.set("username", data.username);
+
+        if (data.isSuperAdmin) {
+            Cookies.set("isSuperAdmin", "true");
+        } else {
+            Cookies.remove("isSuperAdmin");
+        }
+
+        console.log('JWT cookies set');
+    }
+
+    setLoginMessage(msg:string) {
+        const el = document.getElementById('login-message');
+        if (el) {
+            el.innerHTML = msg;
+        }
+    }
+
+    /**
      * Check for the Cognito auth code in the URL.
      * 
      * If it's there, log in. 
      */
     async checkAuthCode() {
-        
+
         const code = this.getParameterByName('code');
 
         if (code) {
-            const data = await axios.default({
-                url: `${config('apiUrl')}/decode-verify-jwt?code=${code}`,
+            const resp = await axios.default({
+                url: `${this.apiUrl}/decode-verify-jwt?code=${code}`,
                 method: 'get'
             });
 
-            console.log('decode-verify-jwt response: ' + JSON.stringify(data, null, 0));
+            console.log('decode-verify-jwt response: ' + JSON.stringify(resp, null, 0));
+
+            this.setAuthCookies(resp.data);
+            
+            // Reload the page
+            window.location.href = '/';
+        } else {
+            if (this.isLoggedIn()) {
+                this.setLoginMessage('You are logged in!');
+            }
         }
+    }
+
+    /**
+     * Make an authenticated API call.
+     */
+    async aapi(resource: string, verb: axios.Method, data: any) {
+
+        // Conver the data to a string
+        let dataString: string;
+        if (data) {
+            dataString = JSON.stringify(data);
+        }
+        const apiUrl = this.apiUrl + '/' + resource;
+
+        console.info("aapi apiUrl", apiUrl);
+
+        // Get the JWT token
+        let jwt = Cookies.get('jwt.id');
+
+        if (!jwt) {
+            if (this.localJwt) {
+                console.log('Using local testing jwt');
+                jwt = this.localJwt;
+            } else {
+                console.log('No jwt, trying aapi, logging out');
+                this.logout();
+                return;
+            }
+        }
+
+        // Inline function to make the API call
+        const callApi = async () => {
+
+            const resp = await axios.default({
+                url: apiUrl,
+                method: verb,
+                data: dataString,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + jwt
+                }
+            });
+
+            console.info({ resp });
+
+            if (resp.status === 401) {
+                // Not logged in
+                this.logout();
+                return;
+            }
+
+            if (resp.status === 403) {
+                // Not authorized
+                return;
+            }
+
+            return resp.data;
+        }
+
+        // Refresh the token if it is expired
+        const expCookie = Cookies.get('jwt.expires');
+        let expires: Date;
+        if (expCookie) {
+            expires = new Date(expCookie);
+            if (expires < new Date()) {
+                const refresh = Cookies.get('jwt.refresh');
+
+                console.log('Refreshing jwt token: ' + refresh);
+
+                // Refresh the token
+                const resp = await axios.default({
+                    url: this.apiUrl + '/' + `decode-verify-jwt?refresh=${refresh}`,
+                    method: 'get'
+                });
+
+                console.log('decode-verify-jwt refresh response: ' +
+                    JSON.stringify(resp, null, 0));
+
+                this.setAuthCookies(resp.data);
+            }
+        }
+
+        return await callApi();
     }
 }
 

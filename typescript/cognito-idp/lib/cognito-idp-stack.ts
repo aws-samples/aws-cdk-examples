@@ -181,14 +181,10 @@ export class CognitoIdpStack extends cdk.Stack {
             providerArns: [userPool.userPoolArn]
         });
 
-        // TODO - L2 construct for the above?
+        // TODO - L2 construct for the above? Looks like there isn't one
 
         // We will ask the IDP to redirect back to our domain's index page
         const redirectUri = `https://${domainName}`;
-
-        // Configure the identity provider
-        const idpOptions = {};
-        // const idp = cognito.UserPoolIdentityProvider.facebook(this, 'FacebookIDP', idpOptions);
 
         // Amazon Federate Client Secret
         const secret = secrets.Secret.fromSecretAttributes(this, 'FederateSecret', {
@@ -200,24 +196,63 @@ export class CognitoIdpStack extends cdk.Stack {
         const fbProviderName = 'Facebook'; // ProviderType must match!
 
         // Facebook IDP
-        const idp = new cognito.CfnUserPoolIdentityProvider(this,
-            'FacebookIDP', {
-            providerName: fbProviderName,
-            providerType: fbProviderName,
-            userPoolId: userPool.userPoolId,
-            idpIdentifiers: [],
-            attributeMapping: {
-                'email': 'EMAIL',
-                'given_name': 'GIVEN_NAME',
-                'family_name': 'FAMILY_NAME'
-            },
-            providerDetails: {
-                client_id: util.getEnv('FACEBOOK_APP_ID'),
-                client_secret: secret.secretValue,
-                authorize_scopes: "profile"
-            }
-        });
+        //
+        // L1
+        // const idp = new cognito.CfnUserPoolIdentityProvider(this,
+        //     'FacebookIDP', {
+        //     providerName: fbProviderName,
+        //     providerType: fbProviderName,
+        //     userPoolId: userPool.userPoolId,
+        //     idpIdentifiers: [],
+        //     attributeMapping: {
+        //         'email': 'EMAIL',
+        //         'given_name': 'GIVEN_NAME',
+        //         'family_name': 'FAMILY_NAME'
+        //     },
+        //     providerDetails: {
+        //         client_id: util.getEnv('FACEBOOK_APP_ID'),
+        //         client_secret: secret.secretValue,
+        //         authorize_scopes: "email" // openid and profile don't work here
+        //     }
+        // });
 
+        // This doesn't work any more either. Something changed on the branch...
+
+        // L2
+        // 
+        // TODO - For some reason this isn't working. It deploys Ok, but Facebook doesn't show up
+        //
+        const idp = cognito.UserPoolIdentityProvider.facebook(this, 'FacebookIDP', {
+            clientId: util.getEnv('FACEBOOK_APP_ID'),
+            clientSecret: secret.secretValue.toString(), 
+            scopes: ['email'], 
+            userPool
+            // TODO - What about attribute mapping?
+        });
+        //
+        // 
+        //
+        // Results in this:
+        //
+        // "FacebookIDPD5954FB4": {
+        //     "Type": "AWS::Cognito::UserPoolIdentityProvider",
+        //     "Properties": {
+        //       "ProviderName": "Facebook",
+        //       "ProviderType": "Facebook",
+        //       "UserPoolId": {
+        //         "Ref": "CognitoIDPUserPool7AC5AB52"
+        //       },
+        //       "ProviderDetails": {
+        //         "client_id": "245959259996671",
+        //         "client_secret": "{{resolve:secretsmanager:arn:aws:secretsmanager:us-east-1:916662284357:secret:facebook_app_secret-Jp5jFl:SecretString:::}}",
+        //         "authorize_scopes": "email"
+        //       }
+        //     },
+        //     "Metadata": {
+        //       "aws:cdk:path": "CognitoIdpStack/FacebookIDP/Resource"
+        //     }
+        //   },
+            
         // Configure the user pool client application 
         const cfnUserPoolClient = new cognito.CfnUserPoolClient(this, "CognitoAppClient", {
             supportedIdentityProviders: ["COGNITO", 'Facebook'],
@@ -232,7 +267,31 @@ export class CognitoIdpStack extends cdk.Stack {
             userPoolId: userPool.userPoolId
         });
 
-        // TODO - L2 for above?
+        // TODO - We need better docs for this L2, I had to reverse engineer the code...
+        // TODO - Looks like a few things are missing, see below
+
+        // const userPoolClient = new cognito.UserPoolClient(this, 'CognitoAppClient', {
+        //     userPool, 
+        //     authFlows: {
+        //         userPassword: true
+        //     }, 
+        //     oAuth: {
+        //         flows: {
+        //             authorizationCodeGrant: true
+        //         }, 
+        //         scopes: [ 
+        //             cognito.OAuthScope.PHONE, 
+        //             cognito.OAuthScope.EMAIL, 
+        //             cognito.OAuthScope.PROFILE, 
+        //             cognito.OAuthScope.OPENID
+        //         ], 
+        //         callbackUrls: [redirectUri]
+        //         // TODO - What about logoutUrls?
+        //     }, 
+        //     generateSecret: false,
+        //     userPoolClientName: 'Web'
+        //     // TODO - Where are the supported identity providers?
+        // });
 
         // Output the User Pool App Client ID
         const userPoolClientOut = new cdk.CfnOutput(this, 'CognitoIDPUserPoolClientOut', {
@@ -241,7 +300,8 @@ export class CognitoIdpStack extends cdk.Stack {
         });
 
         // Make sure the user pool client is created after the IDP
-        cfnUserPoolClient.addDependsOn(idp);
+        // cfnUserPoolClient.addDependsOn(idp);
+        // TODO - How do I do this with the L2?
 
         // Our cognito domain name
         const cognitoDomainPrefix =
