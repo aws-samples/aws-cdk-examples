@@ -57,6 +57,7 @@ To run the Java examples:
 
 ```
 $ npm install -g aws-cdk
+$ cd java/my-widget-service
 $ mvn compile
 $ cdk deploy
 
