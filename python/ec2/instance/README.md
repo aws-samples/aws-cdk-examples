@@ -6,7 +6,7 @@ This example includes:
 * Own VPC with public subnet (following AWS Defaults for new accounts)
 * Based on latest Amazon Linux 2
 * System Manager replaces SSH (Remote session available trough the AWS Console or the AWS CLI.)
-* Userdata executed from script in S3 (`configuration.sh`).
+* Userdata executed from script in S3 (`configure.sh`).
 
 ## Useful commands
 
