@@ -21,3 +21,5 @@ dist/
 
 # Synth file for troubleshooting
 s.json
+
+bundle.js

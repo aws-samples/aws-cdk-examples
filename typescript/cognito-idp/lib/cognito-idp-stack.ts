@@ -321,10 +321,15 @@ export class CognitoIdpStack extends cdk.Stack {
 
         // Create the custom resource
         const customResource = new cdk.CustomResource(this, 'ConfigFileResource', {
-            serviceToken: provider.serviceToken
+            serviceToken: provider.serviceToken, 
+            properties: { 
+                'FORCE_UPDATE': new Date().toISOString()
+            }
         });
 
-        customResource.node.addDependency(site);
+        // FORCE_UPDATE forces the custom resource to update the config file on each deploy
+
+        customResource.node.addDependency(site.getDeployment());
 
     }
 }

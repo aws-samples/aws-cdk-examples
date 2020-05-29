@@ -27,14 +27,15 @@ export interface StaticSiteProps {
  */
 export class StaticSite extends Construct {
 
-    private bucketName:string;
-    private siteBucket:s3.Bucket;
+    private bucketName: string;
+    private siteBucket: s3.Bucket;
+    private deployment: s3deploy.BucketDeployment;
 
     constructor(parent: Construct, name: string, props: StaticSiteProps) {
         super(parent, name);
 
         // Look up the hosted zone from Route53 in your account
-        const zone = route53.HostedZone.fromLookup(this, 'Zone', { 
+        const zone = route53.HostedZone.fromLookup(this, 'Zone', {
             domainName: props.domainName
         });
 
@@ -58,7 +59,7 @@ export class StaticSite extends Construct {
         const oai = new cloudfront.CfnCloudFrontOriginAccessIdentity(this, 'OAI', {
             cloudFrontOriginAccessIdentityConfig: { comment: props.domainName }
         });
-        
+
         // Restrict the S3 bucket via a bucket policy that only allows our CloudFront distribution
         const bucketPolicy = new PolicyStatement({
             principals: [new CanonicalUserPrincipal(oai.attrS3CanonicalUserId)],
@@ -71,24 +72,24 @@ export class StaticSite extends Construct {
         const distribution = new cloudfront.CloudFrontWebDistribution(this, 'SiteDistribution', {
             aliasConfiguration: {
                 acmCertRef: props.certificateArn,
-                names: [ props.domainName ],
+                names: [props.domainName],
                 sslMethod: cloudfront.SSLMethod.SNI,
                 securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_1_2016,
             },
             originConfigs: [
                 {
                     s3OriginSource: {
-                        s3BucketSource: this.siteBucket, 
+                        s3BucketSource: this.siteBucket,
                         originAccessIdentity: cloudfront.OriginAccessIdentity.fromOriginAccessIdentityName(this, 'OAIRef', oai.ref)
                     },
-                    behaviors : [ {isDefaultBehavior: true}]
+                    behaviors: [{ isDefaultBehavior: true }]
                 }
             ]
         });
 
         // Output the distribution ID
-        const distroOut = new cdk.CfnOutput(this, 'DistributionId', { 
-            value: distribution.distributionId 
+        const distroOut = new cdk.CfnOutput(this, 'DistributionId', {
+            value: distribution.distributionId
         });
 
         // Route53 alias record for the CloudFront distribution
@@ -100,12 +101,12 @@ export class StaticSite extends Construct {
         });
 
         // Deploy contents of the folder to the S3 bucket
-        const deployment = new s3deploy.BucketDeployment(this, 'DeployWithInvalidation', {
-            sources: [ s3deploy.Source.asset(props.contentPath) ],
+        this.deployment = new s3deploy.BucketDeployment(this, 'DeployWithInvalidation', {
+            sources: [s3deploy.Source.asset(props.contentPath)],
             destinationBucket: this.siteBucket,
             distribution,
             distributionPaths: ['/*'],
-          });
+        });
     }
 
     /**
@@ -118,7 +119,14 @@ export class StaticSite extends Construct {
     /**
      * Grant access to the site bucket.
      */
-    public grantAccessTo(f:lambda.Function) {
+    public grantAccessTo(f: lambda.Function) {
         this.siteBucket.grantReadWrite(f);
+    }
+
+    /**
+     * Get a reference to the BucketDeployment.
+     */
+    public getDeployment() {
+        return this.deployment;
     }
 }

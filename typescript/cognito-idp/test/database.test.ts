@@ -21,6 +21,8 @@ import { User } from '../functions/entities/user';
 
 const db = new Database(new AWS.DynamoDB());
 
+// TODO - Ensure admin user
+
 /**
  * This expects the 'admin' user to be created already.
  */

@@ -24,7 +24,7 @@ class CreateConfigHandler {
             const s3BucketName = util.getEnv('S3_BUCKET_NAME');
             let contents = '';
 
-            if (requestType === 'Create') {
+            if (requestType === 'Create' || requestType === 'Update') {
                 const configFileName = 'config.js';
 
                 const apiDomain = util.getEnv('API_DOMAIN');

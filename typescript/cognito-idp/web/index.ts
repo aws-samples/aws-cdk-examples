@@ -16,10 +16,6 @@ class FacebookExample {
 
     /**
      * For local testing to connect to the API.
-     * 
-     * You need to log in to the version running in your account to get the JWT.
-     * 
-     * Use the refresh_token
      */
     localJwt = "";
 
@@ -44,6 +40,20 @@ class FacebookExample {
         eval(configFile.data);
 
         this.localJwt = config('JWT');
+
+        if (this.localJwt) {
+
+            console.log('Local JWT found in config');
+
+            Cookies.set('username', 'admin');
+
+            const exp = new Date();
+            const totalSeconds = exp.getSeconds() + 3600;
+            exp.setSeconds(totalSeconds);
+            Cookies.set('jwt.expires', exp.toISOString());
+            Cookies.set('jwt.id', this.localJwt);
+        }
+
         this.apiUrl = config('apiUrl');
 
         console.info('apiUrl: ', this.apiUrl);
@@ -115,6 +125,7 @@ class FacebookExample {
 
         const idToken = data.idToken;
         const refreshToken = data.refreshToken;
+        const username = data.username;
         Cookies.set('jwt.id', idToken);
         Cookies.set('jwt.refresh', refreshToken);
 
@@ -165,15 +176,55 @@ class FacebookExample {
             window.location.href = '/';
         } else {
             if (this.isLoggedIn()) {
-                this.setLoginMessage('You are logged in!');
+                this.setLoginMessage('You are logged in as ' + Cookies.get('username'));
+
+                const user = await this.aapi('userbyusername/' + Cookies.get('username'), 'get');
+
+                const el = document.getElementById('user-data');
+                if (el) {
+                    el.innerText = JSON.stringify(user, null, 0);
+                }
             }
+        }
+    }
+
+    /**
+     * Check to see if the JWT token is expired and refresh it if so.
+     */
+    async checkExpiration(): Promise<boolean> {
+        // Refresh the token if it is expired
+        const expCookie = Cookies.get('jwt.expires');
+        let expires: Date;
+        if (expCookie) {
+            expires = new Date(expCookie);
+            if (expires < new Date()) {
+                const refresh = Cookies.get('jwt.refresh');
+
+                console.log('Refreshing jwt token: ' + refresh);
+
+                // Refresh the token
+                const resp = await axios.default({
+                    url: this.apiUrl + '/' + `decode-verify-jwt?refresh=${refresh}`,
+                    method: 'get'
+                });
+
+                console.log('decode-verify-jwt refresh response: ' +
+                    JSON.stringify(resp, null, 0));
+
+                this.setAuthCookies(resp.data);
+            }
+
+            return true;
+        } else {
+            this.logout();
+            return false;
         }
     }
 
     /**
      * Make an authenticated API call.
      */
-    async aapi(resource: string, verb: axios.Method, data: any) {
+    async aapi(resource: string, verb: axios.Method, data?: any) {
 
         // Conver the data to a string
         let dataString: string;
@@ -227,30 +278,13 @@ class FacebookExample {
             return resp.data;
         }
 
-        // Refresh the token if it is expired
-        const expCookie = Cookies.get('jwt.expires');
-        let expires: Date;
-        if (expCookie) {
-            expires = new Date(expCookie);
-            if (expires < new Date()) {
-                const refresh = Cookies.get('jwt.refresh');
+        const loggedIn = await this.checkExpiration();
+        jwt = Cookies.get('jwt.id');
 
-                console.log('Refreshing jwt token: ' + refresh);
-
-                // Refresh the token
-                const resp = await axios.default({
-                    url: this.apiUrl + '/' + `decode-verify-jwt?refresh=${refresh}`,
-                    method: 'get'
-                });
-
-                console.log('decode-verify-jwt refresh response: ' +
-                    JSON.stringify(resp, null, 0));
-
-                this.setAuthCookies(resp.data);
-            }
+        // If false, we should get redirected to the login page
+        if (loggedIn) {
+            return await callApi();
         }
-
-        return await callApi();
     }
 }
 

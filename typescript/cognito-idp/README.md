@@ -41,23 +41,17 @@ API_CERTIFICATE_ARN=
 FACEBOOK_APP_ID=
 FACBOOK_VERSION=v7.0
 FACEBOOK_SECRET_ARN=
-```
-
-After your first deployment, add the following values to the .env file:
-
-(TODO - Is there a way we can populate these during the first deployment?)
-
-```
 COGNITO_REDIRECT_URI=
-COGNITO_POOL_ID=
 COGNITO_DOMAIN_PREFIX=
-COGNITO_APP_CLIENT_ID=
 COGNITO_REGION=
 ```
 
-Add this environment variable to enable api integration testing:
+Add these environment variables after deployment to enable api integration testing:
 
 ```
+COGNITO_APP_CLIENT_ID=
+COGNITO_POOL_ID=
+USER_TABLE=
 JWT=
 ```
 
