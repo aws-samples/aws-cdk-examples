@@ -6,7 +6,7 @@ import * as cdk from '@aws-cdk/core';
 import * as targets from '@aws-cdk/aws-route53-targets/lib';
 import { Construct } from '@aws-cdk/core';
 import { PolicyStatement, CanonicalUserPrincipal } from '@aws-cdk/aws-iam';
-
+import * as lambda from '@aws-cdk/aws-lambda';
 /**
  * Properties needed to configure the static site.
  */
@@ -17,6 +17,8 @@ export interface StaticSiteProps {
 }
 
 /**
+ * (This is an example of an L3 construct. As opposed to L2s, L3s are opinionated and don't give access to all available underlying resources.)
+ * 
  * Deploy a static site to S3 with CloudFront and an Origin Access Identity.
  * 
  * This construct does *NOT* create the hosted zone for the domain or the 
@@ -24,6 +26,10 @@ export interface StaticSiteProps {
  * deploying.
  */
 export class StaticSite extends Construct {
+
+    private bucketName:string;
+    private siteBucket:s3.Bucket;
+
     constructor(parent: Construct, name: string, props: StaticSiteProps) {
         super(parent, name);
 
@@ -36,15 +42,17 @@ export class StaticSite extends Construct {
         const siteOut = new cdk.CfnOutput(this, 'Site', { value: 'https://' + props.domainName });
 
         // Create a bucket to hold content
-        const siteBucket = new s3.Bucket(this, 'SiteBucket', {
+        this.siteBucket = new s3.Bucket(this, 'SiteBucket', {
             websiteIndexDocument: 'index.html',
             websiteErrorDocument: 'error.html',
             publicReadAccess: false,
             removalPolicy: cdk.RemovalPolicy.RETAIN,
         });
 
+        this.bucketName = this.siteBucket.bucketName;
+
         // Output the bucket name
-        const bucketOut = new cdk.CfnOutput(this, 'Bucket', { value: siteBucket.bucketName });
+        const bucketOut = new cdk.CfnOutput(this, 'Bucket', { value: this.siteBucket.bucketName });
 
         // Create an origin access identity so that the public can be private
         const oai = new cloudfront.CfnCloudFrontOriginAccessIdentity(this, 'OAI', {
@@ -55,9 +63,9 @@ export class StaticSite extends Construct {
         const bucketPolicy = new PolicyStatement({
             principals: [new CanonicalUserPrincipal(oai.attrS3CanonicalUserId)],
             actions: ['s3:GetObject'],
-            resources: [siteBucket.arnForObjects('*')],
+            resources: [this.siteBucket.arnForObjects('*')],
         })
-        siteBucket.addToResourcePolicy(bucketPolicy);
+        this.siteBucket.addToResourcePolicy(bucketPolicy);
 
         // CloudFront
         const distribution = new cloudfront.CloudFrontWebDistribution(this, 'SiteDistribution', {
@@ -70,7 +78,7 @@ export class StaticSite extends Construct {
             originConfigs: [
                 {
                     s3OriginSource: {
-                        s3BucketSource: siteBucket, 
+                        s3BucketSource: this.siteBucket, 
                         originAccessIdentity: cloudfront.OriginAccessIdentity.fromOriginAccessIdentityName(this, 'OAIRef', oai.ref)
                     },
                     behaviors : [ {isDefaultBehavior: true}]
@@ -94,9 +102,23 @@ export class StaticSite extends Construct {
         // Deploy contents of the folder to the S3 bucket
         const deployment = new s3deploy.BucketDeployment(this, 'DeployWithInvalidation', {
             sources: [ s3deploy.Source.asset(props.contentPath) ],
-            destinationBucket: siteBucket,
+            destinationBucket: this.siteBucket,
             distribution,
             distributionPaths: ['/*'],
           });
+    }
+
+    /**
+     * Get the name of the site bucket.
+     */
+    public getBucketName(): string {
+        return this.bucketName;
+    }
+
+    /**
+     * Grant access to the site bucket.
+     */
+    public grantAccessTo(f:lambda.Function) {
+        this.siteBucket.grantReadWrite(f);
     }
 }

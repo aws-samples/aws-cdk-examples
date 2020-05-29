@@ -2,42 +2,45 @@ import * as cdk from '@aws-cdk/core';
 import lambda = require('@aws-cdk/aws-lambda');
 import { AuthorizationType } from "@aws-cdk/aws-apigateway";
 import apigw = require('@aws-cdk/aws-apigateway');
+import { ResourceHandlerProps } from './resource-handler-props';
 
 /**
  * This is an opinionated way to arrange lambda handlers... there are lots of ways to do this.
  * 
  * This class gives you basic path handling without needing to install something like Express.
  * 
- * The upside is that you get a fully configured API, with each resource endpoint visible and 
+ * The upside is that you get a fully configured API, with each resource visible and 
  * configurable in API Gateway. The downside is that each lambda function eats into your 
  * CloudFormation stack limits. A large, complex API might hit those limits.
  * 
  * Also... this is sample code, so YMMV.
  */
-export class EndpointHandler {
+export class ResourceHandler {
 
     constructor(
-        private app: cdk.Stack,
+        private parent: cdk.Construct,
+        private stackName: string,
         private envVars: any,
-        private grantAccess: (f: lambda.Function) => any,
         private api: apigw.RestApi,
-        private cfnAuthorizer: apigw.CfnAuthorizer) { }
+        private cfnAuthorizer: apigw.CfnAuthorizer, 
+        private lambdaFunctionDirectory: string) { }
 
     /**
-     * Add a new endpoint to our API gateway and map it to a local file:
+     * Add a new resource to our API gateway and map it to a local file:
      * 
      * resourceName-verb.ts
      * 
-     * E.g. for the POST /user resource endpoint, we create a file called:
+     * E.g. for the POST /user resource, we create a file called:
      * 
      * ./functions/user-post.ts
      * 
      * That file has the lambda handler code.
      */
-    addEndpoint(
+    addResource(
         resourceName: string,
         verb: string,
-        requireAuth: boolean) {
+        requireAuth: boolean, 
+        grantAccess: (f: lambda.Function) => any) {
 
         let resourceId: string | undefined;
 
@@ -56,17 +59,17 @@ export class EndpointHandler {
 
         const lambdaName = `${resourceName}-${verb}`;
 
-        const lf = new lambda.Function(this.app, lambdaName, {
+        const lf = new lambda.Function(this.parent, lambdaName, {
             runtime: lambda.Runtime.NODEJS_12_X,
-            code: lambda.Code.fromAsset('./dist/lambda'),
+            code: lambda.Code.fromAsset(this.lambdaFunctionDirectory),
             handler: `${resourceName}-${verb}.handler`,
             memorySize: 1536,
             timeout: cdk.Duration.minutes(5),
-            description: `CognitoIdp ${resourceName} ${verb}`,
+            description: `${this.stackName} ${resourceName} ${verb}`,
             environment: this.envVars
         });
 
-        this.grantAccess(lf);
+        grantAccess(lf);
 
         let resource = this.api.root.getResource(resourceName);
         if (!resource) {

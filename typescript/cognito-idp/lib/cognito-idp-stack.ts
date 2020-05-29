@@ -7,11 +7,13 @@ import * as cognito from '@aws-cdk/aws-cognito';
 import * as acm from '@aws-cdk/aws-certificatemanager';
 import { StaticSite } from './static-site';
 import { AuthorizationType } from "@aws-cdk/aws-apigateway";
-import { EndpointHandler } from './endpoint-handler';
+import { ResourceHandlerProps } from './resource-handler-props';
 import * as dynamodb from '@aws-cdk/aws-dynamodb';
 import * as secrets from '@aws-cdk/aws-secretsmanager';
 import * as route53 from '@aws-cdk/aws-route53';
 import * as targets from '@aws-cdk/aws-route53-targets';
+import { CognitoRestApiProps, CognitoRestApi } from './cognito-rest-api';
+import * as cr from '@aws-cdk/custom-resources';
 
 require('dotenv').config();
 
@@ -26,7 +28,7 @@ export class CognitoIdpStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
 
-        // Read local environment variables from ./env
+        // Read local environment variables from .env
         const region = util.getEnv('AWS_REGION');
         const accountId = util.getEnv('AWS_ACCOUNT');
         const domainName = util.getEnv('WEB_DOMAIN');
@@ -55,64 +57,6 @@ export class CognitoIdpStack extends cdk.Stack {
             value: userTable.tableName,
             exportName: 'CognitoIdpUserTableName',
         });
-
-        const contentPath = './dist/web';
-
-        // Static web site
-        const site = new StaticSite(this, 'StaticSite', {
-            domainName,
-            certificateArn: webCertificateArn,
-            contentPath
-        });
-
-        const apiCert = acm.Certificate.fromCertificateArn(this, 'ApiCert',
-            util.getEnv('API_CERTIFICATE_ARN'));
-
-        // Configure options for API Gateway
-        const apiOptions = {
-            defaultCorsPreflightOptions: {
-                allowOrigins: apigw.Cors.ALL_ORIGINS,
-                allowMethods: apigw.Cors.ALL_METHODS
-            },
-            loggingLevel: apigw.MethodLoggingLevel.INFO,
-            dataTraceEnabled: true,
-            domainName: {
-                domainName: util.getEnv('API_DOMAIN'),
-                certificate: apiCert,
-            }
-        }
-
-        // That creates the custom domain but does not create the A record...
-
-        // Look up the hosted zone from Route53 in your account
-        const apiZone = route53.HostedZone.fromLookup(this, 'Zone', {
-            domainName: util.getEnv('API_DOMAIN')
-        });
-
-        // The REST API
-        const api = new apigw.RestApi(this, 'CognitoIDPRestApi', apiOptions);
-
-        // Create the A record to map to the API Gateway custom domain
-        const apiARecord = new route53.ARecord(this, 'CognitoIDPCustomDomainAliasRecord', {
-            zone: apiZone,
-            target: route53.RecordTarget.fromAlias(new targets.ApiGateway(api))
-        });
-
-        // Send CORS headers on expired token OPTIONS requests, 
-        // or the browser won't know to refresh.
-        //
-        // (Note that the header values have to be in nested single quotes.)
-        api.addGatewayResponse('ExpiredTokenResponse', {
-            responseHeaders: {
-                'Access-Control-Allow-Headers':
-                    "'Authorization,Content-Type,X-Amz-Date,X-Amz-Security-Token,X-Api-Key'",
-                'Access-Control-Allow-Origin': "'*'"
-            },
-            statusCode: '401',
-            type: apigw.ResponseType.EXPIRED_TOKEN
-        });
-
-        // TODO - Can we include the above in the RestApi construct?
 
         // Cognito User Pool
         const userPool = new cognito.UserPool(this, 'CognitoIDPUserPool', {
@@ -166,22 +110,12 @@ export class CognitoIdpStack extends cdk.Stack {
         ];
 
         // TODO - Can we do the above in the construct somehow?
+        // Did the recent related PR on StandardAttributes solve this?
 
         // Set up an admin group in the user pool
         const adminsGroup = new cognito.CfnUserPoolGroup(this, "AdminsGroup", {
             userPoolId: userPool.userPoolId
         });
-
-        // Create the authorizer for all REST API calls
-        const cfnAuthorizer = new apigw.CfnAuthorizer(this, id, {
-            name: "CognitoAuthorizer",
-            type: AuthorizationType.COGNITO,
-            identitySource: "method.request.header.Authorization",
-            restApiId: api.restApiId,
-            providerArns: [userPool.userPoolArn]
-        });
-
-        // TODO - L2 construct for the above? Looks like there isn't one
 
         // We will ask the IDP to redirect back to our domain's index page
         const redirectUri = `https://${domainName}`;
@@ -191,13 +125,10 @@ export class CognitoIdpStack extends cdk.Stack {
             secretArn: util.getEnv('FACEBOOK_SECRET_ARN'),
         });
 
-        // TODO! Replace this with the new L2 construct!
-
-        const fbProviderName = 'Facebook'; // ProviderType must match!
-
         // Facebook IDP
-        //
+
         // L1
+        // const fbProviderName = 'Facebook'; // ProviderType must match!
         // const idp = new cognito.CfnUserPoolIdentityProvider(this,
         //     'FacebookIDP', {
         //     providerName: fbProviderName,
@@ -216,92 +147,71 @@ export class CognitoIdpStack extends cdk.Stack {
         //     }
         // });
 
-        // This doesn't work any more either. Something changed on the branch...
+        // Beware! Weird things can happen if you have the L1 as above and replace it with the L2.
 
         // L2
         // 
-        // TODO - For some reason this isn't working. It deploys Ok, but Facebook doesn't show up
-        //
         const idp = cognito.UserPoolIdentityProvider.facebook(this, 'FacebookIDP', {
             clientId: util.getEnv('FACEBOOK_APP_ID'),
-            clientSecret: secret.secretValue.toString(), 
-            scopes: ['email'], 
+            clientSecret: secret.secretValue.toString(),
+            scopes: ['email'],
             userPool
             // TODO - What about attribute mapping?
         });
-        //
-        // 
-        //
-        // Results in this:
-        //
-        // "FacebookIDPD5954FB4": {
-        //     "Type": "AWS::Cognito::UserPoolIdentityProvider",
-        //     "Properties": {
-        //       "ProviderName": "Facebook",
-        //       "ProviderType": "Facebook",
-        //       "UserPoolId": {
-        //         "Ref": "CognitoIDPUserPool7AC5AB52"
-        //       },
-        //       "ProviderDetails": {
-        //         "client_id": "245959259996671",
-        //         "client_secret": "{{resolve:secretsmanager:arn:aws:secretsmanager:us-east-1:916662284357:secret:facebook_app_secret-Jp5jFl:SecretString:::}}",
-        //         "authorize_scopes": "email"
-        //       }
-        //     },
-        //     "Metadata": {
-        //       "aws:cdk:path": "CognitoIdpStack/FacebookIDP/Resource"
-        //     }
-        //   },
-            
+
         // Configure the user pool client application 
-        const cfnUserPoolClient = new cognito.CfnUserPoolClient(this, "CognitoAppClient", {
-            supportedIdentityProviders: ["COGNITO", 'Facebook'],
-            clientName: "Web",
-            allowedOAuthFlowsUserPoolClient: true,
-            allowedOAuthFlows: ["code"],
-            allowedOAuthScopes: ["phone", "email", "openid", "profile"],
-            generateSecret: false,
-            refreshTokenValidity: 1,
-            callbackUrLs: [redirectUri],
-            logoutUrLs: [redirectUri],
-            userPoolId: userPool.userPoolId
-        });
 
-        // TODO - We need better docs for this L2, I had to reverse engineer the code...
-        // TODO - Looks like a few things are missing, see below
-
-        // const userPoolClient = new cognito.UserPoolClient(this, 'CognitoAppClient', {
-        //     userPool, 
-        //     authFlows: {
-        //         userPassword: true
-        //     }, 
-        //     oAuth: {
-        //         flows: {
-        //             authorizationCodeGrant: true
-        //         }, 
-        //         scopes: [ 
-        //             cognito.OAuthScope.PHONE, 
-        //             cognito.OAuthScope.EMAIL, 
-        //             cognito.OAuthScope.PROFILE, 
-        //             cognito.OAuthScope.OPENID
-        //         ], 
-        //         callbackUrls: [redirectUri]
-        //         // TODO - What about logoutUrls?
-        //     }, 
+        // // L1
+        // const cfnUserPoolClient = new cognito.CfnUserPoolClient(this, "CognitoAppClient", {
+        //     supportedIdentityProviders: ["COGNITO", 'Facebook'],
+        //     clientName: "Web",
+        //     allowedOAuthFlowsUserPoolClient: true,
+        //     allowedOAuthFlows: ["code"],
+        //     allowedOAuthScopes: ["phone", "email", "openid", "profile"],
         //     generateSecret: false,
-        //     userPoolClientName: 'Web'
-        //     // TODO - Where are the supported identity providers?
+        //     refreshTokenValidity: 1,
+        //     callbackUrLs: [redirectUri],
+        //     logoutUrLs: [redirectUri],
+        //     userPoolId: userPool.userPoolId
         // });
+
+        // TODO - We need better docs for this L2
+
+        // L2
+        const userPoolClient = new cognito.UserPoolClient(this, 'CognitoAppClient', {
+            userPool,
+            authFlows: {
+                userPassword: true,
+                refreshToken: true // TODO - This is required by Cfn, needs validation
+                // REFRESH_TOKEN_AUTH should always be allowed. (Service: AWSCognitoIdentityProviderService; Status Code: 400; Error Code: InvalidParameterException; Request ID: 8b17a2ba-89a2-4446-b458-c365ae51b13e)
+            },
+            oAuth: {
+                flows: {
+                    authorizationCodeGrant: true
+                },
+                scopes: [
+                    cognito.OAuthScope.PHONE,
+                    cognito.OAuthScope.EMAIL,
+                    cognito.OAuthScope.PROFILE,
+                    cognito.OAuthScope.OPENID
+                ],
+                callbackUrls: [redirectUri]
+                // TODO - What about logoutUrls?
+            },
+            generateSecret: false,
+            userPoolClientName: 'Web',
+            identityProviders: [idp],
+            allowUserPoolIdentities: true // Adds "COGNITO" as an IDP
+        });
 
         // Output the User Pool App Client ID
         const userPoolClientOut = new cdk.CfnOutput(this, 'CognitoIDPUserPoolClientOut', {
-            value: cfnUserPoolClient.ref,
+            value: userPoolClient.userPoolClientId,
             exportName: 'CognitoIDPUserPoolClientId'
         });
 
         // Make sure the user pool client is created after the IDP
-        // cfnUserPoolClient.addDependsOn(idp);
-        // TODO - How do I do this with the L2?
+        userPoolClient.node.addDependency(idp);
 
         // Our cognito domain name
         const cognitoDomainPrefix =
@@ -314,20 +224,12 @@ export class CognitoIdpStack extends cdk.Stack {
             },
         });
 
-        // Set up environment variables for our lambda functions
-        const envVars: any = {
-            "COGNITO_POOL_ID": userPool.userPoolId,
-            "COGNITO_REDIRECT_URI": `https://${domainName}`,
-            "COGNITO_DOMAIN_PREFIX": cognitoDomainPrefix,
-            "COGNITO_APP_CLIENT_ID": cfnUserPoolClient.ref, // <-- This is how you get the ID
-            "COGNITO_REGION": region, 
-            "USER_TABLE": userTable.tableName
-        };
+        // Configure the lambda functions and REST API
 
         /**
          * This function grants access to resources to our lambda functions.
          */
-        const grantAccess = (f: lambda.Function) => {
+        const g = (f: lambda.Function) => {
 
             // someBucket.grantReadWrite(f);
 
@@ -344,26 +246,85 @@ export class CognitoIdpStack extends cdk.Stack {
             }
         }
 
-        const h = new EndpointHandler(this,
-            envVars, grantAccess, api, cfnAuthorizer);
-
         // Auth
-        h.addEndpoint('decode-verify-jwt', 'get', false);
+        const handlers: ResourceHandlerProps[] = [];
+        handlers.push(new ResourceHandlerProps('decode-verify-jwt', 'get', false, g));
 
         // Users
-        h.addEndpoint('users', 'get', true);
-        h.addEndpoint('user/{userId}', 'get', true);
-        h.addEndpoint('user/{userId}', 'delete', true);
-        h.addEndpoint('user', 'post', true);
-        h.addEndpoint('userbyusername/{username}', 'get', true);
+        handlers.push(new ResourceHandlerProps('users', 'get', true, g));
+        handlers.push(new ResourceHandlerProps('user/{userId}', 'get', true, g));
+        handlers.push(new ResourceHandlerProps('user/{userId}', 'delete', true, g));
+        handlers.push(new ResourceHandlerProps('user', 'post', true, g));
+        handlers.push(new ResourceHandlerProps('userbyusername/{username}', 'get', true, g));
 
-        // The endpoint handler can't currently handle something like this:
+        // The resource handler can't currently handle something like this:
         //
         // thing/{thingId}/otherThing/{otherId}
         //
         // If you need that, do:
         //
         // thing/{thingId}?otherThing=otherId
+
+        // Create the REST API with an L3 construct included in this example repo.
+        // (See cognito-rest-api.ts)
+        const api = new CognitoRestApi(this, this.stackName, {
+            domainName: util.getEnv('API_DOMAIN'),
+            certificateArn: util.getEnv('API_CERTIFICATE_ARN'),
+            lambdaFunctionDirectory: './dist/lambda',
+            userPool,
+            cognitoRedirectUri: `https://${domainName}`,
+            cognitoDomainPrefix,
+            cognitoAppClientId: userPoolClient.userPoolClientId,
+            cognitoRegion: region,
+            additionalEnvVars: {
+                "USER_TABLE": userTable.tableName
+            },
+            resourceHandlers: handlers
+        });
+
+        // Static web site created by an L3 construct included in this example repo
+        // (See static-site.ts)
+        const site = new StaticSite(this, 'StaticSite', {
+            domainName,
+            certificateArn: webCertificateArn,
+            contentPath: './dist/web'
+        });
+
+        // Create a custom resource that writes out the config file for the web site.
+        // (The web site needs deploy-time values, so this fixes some of the chicken 
+        // and egg problems with the .env file)
+        const onEvent = new lambda.Function(this, 'CreateConfigHandler', {
+            runtime: lambda.Runtime.NODEJS_12_X,
+            code: lambda.Code.fromAsset('./dist/lambda'),
+            handler: `create-config.handler`,
+            memorySize: 1536,
+            timeout: cdk.Duration.minutes(5),
+            description: `${this.stackName} Static Site Config`,
+            environment: {
+                'S3_BUCKET_NAME': site.getBucketName(),
+                'API_DOMAIN': util.getEnv('API_DOMAIN'),
+                'COGNITO_DOMAIN_PREFIX': cognitoDomainPrefix,
+                'COGNITO_REGION': region,
+                'COGNITO_APP_CLIENT_ID': userPoolClient.userPoolClientId,
+                'COGNITO_REDIRECT_URI': util.getEnv('COGNITO_REDIRECT_URI'),
+                'FACEBOOK_APP_ID': util.getEnv('FACEBOOK_APP_ID'),
+                'FACEBOOK_VERSION': util.getEnv('FACEBOOK_VERSION')
+            }
+        });
+
+        site.grantAccessTo(onEvent);
+
+        // Create a provider
+        const provider = new cr.Provider(this, 'ConfigFileProvider', {
+            onEventHandler: onEvent
+        });
+
+        // Create the custom resource
+        const customResource = new cdk.CustomResource(this, 'ConfigFileResource', {
+            serviceToken: provider.serviceToken
+        });
+
+        customResource.node.addDependency(site);
 
     }
 }
