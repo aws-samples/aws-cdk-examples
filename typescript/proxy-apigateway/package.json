@@ -1,0 +1,25 @@
+{
+  "name": "proxy-api-gateway",
+  "version": "1.0.0",
+  "description": "Generate proxy using api gateway of cdk",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "author": {
+    "name": "Amazon Web Services",
+    "url": "https://aws.amazon.com",
+    "organization": true
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/node": "^14.0.6",
+    "typescript": "3.9.3"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-apigateway": "^1.42.0",
+    "@aws-cdk/core": "^1.42.0"
+  }
+}
