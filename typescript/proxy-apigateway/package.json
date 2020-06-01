@@ -19,7 +19,7 @@
     "typescript": "3.9.3"
   },
   "dependencies": {
-    "@aws-cdk/aws-apigateway": "^1.42.0",
-    "@aws-cdk/core": "^1.42.0"
+    "@aws-cdk/aws-apigateway": "*",
+    "@aws-cdk/core": "*"
   }
 }
