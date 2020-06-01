@@ -11,8 +11,10 @@
 ---
 <!--END STABILITY BANNER-->
 
-This example creates a http proxy using api gateway of cdk
+This example creates Http proxy using API gateway of cdk.
+If you want to parse another region site(your origin is us-east-1 but scrap site origin is ap-north-east-2) then you can use this proxy.
 
+> For more information on using Http proxy with apigateway clik [here](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-create-api-as-simple-proxy-for-http.html).
 
 ## Build
 
