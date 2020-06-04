@@ -14,6 +14,7 @@ import * as route53 from '@aws-cdk/aws-route53';
 import * as targets from '@aws-cdk/aws-route53-targets';
 import { CognitoRestApiProps, CognitoRestApi } from './cognito-rest-api';
 import * as cr from '@aws-cdk/custom-resources';
+import { UserPoolClientIdentityProvider } from '@aws-cdk/aws-cognito';
 
 require('dotenv').config();
 
@@ -151,7 +152,7 @@ export class CognitoIdpStack extends cdk.Stack {
 
         // L2
         // 
-        const idp = cognito.UserPoolIdentityProvider.facebook(this, 'FacebookIDP', {
+        const idp = new cognito.UserPoolIdentityProviderFacebook(this, 'FacebookIDP', {
             clientId: util.getEnv('FACEBOOK_APP_ID'),
             clientSecret: secret.secretValue.toString(),
             scopes: ['email'],
@@ -195,13 +196,12 @@ export class CognitoIdpStack extends cdk.Stack {
                     cognito.OAuthScope.PROFILE,
                     cognito.OAuthScope.OPENID
                 ],
-                callbackUrls: [redirectUri]
+                callbackUrls: [redirectUri] 
                 // TODO - What about logoutUrls?
             },
             generateSecret: false,
             userPoolClientName: 'Web',
-            identityProviders: [idp],
-            allowUserPoolIdentities: true // Adds "COGNITO" as an IDP
+            supportedIdentityProviders: [UserPoolClientIdentityProvider.FACEBOOK]
         });
 
         // Output the User Pool App Client ID
@@ -328,6 +328,8 @@ export class CognitoIdpStack extends cdk.Stack {
         });
 
         // FORCE_UPDATE forces the custom resource to update the config file on each deploy
+
+        // TODO - Can we set the logical id of the custom resource every time the deployment changes?
 
         customResource.node.addDependency(site.getDeployment());
 
