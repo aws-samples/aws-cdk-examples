@@ -58,7 +58,12 @@
     "@types/js-cookie": "^2.2.6",
     "aws-sdk": "^2.690.0",
     "js-cookie": "^2.2.1",
+    "jsonwebtoken": "^8.5.1",
     "source-map-support": "^0.5.19",
-    "uuid": "^7.0.3"
+    "uuid": "^7.0.3",
+    "axios": "^0.19.2",
+    "csv-writer": "^1.6.0",
+    "jwk-to-pem": "^2.0.3",
+    "qs": "^6.9.3"
   }
 }
