@@ -9,6 +9,7 @@ fs.ensureDirSync('dist/web');
 fs.ensureDirSync('dist/web/img');
 fs.ensureDirSync('dist/lambda');
 fs.ensureDirSync('dist/lambda/node_modules');
+fs.ensureDirSync('functions/node_modules');
 
 fs.emptyDirSync('dist');
 
