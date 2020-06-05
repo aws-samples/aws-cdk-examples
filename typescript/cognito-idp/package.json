@@ -9,7 +9,7 @@
     "build": "tsc && browserify web/index.ts -p [ tsify --noImplicitAny ]  > build/web/bundle.js && node build/copy-dist.js",
     "build-local": "tsc && browserify web/index.ts -p [ tsify --noImplicitAny ]  > web/bundle.js",
     "watch": "tsc -w",
-    "test": "jest",
+    "test": "jest --group=unit",
     "cdk": "cdk",
     "unit-test": "jest --group=unit",
     "database-test": "jest --group=database",
