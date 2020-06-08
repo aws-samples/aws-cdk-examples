@@ -16,8 +16,7 @@
     "cognito-test": "jest --group=cognito",
     "api-test": "jest --group=api",
     "handler-test": "jest --group=handler",
-    "deploy": "cdk deploy --require-approval never",
-    "link-cdk": "../../../aws-cdk-fork/link-all.sh"
+    "deploy": "cdk deploy --require-approval never"
   },
   "devDependencies": {
     "@aws-cdk/assert": "*",
