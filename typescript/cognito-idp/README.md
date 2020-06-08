@@ -1,4 +1,4 @@
-# A web site and REST API with Cognito authentication using the Facebook identity pool provider
+# A web site and REST API with Cognito authentication (user pools) using the Facebook identity provider
 
 The example will show you how to create the following:
 
