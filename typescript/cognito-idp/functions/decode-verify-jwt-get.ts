@@ -10,12 +10,16 @@ import { Database } from './database';
 import { User } from './entities/user';
 import * as AWS from 'aws-sdk';
 
-// Much of this was copied from the AWS samples site. It's ugly.
-
+/**
+ * Request to verify claims.
+ */
 export interface ClaimVerifyRequest {
     readonly token?: string;
 }
 
+/**
+ * Response from claim verification.
+ */
 export interface ClaimVerifyResult {
     readonly userName: string;
     readonly firstName: string;
@@ -26,10 +30,17 @@ export interface ClaimVerifyResult {
     readonly email: string;
 }
 
+/**
+ * JWT token header.
+ */
 interface TokenHeader {
     kid: string;
     alg: string;
 }
+
+/**
+ * JWT public key.
+ */
 interface PublicKey {
     alg: string;
     e: string;
@@ -38,19 +49,32 @@ interface PublicKey {
     n: string;
     use: string;
 }
+
+/**
+ * JWT public key meta data.
+ */
 interface PublicKeyMeta {
     instance: PublicKey;
     pem: string;
 }
 
+/**
+ * JWT keys.
+ */
 interface PublicKeys {
     keys: PublicKey[];
 }
 
+/**
+ * Map key id to public key.
+ */
 interface MapOfKidToPublicKey {
     [key: string]: PublicKeyMeta;
 }
 
+/**
+ * A claim.
+ */
 interface Claim {
     token_use: string;
     auth_time: number;
@@ -64,11 +88,8 @@ interface Claim {
 }
 
 const region = util.getEnv('COGNITO_REGION');
+const cognitoPoolId = util.getEnv('COGNITO_POOL_ID');
 
-const cognitoPoolId = process.env.COGNITO_POOL_ID || '';
-if (!cognitoPoolId) {
-    throw new Error('env var required for cognito pool');
-}
 const cognitoIssuer = `https://cognito-idp.${region}.amazonaws.com/${cognitoPoolId}`;
 
 let cacheKeys: MapOfKidToPublicKey | undefined;
@@ -123,7 +144,7 @@ export const verify = async (token: string): Promise<ClaimVerifyResult> => {
         console.log(`claim confirmed for ${claim.username}`);
 
         result = {
-            userName: claim.username.replace('AmazonFederate_', ''),
+            userName: claim.username,
             clientId: claim.client_id,
             isValid: true,
             firstName: claim.given_name,
@@ -146,6 +167,8 @@ export const verify = async (token: string): Promise<ClaimVerifyResult> => {
 
 /**
  * Get the token for the code and verify it.
+ * 
+ * Also refreshes an expired token.
  */
 export class DecodeVerifyJwtGetHandler extends Handler {
 
@@ -182,7 +205,6 @@ export class DecodeVerifyJwtGetHandler extends Handler {
             if (code) {
 
                 console.log(`Verifying ${code}`);
-
 
                 postData = {
                     grant_type: 'authorization_code',

@@ -7,6 +7,7 @@ import { Database } from '../functions/database';
 import * as AWS from 'aws-sdk';
 import * as uuid from 'uuid';
 import { User } from '../functions/entities/user';
+import * as util from '../functions/util';
 
 /**
  * Database Tests.
@@ -19,7 +20,7 @@ import { User } from '../functions/entities/user';
  * @group database
  */
 
-const db = new Database(new AWS.DynamoDB());
+const db = new Database(new AWS.DynamoDB(), util.getEnv('USER_TABLE'));
 
 // TODO - Ensure admin user
 

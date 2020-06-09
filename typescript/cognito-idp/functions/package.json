@@ -12,6 +12,7 @@
     "aws-sdk": "^2.656.0",
     "axios": "^0.19.2",
     "csv-writer": "^1.6.0",
+    "dotenv": "^8.2.0",
     "jsonwebtoken": "^8.5.1",
     "jwk-to-pem": "^2.0.3",
     "qs": "^6.9.3"

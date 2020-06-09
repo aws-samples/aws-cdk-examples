@@ -3,6 +3,8 @@ import * as AWS from 'aws-sdk';
 import { APIGatewayEvent } from 'aws-lambda';
 import { User } from './entities/user';
 import { Log } from './util';
+require('dotenv').config();
+import * as util from './util';
 
 export class APIEventResponse {
     statusCode: number;
@@ -27,7 +29,7 @@ export abstract class Handler {
     abstract handle(event:APIGatewayEvent): Promise<APIEventResponse>;
     
     constructor() {
-        this.db = new Database(new AWS.DynamoDB());
+        this.db = new Database(new AWS.DynamoDB(), util.getEnv('USER_TABLE'));
     }
 
     /**

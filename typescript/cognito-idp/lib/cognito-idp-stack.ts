@@ -2,7 +2,6 @@ import * as cdk from '@aws-cdk/core';
 import * as lambda from '@aws-cdk/aws-lambda';
 import * as apigw from '@aws-cdk/aws-apigateway';
 import * as iam from '@aws-cdk/aws-iam';
-import * as util from '../functions/util';
 import * as cognito from '@aws-cdk/aws-cognito';
 import * as acm from '@aws-cdk/aws-certificatemanager';
 import { StaticSite } from './static-site';
@@ -16,7 +15,53 @@ import { CognitoRestApiProps, CognitoRestApi } from './cognito-rest-api';
 import * as cr from '@aws-cdk/custom-resources';
 import { UserPoolClientIdentityProvider } from '@aws-cdk/aws-cognito';
 
-require('dotenv').config();
+/**
+ * Environment variables needed to deploy the stack.
+ */
+export interface CognitoIdpStackProps extends cdk.StackProps {
+    
+    /**
+     * Domain name for the web site, e.g. www.example.com
+     */
+    readonly webDomainName: string;
+
+    /**
+     * The ARN to the certificate for the web site.
+     */
+    readonly webCertificateArn: string;
+
+    /**
+     * The ARN to the FaceBook app secret.
+     */
+    readonly facebookSecretArn: string;
+
+    /**
+     * The FaceBook app id.
+     */
+    readonly facebookAppId: string;
+
+    /**
+     * The domain name for the REST API. e.g. api.example.com
+     * 
+     * This cannot include any reserved strings like 'aws' or 'cognito'.
+     */
+    readonly apiDomainName: string;
+
+    /**
+     * The ARN to the certificate for the REST API domain.
+     */
+    readonly apiCertificateArn: string;
+
+    /**
+     * The FaceBook API version.
+     */
+    readonly facebookApiVersion: string;
+
+    /**
+     * The redirect Uri for the Cognito auth code.
+     */ 
+    readonly cognitoRedirectUri: string;
+}
 
 /**
  * This stack contains the following:
@@ -26,14 +71,23 @@ require('dotenv').config();
  * - Auth (Cognito)
  */
 export class CognitoIdpStack extends cdk.Stack {
-    constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+    constructor(scope: cdk.Construct, id: string, props: CognitoIdpStackProps) {
         super(scope, id, props);
 
-        // Read local environment variables from .env
-        const region = util.getEnv('AWS_REGION');
-        const accountId = util.getEnv('AWS_ACCOUNT');
-        const domainName = util.getEnv('WEB_DOMAIN');
-        const webCertificateArn = util.getEnv('WEB_CERTIFICATE_ARN');
+        if (!props.env) { 
+            throw Error('props.env is required');
+        }
+
+        if (!props.env.region) {
+            throw Error('props.env.region is required');
+        }
+
+        if (!props.env.account) {
+            throw Error('props.env.account is required');
+        }
+
+        const region = props.env.region;
+        const accountId = props.env.account;
 
         // Users Table - Store basic user details we get from Cognito
         const userTable = new dynamodb.Table(this, 'UsersTable', {
@@ -66,10 +120,19 @@ export class CognitoIdpStack extends cdk.Stack {
                 email: true,
                 username: true
             },
-            requiredAttributes: {
-                email: true,
-                givenName: true,
-                familyName: true
+            standardAttributes: {
+                email: {
+                    mutable: true,
+                    required: true
+                },
+                givenName: {
+                    mutable: true,
+                    required: true
+                },
+                familyName: {
+                    mutable: true,
+                    required: true
+                }
             }
         });
 
@@ -79,39 +142,36 @@ export class CognitoIdpStack extends cdk.Stack {
             exportName: 'CognitoIDPUserPoolId'
         });
 
-        // This solves an error that can be very difficult to troubleshoot when using federation.
-        // User attributes must be mutable, even though we never change them. When created 
-        // via the console, they are mutable, but via Cfn they are not mutable by default.
-        const userPoolCfn = userPool.node.defaultChild as cognito.CfnUserPool;
-        userPoolCfn.schema = [{
-            name: 'email',
-            attributeDataType: "String",
-            mutable: true,
-            required: false,
-            stringAttributeConstraints: {
-                maxLength: "128"
-            }
-        }, {
-            name: 'given_name',
-            attributeDataType: "String",
-            mutable: true,
-            required: false,
-            stringAttributeConstraints: {
-                maxLength: "128"
-            }
-        }, {
-            name: 'family_name',
-            attributeDataType: "String",
-            mutable: true,
-            required: false,
-            stringAttributeConstraints: {
-                maxLength: "128"
-            }
-        },
-        ];
-
-        // TODO - Can we do the above in the construct somehow?
-        // Did the recent related PR on StandardAttributes solve this?
+        // // This solves an error that can be very difficult to troubleshoot when using federation.
+        // // User attributes must be mutable, even though we never change them. When created 
+        // // via the console, they are mutable, but via Cfn they are not mutable by default.
+        // const userPoolCfn = userPool.node.defaultChild as cognito.CfnUserPool;
+        // userPoolCfn.schema = [{
+        //     name: 'email',
+        //     attributeDataType: "String",
+        //     mutable: true,
+        //     required: false,
+        //     stringAttributeConstraints: {
+        //         maxLength: "128"
+        //     }
+        // }, {
+        //     name: 'given_name',
+        //     attributeDataType: "String",
+        //     mutable: true,
+        //     required: false,
+        //     stringAttributeConstraints: {
+        //         maxLength: "128"
+        //     }
+        // }, {
+        //     name: 'family_name',
+        //     attributeDataType: "String",
+        //     mutable: true,
+        //     required: false,
+        //     stringAttributeConstraints: {
+        //         maxLength: "128"
+        //     }
+        // },
+        // ];
 
         // Set up an admin group in the user pool
         const adminsGroup = new cognito.CfnUserPoolGroup(this, "AdminsGroup", {
@@ -119,11 +179,11 @@ export class CognitoIdpStack extends cdk.Stack {
         });
 
         // We will ask the IDP to redirect back to our domain's index page
-        const redirectUri = `https://${domainName}`;
+        const redirectUri = `https://${props.webDomainName}`;
 
         // Amazon Federate Client Secret
         const secret = secrets.Secret.fromSecretAttributes(this, 'FederateSecret', {
-            secretArn: util.getEnv('FACEBOOK_SECRET_ARN'),
+            secretArn: props.facebookSecretArn,
         });
 
         // Facebook IDP
@@ -153,10 +213,15 @@ export class CognitoIdpStack extends cdk.Stack {
         // L2
         // 
         const idp = new cognito.UserPoolIdentityProviderFacebook(this, 'FacebookIDP', {
-            clientId: util.getEnv('FACEBOOK_APP_ID'),
+            clientId: props.facebookAppId,
             clientSecret: secret.secretValue.toString(),
             scopes: ['email'],
-            userPool
+            userPool, 
+            attributeMapping: {
+                email: cognito.ProviderAttribute.FACEBOOK_EMAIL,
+                familyName: cognito.ProviderAttribute.FACEBOOK_LAST_NAME, 
+                givenName: cognito.ProviderAttribute.FACEBOOK_FIRST_NAME
+            }
             // TODO - What about attribute mapping?
         });
 
@@ -215,7 +280,7 @@ export class CognitoIdpStack extends cdk.Stack {
 
         // Our cognito domain name
         const cognitoDomainPrefix =
-            `${domainName}`.toLowerCase().replace(/[.]/g, "-");
+            `${props.webDomainName}`.toLowerCase().replace(/[.]/g, "-");
 
         // Add the domain to the user pool
         userPool.addDomain('CognitoDomain', {
@@ -268,11 +333,11 @@ export class CognitoIdpStack extends cdk.Stack {
         // Create the REST API with an L3 construct included in this example repo.
         // (See cognito-rest-api.ts)
         const api = new CognitoRestApi(this, this.stackName, {
-            domainName: util.getEnv('API_DOMAIN'),
-            certificateArn: util.getEnv('API_CERTIFICATE_ARN'),
+            domainName: props.apiDomainName,
+            certificateArn: props.apiCertificateArn,
             lambdaFunctionDirectory: './dist/lambda',
             userPool,
-            cognitoRedirectUri: `https://${domainName}`,
+            cognitoRedirectUri: `https://${props.webDomainName}`,
             cognitoDomainPrefix,
             cognitoAppClientId: userPoolClient.userPoolClientId,
             cognitoRegion: region,
@@ -285,8 +350,8 @@ export class CognitoIdpStack extends cdk.Stack {
         // Static web site created by an L3 construct included in this example repo
         // (See static-site.ts)
         const site = new StaticSite(this, 'StaticSite', {
-            domainName,
-            certificateArn: webCertificateArn,
+            domainName: props.webDomainName,
+            certificateArn: props.webCertificateArn,
             contentPath: './dist/web'
         });
 
@@ -302,13 +367,13 @@ export class CognitoIdpStack extends cdk.Stack {
             description: `${this.stackName} Static Site Config`,
             environment: {
                 'S3_BUCKET_NAME': site.getBucketName(),
-                'API_DOMAIN': util.getEnv('API_DOMAIN'),
+                'API_DOMAIN': props.apiDomainName,
                 'COGNITO_DOMAIN_PREFIX': cognitoDomainPrefix,
                 'COGNITO_REGION': region,
                 'COGNITO_APP_CLIENT_ID': userPoolClient.userPoolClientId,
-                'COGNITO_REDIRECT_URI': util.getEnv('COGNITO_REDIRECT_URI'),
-                'FACEBOOK_APP_ID': util.getEnv('FACEBOOK_APP_ID'),
-                'FACEBOOK_VERSION': util.getEnv('FACEBOOK_VERSION')
+                'COGNITO_REDIRECT_URI': props.cognitoRedirectUri,
+                'FACEBOOK_APP_ID': props.facebookAppId,
+                'FACEBOOK_VERSION': props.facebookApiVersion
             }
         });
 

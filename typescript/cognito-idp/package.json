@@ -37,8 +37,7 @@
     "@types/node": "10.17.5",
     "@types/qs": "^6.9.2",
     "@types/uuid": "^7.0.3",
-    "aws-cdk": "1.41.0",
-    "axios": "^0.19.2",
+    "aws-cdk": "^1.45.0",
     "browserify": "^16.5.1",
     "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",
@@ -56,14 +55,14 @@
     "@aws-cdk/core": "*",
     "@types/facebook-js-sdk": "^3.3.0",
     "@types/js-cookie": "^2.2.6",
-    "aws-sdk": "^2.690.0",
-    "js-cookie": "^2.2.1",
-    "jsonwebtoken": "^8.5.1",
-    "source-map-support": "^0.5.19",
-    "uuid": "^7.0.3",
+    "aws-sdk": "^2.693.0",
     "axios": "^0.19.2",
     "csv-writer": "^1.6.0",
+    "js-cookie": "^2.2.1",
+    "jsonwebtoken": "^8.5.1",
     "jwk-to-pem": "^2.0.3",
-    "qs": "^6.9.3"
+    "qs": "^6.9.3",
+    "source-map-support": "^0.5.19",
+    "uuid": "^7.0.3"
   }
 }

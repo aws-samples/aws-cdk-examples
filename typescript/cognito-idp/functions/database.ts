@@ -10,14 +10,7 @@ import * as uuid from 'uuid';
  */
 export class Database {
 
-    userTable: string;
-
-    constructor(private ddb: AWS.DynamoDB) {
-        this.userTable = process.env.USER_TABLE || '';
-        if (!this.userTable) {
-            throw Error('process.env.USER_TABLE is not defined');
-        }
-    }
+    constructor(private ddb: AWS.DynamoDB, private userTable:string) {}
 
     /**
      * Convert a DynamoDB user to a User object.

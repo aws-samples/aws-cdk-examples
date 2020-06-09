@@ -13,7 +13,7 @@ import * as userDelete from '../functions/user-delete';
 import { Log } from '../functions/util';
 import { getUnpackedSettings } from 'http2';
 
-const apiUrl = util.getEnv('PUBLIC_API');
+const apiUrl = util.getEnv('API_DOMAIN');
 
 // Suppress console.error from lambda handler code
 Log.IsTest = true;
