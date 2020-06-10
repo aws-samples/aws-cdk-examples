@@ -1,7 +1,7 @@
 {
-  "name": "proxy-api-gateway",
+  "name": "http-proxy-apigateway",
   "version": "1.0.0",
-  "description": "Generate proxy using api gateway of cdk",
+  "description": "Generate http proxy using apigateway of cdk",
   "private": true,
   "scripts": {
     "build": "tsc",
