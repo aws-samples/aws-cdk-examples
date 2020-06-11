@@ -1,3 +1,7 @@
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
 /**
  * Get an environment variable or throw an error if it is not set, unless the 
  * missing parameter is provided, in which case that string is returned.
@@ -11,7 +15,7 @@ export const getEnv = (name:string, missing?:string) : string => {
         env = missing;
     }
     return env || '';
-}
+};
 
 /**
  * This only exists to suppress errors from unit tests when we want to 
@@ -21,9 +25,9 @@ export const getEnv = (name:string, missing?:string) : string => {
  */
 export class Log {
 
-    static IsTest = false;
+    public static IsTest = false;
 
-    static Error(err:any) {
+    public static Error(err:any) {
         if (!Log.IsTest) {
             console.error(err);
         }

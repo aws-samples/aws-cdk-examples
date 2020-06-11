@@ -1,7 +1,10 @@
 import { APIGatewayEvent } from 'aws-lambda';
-import { Handler } from './handler';
+import { Handler, APIEventResponse } from './handler';
 import * as AWS from 'aws-sdk';
-import { APIEventResponse } from './handler';
+import * as util from './util';
+import { Database } from './database';
+
+const db = new Database(new AWS.DynamoDB(), util.getEnv('USER_TABLE'));
 
 
 /**
@@ -10,13 +13,13 @@ import { APIEventResponse } from './handler';
 class UserByUsernameHandler extends Handler {
 
     constructor() {
-        super();
+        super(db);
     }
 
     /**
      * The event handler.
      */
-    async handle(event: APIGatewayEvent): Promise<APIEventResponse> {
+    public async handle(event: APIGatewayEvent): Promise<APIEventResponse> {
         try {
 
             const username = event?.pathParameters?.username;

@@ -11,7 +11,7 @@ import * as lambda from '@aws-cdk/aws-lambda';
  * 
  * is implemented in this file:
  * 
- * functions/user-get.ts
+ * lambda/user-get.ts
  */
 export class ResourceHandlerProps {
     

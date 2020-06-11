@@ -1,9 +1,11 @@
 import { APIGatewayEvent } from 'aws-lambda';
-import { Handler } from './handler';
+import { Handler, APIEventResponse } from './handler';
 import * as AWS from 'aws-sdk';
-import { APIEventResponse } from './handler';
 import { User } from './entities/user';
-import { Log } from './util';
+import * as util from './util';
+import { Database } from './database';
+
+const db = new Database(new AWS.DynamoDB(), util.getEnv('USER_TABLE'));
 
 /**
  * GET /users
@@ -11,13 +13,13 @@ import { Log } from './util';
 class UsersGetHandler extends Handler {
 
     constructor() {
-        super();
+        super(db);
     }
 
     /**
      * The event handler.
      */
-    async handle(event: APIGatewayEvent): Promise<APIEventResponse> {
+    public async handle(event: APIGatewayEvent): Promise<APIEventResponse> {
         try {
 
             // Make sure user is logged in as super user
@@ -28,7 +30,7 @@ class UsersGetHandler extends Handler {
             // Get the users from the database
             return this.success(await this.db.usersGet());
         } catch (ex) {
-            Log.Error(ex);
+            util.Log.Error(ex);
             return this.failure(ex);
         }
     }

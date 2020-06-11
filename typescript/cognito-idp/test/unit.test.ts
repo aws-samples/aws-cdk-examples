@@ -1,10 +1,8 @@
 import { expect as expectCDK, matchTemplate, MatchStyle } from '@aws-cdk/assert';
 import * as cdk from '@aws-cdk/core';
-import { handler } from '../functions/unit';
+import { handler } from '../lambda/unit';
 import { APIGatewayEvent } from 'aws-lambda';
-import * as util from '../functions/util';
-import { Log } from '../functions/util';
-require('dotenv').config();
+import * as util from '../lambda/util';
 
 /**
  * Unit Tests.
@@ -17,10 +15,10 @@ require('dotenv').config();
  */
 
 // Suppress console.error from lambda handler code
-Log.IsTest = true;
+util.Log.IsTest = true;
 
  test('util getEnv', () => {
-    expect(() => {util.getEnv('This key does not exist')}).toThrowError();
+    expect(() => {util.getEnv('This key does not exist');}).toThrowError();
     expect(util.getEnv('This key also does not exist', 'abc')).toEqual('abc');
  });
 

@@ -36,7 +36,7 @@ export class ResourceHandler {
      * 
      * That file has the lambda handler code.
      */
-    addResource(
+    public addResource(
         resourceName: string,
         verb: string,
         requireAuth: boolean, 

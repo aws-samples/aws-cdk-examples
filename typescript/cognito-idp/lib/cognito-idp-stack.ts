@@ -5,7 +5,6 @@ import * as iam from '@aws-cdk/aws-iam';
 import * as cognito from '@aws-cdk/aws-cognito';
 import * as acm from '@aws-cdk/aws-certificatemanager';
 import { StaticSite } from './static-site';
-import { AuthorizationType } from "@aws-cdk/aws-apigateway";
 import { ResourceHandlerProps } from './resource-handler-props';
 import * as dynamodb from '@aws-cdk/aws-dynamodb';
 import * as secrets from '@aws-cdk/aws-secretsmanager';
@@ -13,13 +12,12 @@ import * as route53 from '@aws-cdk/aws-route53';
 import * as targets from '@aws-cdk/aws-route53-targets';
 import { CognitoRestApiProps, CognitoRestApi } from './cognito-rest-api';
 import * as cr from '@aws-cdk/custom-resources';
-import { UserPoolClientIdentityProvider } from '@aws-cdk/aws-cognito';
 
 /**
  * Environment variables needed to deploy the stack.
  */
 export interface CognitoIdpStackProps extends cdk.StackProps {
-    
+
     /**
      * Domain name for the web site, e.g. www.example.com
      */
@@ -59,8 +57,18 @@ export interface CognitoIdpStackProps extends cdk.StackProps {
 
     /**
      * The redirect Uri for the Cognito auth code.
-     */ 
+     */
     readonly cognitoRedirectUri: string;
+
+    // Note: The below variables are only required for integration testing
+    // after deploying the stack, so you can wait to fill those in
+
+    readonly cognitoPoolId: string;
+    readonly cognitoDomainPrefix: string;
+    readonly cognitoAppClientId: string;
+    readonly cognitoRegion: string;
+    readonly userTable: string
+    readonly jwt: string;
 }
 
 /**
@@ -74,7 +82,7 @@ export class CognitoIdpStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props: CognitoIdpStackProps) {
         super(scope, id, props);
 
-        if (!props.env) { 
+        if (!props.env) {
             throw Error('props.env is required');
         }
 
@@ -187,69 +195,27 @@ export class CognitoIdpStack extends cdk.Stack {
         });
 
         // Facebook IDP
-
-        // L1
-        // const fbProviderName = 'Facebook'; // ProviderType must match!
-        // const idp = new cognito.CfnUserPoolIdentityProvider(this,
-        //     'FacebookIDP', {
-        //     providerName: fbProviderName,
-        //     providerType: fbProviderName,
-        //     userPoolId: userPool.userPoolId,
-        //     idpIdentifiers: [],
-        //     attributeMapping: {
-        //         'email': 'EMAIL',
-        //         'given_name': 'GIVEN_NAME',
-        //         'family_name': 'FAMILY_NAME'
-        //     },
-        //     providerDetails: {
-        //         client_id: util.getEnv('FACEBOOK_APP_ID'),
-        //         client_secret: secret.secretValue,
-        //         authorize_scopes: "email" // openid and profile don't work here
-        //     }
-        // });
-
-        // Beware! Weird things can happen if you have the L1 as above and replace it with the L2.
-
-        // L2
-        // 
         const idp = new cognito.UserPoolIdentityProviderFacebook(this, 'FacebookIDP', {
             clientId: props.facebookAppId,
             clientSecret: secret.secretValue.toString(),
             scopes: ['email'],
-            userPool, 
+            userPool,
             attributeMapping: {
                 email: cognito.ProviderAttribute.FACEBOOK_EMAIL,
                 familyName: cognito.ProviderAttribute.FACEBOOK_LAST_NAME, 
                 givenName: cognito.ProviderAttribute.FACEBOOK_FIRST_NAME
             }
-            // TODO - What about attribute mapping?
         });
 
         // Configure the user pool client application 
-
-        // // L1
-        // const cfnUserPoolClient = new cognito.CfnUserPoolClient(this, "CognitoAppClient", {
-        //     supportedIdentityProviders: ["COGNITO", 'Facebook'],
-        //     clientName: "Web",
-        //     allowedOAuthFlowsUserPoolClient: true,
-        //     allowedOAuthFlows: ["code"],
-        //     allowedOAuthScopes: ["phone", "email", "openid", "profile"],
-        //     generateSecret: false,
-        //     refreshTokenValidity: 1,
-        //     callbackUrLs: [redirectUri],
-        //     logoutUrLs: [redirectUri],
-        //     userPoolId: userPool.userPoolId
-        // });
-
-        // TODO - We need better docs for this L2
-
-        // L2
         const userPoolClient = new cognito.UserPoolClient(this, 'CognitoAppClient', {
             userPool,
             authFlows: {
                 userPassword: true,
                 refreshToken: true // TODO - This is required by Cfn, needs validation
-                // REFRESH_TOKEN_AUTH should always be allowed. (Service: AWSCognitoIdentityProviderService; Status Code: 400; Error Code: InvalidParameterException; Request ID: 8b17a2ba-89a2-4446-b458-c365ae51b13e)
+                // REFRESH_TOKEN_AUTH should always be allowed. 
+                // (Service: AWSCognitoIdentityProviderService; Status Code: 400; 
+                // Error Code: InvalidParameterException; ...
             },
             oAuth: {
                 flows: {
@@ -266,7 +232,7 @@ export class CognitoIdpStack extends cdk.Stack {
             },
             generateSecret: false,
             userPoolClientName: 'Web',
-            supportedIdentityProviders: [UserPoolClientIdentityProvider.FACEBOOK]
+            supportedIdentityProviders: [cognito.UserPoolClientIdentityProvider.FACEBOOK]
         });
 
         // Output the User Pool App Client ID
@@ -309,7 +275,7 @@ export class CognitoIdpStack extends cdk.Stack {
                     resources: [`${table.tableArn}/index/*`],
                 }));
             }
-        }
+        };
 
         // Auth
         const handlers: ResourceHandlerProps[] = [];

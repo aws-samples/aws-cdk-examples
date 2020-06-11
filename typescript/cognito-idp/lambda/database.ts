@@ -15,7 +15,7 @@ export class Database {
     /**
      * Convert a DynamoDB user to a User object.
      */
-    userConvert(item: any): User {
+    private userConvert(item: any): User {
 
         const user: User = {
             'id': item.id.S,
@@ -39,7 +39,7 @@ export class Database {
     /**
      * Get all users.
      */
-    async usersGet(): Promise<User[]> {
+    public async usersGet(): Promise<User[]> {
 
         const users = [];
 
@@ -60,7 +60,7 @@ export class Database {
     /**
      * Get a user
      */
-    async userGet(userId: string) {
+    public async userGet(userId: string) {
 
         const response = await this.ddb.getItem({
             TableName: this.userTable,
@@ -81,7 +81,7 @@ export class Database {
     /**
      * Get a user by username.
      */
-    async userGetByUsername(username:string) : Promise<User | null> {
+    public async userGetByUsername(username:string) : Promise<User | null> {
 
         const response = await this.ddb.query({
             ExpressionAttributeValues: {
@@ -108,7 +108,7 @@ export class Database {
      *
      * Returns false if the username is already taken.
      */
-    async userSave(user: any): Promise<string | boolean> {
+    public async userSave(user: any): Promise<string | boolean> {
 
         let isNewUser = false;
 
@@ -152,7 +152,7 @@ export class Database {
         let updateExpression = 'SET username = :username,' +
         ' email_address = :emailAddress,' +
         ' first_name = :firstName, ' +
-        ' last_name = :lastName'
+        ' last_name = :lastName';
 
         const now = new Date().toISOString();
 
@@ -180,14 +180,14 @@ export class Database {
             UpdateExpression: updateExpression
         }).promise();
 
-        return user.id
+        return user.id;
 
     }
 
     /**
      * Delete a user.
      */
-    async userDelete(userId: string) {
+    public async userDelete(userId: string) {
         await this.ddb.deleteItem({
             TableName: this.userTable,
             Key: {

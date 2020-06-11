@@ -1,13 +1,18 @@
-require('dotenv').config();
 import { expect as expectCDK, matchTemplate, MatchStyle } from '@aws-cdk/assert';
 import * as cdk from '@aws-cdk/core';
-import { handler } from '../functions/unit';
+import { handler } from '../lambda/unit';
 import { APIGatewayEvent } from 'aws-lambda';
-import { Database } from '../functions/database';
+import { Database } from '../lambda/database';
 import * as AWS from 'aws-sdk';
 import * as uuid from 'uuid';
-import { User } from '../functions/entities/user';
-import * as util from '../functions/util';
+import { User } from '../lambda/entities/user';
+import * as util from '../lambda/util';
+import { CognitoIdpStackProps } from '../lib/cognito-idp-stack';
+
+// tslint:disable-next-line: no-var-requires
+const config:CognitoIdpStackProps = require('../config/env-local.json');
+process.env.AWS_REGION = config.env?.region;
+process.env.AWS_ACCOUNT = config.env?.account;
 
 /**
  * Database Tests.
@@ -20,7 +25,7 @@ import * as util from '../functions/util';
  * @group database
  */
 
-const db = new Database(new AWS.DynamoDB(), util.getEnv('USER_TABLE'));
+const db = new Database(new AWS.DynamoDB(), config.userTable);
 
 // TODO - Ensure admin user
 
@@ -37,7 +42,7 @@ test('user get', async () => {
     const id = users[0].id;
 
     const user = await db.userGet(id);
-    expect(user).toBeDefined()
+    expect(user).toBeDefined();
     expect(user?.emailAddress).toEqual(users[0].emailAddress);
 });
 

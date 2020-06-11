@@ -7,7 +7,7 @@ import * as Cookies from 'js-cookie';
  */
 export const config = (name: string): string => {
     return (window as any).FacebookExampleConfig[name];
-}
+};
 
 /**
  * Handle Cognito login events.
@@ -17,17 +17,17 @@ class FacebookExample {
     /**
      * For local testing to connect to the API.
      */
-    localJwt = "";
+    public localJwt = "";
 
     /**
      * The URL to the REST API.
      */
-    apiUrl: string;
+    public apiUrl: string;
 
     /**
      * Initialize the page.
      */
-    async init() {
+    public async init() {
 
         // Load environment config
         const configFile = await axios.default({
@@ -78,7 +78,7 @@ class FacebookExample {
     /**
      * Get a URL parameter by name.
      */
-    getParameterByName(name: string, url?: string): string | null {
+    public getParameterByName(name: string, url?: string): string | null {
         if (!url) url = window.location.href;
         name = name.replace(/[\[\]]/g, "\\$&");
         const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
@@ -86,12 +86,12 @@ class FacebookExample {
         if (!results) return null;
         if (!results[2]) return '';
         return decodeURIComponent(results[2].replace(/\+/g, " "));
-    };
+    }
 
     /**
      * Check to see if the user is logged in as an admin.
      */
-    isLoggedIn() {
+    public isLoggedIn() {
         const c = Cookies.get("jwt.id");
         if (c) {
             return true;
@@ -102,7 +102,7 @@ class FacebookExample {
     /**
      * Log out.
      */
-    logout() {
+    public logout() {
         const self = this;
 
         const cookies = ["username", "isSuperAdmin", "jwt.id", "jwt.refresh", "jwt.expires"];
@@ -121,7 +121,7 @@ class FacebookExample {
     /**
      * Save data from the JWT token.
      */
-    setAuthCookies(data: any) {
+    public setAuthCookies(data: any) {
 
         const idToken = data.idToken;
         const refreshToken = data.refreshToken;
@@ -146,7 +146,7 @@ class FacebookExample {
         console.log('JWT cookies set');
     }
 
-    setLoginMessage(msg:string) {
+    public setLoginMessage(msg:string) {
         const el = document.getElementById('login-message');
         if (el) {
             el.innerHTML = msg;
@@ -158,7 +158,7 @@ class FacebookExample {
      * 
      * If it's there, log in. 
      */
-    async checkAuthCode() {
+    public async checkAuthCode() {
 
         const code = this.getParameterByName('code');
 
@@ -191,7 +191,7 @@ class FacebookExample {
     /**
      * Check to see if the JWT token is expired and refresh it if so.
      */
-    async checkExpiration(): Promise<boolean> {
+    public async checkExpiration(): Promise<boolean> {
         // Refresh the token if it is expired
         const expCookie = Cookies.get('jwt.expires');
         let expires: Date;
@@ -224,7 +224,7 @@ class FacebookExample {
     /**
      * Make an authenticated API call.
      */
-    async aapi(resource: string, verb: axios.Method, data?: any) {
+    public async aapi(resource: string, verb: axios.Method, data?: any) {
 
         // Conver the data to a string
         let dataString: string;
@@ -276,7 +276,7 @@ class FacebookExample {
             }
 
             return resp.data;
-        }
+        };
 
         const loggedIn = await this.checkExpiration();
         jwt = Cookies.get('jwt.id');

@@ -4,7 +4,6 @@ import * as s3 from '@aws-cdk/aws-s3';
 import * as s3deploy from '@aws-cdk/aws-s3-deployment';
 import * as cdk from '@aws-cdk/core';
 import * as targets from '@aws-cdk/aws-route53-targets/lib';
-import { Construct } from '@aws-cdk/core';
 import { PolicyStatement, CanonicalUserPrincipal } from '@aws-cdk/aws-iam';
 import * as lambda from '@aws-cdk/aws-lambda';
 /**
@@ -25,13 +24,13 @@ export interface StaticSiteProps {
  * certificate for the web app subdomain. You must do those manually before 
  * deploying.
  */
-export class StaticSite extends Construct {
+export class StaticSite extends cdk.Construct {
 
     private bucketName: string;
     private siteBucket: s3.Bucket;
     private deployment: s3deploy.BucketDeployment;
 
-    constructor(parent: Construct, name: string, props: StaticSiteProps) {
+    constructor(parent: cdk.Construct, name: string, props: StaticSiteProps) {
         super(parent, name);
 
         // Look up the hosted zone from Route53 in your account
@@ -65,7 +64,7 @@ export class StaticSite extends Construct {
             principals: [new CanonicalUserPrincipal(oai.attrS3CanonicalUserId)],
             actions: ['s3:GetObject'],
             resources: [this.siteBucket.arnForObjects('*')],
-        })
+        });
         this.siteBucket.addToResourcePolicy(bucketPolicy);
 
         // CloudFront

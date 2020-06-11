@@ -2,10 +2,9 @@ import * as route53 from '@aws-cdk/aws-route53';
 import * as targets from '@aws-cdk/aws-route53-targets/lib';
 import { Construct } from '@aws-cdk/core';
 import * as apigw from '@aws-cdk/aws-apigateway';
-import * as util from '../functions/util';
+import * as util from '../lambda/util';
 import * as cognito from '@aws-cdk/aws-cognito';
 import * as acm from '@aws-cdk/aws-certificatemanager';
-import { AuthorizationType } from "@aws-cdk/aws-apigateway";
 import { ResourceHandler } from './resource-handler';
 import { ResourceHandlerProps } from './resource-handler-props';
 import * as lambda from '@aws-cdk/aws-lambda';
@@ -51,7 +50,7 @@ export class CognitoRestApi extends Construct {
                 domainName: props.domainName,
                 certificate: apiCert,
             }
-        }
+        };
 
         // That creates the custom domain but does not create the A record...
 
@@ -86,7 +85,7 @@ export class CognitoRestApi extends Construct {
         // Create the authorizer for all REST API calls
         const cfnAuthorizer = new apigw.CfnAuthorizer(this, 'Authorizer', {
             name: "CognitoAuthorizer",
-            type: AuthorizationType.COGNITO,
+            type: apigw.AuthorizationType.COGNITO,
             identitySource: "method.request.header.Authorization",
             restApiId: api.restApiId,
             providerArns: [props.userPool.userPoolArn]

@@ -1,10 +1,12 @@
-import { Database } from '../functions/database';
+import { Database } from '../lambda/database';
 import * as aws from 'aws-sdk';
-import * as util from '../functions/util';
+import * as util from '../lambda/util';
+import { CognitoIdpStackProps } from '../lib/cognito-idp-stack';
 
-require('dotenv').config();
+// tslint:disable-next-line: no-var-requires
+const config:CognitoIdpStackProps = require('../config/env-local.json');
 
-const db = new Database(new aws.DynamoDB(), util.getEnv('USER_TABLE'));
+const db = new Database(new aws.DynamoDB(), config.userTable);
 
 // tslint:disable-next-line: no-floating-promises
 db.userSave({

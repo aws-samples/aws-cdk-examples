@@ -1,7 +1,7 @@
 import { APIGatewayEvent } from 'aws-lambda';
-import { Handler } from './handler';
+import { Handler, APIEventResponse } from './handler';
 import * as AWS from 'aws-sdk';
-import { APIEventResponse } from './handler';
+import { Database } from '../lambda/database';
 
 /**
  * Simple handler for unit testing. Doesn't actually do anything with AWS.
@@ -9,13 +9,13 @@ import { APIEventResponse } from './handler';
 class UnitHandler extends Handler {
 
     constructor() {
-        super();
+        super(new Database(new AWS.DynamoDB(), 'N/A'));
     }
 
     /**
      * The event handler.
      */
-    async handle(event: APIGatewayEvent): Promise<APIEventResponse> {
+    public async handle(event: APIGatewayEvent): Promise<APIEventResponse> {
 
         try {
             if (event.path === 'succeed') {

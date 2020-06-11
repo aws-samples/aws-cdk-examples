@@ -2,14 +2,12 @@ import { Database } from './database';
 import * as AWS from 'aws-sdk';
 import { APIGatewayEvent } from 'aws-lambda';
 import { User } from './entities/user';
-import { Log } from './util';
-require('dotenv').config();
 import * as util from './util';
 
 export class APIEventResponse {
-    statusCode: number;
-    headers: any;
-    body: string;
+    public statusCode: number;
+    public headers: any;
+    public body: string;
 }
 
 /**
@@ -19,23 +17,19 @@ export class APIEventResponse {
 export abstract class Handler {
 
     /**
-     * Database access, such as dynamo and s3.
-     */
-    db:Database;
-
-    /**
      * The lambda handler function.
      */
-    abstract handle(event:APIGatewayEvent): Promise<APIEventResponse>;
+    public abstract handle(event:APIGatewayEvent): Promise<APIEventResponse>;
     
-    constructor() {
-        this.db = new Database(new AWS.DynamoDB(), util.getEnv('USER_TABLE'));
-    }
+    /**
+     * Construct an instance by passing in a ref to the db.
+     */
+    constructor(protected db:Database) {}
 
     /**
      * Standard API Gateway successful response.
      */
-    success(resp: any) {
+    public success(resp: any) {
         return {
             statusCode: 200,
             headers: {
@@ -51,7 +45,7 @@ export abstract class Handler {
     /**
      * Standard API Gateway failure response.
      */
-    failure(ex: any, statusCode?: number, msg?: string) {
+    public failure(ex: any, statusCode?: number, msg?: string) {
 
         if (!statusCode) {
             statusCode = 500;
@@ -61,7 +55,7 @@ export abstract class Handler {
             msg = 'System Error';
         }
 
-        Log.Error(`${statusCode}: ${msg}\n${ex}`);
+        util.Log.Error(`${statusCode}: ${msg}\n${ex}`);
 
         return {
             statusCode,
@@ -78,7 +72,7 @@ export abstract class Handler {
     /**
      * 
      */
-    async getLoggedInUser(event:APIGatewayEvent): Promise<User | null> {
+    public async getLoggedInUser(event:APIGatewayEvent): Promise<User | null> {
 
         const claims = event.requestContext?.authorizer?.claims;
 
@@ -116,7 +110,7 @@ export abstract class Handler {
     /**
      * Returns true if the logged in user is a super admin.
      */
-    async isSuperAdmin(event:APIGatewayEvent): Promise<boolean> {
+    public async isSuperAdmin(event:APIGatewayEvent): Promise<boolean> {
         const loggedInUser = await this.getLoggedInUser(event);
         return loggedInUser?.isSuperAdmin || false;
     }

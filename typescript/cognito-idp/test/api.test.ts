@@ -1,4 +1,3 @@
-require('dotenv').config();
 import { ApiHandlerTests } from './api-handler-tests';
 
 /**
@@ -6,7 +5,10 @@ import { ApiHandlerTests } from './api-handler-tests';
  * 
  * Calls the deployed REST API using a configured endpoint URL.
  * 
- * You need to create a .env file run this (See Readme).
+ * To run this test, you need to add a JWT idToken to your config/env-local.json
+ * 
+ * To get the JWT, log in to the web site and view console logs. Also make sure 
+ * to manually add is_super_admin=true to the DynamoDB record for your user account.
  * 
  * @group api
  */

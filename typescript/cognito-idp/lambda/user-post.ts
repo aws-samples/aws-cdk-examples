@@ -1,9 +1,11 @@
 import { APIGatewayEvent } from 'aws-lambda';
-import { Handler } from './handler';
+import { Handler, APIEventResponse } from './handler';
 import * as AWS from 'aws-sdk';
-import { APIEventResponse } from './handler';
 import { User } from './entities/user';
-import { Log } from './util';
+import * as util from './util';
+import { Database } from './database';
+
+const db = new Database(new AWS.DynamoDB(), util.getEnv('USER_TABLE'));
 
 /**
  * POST /user
@@ -13,13 +15,13 @@ import { Log } from './util';
 class UserPostHandler extends Handler {
 
     constructor() {
-        super();
+        super(db);
     }
 
     /**
      * The event handler.
      */
-    async handle(event: APIGatewayEvent): Promise<APIEventResponse> {
+    public async handle(event: APIGatewayEvent): Promise<APIEventResponse> {
         try {
 
             const loggedInUser = await this.getLoggedInUser(event);
@@ -44,7 +46,7 @@ class UserPostHandler extends Handler {
                 if ( (!priorUser && user.isSuperAdmin) ||
                      (user.isSuperAdmin && !priorUser?.isSuperAdmin) ) {
 
-                    Log.Error(`User ${loggedInUser.username} trying to set super admin`);
+                    util.Log.Error(`User ${loggedInUser.username} trying to set super admin`);
 
                     return this.failure(null, 403, 'Not Authorized');
                 }

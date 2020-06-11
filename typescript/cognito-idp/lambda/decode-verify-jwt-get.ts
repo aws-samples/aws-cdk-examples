@@ -1,14 +1,16 @@
 import { promisify } from 'util';
 import * as axios from 'axios';
 import * as jsonwebtoken from 'jsonwebtoken';
-const jwkToPem = require('jwk-to-pem');
+import * as jwkToPem from 'jwk-to-pem';
 import { APIGatewayEvent } from 'aws-lambda';
 import { Handler, APIEventResponse } from './handler';
 import * as util from './util';
 import * as qs from 'qs';
-import { Database } from './database';
 import { User } from './entities/user';
 import * as AWS from 'aws-sdk';
+import { Database } from './database';
+
+const db = new Database(new AWS.DynamoDB(), util.getEnv('USER_TABLE'));
 
 /**
  * Request to verify claims.
@@ -98,7 +100,7 @@ const getPublicKeys = async (): Promise<MapOfKidToPublicKey> => {
         const url = `${cognitoIssuer}/.well-known/jwks.json`;
         const publicKeys = await axios.default.get<PublicKeys>(url);
         cacheKeys = publicKeys.data.keys.reduce((agg, current) => {
-            const pem = jwkToPem(current);
+            const pem = jwkToPem(current as any);
             agg[current.kid] = { instance: current, pem };
             return agg;
         }, {} as MapOfKidToPublicKey);
@@ -173,13 +175,13 @@ export const verify = async (token: string): Promise<ClaimVerifyResult> => {
 export class DecodeVerifyJwtGetHandler extends Handler {
 
     constructor() {
-        super();
+        super(db);
     }
 
     /**
      * The event handler.
      */
-    async handle(event: APIGatewayEvent): Promise<APIEventResponse> {
+    public async handle(event: APIGatewayEvent): Promise<APIEventResponse> {
         try {
 
             const redirectUri = util.getEnv('COGNITO_REDIRECT_URI');

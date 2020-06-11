@@ -6,7 +6,7 @@ import * as AWS from 'aws-sdk';
  */
 export const config = (name: string): string => {
     return (window as any).FacebookExampleConfig[name];
-}
+};
 
 /**
  * Handle Facebook login events.
@@ -15,7 +15,7 @@ export const config = (name: string): string => {
  */
 class FacebookDirectExample {
 
-    async init() {
+    public async init() {
 
         // Load environment config
         const configFile = await axios.default({
@@ -56,7 +56,7 @@ class FacebookDirectExample {
 
     }
 
-    statusChangeCallback(response: fb.StatusResponse) {
+    public statusChangeCallback(response: fb.StatusResponse) {
         console.log('statusChangeCallback');
         console.log(response);
         if (response.status === 'connected') {
@@ -69,7 +69,7 @@ class FacebookDirectExample {
         }
     }
 
-    testFBAPI() {
+    public testFBAPI() {
         console.log('Welcome!  Fetching your information.... ');
         FB.api('/me', (response: any) => {
 
@@ -80,7 +80,7 @@ class FacebookDirectExample {
         });
     }
 
-    checkLoginState() {
+    public checkLoginState() {
         const self = this;
         FB.getLoginStatus((response) => {
             self.statusChangeCallback.call(self, response);

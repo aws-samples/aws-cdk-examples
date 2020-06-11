@@ -1,22 +1,44 @@
-require('dotenv').config();
-import * as util from '../functions/util';
+import * as util from '../lambda/util';
 import * as axios from 'axios';
-import { User } from '../functions/entities/user';
+import { User } from '../lambda/entities/user';
 import * as uuid from 'uuid';
 import * as AWS from 'aws-sdk';
 import { APIGatewayEvent, APIGatewayEventDefaultAuthorizerContext } from 'aws-lambda';
-import * as usersGet from '../functions/users-get';
-import * as userByUsernameGet from '../functions/userbyusername-get';
-import * as userGet from '../functions/user-get';
-import * as userPost from '../functions/user-post';
-import * as userDelete from '../functions/user-delete';
-import { Log } from '../functions/util';
-import { getUnpackedSettings } from 'http2';
+import { CognitoIdpStackProps } from '../lib/cognito-idp-stack';
 
-const apiUrl = util.getEnv('API_DOMAIN');
+// To run the lambda handlers locally, we need to simulate the environment 
+// variables that will be set when the lambda function is created.
+
+// tslint:disable-next-line: no-var-requires
+const config:CognitoIdpStackProps = require('../config/env-local.json');
+process.env.AWS_REGION = config.env?.region;
+process.env.AWS_ACCOUNT = config.env?.account;
+process.env.FACEBOOK_APP_ID = config.facebookAppId;
+process.env.FACEBOOK_VERSION = config.facebookApiVersion;
+process.env.FACEBOOK_SECRET_ARN = config.facebookSecretArn;
+process.env.WEB_DOMAIN = config.webDomainName;
+process.env.API_DOMAIN = config.apiDomainName;
+process.env.WEB_CERTIFICATE_ARN = config.webCertificateArn;
+process.env.API_CERTIFICATE_ARN = config.apiCertificateArn;
+process.env.COGNITO_REDIRECT_URI = config.cognitoRedirectUri;
+process.env.COGNITO_POOL_ID = config.cognitoPoolId;
+process.env.COGNITO_DOMAIN_PREFIX = config.cognitoDomainPrefix;
+process.env.COGNITO_APP_CLIENT_ID = config.cognitoAppClientId;
+process.env.COGNITO_REGION = config.cognitoRegion;
+process.env.USER_TABLE = config.userTable;
+process.env.JWT = config.jwt;
+
+const apiUrl = `https://${config.apiDomainName}`;
 
 // Suppress console.error from lambda handler code
-Log.IsTest = true;
+util.Log.IsTest = true;
+
+// These imports have to come after creating environment variables
+import * as usersGet from '../lambda/users-get';
+import * as userByUsernameGet from '../lambda/userbyusername-get';
+import * as userGet from '../lambda/user-get';
+import * as userPost from '../lambda/user-post';
+import * as userDelete from '../lambda/user-delete';
 
 /**
  * Make an authenticated API call to the API, using the JWT env var.
@@ -28,7 +50,7 @@ const aapi = async (path: string, verb: string = 'get', data?: any) => {
         data,
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + util.getEnv('JWT')
+            'Authorization': 'Bearer ' + config.jwt
         }
     } as any);
 };
@@ -81,7 +103,7 @@ const convert = (resp: any): any => {
         throw Error(resp.body);
     }
     return { data: JSON.parse(resp.body) };
-}
+};
 
 /**
  * This class contains tests that can run either against the actual deployed
@@ -95,7 +117,7 @@ export class ApiHandlerTests {
     /**
      * Test user functions.
      */
-    async users() {
+    public async users() {
 
         // axios.interceptors.request.use(request => {
         //     console.log('Starting Request', request)

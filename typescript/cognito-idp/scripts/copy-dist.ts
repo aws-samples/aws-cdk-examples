@@ -2,14 +2,14 @@
  * Copy files to the dist folder after a build.
  */
 
-const fs = require('fs-extra');
+import * as fs from 'fs-extra';
 
 fs.ensureDirSync('dist');
 fs.ensureDirSync('dist/web');
 fs.ensureDirSync('dist/web/img');
 fs.ensureDirSync('dist/lambda');
 fs.ensureDirSync('dist/lambda/node_modules');
-fs.ensureDirSync('functions/node_modules');
+fs.ensureDirSync('lambda/node_modules');
 
 fs.emptyDirSync('dist');
 
@@ -20,4 +20,4 @@ fs.copySync('web/index.css', 'dist/web/index.css');
 fs.copySync('build/web/bundle.js', 'dist/web/bundle.js');
 
 fs.copySync('build/functions', 'dist/lambda');
-fs.copySync('functions/node_modules', 'dist/lambda/node_modules');
+fs.copySync('lambda/node_modules', 'dist/lambda/node_modules');

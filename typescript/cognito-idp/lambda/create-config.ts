@@ -1,6 +1,5 @@
-import { Handler } from './handler';
+import { Handler, APIEventResponse } from './handler';
 import * as AWS from 'aws-sdk';
-import { APIEventResponse } from './handler';
 import * as util from './util';
 
 const s3 = new AWS.S3();
@@ -15,7 +14,7 @@ class CreateConfigHandler {
     /**
      * The event handler.
      */
-    async handle(event: any): Promise<any> {
+    public async handle(event: any): Promise<any> {
         try {
 
             console.info({ event });
@@ -35,16 +34,16 @@ class CreateConfigHandler {
                 const facebookAppId = util.getEnv('FACEBOOK_APP_ID');
                 const facebookVersion = util.getEnv('FACEBOOK_VERSION');
 
-                contents += 'window.FacebookExampleConfig = {};\n'
-                contents += `window.FacebookExampleConfig.apiUrl = "https://${apiDomain}";\n`
+                contents += 'window.FacebookExampleConfig = {};\n';
+                contents += `window.FacebookExampleConfig.apiUrl = "https://${apiDomain}";\n`;
 
                 contents += `window.FacebookExampleConfig.federatedLogin = `;
                 contents += `"https://${cognitoDomain}.auth.${region}.amazoncognito.com/`;
-                contents += `login?response_type=code&client_id=${appClient}&redirect_uri=${redirect}";\n`
+                contents += `login?response_type=code&client_id=${appClient}&redirect_uri=${redirect}";\n`;
 
                 contents += `window.FacebookExampleConfig.federatedLogout = `;
                 contents += `"https://${cognitoDomain}.auth.${region}.amazoncognito.com/`;
-                contents += `logout?response_type=code&client_id=${appClient}&redirect_uri=${redirect}";\n`
+                contents += `logout?response_type=code&client_id=${appClient}&redirect_uri=${redirect}";\n`;
 
                 contents += `window.FacebookExampleConfig.facebookAppId = "${facebookAppId}"\n`;
                 contents += `window.FacebookExampleConfig.facebookVersion = "${facebookVersion}"\n`;
