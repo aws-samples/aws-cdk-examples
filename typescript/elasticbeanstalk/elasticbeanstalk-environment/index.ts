@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import cdk = require('@aws-cdk/core');
-import elasticbeanstalk = require('@aws-cdk/aws-elasticbeanstalk');
+import * as cdk from '@aws-cdk/core';
+import * as elasticbeanstalk from '@aws-cdk/aws-elasticbeanstalk';
 
 
 export class CdkStack extends cdk.Stack {
@@ -18,11 +18,14 @@ export class CdkStack extends cdk.Stack {
       applicationName: appName
     });
 
-    new elasticbeanstalk.CfnEnvironment(this, 'Environment', {
+    const env = new elasticbeanstalk.CfnEnvironment(this, 'Environment', {
       environmentName: 'MySampleEnvironment',
       applicationName: app.applicationName || appName,
       platformArn: platform
     });
+
+    // to ensure the application is created before the environment
+    env.addDependsOn(app);
   }
 }
 

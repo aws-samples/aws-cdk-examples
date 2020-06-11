@@ -48,7 +48,7 @@ class CdkVpcEc2Stack(core.Stack):
         host.connections.allow_from_any_ipv4(
             ec2.Port.tcp(22), "Allow ssh from internet")
         host.connections.allow_from_any_ipv4(
-            ec2.Port.tcp(80), "Allow ssh from internet")
+            ec2.Port.tcp(80), "Allow http from internet")
 
         core.CfnOutput(self, "Output",
                        value=host.instance_public_ip)
