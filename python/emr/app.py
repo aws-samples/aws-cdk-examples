@@ -89,7 +89,7 @@ class EMRClusterStack(core.Stack):
             },
             # note job_flow_role is an instance profile (not an iam role)
             job_flow_role=emr_job_flow_profile.instance_profile_name,
-            name="job_name",
+            name="cluster_name",
             service_role=emr_service_role.role_name,
             applications=[{"name": "Spark"}],
             configurations=[
@@ -135,7 +135,7 @@ class EMRClusterStack(core.Stack):
                             f"s3://{s3_script_bucket}/scripts/{spark_script}",
                         ],
                     },
-                    "name": "job_name",
+                    "name": "step_name",
                 }
             ],
         )
@@ -145,8 +145,8 @@ app = core.App()
 EMRClusterStack(
     app,
     "emr-cluster",
-    s3_log_bucket="emr-vpc-s3bucketlogsc894406b-ectp12ry6e5t",
-    s3_script_bucket="emr-vpc-s3bucketscripts86fda855-nhjwrxp55888",
+    s3_log_bucket="s3_bucket_logs",
+    s3_script_bucket="s3_bucket_scripts",
     spark_script="pyspark_script.py",
 )
 
