@@ -11,8 +11,6 @@ import { CognitoIdpStackProps } from '../lib/cognito-idp-stack';
 
 // tslint:disable-next-line: no-var-requires
 const config:CognitoIdpStackProps = require('../config/env-local.json');
-process.env.AWS_REGION = config.env?.region;
-process.env.AWS_ACCOUNT = config.env?.account;
 process.env.FACEBOOK_APP_ID = config.facebookAppId;
 process.env.FACEBOOK_VERSION = config.facebookApiVersion;
 process.env.FACEBOOK_SECRET_ARN = config.facebookSecretArn;

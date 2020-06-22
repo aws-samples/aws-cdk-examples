@@ -26,6 +26,8 @@ class UserPostHandler extends Handler {
 
             const loggedInUser = await this.getLoggedInUser(event);
 
+            console.info({loggedInUser});
+
 
             if (event.body) {
 

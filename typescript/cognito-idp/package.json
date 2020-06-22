@@ -16,7 +16,7 @@
     "cognito-test": "jest --group=cognito",
     "api-test": "jest --group=api",
     "handler-test": "jest --group=handler",
-    "deploy": "cdk deploy --require-approval never"
+    "deploy": "cdk deploy --require-approval never --verbose"
   },
   "devDependencies": {
     "@aws-cdk/assert": "*",

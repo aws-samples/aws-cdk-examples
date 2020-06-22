@@ -29,42 +29,51 @@ There is a bit of setup required before you can deploy this stack.
 
 ## Environment Variables
 
-Put the following into a .env file in the root folder for this example, replacing each placeholder value with your specific environment values.
+Create file called config/env-local.json using the following json as a template. Replace those values with your own.
+(Some of the values, starting with cognitoPoolId, are only used for integration testing and can be left blank until after your first deployment)
 
-```
-AWS_REGION=us-east-1
-AWS_ACCOUNT=123456789123
-WEB_DOMAIN=myapp.example.com
-API_DOMAIN=myapi.example.com
-WEB_CERTIFICATE_ARN=
-API_CERTIFICATE_ARN=
-FACEBOOK_APP_ID=
-FACBOOK_VERSION=v7.0
-FACEBOOK_SECRET_ARN=
-COGNITO_REDIRECT_URI=
-COGNITO_DOMAIN_PREFIX=
-COGNITO_REGION=
-```
+```json
+{ 
+    "env": {
+        "account": "012345678901",
+        "region": "us-east-1"
+    }, 
+    "webDomainName": "www.example.com",
+    "webCertificateArn": "arn:aws:acm:us-east-1:0123456789012:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+    "facebookSecretArn": "arn:aws:secretsmanager:us-east-1:012345678901:secret:facebook_app_secret-Abcdef",
+    "facebookAppId": "111111111111111",
+    "facebookApiVersion": "v7.0",
+    "apiDomainName": "api.example.com",
+    "apiCertificateArn": "arn:aws:acm:us-east-1:0123456789012:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+    "cognitoRedirectUri": "https://www.example.com", 
 
-Add these environment variables after deployment to enable api integration testing:
 
-```
-COGNITO_APP_CLIENT_ID=
-COGNITO_POOL_ID=
-USER_TABLE=
-JWT=
+    "cognitoPoolId": "us-east-1_0123456789", 
+    "cognitoDomainPrefix": "www-example-com", 
+    "cognitoAppClientId": "A1A1A1A1A1A1A1A1A1A1A1A1A1", 
+    "cognitoRegion:": "us-east-1", 
+    "userTable": "CognitoIdpStack-UsersTableAAAAAAAA-000000000000", 
+    "jwt": ""
+}
 ```
 
 ## Build and Deploy
 
 ```
-cd functions
+# Install lambda dependencies
+cd lambda
 npm install
+
 cd ..
 npm install
 npm run build
 npm run unit-test
 npm run deploy
+
+# Get values from the deployment output to complete env-local.json.
+# Then you can run integration tests.
+node build/test/create-admin-user.js
+# After that, manually add is_super_admin=true to the record in DynamoDB
 npm run database-test
 npm run handler-test
 npm run api-test
