@@ -4,18 +4,20 @@ import * as cdk from '@aws-cdk/core';
 import { CognitoIdpStack, CognitoIdpStackProps } from '../lib/cognito-idp-stack';
 import * as fs from 'fs-extra';
 
-// Load environment configuration.
-//
 // For local development, create a copy of config/env.json called config/env-local.json
 
+const app = new cdk.App();
+
 const localConfigPath = './config/env-local.json';
-let configPath = '../config/env.json';
 if (fs.existsSync(localConfigPath)) {
-    configPath = '.' + localConfigPath; // require and fs resolve paths differently
-}
+    // tslint:disable-next-line: no-var-requires
+    const localStack = new CognitoIdpStack(app, 'CognitoIdp-Local', require('.' + localConfigPath));
+} 
 
 // tslint:disable-next-line: no-var-requires
-const props: CognitoIdpStackProps = require(configPath);
+// const prodStack = new CognitoIdpStack(app, 'CognitoIdp-Prod', require('../config/env-prod.json'));
 
-const app = new cdk.App();
-const stack = new CognitoIdpStack(app, 'CognitoIdpStack', props);
+// Other stacks like test, gamma, etc would be added here
+
+
+// Need to perform AWS calls for account X, but the current credentials are for Y
