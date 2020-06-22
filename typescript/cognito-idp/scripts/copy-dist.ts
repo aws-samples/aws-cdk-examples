@@ -19,5 +19,5 @@ fs.copySync('web/index.html', 'dist/web/index.html');
 fs.copySync('web/index.css', 'dist/web/index.css');
 fs.copySync('build/web/bundle.js', 'dist/web/bundle.js');
 
-fs.copySync('build/functions', 'dist/lambda');
+fs.copySync('build/lambda', 'dist/lambda');
 fs.copySync('lambda/node_modules', 'dist/lambda/node_modules');
