@@ -12,7 +12,7 @@ class RDSStack(core.Stack):
         super().__init__(app, id, **kwargs)
 
         vpc = ec2.Vpc(self, "VPC")
-        
+
         rds.DatabaseInstance(
             self, "RDS",
             master_username="master",
@@ -22,8 +22,8 @@ class RDSStack(core.Stack):
             engine=rds.DatabaseInstanceEngine.MYSQL,
             vpc=vpc,
             port=3306,
-            instance_class=ec2.InstanceType.of(
-                ec2.InstanceClass.MEMORY4, 
+            instance_type= ec2.InstanceType.of(
+                ec2.InstanceClass.MEMORY4,
                 ec2.InstanceSize.LARGE,
             ),
             removal_policy=core.RemovalPolicy.DESTROY,

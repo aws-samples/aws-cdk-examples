@@ -33,7 +33,7 @@ class CdkRdsStack(core.Stack):
         db_mysql_easy = rds.DatabaseInstance(self, "MySQL_DB_easy",
                                              engine=rds.DatabaseInstanceEngine.MYSQL,
                                              engine_version="5.7.22",
-                                             instance_class=ec2.InstanceType.of(
+                                             instance_type=ec2.InstanceType.of(
                                                  ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.SMALL),
                                              master_username="admin",
                                              vpc=vpc,
