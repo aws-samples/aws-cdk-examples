@@ -24,3 +24,5 @@ config/env-local.json
 s.json
 
 bundle.js
+cdk.context.json
+
