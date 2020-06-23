@@ -22,7 +22,8 @@ export interface CognitoRestApiProps {
     cognitoAppClientId: string;
     cognitoRegion: string;
     additionalEnvVars: any; 
-    resourceHandlers: ResourceHandlerProps[]
+    resourceHandlers: ResourceHandlerProps[], 
+    hostedZoneId: string
 }
 
 /**
@@ -54,9 +55,10 @@ export class CognitoRestApi extends Construct {
 
         // That creates the custom domain but does not create the A record...
 
-        // Look up the hosted zone from Route53 in your account
-        const apiZone = route53.HostedZone.fromLookup(this, 'Zone', {
-            domainName: props.domainName
+        // Reference the hosted zone (this does not require a context lookup)
+        const apiZone = route53.HostedZone.fromHostedZoneAttributes(this, 'Zone', {
+            hostedZoneId: props.hostedZoneId, 
+            zoneName: props.domainName + '.'
         });
 
         // The REST API

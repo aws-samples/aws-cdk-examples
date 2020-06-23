@@ -12,17 +12,17 @@ const localConfigPath = './config/env-local.json';
 if (fs.existsSync(localConfigPath)) {
 
     // Deploy to your 'local' development account
-    
+
     // tslint:disable-next-line: no-var-requires
     const localStack = new CognitoIdpStack(app, 'CognitoIdp-Local', require('.' + localConfigPath));
-} else {
-
-    // Delete this and replace it with environment-specific stacks like prodStack below
-    const placeholderStack = new cdk.Stack(app, 'Placeholder');
-
-    // tslint:disable-next-line: no-var-requires
-    // const prodStack = new CognitoIdpStack(app, 'CognitoIdp-Prod', require('../config/env-prod.json'));
-
-    // Other stacks like test, gamma, etc would be added here
-
 }
+
+// Delete this and replace it with environment-specific stacks like prodStack below
+// const placeholderStack = new cdk.Stack(app, 'Placeholder');
+
+// tslint:disable-next-line: no-var-requires
+const prodStack = new CognitoIdpStack(app, 'CognitoIdp-Prod', require('../config/env-prod.json'));
+
+// Other stacks like test, gamma, etc would be added here
+
+

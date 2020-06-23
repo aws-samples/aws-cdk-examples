@@ -60,6 +60,16 @@ export interface CognitoIdpStackProps extends cdk.StackProps {
      */
     readonly cognitoRedirectUri: string;
 
+    /**
+     * The ID of the hosted zone for the web site domain.
+     */
+    readonly hostedZoneId: string;
+
+    /**
+     * The ID of the hosted zone for the API domain.
+     */
+    readonly apiHostedZoneId: string;
+
     // Note: The below variables are only required for integration testing
     // after deploying the stack, so you can wait to fill those in
 
@@ -310,7 +320,8 @@ export class CognitoIdpStack extends cdk.Stack {
             additionalEnvVars: {
                 "USER_TABLE": userTable.tableName
             },
-            resourceHandlers: handlers
+            resourceHandlers: handlers, 
+            hostedZoneId: props.apiHostedZoneId
         });
 
         // Static web site created by an L3 construct included in this example repo
@@ -318,7 +329,8 @@ export class CognitoIdpStack extends cdk.Stack {
         const site = new StaticSite(this, 'StaticSite', {
             domainName: props.webDomainName,
             certificateArn: props.webCertificateArn,
-            contentPath: './dist/web'
+            contentPath: './dist/web', 
+            hostedZoneId: props.hostedZoneId
         });
 
         // Create a custom resource that writes out the config file for the web site.

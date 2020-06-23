@@ -13,6 +13,7 @@ export interface StaticSiteProps {
     domainName: string;
     certificateArn: string;
     contentPath: string;
+    hostedZoneId: string;
 }
 
 /**
@@ -33,9 +34,10 @@ export class StaticSite extends cdk.Construct {
     constructor(parent: cdk.Construct, name: string, props: StaticSiteProps) {
         super(parent, name);
 
-        // Look up the hosted zone from Route53 in your account
-        const zone = route53.HostedZone.fromLookup(this, 'Zone', {
-            domainName: props.domainName
+        // Reference the hosted zone (this does not require a context lookup)
+        const zone = route53.HostedZone.fromHostedZoneAttributes(this, 'Zone', {
+            hostedZoneId: props.hostedZoneId, 
+            zoneName: props.domainName + '.'
         });
 
         // Output the URL for the site

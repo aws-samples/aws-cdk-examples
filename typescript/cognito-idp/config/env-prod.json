@@ -11,6 +11,8 @@
     "apiDomainName": "api.example.com",
     "apiCertificateArn": "arn:aws:acm:us-east-1:0123456789012:certificate/aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
     "cognitoRedirectUri": "https://www.example.com", 
+    "hostedZoneId": "ZZZZZZZZZZZZZZZZZZZZ",
+    "apiHostedZoneId": "YYYYYYYYYYYYYYYYYYYY",
 
 
     "cognitoPoolId": "us-east-1_0123456789", 
