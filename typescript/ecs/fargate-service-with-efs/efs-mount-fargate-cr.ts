@@ -1,9 +1,9 @@
-import cfn = require('@aws-cdk/aws-cloudformation');
-import lambda = require('@aws-cdk/aws-lambda');
-import cdk = require('@aws-cdk/core');
-import iam = require('@aws-cdk/aws-iam');
-
+import * as lambda from '@aws-cdk/aws-lambda';
+import * as cdk from '@aws-cdk/core';
+import * as iam from '@aws-cdk/aws-iam';
+import * as cr from '@aws-cdk/custom-resources';
 import fs = require('fs');
+
 
 export interface FargateEfsCustomResourceProps {
   /**
@@ -23,20 +23,26 @@ export class FargateEfsCustomResource extends cdk.Construct {
   constructor(scope: cdk.Construct, id: string, props: FargateEfsCustomResourceProps) {
     super(scope, id);
 
-    const resource = new cfn.CustomResource(this, 'Resource', {
-      provider: cfn.CustomResourceProvider.lambda(new lambda.SingletonFunction(this, 'Singleton', {
-        uuid: 'f7d4f730-4ee1-11e8-9c2d-fa7ae01bbebc',
-        code: new lambda.InlineCode(fs.readFileSync('lambda.js', { encoding: 'utf-8' })),
-        handler: 'index.handler',
-        timeout: cdk.Duration.seconds(300),
-        runtime: lambda.Runtime.NODEJS_12_X,
-        initialPolicy:[
-            new iam.PolicyStatement({
-              actions: [ 'ecs:UpdateService', 'ecs:RegisterTaskDefinition', 'ecs:DescribeTaskDefinition', 'iam:PassRole', 'iam:GetRole' ],
-              resources: [ '*' ]
-            })
-        ]
-      })),
+    const onEvent = new lambda.SingletonFunction(this, 'Singleton', {
+      uuid: 'f7d4f730-4ee1-11e8-9c2d-fa7ae01bbebc',
+      code: new lambda.InlineCode(fs.readFileSync('lambda.js', { encoding: 'utf-8' })),
+      handler: 'index.handler',
+      timeout: cdk.Duration.seconds(300),
+      runtime: lambda.Runtime.NODEJS_12_X,
+      initialPolicy:[
+        new iam.PolicyStatement({
+          actions: [ 'ecs:UpdateService', 'ecs:RegisterTaskDefinition', 'ecs:DescribeTaskDefinition', 'iam:PassRole', 'iam:GetRole' ],
+          resources: [ '*' ]
+        })
+      ]
+    });
+
+    const myProvider = new cr.Provider(this, 'MyProvider', {
+      onEventHandler: onEvent
+    });
+
+    const resource = new cdk.CustomResource(this, 'Resource1', {
+      serviceToken: myProvider.serviceToken,
       properties: props
     });
 

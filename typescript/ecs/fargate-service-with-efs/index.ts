@@ -1,27 +1,30 @@
 import * as cdk from '@aws-cdk/core';
-import ec2 = require('@aws-cdk/aws-ec2');
-import ecs = require('@aws-cdk/aws-ecs');
-import ecs_patterns = require('@aws-cdk/aws-ecs-patterns');
-import efs = require('@aws-cdk/aws-efs');
-import cr = require('@aws-cdk/custom-resources');
+import * as ec2 from '@aws-cdk/aws-ec2';
+import * as ecs from '@aws-cdk/aws-ecs';
+import * as ecs_patterns from '@aws-cdk/aws-ecs-patterns';
+import * as efs from '@aws-cdk/aws-efs';
+import * as cr from '@aws-cdk/custom-resources';
 import {FargateEfsCustomResource} from "./efs-mount-fargate-cr";
+
+
 
 class FargateEfs extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const vpc = new ec2.Vpc(this, 'defaultCellVpc', { maxAzs: 2});
-    const ecsCluster = new ecs.Cluster(this, 'defaultCellEcsCluster', {vpc: vpc });
+    const vpc = new ec2.Vpc(this, 'DefaultVpc', { maxAzs: 2});
+    const ecsCluster = new ecs.Cluster(this, 'DefaultEcsCluster', {vpc: vpc});
 
-    const fileSystem = new efs.EfsFileSystem(this, 'MyEfsFileSystem', {
+    const fileSystem = new efs.FileSystem(this, 'MyEfsFileSystem', {
       vpc: vpc,
       encrypted: true,
-      lifecyclePolicy: efs.EfsLifecyclePolicyProperty.AFTER_14_DAYS,
-      performanceMode: efs.EfsPerformanceMode.GENERAL_PURPOSE,
-      throughputMode: efs.EfsThroughputMode.BURSTING
+      lifecyclePolicy: efs.LifecyclePolicy.AFTER_14_DAYS,
+      performanceMode: efs.PerformanceMode.GENERAL_PURPOSE,
+      throughputMode: efs.ThroughputMode.BURSTING
     });
 
-     var params = {
+
+     const params = {
       FileSystemId: fileSystem.fileSystemId,
       PosixUser: {
         Gid: 1000,
@@ -43,7 +46,7 @@ class FargateEfs extends cdk.Stack {
       ]
     };
 
-    const efsAccessPoint = new cr.AwsCustomResource(this, 'efsAccessPoint', {
+    const efsAccessPoint = new cr.AwsCustomResource(this, 'EfsAccessPoint', {
        onUpdate: {
            service: 'EFS',
            action: 'createAccessPoint',
