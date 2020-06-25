@@ -35,9 +35,6 @@ for pkgJson in $(find typescript -name cdk.json | grep -v node_modules); do
         npm install
         npm run build
 
-        # cdk synth breaks in examples that rely on environment variables
-        if [[ -f DO_NOT_AUTOSYNTH ]]; then exit 0; fi
-
         $scriptdir/synth.sh
     )
 done
