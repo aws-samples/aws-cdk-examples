@@ -34,7 +34,7 @@ class RDSStack(core.Stack):
                 engine=rds.DatabaseInstanceEngine.MYSQL,
                 vpc=props['vpc'],
                 port=3306,
-                instance_class=ec2.InstanceType.of(
+                instance_type=ec2.InstanceType.of(
                     ec2.InstanceClass.MEMORY4,
                     ec2.InstanceSize.LARGE,
                     ),

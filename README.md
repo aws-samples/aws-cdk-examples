@@ -49,6 +49,9 @@ $ cdk destroy
 | [ecs-service-with-logging](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-service-with-logging/) | Starting a container fronted by a load balancer on ECS |
 | [fargate-service-with-logging](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/fargate-service-with-logging/) | Starting a container fronted by a load balancer on Fargate |
 | [custom-logical-names](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/custom-logical-names/) | Example of how to override logical name allocation |
+| [fargate-service-with-efs](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/fargate-service-with-efs/) | Starting a container fronted by an application load balancer on Fargate with an EFS Mount |
+| [http-proxy-apigateway](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/http-proxy-apigateway/) | Use ApiGateway to set up a http proxy |
+
 
 ## Java examples <a name="Java"></a>
 
@@ -108,6 +111,8 @@ $ cdk destroy
 | [rds](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/rds/) | Creating a MySQL RDS database inside its dedicated VPC |
 | [stepfunctions](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/stepfunctions/) | A simple StepFunctions workflow |
 | [url-shortner](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/url-shortener) | Demo from the [Infrastructure ***is*** Code with the AWS CDK](https://youtu.be/ZWCvNFUN-sU) AWS Online Tech Talk |
+| [ec2-instance](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ec2/instance/) | Create EC2 Instance in new VPC with Systems Manager enabled |
+
 
 ## JavaScript examples <a name="JavaScript"></a>
 
