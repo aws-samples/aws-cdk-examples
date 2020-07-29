@@ -12,8 +12,9 @@ class CdkRdsStack(core.Stack):
         # Secrets Manager auto generate and keep the password, don't put password in cdk code directly
         # db_Aurora_cluster = rds.DatabaseCluster(self, "MyAurora",
         #                                         default_database_name="MyAurora",
-        #                                         engine=rds.DatabaseClusterEngine.AURORA_MYSQL,
-        #                                         engine_version="5.7.12",
+        #                                         engine=rds.DatabaseClusterEngine.arora_mysql(
+        #                                             version=rds.AuroraMysqlEngineVersion.VER_5_7_12
+        #                                         )
         #                                         master_user=rds.Login(username="admin"),
         #                                         instance_props=rds.InstanceProps(
         #                                             vpc=vpc,
@@ -31,8 +32,9 @@ class CdkRdsStack(core.Stack):
 
         # Alternatively, create MySQL RDS with CDK High Level API
         db_mysql_easy = rds.DatabaseInstance(self, "MySQL_DB_easy",
-                                             engine=rds.DatabaseInstanceEngine.MYSQL,
-                                             engine_version="5.7.22",
+                                             engine=rds.DatabaseInstanceEngine.mysql(
+                                                 version=rds.MysqlEngineVersion.VER_5_7_30
+                                             ),
                                              instance_type=ec2.InstanceType.of(
                                                  ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.SMALL),
                                              master_username="admin",
