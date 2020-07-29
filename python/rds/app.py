@@ -18,8 +18,9 @@ class RDSStack(core.Stack):
             master_username="master",
             master_user_password=core.SecretValue.plain_text("password"),
             database_name="db1",
-            engine_version="8.0.16",
-            engine=rds.DatabaseInstanceEngine.MYSQL,
+            engine=rds.DatabaseInstanceEngine.mysql(
+                version=rds.MysqlEngineVersion.VER_8_0_16
+            ),
             vpc=vpc,
             port=3306,
             instance_type= ec2.InstanceType.of(
