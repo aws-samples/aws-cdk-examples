@@ -1,9 +1,9 @@
 
 # AWS Batch + AWS Stepfunctions + AWS Fargate + CI/CD Pipeline
 
-![Architecture](architecture.jpg)
+![Architecture](images/architecture.jpg)
 
-![Logic](SFN-Logic.jpg)
+![Logic](images/SFN-Logic.jpg)
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
@@ -65,7 +65,7 @@ cdk deploy CICDPipeline-xxxx
 ```
 
 ### After you deploy these stack, you can find the information like this.
-![Deploy Message](DeployMsg.jpg)
+![Deploy Message](images/DeployMsg.jpg)
 
 ### you need pull the repo from AWS codecommit for Webapplication and Taskdefination, Copy files to the corresponding directory ，for example:copy <font color='red'> cp -r batch-compute-with-step-functions/docker-image/BatchJob/* Workshop-Batch-xx/</font>
 ```
