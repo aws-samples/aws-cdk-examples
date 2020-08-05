@@ -44,7 +44,7 @@ $ cdk ls
 ```
 
 ## Deploy the app
-### At first, You need to open <font color='red'> ***app.py*** </font> and modify the  environment variables, such as <font color='red'> ***UserName,EmailAddress,CustomeENV*** </font> , then you can list stacks.
+### At first, You need to open `app.py` and modify the  environment variables, such as `UserName,EmailAddress,CustomeENV`, then you can list stacks.
 ```
 #......
 from workshop.stack.production_stack import ProductionStack
@@ -57,7 +57,7 @@ CustomeENV = core.Environment(account="2383838383xxx", region="ap-northeast-1") 
 #......
 ```
 
-### When you run <font color='red'> ***cdk list*** </font>, you will find three stacks below, such as <font color='red'> ***Production-xxxx,Webapplication-xxxx,CICDPipeline-xxxx*** </font>, then you can run <font color='red'>deploy one by one</font>.
+### When you run `cdk ls`, you will find three stacks below, such as `Production-xxxx,Webapplication-xxxx,CICDPipeline-xxxx`, then you can run `deploy one by one`.
 ```
 cdk deploy Production-xxxx
 cdk deploy Webapplication-xxxx
@@ -67,7 +67,7 @@ cdk deploy CICDPipeline-xxxx
 ### After you deploy these stack, you can find the information like this.
 ![Deploy Message](images/DeployMsg.jpg)
 
-### you need pull the repo from AWS codecommit for Webapplication and Taskdefination, Copy files to the corresponding directory ，for example:copy <font color='red'> cp -r batch-compute-with-step-functions/docker-image/BatchJob/* Workshop-Batch-xx/</font>
+### you need pull the repo from AWS codecommit for Webapplication and BatchTaskdefination, Copy files to the corresponding directory ，for example:`cp -r batch-compute-with-step-functions/docker-image/BatchJob/* Workshop-Batch-xx/`
 ```
 git clone <codecommit for web>
 git clone <codecommit for batch>
@@ -75,7 +75,7 @@ cp -r batch-compute-with-step-functions/docker-image/BatchJob/* Workshop-Batch-x
 cp -r batch-compute-with-step-functions/docker-image/WebApplication/* Workshop-Web-xx/
 ```
 
-### modify the ***buildspec.yaml*** in every git repo, such as <username>,<accountid>,<region>,then ***git push*** these repo, when you push the code, you can use AWS View progress and results on CodePipeline
+### modify the `buildspec.yaml` in every git repo, such as `username,accountid,region`,then `git push` these repo, when you push the code, you can use AWS View progress and results on CodePipeline
 ```
 git add .
 git commit -m "example"
