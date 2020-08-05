@@ -16,7 +16,7 @@ Production = ProductionStack(app,
     "Production-" + UserName.lower(),
     UserName = UserName.lower(),
     EmailAddress = EmailAddress,
-    env=Custome_ENV
+    env=CustomeENV
 )
 
 
@@ -26,7 +26,7 @@ WebApplication = WebApplicationStack(app,
     EmailAddress = EmailAddress,
     Vpc=Production.getVpc(),
     StateMachine = Production.getStateMachine(),
-    env=Custome_ENV
+    env=CustomeENV
 )
 
 CICDPipeline = CICDPipelineStack(app, 
@@ -36,7 +36,7 @@ CICDPipeline = CICDPipelineStack(app,
     BatchRepo = Production.getEcrRepo(),
     WebRepo = WebApplication.getEcrRepo(),
     WebService = WebApplication.getService(),
-    env=Custome_ENV
+    env=CustomeENV
 )
 
 
