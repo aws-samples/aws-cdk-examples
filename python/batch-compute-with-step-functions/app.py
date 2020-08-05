@@ -9,7 +9,8 @@ from workshop.stack.webapplication_stack import WebApplicationStack
 
 UserName = "example"
 EmailAddress = "example@qq.com"
-CustomeENV = core.Environment(account="2383838383xxx", region="ap-northeast-1")
+# CustomeENV = core.Environment(account="2383838383xxx", region="ap-northeast-1")
+CustomeENV = core.Environment(region="ap-northeast-1")
 
 app = core.App()
 Production = ProductionStack(app, 
