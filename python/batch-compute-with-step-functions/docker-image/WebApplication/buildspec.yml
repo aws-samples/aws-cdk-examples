@@ -1,0 +1,26 @@
+version: 0.2
+
+environment_variables:
+  plaintext:
+    username: "<example>"
+    repo: "<accountid>.dkr.ecr.<region>.amazonaws.com/web_"
+    web_application_version: "latest"
+    
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --no-include-email)
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...          
+      - docker build -t ${repo}${username}/index:${web_application_version} ./
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push ${repo}${username}/index:${web_application_version}
+      - printf '[{"name":"%s","imageUri":"%s"}]' Fargate_Web_Container_${username} ${repo}${username}/index:latest > imagedefinitions.json  
+artifacts:
+        files: imagedefinitions.json

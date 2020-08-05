@@ -1,0 +1,11 @@
+FROM python:latest
+ENV WORK_DIR /data/
+ENV INPUT_BUCKET s3_bucket
+ENV INPUT_KEY tempdata
+ENV OUTPUT_BUCKET s3_bucket
+ENV OUTPUT_KEY output
+ENV FILE_NAME tempfile
+WORKDIR ${WORK_DIR}
+COPY run.sh .
+RUN pip install awscli
+CMD [ "/bin/bash", "${WORK_DIR}/run.sh" ]

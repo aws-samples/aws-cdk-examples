@@ -1,0 +1,33 @@
+version: 0.2
+
+environment_variables:
+  plaintext:
+    username: "<example>"
+    repo: "<accountid>.dkr.ecr.<region>.amazonaws.com/batch_"
+    string_split_version: "latest"
+    string_merge_version: "latest"
+    string_repeat_version: "latest"
+    string_reverse_version: "latest"
+phases:
+  install:
+    commands:
+      - ls -a
+      - date
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login  --no-include-email)
+  build:
+    commands:
+      - echo Building the Docker image... 
+      - docker build -t ${repo}${username}/string_split:${string_split_version} string_split/
+      - docker build -t ${repo}${username}/string_merge:${string_merge_version} string_merge/
+      - docker build -t ${repo}${username}/string_repeat:${string_repeat_version} string_repeat/
+      - docker build -t ${repo}${username}/string_reverse:${string_reverse_version} string_reverse/
+  post_build:
+    commands:
+      - echo Pushing the Docker image...
+      - docker push ${repo}${username}/string_split:${string_split_version}
+      - docker push ${repo}${username}/string_merge:${string_merge_version}
+      - docker push ${repo}${username}/string_repeat:${string_repeat_version}
+      - docker push ${repo}${username}/string_reverse:${string_reverse_version}
