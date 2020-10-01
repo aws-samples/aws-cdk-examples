@@ -1,4 +1,4 @@
-an amazing project sir but plz make index page of resources
+an amazing project sir but plz make index page of resource
 
 # AWS CDK Examples
 
