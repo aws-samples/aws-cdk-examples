@@ -35,7 +35,7 @@ class EKSCluster extends cdk.Stack {
       updateType: autoscaling.UpdateType.ROLLING_UPDATE
     });
 
-    eksCluster.addAutoScalingGroup(onDemandASG, {});
+    eksCluster.connectAutoScalingGroupCapacity(onDemandASG, {});
   }
 }
 

@@ -15,8 +15,6 @@ class RDSStack(core.Stack):
 
         rds.DatabaseInstance(
             self, "RDS",
-            master_username="master",
-            master_user_password=core.SecretValue.plain_text("password"),
             database_name="db1",
             engine=rds.DatabaseInstanceEngine.mysql(
                 version=rds.MysqlEngineVersion.VER_8_0_16
