@@ -1,2 +1,2 @@
 def main(event, context):
-    print("I'm running secondly!")
+    print("The second cron job is running!")
