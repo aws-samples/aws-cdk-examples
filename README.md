@@ -93,6 +93,7 @@ $ cdk destroy
 
 | Example | Description |
 |---------|-------------|
+| [apigw-lambda-rds](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/apigw-lambda-rds/) | Creating an API Gateway with a lambda which connects to RDS instance |
 | [api-cors-lambda](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/api-cors-lambda/) | Shows creation of Rest API (GW) with an /example GET endpoint, with CORS enabled |
 | [application-load-balancer](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/application-load-balancer/) | Using an AutoScalingGroup with an Application Load Balancer |
 | [appsync-graphql-dynamodb](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/appsync-graphql-dynamodb/) | Creating a single GraphQL API with an API Key, and four Resolvers doing CRUD operations over a single DynamoDB |
