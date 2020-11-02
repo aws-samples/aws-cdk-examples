@@ -53,6 +53,8 @@ export class AppConfigHostedConfigurationStack extends cdk.Stack {
 			environmentId: environment.ref,
 		});
 
+		deployment.addDependsOn(hostedConfigurationProfile);
+
 		deployment.addMetadata('description', 'Sample AppConfig initial deployment');
 
 		const sampleAppConfigLambda = new Function(this, 'sampleAppConfigLambda', {
