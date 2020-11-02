@@ -51,6 +51,7 @@ $ cdk destroy
 | [custom-logical-names](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/custom-logical-names/) | Example of how to override logical name allocation |
 | [fargate-service-with-efs](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/fargate-service-with-efs/) | Starting a container fronted by an application load balancer on Fargate with an EFS Mount |
 | [http-proxy-apigateway](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/http-proxy-apigateway/) | Use ApiGateway to set up a http proxy |
+| [appconfig-hosted-configuration-lambda-extension]() | Example of AWS AppConfig hosted configuration with consuming Lambda using AppConfig Lambda extension integration |
 
 
 ## Java examples <a name="Java"></a>
