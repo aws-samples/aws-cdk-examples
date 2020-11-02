@@ -1,0 +1,28 @@
+{
+  "name": "appconfig-hosted-configuration",
+  "version": "1.0.0",
+  "description": "Use of AWS AppConfig with a hosted configuration",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "author": {
+    "name": "Amazon Web Services",
+    "url": "https://aws.amazon.com",
+    "organization": true
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/node": "10.17.27",
+    "typescript": "~3.9.7"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-appconfig": "^1.71.0",
+    "@aws-cdk/aws-iam": "^1.71.0",
+    "@aws-cdk/aws-lambda": "^1.71.0",
+    "@aws-cdk/core": "^1.71.0",
+    "aws-sdk": "^2.783.0"
+  }
+}
