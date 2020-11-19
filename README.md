@@ -128,6 +128,7 @@ Select the following link to see how to install and run the example.
 |---------|-------------|
 | [my-widget-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/csharp/my-widget-service/) | Use Lambda to serve up widgets |
 | [random-writer](https://github.com/aws-samples/aws-cdk-examples/tree/master/csharp/random-writer/) | This sample application demonstrates some essential mechanisms of the AWS CDK for .NET. It uses AWS Lambda, DynamoDB, CloudWatch. |
+| [eks-cluster-with-prometheus-grafana](https://github.com/aws-samples/aws-cdk-examples/tree/master/csharp/eks-cluster-with-prometheus-grafana/) | This sample application demonstrates provisioning an EKS cluster and deploy Prometheus and Grafana. |
 
 To run a .NET example, say my-widget-service:
 
