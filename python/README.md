@@ -6,16 +6,42 @@ This section contains all the CDK code examples written in Python. For more info
 
 ## Running Examples
 
-To run a Python example, execute the following:
-
+### To run example
+1. Ensure CDK is installed
 ```
 $ npm install -g aws-cdk
-$ cd python/EXAMPLE_DIRECTORY
-$ pip install -r requirements.txt    # Best to do this in a virtualenv
+```
+
+2. Create a Python virtual environment
+```
+$ python3 -m venv .venv
+```
+
+3. Activate virtual environment
+
+_On MacOS or Linux_
+```
+$ source .venv/bin/activate
+```
+
+_On Windows_
+```
+% .venv\Scripts\activate.bat
+```
+
+4. Install the required dependencies.
+
+```
+$ pip install -r requirements.txt
+```
+
+5. Synthesize (`cdk synth`) or deploy (`cdk deploy`) the example
+
+```
 $ cdk deploy
 ```
 
-Then, to dispose of the stack afterwards:
+### To dispose of the stack afterwards:
 
 ```
 $ cdk destroy
