@@ -114,6 +114,11 @@ Every example needs a comprehensive README at the root of its directory. This RE
   - Structure: If the example is more complex than a single stack, or the stack contains more than a couple resources, please describe the structure of application being deployed. This can be as simple as a bulleted list of resources, or as intricate as a complete infrastructure diagram.
   - Build/Deploy: Finally, the README must include the basic build/deploy instructions required for that example in said language.
 
+### Linking External Examples <a name="Extern"></a>
+
+If you have an example project that is out of scope or too large for this repo based on the criteria listed above, but you still think it would be a good learning resource for CDK users, you may contribute it to this repo as an external link.
+
+Simply create a Pull Request to the README of this repo, adding the link to your repo in the ["Additional Examples" section](https://github.com/aws-samples/aws-cdk-examples#AddEx). The pull request can be used to discuss the function and content of the linked repo with the CDK team and other contributors. If the repo is not a learning resource, but rather a tool or library based-on, or for use with the CDK consider requesting it be added to the [Awesome CDK repo](https://github.com/kolomied/awesome-cdk).
 
 ## Style and Formatting <a name="Style"></a>
 
