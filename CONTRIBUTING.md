@@ -41,7 +41,7 @@ To send us a pull request, please:
 
 1. Fork the repository.
 2. Modify the source; please focus on the specific change you are contributing. If you also reformat all the code, it will be hard for us to focus on your change.
-3. Ensure local tests pass (check the [scripts](https://github.com/aws-samples/aws-cdk-examples/tree/master/scripts) directory)
+3. Ensure local tests pass automated tests (check the [scripts](https://github.com/aws-samples/aws-cdk-examples/tree/master/scripts) directory)
 4. Commit to your fork using clear commit messages.
 5. Send us a pull request, answering any default questions in the pull request interface.
 6. Pay attention to any automated CI failures reported in the pull request, and stay involved in the conversation.
@@ -51,7 +51,7 @@ GitHub provides additional document on [forking a repository](https://help.githu
 
 ## Adding an Example <a name="New"></a>
 
-When adding a new example, there are several things important to consider as you implement (please create a `feature-request` issue to discuss these before writing your contribution):
+When adding a new example, there are several things important to consider as you implement (please create a [`feature-request` issue](https://github.com/aws-samples/aws-cdk-examples/issues/new?labels=feature-request%2C+needs-triage&template=feature-request.md) to discuss these before writing your contribution):
 
 ### Added Value
 As an official learning resource, it is important that any new examples add value to our learning resources. This means we are looking for examples that clarify additional information about developing with the CDK whether this is a common pattern, or a construct library that does not have any examples.
@@ -59,7 +59,7 @@ As an official learning resource, it is important that any new examples add valu
 When considering if your example adds value, review the existing examples and think about if your example could be written with just the knowledge from the other examples.
 
 ### Language Parity
-While we have historically allowed adding examples in just one of our supported languages, moving forward we would like to maintain language parity. This does not necessarily mean that you must write the example in each action yourself, but a PR will not be merged until the example has been added for each language.
+While we have historically allowed adding examples in just one of our supported languages, moving forward we would like to maintain language parity. This does not necessarily mean that you must write the example in each language yourself, but a PR will not be merged until the example has been added for each language.
 
 If you are looking for help to achieve language parity, you can request help in either the issue related to the new example, or directly through the PR.
 
@@ -75,8 +75,8 @@ When submitting the PR, please ensure that the directory includes all relevant p
 
 2. `README.md`
 
-Every example needs a comprehensive README at the root of it's directory. This README can vary depending on the example, but has several required components:
-  - Stability Banner: You can use the banner code below to indicate whether an example consists of modules that are "Stable", "Dev-Preview", or "Cfn-Only". Please reference the lowest common denominator (if all modules are stable except for one that is dev-preview, you must mark the example as dev-preview)
+Every example needs a comprehensive README at the root of its directory. This README can vary depending on the example, but has several required components:
+  - Stability Banner: You can use the banner code below to indicate whether an example consists of modules that are "Stable", "Dev-Preview", or "Cfn-Only" (for more information on state, see the [Module Lifecycle guide](https://github.com/aws/aws-cdk-rfcs/blob/master/text/0107-construct-library-module-lifecycle.md). Please reference the lowest common denominator (if all modules are stable except for one that is dev-preview, you must mark the example as dev-preview)
 
     - __Stable__
 ```md
@@ -87,7 +87,7 @@ Every example needs a comprehensive README at the root of it's directory. This R
 
 > **This is a stable example. It should successfully build out of the box**
 >
-> This examples does is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
+> This examples is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
 ---
 <!--END STABILITY BANNER-->
 ```
@@ -101,7 +101,7 @@ Every example needs a comprehensive README at the root of it's directory. This R
 
 > **This is an experimental example. It may not build out of the box**
 >
-> This examples does is built on Construct Libraries marked "Developer Preview" and may not be updated for latest breaking changes.
+> This example is built on Construct Libraries marked "Developer Preview" and may not be updated for latest breaking changes.
 >
 > It may additionally requires infrastructure prerequisites that must be created before successful build.
 >
@@ -122,7 +122,7 @@ We strive to keep examples consistent in style and formatting. This hopefully ma
 New guidelines for various languages will be added as we define them.
 
 ### Typescript
-1. You can use [eslint](https://eslint.org/) with the standard configuration to check for code syntax.
+1. You can use [eslint](https://eslint.org/) with the standard configuration to check code syntax and style.
 
 ### Java
 1. Use builders wherever possible. Some classes are unable to have builders generated in JSII but for those that do, prefer them over constructing by hand.

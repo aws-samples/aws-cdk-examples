@@ -11,7 +11,6 @@ To run a Java examples, execute the following:
 ```
 $ npm install -g aws-cdk
 $ cd java/EXAMPLE_DIRECTORY
-$ mvn package
 $ cdk deploy
 ```
 
