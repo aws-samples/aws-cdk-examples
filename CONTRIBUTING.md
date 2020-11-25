@@ -54,9 +54,13 @@ GitHub provides additional document on [forking a repository](https://help.githu
 When adding a new example, there are several things important to consider as you implement (please create a [`feature-request` issue](https://github.com/aws-samples/aws-cdk-examples/issues/new?labels=feature-request%2C+needs-triage&template=feature-request.md) to discuss these before writing your contribution):
 
 ### Added Value
-As an official learning resource, it is important that any new examples add value to our learning resources. This means we are looking for examples that clarify additional information about developing with the CDK whether this is a common pattern, or a construct library that does not have any examples.
+As an official learning resource, it is important that any new examples add value to our learning resources. This means that it should not duplicate an existing example, and cover one of the following topics:
 
-When considering if your example adds value, review the existing examples and think about if your example could be written with just the knowledge from the other examples.
+* Document a common infrastructure pattern - _(static website, cron triggered lambda, etc.)_
+* Outline usage of an L2 construct
+* Cover a less-obvious implementation of one or more constructs - _(cross-stack resource sharing, escape hatches, using SSM values during synthesis, etc.)_
+
+When we are considering merging a new contribution we will review the above criteria as well as evaluating quality based on the criteria in the following sections.
 
 ### Language Parity
 While we have historically allowed adding examples in just one of our supported languages, moving forward we would like to maintain language parity. This does not necessarily mean that you must write the example in each language yourself, but a PR will not be merged until the example has been added for each language.
