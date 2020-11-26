@@ -91,7 +91,7 @@ Every example needs a comprehensive README at the root of its directory. This RE
 
 > **This is a stable example. It should successfully build out of the box**
 >
-> This examples is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
+> This example is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
 ---
 <!--END STABILITY BANNER-->
 ```
