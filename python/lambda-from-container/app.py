@@ -2,8 +2,7 @@ import os
 from aws_cdk import (
     core,
     aws_lambda,
-    aws_ecr,
-    aws_ecr_assets
+    aws_ecr
 )
 
 
@@ -35,7 +34,7 @@ class LambdaContainerFunctionStack(core.Stack):
             ##
             ecr_repository = aws_ecr.Repository.from_repository_attributes(self, 
                 id              = "ECR", 
-                repository_arn  = core.Aws.ACCOUNT_ID + ".dkr.ecr." + core.Aws.REGION + ".amazonaws.com/" + image_name + ":" + image_version, 
+                repository_arn  = '{0}.dkr.ecr.{1}.amazonaws.com/{2}:{3}'.format(core.Aws.ACCOUNT_ID, core.Aws.REGION, image_name, image_version),
                 repository_name = image_name
             ) ## aws_ecr.Repository.from_repository_attributes
 

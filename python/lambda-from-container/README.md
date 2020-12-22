@@ -1,7 +1,14 @@
 Lambda Function from Container
-=============================
+==============================
 
-* This example will produce a **Lambda function** from a **Container Image**.
+
+* AWS announced at [re:Invent 2020 that Lambda Functions could now be deployed from Containers](https://aws.amazon.com/blogs/aws/new-for-aws-lambda-container-image-support/)
+
+* Provisioning A Lambda function from a Container allows the establishment of a standardized Container-based build, and deployment, pipeline.
+
+* Lambda functions with large sets of dependencies will can be easier to package and deploy as a Container.
+
+
 * The **Container Image** is defined in `app.py`. 
   * If `use_pre_existing_image` is **True**, then it is expected that a **Container Image** was **created elsewhere** and will be used by this CDK code.
   * If `use_pre_existing_image` is **False**, then a new container will be created using the `Dockerfile` from the the `lambda-image` sub-directory.
@@ -36,8 +43,8 @@ sudo npm install -g --force cdk
 ### Create Python Virtual Environment
 
 ```bash
-python3 -m venv .env
-source .env/bin/activate
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
 
