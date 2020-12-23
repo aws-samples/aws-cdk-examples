@@ -1,0 +1,10 @@
+aws-cdk.aws-batch
+aws-cdk.aws-ec2
+aws-cdk.aws-ecs
+aws-cdk.aws-events
+aws-cdk.aws-events-targets
+aws-cdk.aws-iam
+aws-cdk.aws-lambda
+aws-cdk.aws-stepfunctions
+aws-cdk.aws-stepfunctions-tasks
+aws-cdk.core
