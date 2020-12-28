@@ -18,13 +18,11 @@ export class EC2InstanceStack extends cdk.Stack {
           storage : ec2.AmazonLinuxStorage.GENERAL_PURPOSE,
         });
         
-        // Ec2 instance with vpc and amiLinux AMI
-        let instance = new ec2.Instance(this, id, 
-            {
-               instanceType : new ec2.InstanceType("t3.nano"),
-                machineImage : amiLinux,
-                vpc         : vpc
-            });
+        new ec2.Instance(this, id, {
+          instanceType : new ec2.InstanceType('t3.nano'),
+          machineImage,
+          vpc,
+        });
 
     }
 }
