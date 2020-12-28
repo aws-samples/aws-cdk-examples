@@ -6,9 +6,8 @@ export class EC2InstanceStack extends cdk.Stack {
         super(scope, id, props);
         
         // VPC
-        let vpc = new ec2.Vpc(this, "VPC", 
-        {
-            cidr: "10.0.0.0/16"
+        new ec2.Vpc(this, 'VPC', {
+          cidr: "10.0.0.0/16"
         });
 
         // AMI
@@ -31,4 +30,3 @@ export class EC2InstanceStack extends cdk.Stack {
 
     }
 }
-
