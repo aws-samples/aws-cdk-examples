@@ -10,15 +10,13 @@ export class EC2InstanceStack extends cdk.Stack {
           cidr: "10.0.0.0/16"
         });
 
-        // AMI
-        let amiLinux = ec2.MachineImage.latestAmazonLinux(
-            {
-                generation : ec2.AmazonLinuxGeneration.AMAZON_LINUX_2,
-                edition :  ec2.AmazonLinuxEdition.STANDARD,
-                virtualization : ec2.AmazonLinuxVirt.HVM,
-                storage : ec2.AmazonLinuxStorage.GENERAL_PURPOSE,
-            }
-        );
+        // Latest Amazon Linux AMI
+        const machineImage = ec2.MachineImage.latestAmazonLinux({
+          generation : ec2.AmazonLinuxGeneration.AMAZON_LINUX_2,
+          edition :  ec2.AmazonLinuxEdition.STANDARD,
+          virtualization : ec2.AmazonLinuxVirt.HVM,
+          storage : ec2.AmazonLinuxStorage.GENERAL_PURPOSE,
+        });
         
         // Ec2 instance with vpc and amiLinux AMI
         let instance = new ec2.Instance(this, id, 
