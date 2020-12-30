@@ -12,18 +12,18 @@ export class IamStack extends cdk.Stack {
 
     // Custom role class with pre-defined policy
     // See "./role.ts"
-    const role = new IamRole(this, "IAMSampleRole", {
+    const role = new IamRole(this, "IAMSampleRole1", {
       assumedBy: new iam.ServicePrincipal("s3.amazonaws.com")
     });
 
     // Example of existing policy lookup for permissions boundary
-    const role2 = new IamRole(this, "IAMSampleRole", {
+    const role2 = new IamRole(this, "IAMSampleRole2", {
       assumedBy: new iam.ServicePrincipal("s3.amazonaws.com"),
-      permissionsBoundary: iam.ManagedPolicy.fromManagedPolicyName(scope, "perm-boundary-lookup", "ExistingPolicyName")
+      permissionsBoundary: iam.ManagedPolicy.fromManagedPolicyName(this, "perm-boundary-lookup", "ExistingPolicyName")
     });
 
     // Example of policy lookup AFTER initialisation (via .addManagedPolicy())
-    const role3 = new IamRole(this, "IAMSampleRole", {
+    const role3 = new IamRole(this, "IAMSampleRole3", {
       assumedBy: new iam.ServicePrincipal("s3.amazonaws.com"),
     });
 
