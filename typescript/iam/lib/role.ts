@@ -9,7 +9,7 @@ export class IamRole extends iam.Role {
     super(scope, id, props);
     
     // Attach sample policy to user
-    const policy:iam.Policy = new IamSamplePolicy(scope, "SamplePolicy");
+    const policy:iam.Policy = new IamSamplePolicy(scope, `SamplePolicy-${id}`);
     policy.attachToRole(this);
 
   }
