@@ -18,3 +18,4 @@ This example creates the infrastructure for a static site, which uses an S3 buck
 The site redirects from HTTP to HTTPS, using a CloudFront distribution, Route53 alias record, and ACM certificate.
 
 > **Note:** Due to a known issue with the EKS module in CDK version `1.81.0`, the project currently only works with version `1.80.0`. See https://github.com/aws/aws-cdk/issues/12291 for possible workarounds if you require version `1.81.0`.
+
