@@ -1,9 +1,10 @@
-#! /bin/sh
+yum install jq -y
 
 EC2_METADATA=http://169.254.169.254/latest
 REGION=$(curl -s $EC2_METADATA/dynamic/instance-identity/document | jq -r '.region')
-INSTANCE_ID=$(curl -s $EC2_METADATA/meta-data/instance-id);
-INSTANCE_IP=$(curl -s $EC2_METADATA/meta-data/local-ipv4);
+AZ=$(curl -s $EC2_METADATA/meta-data/placement/availability-zone)
+INSTANCE_ID=$(curl -s $EC2_METADATA/meta-data/instance-id)
+INSTANCE_IP=$(curl -s $EC2_METADATA/meta-data/local-ipv4)
 
 
 NAMESPACE_ID=$(aws servicediscovery list-namespaces --output text --region $REGION \
@@ -22,7 +23,7 @@ aws servicediscovery register-instance \
   --region $REGION \
   --service-id ${SERVICE_ID} \
   --instance-id $INSTANCE_ID \
-  --attributes AWS_INSTANCE_IPV4=$INSTANCE_IP,AWS_INSTANCE_PORT=8080
+  --attributes AWS_INSTANCE_IPV4=$INSTANCE_IP,AWS_INSTANCE_PORT=8080,AVAILABILITY_ZONE=$AZ
 
 sleep 5
 

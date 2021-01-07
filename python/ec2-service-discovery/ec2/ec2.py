@@ -43,7 +43,11 @@ class Ec2(core.Stack):
                 storage = ec2.AmazonLinuxStorage.GENERAL_PURPOSE
             )
         )
-        instance.user_data.add_commands(f"yum install jq -y")
+
+        with open('register-ip-instance.sh','r') as file:
+            userdata = file.read()
+        instance.user_data.add_commands(userdata)
+        file.close()
 
         core.CfnOutput(
             self, "INSTANCEID",
