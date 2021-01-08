@@ -35,13 +35,13 @@ aws servicediscovery list-instances \
 ###
 # deregister existing instance ip
 ###
-aws servicediscovery deregister-instance \
-  --region $REGION \
-  --service-id ${SERVICE_ID} \
-  --instance-id $INSTANCE_ID
-
-sleep 5
-
-aws servicediscovery list-instances \
-  --region $REGION \
-  --service-id ${SERVICE_ID}
+#aws servicediscovery deregister-instance \
+#  --region $REGION \
+#  --service-id ${SERVICE_ID} \
+#  --instance-id $INSTANCE_ID
+#
+#sleep 5
+#
+#aws servicediscovery list-instances \
+#  --region $REGION \
+#  --service-id ${SERVICE_ID}

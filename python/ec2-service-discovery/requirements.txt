@@ -1,4 +1,7 @@
+aws-cdk.aws-autoscaling
+aws-cdk.aws-autoscaling-hooktargets
 aws-cdk.aws-ec2
 aws-cdk.aws-iam
+aws-cdk.aws-lambda
 aws-cdk.aws-servicediscovery
 aws-cdk.core
