@@ -12,7 +12,10 @@ class HttpApiServiceDiscovery(core.Stack):
         service = namespace.create_service("ip_service",
             description = "Service registering ip instances",
             custom_health_check = sd.HealthCheckCustomConfig(
-                failure_threshold = 2
+                # The failure threshold indicates the number of 30-second intervals
+                # you want AWS Cloud Map to wait between the time that your application
+                # sends an UpdateInstanceCustomHealthStatus request
+                failure_threshold = 1
             )
         )
         service.register_ip_instance("ip_instance", ipv4 = "54.239.25.192", port = 8080)
