@@ -28,14 +28,14 @@ class StepFunctionsCronStack extends cdk.Stack {
 
       /** ------------------ Step functions Definition ------------------ */
 
-      const firstTask = new sfn.Task(this, 'First task', {
-        task: new sfnTasks.InvokeFunction(lambdaFirstFn),
-      });   
+      const firstTask = new sfnTasks.LambdaInvoke(this, 'FirstTask', {
+        lambdaFunction: lambdaFirstFn
+      });  
       const waitTask = new sfn.Wait(this, 'Wait for something to finish', {
         time: sfn.WaitTime.duration(cdk.Duration.seconds(300)),
       });
-      const secondTask = new sfn.Task(this, 'Second task', {
-        task: new sfnTasks.InvokeFunction(lambdaSecondFn),
+      const secondTask = new sfnTasks.LambdaInvoke(this, 'FirstTask', {
+        lambdaFunction: lambdaSecondFn
       });
       
       // Create chain
