@@ -8,7 +8,7 @@ class AdFsxStack extends cdk.Stack {
   constructor(app: cdk.App, id: string, adDnsDomainName: string) {
     super(app, id);
 
-    const vpc = new ec2.Vpc(this, 'VPC');
+    const vpc = new ec2.Vpc(this, 'VPC', {});
 
     const privateSubnets = vpc.privateSubnets.slice(0,2).map(x => x.subnetId)
 
@@ -28,7 +28,17 @@ class AdFsxStack extends cdk.Stack {
       }
     })
 
-    new fsx.CfnFileSystem(this, 'fs', {
+    const dhcpOptions = new ec2.CfnDHCPOptions(this, 'dhcpOptions', {
+      domainName: adDnsDomainName,
+      domainNameServers: mad.attrDnsIpAddresses,
+    })
+
+    new ec2.CfnVPCDHCPOptionsAssociation(this, 'dhcpOptionsAssoc', {
+      dhcpOptionsId: dhcpOptions.ref,
+      vpcId: vpc.vpcId
+    })
+    
+    const fs = new fsx.CfnFileSystem(this, 'fs', {
       fileSystemType: 'WINDOWS',
       subnetIds: privateSubnets,
       storageType: 'SSD',
@@ -40,9 +50,19 @@ class AdFsxStack extends cdk.Stack {
         preferredSubnetId: privateSubnets[0]
       }
     })
-
-    new cdk.CfnOutput(this, 'ad-dns', {
-      value: cdk.Fn.join(',', mad.attrDnsIpAddresses)
+    
+    const outputs = [
+      {"name":"directoryAlias","value":mad.attrAlias},
+      {"name":"directoryDns","value":cdk.Fn.join(',',mad.attrDnsIpAddresses)},
+      {"name":"fsType", "value": fs.fileSystemType},
+      {"name":"subnetIds", "value": cdk.Fn.join(',',privateSubnets)},
+      {"name":"vpcId", "value":vpc.vpcId}
+    ]
+    
+    outputs.forEach((x) => { 
+      if (x.value) {
+        new cdk.CfnOutput(this, x.name, {value: x.value})
+      }
     })
   }
 }
