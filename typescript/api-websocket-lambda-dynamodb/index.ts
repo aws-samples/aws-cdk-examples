@@ -2,7 +2,7 @@
 import {AssetCode, Function, Runtime} from "@aws-cdk/aws-lambda";
 import {CfnApi, CfnDeployment, CfnIntegration, CfnRoute, CfnStage} from "@aws-cdk/aws-apigatewayv2";
 import {App, ConcreteDependable, Construct, Duration, RemovalPolicy, Stack, StackProps} from '@aws-cdk/core';
-import {Effect, ManagedPolicy, PolicyStatement, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
+import {Effect, PolicyStatement, Role, ServicePrincipal} from "@aws-cdk/aws-iam";
 import {AttributeType, Table} from "@aws-cdk/aws-dynamodb";
 
 import config from './config.json';
@@ -30,53 +30,18 @@ class ChatAppStack extends Stack {
             removalPolicy: RemovalPolicy.DESTROY
         });
 
-        // initialise lambda and permissions
-
-        const lambdaPolicy = new PolicyStatement({
-            actions: [
-                "dynamodb:GetItem",
-                "dynamodb:DeleteItem",
-                "dynamodb:PutItem",
-                "dynamodb:Scan",
-                "dynamodb:Query",
-                "dynamodb:UpdateItem",
-                "dynamodb:BatchWriteItem",
-                "dynamodb:BatchGetItem",
-                "dynamodb:DescribeTable",
-                "dynamodb:ConditionCheckItem"
-            ],
-            resources: [table.tableArn]
-        });
-
-        const connectLambdaRole = new Role(this, "connectLambdaRole", {
-            assumedBy: new ServicePrincipal("lambda.amazonaws.com")
-        })
-        connectLambdaRole.addToPolicy(lambdaPolicy)
-        connectLambdaRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName("service-role/AWSLambdaBasicExecutionRole"));
-
-        const disconnectLambdaRole = new Role(this, "disconnectLambdaRole", {
-            assumedBy: new ServicePrincipal("lambda.amazonaws.com")
-        })
-        disconnectLambdaRole.addToPolicy(lambdaPolicy)
-        disconnectLambdaRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName("service-role/AWSLambdaBasicExecutionRole"));
-
-        const messageLambdaRole = new Role(this, "messageLambdaRole", {
-            assumedBy: new ServicePrincipal("lambda.amazonaws.com")
-        })
-        messageLambdaRole.addToPolicy(lambdaPolicy)
-        messageLambdaRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName("service-role/AWSLambdaBasicExecutionRole"));
-
         const connectFunc = new Function(this, 'connect-lambda', {
             code: new AssetCode('./onconnect'),
             handler: 'app.handler',
             runtime: Runtime.NODEJS_12_X,
             timeout: Duration.seconds(300),
             memorySize: 256,
-            role: connectLambdaRole,
             environment: {
                 "TABLE_NAME": tableName,
             }
         });
+
+        table.grantReadWriteData(connectFunc)
 
         const disconnectFunc = new Function(this, 'disconnect-lambda', {
             code: new AssetCode('./ondisconnect'),
@@ -84,11 +49,12 @@ class ChatAppStack extends Stack {
             runtime: Runtime.NODEJS_12_X,
             timeout: Duration.seconds(300),
             memorySize: 256,
-            role: disconnectLambdaRole,
             environment: {
                 "TABLE_NAME": tableName,
             }
         });
+
+        table.grantReadWriteData(disconnectFunc)
 
         const messageFunc = new Function(this, 'message-lambda', {
             code: new AssetCode('./sendmessage'),
@@ -96,7 +62,6 @@ class ChatAppStack extends Stack {
             runtime: Runtime.NODEJS_12_X,
             timeout: Duration.seconds(300),
             memorySize: 256,
-            role: messageLambdaRole,
             initialPolicy: [
                 new PolicyStatement({
                     actions: [
@@ -112,6 +77,8 @@ class ChatAppStack extends Stack {
                 "TABLE_NAME": tableName,
             }
         });
+
+        table.grantReadWriteData(messageFunc)
 
         // access role for the socket api to access the socket lambda
         const policy = new PolicyStatement({
