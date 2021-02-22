@@ -89,7 +89,7 @@ class AppSyncCdkStack(core.Stack):
 
         items_table_role.add_managed_policy(
             ManagedPolicy.from_aws_managed_policy_name(
-                'arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess'
+                'AmazonDynamoDBFullAccess'
             )
         )
 
