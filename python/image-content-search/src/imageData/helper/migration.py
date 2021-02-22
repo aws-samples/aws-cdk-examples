@@ -1,5 +1,8 @@
 from helper import execute_statement, logger
 
+# this module
+# creates schema for the database
+
 def create_schema():
 
     # do migration

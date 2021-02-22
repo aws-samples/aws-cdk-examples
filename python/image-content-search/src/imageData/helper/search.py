@@ -18,6 +18,10 @@ aws_config = botocore.config.Config(
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
+# this module
+# looks for images in the database
+# translates the keywords if needed
+
 def search_label(label, country = None, language = None):
     if language and language != 'en':
         translated_label = translate(language, label)

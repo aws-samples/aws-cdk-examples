@@ -1,6 +1,9 @@
 
 from helper import batch_execute_statement, logger
 
+# this module
+# adds a new image data to the database
+
 def insert_new_image(image_id, labels):
 
     statement = 'INSERT INTO tags (image_id, label) values (:image_id, :label)'

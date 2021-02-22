@@ -9,6 +9,9 @@ from botocore.exceptions import ClientError
 images_bucket = os.environ['ICS_IMAGES_BUCKET']
 default_signedurl_expiry_seconds = os.environ['DEFAULT_SIGNEDURL_EXPIRY_SECONDS']
 
+# this function
+# creates a pre-sighned URL for uploading image to S3 and returns it
+
 def handler(event, context):
     uniquehash = hashlib.sha1("{}".format(time.time_ns()).encode('utf-8')).hexdigest()
     result = create_presigned_post(images_bucket, "new/{}/{}".format(uniquehash[:2],uniquehash))

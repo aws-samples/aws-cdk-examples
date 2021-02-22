@@ -6,6 +6,13 @@ from helper.insert import insert_new_image
 from helper.migration import create_schema
 from helper.search import search_label, get_http_params
 
+# this function
+# based on the source:
+# 1- gets the event from Amazon EventBridge for date mutation
+# 2- gets then event from CloudFormation for schema creation
+# 3- gets the event from API Gateway for data query
+# return the suitable data
+
 def handler(event, context):
     # logger.info(event)
 

@@ -21,6 +21,11 @@ rekognition_client = boto3.client('rekognition', config=aws_config)
 
 event_bus_name = os.getenv('EVENT_BUS')
 
+# this function
+# gets the SQS message
+# calls Amazon Rekognition to analyze the image
+# publish an event in Amazon EventBridge
+
 def handler(event, context):
 
     for record in event['Records']:

@@ -11,6 +11,13 @@ logger.setLevel(logging.INFO)
 queue_name = os.environ["ICS_IMAGE_MASSAGE"]
 sqs = boto3.resource('sqs')
 
+# this function
+# downloads the image from S3
+# calculates the SHA1 hash checksum to prevent re-analysing images
+# renames the object with prefix "processed"
+# adds the metadata to SQS queue
+# deletes the local copy
+
 def handler(event, context):
     s3 = boto3.resource('s3')
 

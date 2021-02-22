@@ -6,6 +6,11 @@ import http.client
 
 from botocore.exceptions import ClientError
 
+# this function
+# gets the simple html page
+# updates the login page and logout page address
+# returns the content
+
 def handler(event, context):
     login_page = event["headers"]["Referer"]
 
