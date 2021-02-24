@@ -1,3 +1,14 @@
+<!--BEGIN STABILITY BANNER-->
+---
+
+![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
+
+> **This is a stable example. It should successfully build out of the box**
+>
+> This example is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
+---
+<!--END STABILITY BANNER-->
+
 # CDK Custom Resource Provider Framework Example
 
 This sample project demonstrates how to define a custom resource using the @aws-cdk/custom-resource package Provider framework.
