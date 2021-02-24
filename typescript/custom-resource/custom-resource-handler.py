@@ -14,7 +14,9 @@ def main(event, context):
             raise RuntimeError('Create failure requested')
 
         # Do the thing
+
         message = event['ResourceProperties']['Message']
+
         attributes = {
             'Response': 'You said "%s"' % message
         }
