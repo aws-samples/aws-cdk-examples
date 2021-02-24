@@ -20,7 +20,7 @@ export class MyCustomResource extends cdk.Construct {
 
     const onEvent = new lambda.SingletonFunction(this, 'Singleton', {
       uuid: 'f7d4f730-4ee1-11e8-9c2d-fa7ae01bbebc',
-      code: new lambda.InlineCode(fs.readFileSync('lib/custom-resource-handler.py', { encoding: 'utf-8' })),
+      code: new lambda.InlineCode(fs.readFileSync('custom-resource-handler.py', { encoding: 'utf-8' })),
       handler: 'index.on_event',
       timeout: cdk.Duration.seconds(300),
       runtime: lambda.Runtime.PYTHON_3_6,
@@ -28,7 +28,7 @@ export class MyCustomResource extends cdk.Construct {
 
     const myProvider = new cr.Provider(this, 'MyProvider', {
       onEventHandler: onEvent,
-      // isCompleteHandler: isComplete,        // optional async "waiter" lambda, see lib/custom-resource-handler.py
+      // isCompleteHandler: isComplete,        // optional async "waiter" lambda, see custom-resource-handler.py
       logRetention: logs.RetentionDays.ONE_DAY   // default is INFINITE
     });
 
