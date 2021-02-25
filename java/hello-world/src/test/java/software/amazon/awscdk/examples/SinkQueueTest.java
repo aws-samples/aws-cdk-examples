@@ -30,7 +30,7 @@ public class SinkQueueTest {
     Stack stack = new Stack();
     new SinkQueue(stack, "MySinkQueue");
     assertTemplate(
-        stack, "{\"Resources\":{\"MySinkQueueEFCD79C2\":{\"Type\":\"AWS::SQS::Queue\"}}}");
+        stack, "{\"Resources\":{\"MySinkQueueEFCD79C2\":{\"Type\":\"AWS::SQS::Queue\", \"UpdateReplacePolicy\":\"Delete\",\"DeletionPolicy\":\"Delete\"}}}");
   }
 
   /** Defines a sink with custom queue props */
@@ -51,64 +51,66 @@ public class SinkQueueTest {
             + "      \"Type\" : \"AWS::SQS::Queue\",\n"
             + "      \"Properties\" : {\n"
             + "        \"VisibilityTimeout\" : 500\n"
-            + "      }\n"
+            + "      },\n"
+            + "      \"UpdateReplacePolicy\":\"Delete\",\n"
+            + "      \"DeletionPolicy\":\"Delete\""
             + "    }\n"
             + "  }\n"
             + "}");
   }
 
-  // /** Calls "subscribe" to add topics to the sink */
-  // @Test
-  // public void testSubscribeTopics() throws IOException {
-  //   Stack stack = new Stack();
+  /** Calls "subscribe" to add topics to the sink */
+  @Test
+  public void testSubscribeTopics() throws IOException {
+    Stack stack = new Stack();
 
-  //   SinkQueue sink = new SinkQueue(stack, "MySinkQueue");
+    SinkQueue sink = new SinkQueue(stack, "MySinkQueue");
 
-  //   // add three topics in two calls to "subscribe"
-  //   sink.subscribe(new Topic(stack, "Topic1"), new Topic(stack, "Topic2"));
-  //   sink.subscribe(new Topic(stack, "Topic3"));
+    // add three topics in two calls to "subscribe"
+    sink.subscribe(new Topic(stack, "Topic1"), new Topic(stack, "Topic2"));
+    sink.subscribe(new Topic(stack, "Topic3"));
 
-  //   assertTemplate(stack, getClass().getResource("testSubscribeTopics.expected.json"));
-  // }
+    assertTemplate(stack, getClass().getResource("testSubscribeTopics.expected.json"));
+  }
 
-  // /** Verifies that if we exceed the number of allows topics, an exception is thrown */
-  // @Test
-  // public void failsIfExceedMaxTopic() {
-  //   Stack stack = new Stack();
+  /** Verifies that if we exceed the number of allows topics, an exception is thrown */
+  @Test
+  public void failsIfExceedMaxTopic() {
+    Stack stack = new Stack();
 
-  //   SinkQueue sink =
-  //       new SinkQueue(
-  //           stack, "MySinkQueue", SinkQueueProps.builder().withRequiredTopicCount(3).build());
+    SinkQueue sink =
+        new SinkQueue(
+            stack, "MySinkQueue", SinkQueueProps.builder().withRequiredTopicCount(3).build());
 
-  //   sink.subscribe(new Topic(stack, "Topic1"));
-  //   sink.subscribe(new Topic(stack, "Topic2"));
-  //   sink.subscribe(new Topic(stack, "Topic3"));
+    sink.subscribe(new Topic(stack, "Topic1"));
+    sink.subscribe(new Topic(stack, "Topic2"));
+    sink.subscribe(new Topic(stack, "Topic3"));
 
-  //   boolean thrown = false;
-  //   try {
-  //     sink.subscribe(new Topic(stack, "Topic4"));
-  //   } catch (RuntimeException e) {
-  //     thrown = true;
-  //   }
-  //   assertTrue(thrown);
-  // }
+    boolean thrown = false;
+    try {
+      sink.subscribe(new Topic(stack, "Topic4"));
+    } catch (RuntimeException e) {
+      thrown = true;
+    }
+    assertTrue(thrown);
+  }
 
-  // /** Verifies that the sink queue validates that the exact number of subscribers was added */
-  // @Test(expected = JsiiException.class)
-  // public void failsIfNotEnoughTopics() {
-  //   App app = new App();
-  //   Stack stack = new Stack(app, "test");
+  /** Verifies that the sink queue validates that the exact number of subscribers was added */
+  @Test(expected = JsiiException.class)
+  public void failsIfNotEnoughTopics() {
+    App app = new App();
+    Stack stack = new Stack(app, "test");
 
-  //   SinkQueue sink =
-  //       new SinkQueue(
-  //           stack, "MySinkQueue", SinkQueueProps.builder().withRequiredTopicCount(80).build());
+    SinkQueue sink =
+        new SinkQueue(
+            stack, "MySinkQueue", SinkQueueProps.builder().withRequiredTopicCount(80).build());
 
-  //   for (int i = 0; i < 77; ++i) {
-  //     sink.subscribe(new Topic(stack, "Topic" + i));
-  //   }
+    for (int i = 0; i < 77; ++i) {
+      sink.subscribe(new Topic(stack, "Topic" + i));
+    }
 
-  //   getTemplate(stack);
-  // }
+    getTemplate(stack);
+  }
 
   private static void assertTemplate(final Stack stack, final URL expectedResource)
       throws IOException {
@@ -124,31 +126,7 @@ public class SinkQueueTest {
       throws IOException {
     JsonNode actual = JSON.valueToTree(getTemplate(stack));
 
-    if (actual.has("Resources")){
-      JsonNode resources = actual.get("Resources");
 
-      Iterator<JsonNode> items = resources.elements();
-
-      while(items.hasNext()){
-        JsonNode item = items.next();
-        System.out.println(item);
-
-        if (item.has("UpdateReplacePolicy")){
-          if(item.get("UpdateReplacePolicy").textValue().equals("Delete")){
-            ObjectNode object = (ObjectNode) item;
-            object.remove("UpdateReplacePolicy");
-          }
-        }
-
-        if(item.has("DeletionPolicy")){
-          if(item.get("DeletionPolicy").textValue().equals("Delete")){
-            ObjectNode object = (ObjectNode) item;
-            object.remove("DeletionPolicy");
-          }
-        }
-      }
-
-    }
 
     // print to stderr if non-equal, so it will be easy to grab
     if (expected == null || !expected.equals(actual)) {

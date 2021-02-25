@@ -4,7 +4,10 @@
       "Type" : "AWS::SNS::Topic"
     },
     "MySinkQueueEFCD79C2" : {
-      "Type" : "AWS::SQS::Queue"
+      "Type" : "AWS::SQS::Queue",
+      "UpdateReplacePolicy":"Delete",
+      "DeletionPolicy":"Delete"
+
     },
     "MySinkQueueTopic1CE70DEAE" : {
       "Type" : "AWS::SNS::Subscription",
