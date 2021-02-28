@@ -1,5 +1,5 @@
 {
-  "name": "custom-resource",
+  "name": "secrets-manager-secret-rotation",
   "version": "1.0.0",
   "description": "Shows how to use a custom resource",
   "private": true,
