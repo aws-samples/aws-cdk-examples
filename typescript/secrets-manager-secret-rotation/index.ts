@@ -5,7 +5,6 @@ import elasticache = require('@aws-cdk/aws-elasticache');
 import lambda = require('@aws-cdk/aws-lambda');
 import secretsmanager = require('@aws-cdk/aws-secretsmanager')
 import path = require('path');
-import { SecretRotator, SecretRotatorProps } from  "./secret-rotator"
 
 
 export class SecretsManagerCustomRotationStack extends cdk.Stack {
@@ -176,3 +175,7 @@ export class SecretsManagerCustomRotationStack extends cdk.Stack {
 
   }
 }
+
+const app = new cdk.App();
+new SecretsManagerCustomRotationStack(app, 'SecretsManagerCustomRotationStack');
+app.synth();

@@ -1,15 +1,19 @@
 {
-  "name": "secrets-manager-custom-rotation",
-  "version": "0.1.0",
-  "bin": {
-    "secrets-manager-custom-rotation": "bin/secrets-manager-custom-rotation.js"
-  },
+  "name": "custom-resource",
+  "version": "1.0.0",
+  "description": "Shows how to use a custom resource",
+  "private": true,
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "test": "jest",
     "cdk": "cdk"
   },
+  "author": {
+    "name": "Amazon Web Services",
+    "url": "https://aws.amazon.com",
+    "organization": true
+  },
+  "license": "Apache-2.0",
   "devDependencies": {
     "@aws-cdk/assert": "*",
     "@types/jest": "^26.0.10",
