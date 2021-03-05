@@ -157,6 +157,10 @@ You can test secret rotation by manually triggering rotation via the AWS Secrets
 
 ![rotate](img/rotate_immediately.png)
 
+You can view the logs in CloudWatch.
+
+![output](img/output.png)
+
 ## Useful commands
 
  * `npm run build`   compile typescript to js
