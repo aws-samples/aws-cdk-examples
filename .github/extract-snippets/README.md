@@ -203,8 +203,8 @@ extracted before the error are not checked in to the repo.
 
 # README-SNIPPETS.txt
 
-This text file is copied into the snippets directory and should provide
-information that users of the snippets should know.
+This text file is copied into the snippets directory as README.txt and should
+provide information that users of the snippets should know.
 
 # Version history
 
