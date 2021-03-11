@@ -13,7 +13,7 @@
 # snippets are never deleted, as this would break any document where they're used.
 
 mkdir ../snippets
-cp .github/extract-snippets/README-SNIPPETS.txt ../snippets
+cp .github/extract-snippets/README-SNIPPETS.txt ../snippets/README.txt
 
 python -m pip install --upgrade pip pyyaml
 command $* | python .github/extract-snippets/extract-snippets.py ../snippets || exit 1
