@@ -108,10 +108,10 @@ Snippet tags are special single-line comments in source files.  They must not
 follow any code on their line and must begin with the language's single-line
 comment marker (`//` in many languages, `#` in some others).  If a language
 does not have a single-line comment marker, the block comment delimiter may be
-used, but must be closed on the same line.  The snippet tag is followed by the
-snippet directive, a colon, and an argument in square brackets.  Whitespace is
-permitted (but optional) between the comment marker and the snippet directive.
-For example:
+used, but must be closed on the same line following the snippet tag.  The
+snippet tag is followed by the snippet directive, a colon, and an argument in
+square brackets.  Whitespace is permitted (but optional) between the comment
+marker and the snippet directive. For example:
 
 `// snippet-start:[cdk.typescript.widget_service]`
 
@@ -121,8 +121,8 @@ specified, with a `.txt` extension.
 The main tags used in our repos are `snippet-start` and `snippet-end`.  Each
 `snippet-start` requires a matching `snippet-end` (specifying the same snippet
 name) in the same source file.  Multiple snippets may be extracted from one
-source file, and these may overlap.  Snippet tags do not appear in the
-extracted snippets.
+source file, and may overlap.  Snippet tags do not appear in the extracted
+snippets.
 
 The following two tags are unique to this extractor (they are not supported by
 the original snippet extractor used in the AWS SDK Examples repo).
@@ -132,15 +132,15 @@ the original snippet extractor used in the AWS SDK Examples repo).
   `snippet-end` as with `snippet-start`.
 
 * `snippet-echo`: Writes the argument literally to the snippet(s) currently
-  being extracted.  Useful for adding closing braces etc. when extracting part
-  of a code block.  Whitespace is stripped from the right of the argument but
-  not the left, so you can match indentation.
+  being extracted.  Useful for adding closing braces etc. when extracting a
+  partial code block.  Whitespace is stripped from the right of the argument
+  but not the left, so you can match indentation.
 
 Unique to this extractor, `snippet-start` supports an optional number following
 the closing bracket.  If this number is present, that many spaces are removed
-from the beginning of each line of the snippet, allowing for snippets to be
+from the beginning of each line of the snippet, allowing snippets to be
 dedented (have indentation removed), so their left margin is decreased.  Each
-snippet (even overlapping snippets) has its own dedent level.  If you use
+snippet, even overlapping snippets, has its own dedent level.  If you use
 `snippet-append`, it uses the same dedent specified on `snippet-start`.  Dedent
 does not affect `snippet-echo` (provide the desired indentation yourself).
 
@@ -189,7 +189,7 @@ The following situations are errors.
 * Missing `snippet-end` corresponding to a `snippet-start` or `snippet-append`.
 
 * `snippet-append` with no corresponding `snippet-start` in the same source
-  file (you can only append to snippets created in the current source file).
+  file (you can't append to snippets created in a different source file).
 
 * `snippet-echo` outside of a snippet.
 
