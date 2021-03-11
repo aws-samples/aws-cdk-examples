@@ -84,13 +84,12 @@ class Snipper:
     # extract snippets from a single file
     # example snippet tag: // snippet-start:[snippet-name] 8
     def __call__(self, path):
-        print(path)
         self.started    = set()         # snippets we've started in this source file
         self.duplicates = set()         # snippets we've determined are duplicates so we won't append/echo
         ext = next(e for e in EXTENSIONS if path.endswith(e))       # get first matching filename extension
         if not COMMENTS[ext]:           # if empty comment marker, do not process snippets in this file
-            print("    not processed")
             return
+        print(path)
         tag = re.compile(f" *({'|'.join(COMMENTS[ext].split())}) ?snippet-") # e.g. if ext is "// #" end up with regex: " *(#|//) ?snippet-"
         self.files  = {}                # files currently open to write snippets
         self.dedent = {}                # amount of whitespace to strip from each line of snippet
