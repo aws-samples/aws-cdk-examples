@@ -5,10 +5,10 @@ Last update 10-Mar-2021
 
 ## What it is
 
-This is a GitHub Action workflow with supporting scripts that extracts snippets
-from source code files, which can then be used in documentation via include
-directives.  When the code changes, the snippets are automatically extracted
-again, and the documentation will pick them up on the next build.
+This is a GitHub Actions workflow with supporting scripts that extracts
+snippets from source code files, which can then be used in documentation via
+include directives.  When the code changes, the snippets are automatically
+extracted again, and the documentation will pick them up on the next build.
 
 There are two separate workflows: 
 
