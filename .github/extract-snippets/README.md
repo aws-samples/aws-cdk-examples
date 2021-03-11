@@ -58,7 +58,7 @@ contains a map of filename extensions to comment markers.  If a language
 supports more than one line comment marker (I'm looking at you, PHP), you can
 provide them separated by whitespace in a single string:
 
-`php "# //"`
+`php: "# //"`
 
 If a language does not support a line comment marker (e.g. C), you can use the
 starting block comment marker.  However, snippet tags must have the closing
