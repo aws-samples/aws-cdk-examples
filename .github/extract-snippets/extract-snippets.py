@@ -29,7 +29,7 @@
 # code (snippet tags included) is used in each version.  Ideally the snippet tags
 # would be removed from the copies of the Lambda source files... ideally.
 
-import sys, os, yaml, re, functools, difflib
+import sys, os, yaml, re, functools
 
 # all open() calls have an implied encoding parameter
 open = functools.partial(__builtins__.open, 
