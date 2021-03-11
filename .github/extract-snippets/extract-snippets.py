@@ -88,7 +88,7 @@ class Snipper:
         self.duplicates = set()         # snippets we've determined are duplicates so we won't append/echo
         ext = next(e for e in EXTENSIONS if path.endswith(e))       # get first matching filename extension
         if not COMMENTS[ext]:           # if empty comment marker, do not process snippets in this file
-            return
+            return 0
         print(path)
         tag = re.compile(f" *({'|'.join(COMMENTS[ext].split())}) ?snippet-") # e.g. if ext is "// #" end up with regex: " *(#|//) ?snippet-"
         self.files  = {}                # files currently open to write snippets
@@ -116,6 +116,7 @@ class Snipper:
         # done processing this file. make sure all snippets had snippet-end tags
         if self.files:
             raise SnipperError("snippet-end tag(s) for %s missing in %s" % (" ".join(self.files), path))
+        return 1
 
     # directive: beginning of snippet
     def start(self, arg):
@@ -227,8 +228,7 @@ if __name__ == "__main__":
                 continue
             seen += 1                               # count files seen (not hidden)
             if path.endswith(EXTENSIONS):           # process it if it's a source file
-                snipper(path)
-                processed += 1                      # count files processed
+                processed += snipper(path)          # returns 1 if file processed, 0 if not
 
         # print summary of what we processed and exit (successfully)
         print("\n====", snipper.count, "snippet(s) extracted from", processed, 
