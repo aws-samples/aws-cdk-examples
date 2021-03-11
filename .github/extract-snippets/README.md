@@ -193,8 +193,6 @@ The following situations are errors.
 
 * `snippet-echo` outside of a snippet.
 
-* Invalid integer following `snippet-start` or `snippet-append`.
-
 * Insufficient whitespace at the beginning of a line to dedent it as requested.
 
 * Any snippet contains a tab character (ASCII 9), as indenting by tab is not
