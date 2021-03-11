@@ -29,7 +29,7 @@
 # code (snippet tags included) is used in each version.  Ideally the snippet tags
 # would be removed from the copies of the Lambda source files... ideally.
 
-import sys, os, yaml, re, functools
+import sys, os, yaml, re, functools, difflib
 
 # all open() calls have an implied encoding parameter
 open = functools.partial(__builtins__.open, 
@@ -77,9 +77,9 @@ class Snipper:
 
     # initialize Snipper
     def __init__(self, snippetdir):
-        self.dir        = snippetdir
-        self.source     = {}
-        self.count      = 0
+        self.dir        = snippetdir    # directory where snippets will be extracted
+        self.source     = {}            # stores source file of each snippet
+        self.count      = 0             # number of snippets extracted
  
     # extract snippets from a single file
     # example snippet tag: // snippet-start:[snippet-name] 8
@@ -111,7 +111,7 @@ class Snipper:
                     dedent = self.dedent[snip]
                     if dedent and line[:dedent].strip():        # is the text we want to strip to dedent all whitespace? error if not 
                         raise SnipperError(("unable to dedent %s space(s) " % dedent) + 
-                            ("in snippet %s at line %s in %s" % self._where) + 
+                            ("in snippet %s at line %s in %s " % self._where) + 
                             f"(only indented {len(line) - len(line.lstrip())})")
                     file.write(line[dedent:].rstrip() + EOL)    # write it (strip whitespace at end just to be neat)
         # done processing this file. make sure all snippets had snippet-end tags
@@ -123,37 +123,36 @@ class Snipper:
         path = os.path.join(self.dir, f"{arg}.txt")
         indicator = "W"
         opener = open
+        if arg in self.files:
+            raise SnipperError("snippet %s already open at line %s in %s" % self._where)
         if os.path.isfile(path):
             # if snippet output already exists, this is OK only if it is being taken
             # from a source file of the same name with identical content
-            if self.path.rpartition("/")[2] != self.source[arg].rpartition("/")[2] or self.text != cached(self.source[arg]):
-                raise SnipperError(("duplicate snippet %s at line %s in %s" % self._where) +
-                    " (originally defined in %s)" % self.source[arg])
-            else:
+            if self.path != self.source[arg] and self.path.rpartition("/")[2] == self.source[arg].rpartition("/")[2] and self.text == cached(self.source[arg]):
                 indicator = "X"         # show thtis is a duplicate
                 opener = DummyFile      # don't write to this file
                 self.duplicates.add(arg)
+            else:
+                raise SnipperError(("duplicate snippet %s at line %s in %s" % self._where) +
+                    " (originally defined in %s)" % self.source[arg])
         else:
             self.count += 1
-        if arg not in self.files:
-            # parse number at end of line as dedent value
-            self.dedent[arg] = int(DIGITS.search(self.line.rpartition("]")[2] + " 0").group(0))
-            self.files[arg] = opener(path, "w")     # open real file or dummy
-            self.started.add(arg)       # record that we started this snippet in this source file
-            if arg not in self.source:  # record that we *first* saw this snippet in this source file
-                self.source[arg] = self.path
-            print("   ", indicator, arg)
-        else:
-            raise SnipperError("snippet file %s is already open at line %s in %s" % self._where)
+        # parse number at end of line as dedent value
+        self.dedent[arg] = int(DIGITS.search(self.line.rpartition("]")[2] + " 0").group(0))
+        self.files[arg] = opener(path, "w")     # open real file or dummy
+        self.started.add(arg)       # record that we started this snippet in this source file
+        if arg not in self.source:  # record that we *first* saw this snippet in this source file
+            self.source[arg] = self.path
+        print("   ", indicator, arg)
 
     # directive: append to given file (for extracting multiple chunks of code to a single snippet)
     def append(self, arg):
+        if arg in self.files:           # is the file already open?
+            raise SnipperError("snippet %s already open at line %s in %s" % self._where)
         if arg not in self.started:     # did we start this snippet in current source file?
             raise SnipperError("snippet file %s not found at line %s in %s" % self._where)
-        if arg in self.files:           # is the file already open?
-            raise SnipperError("snippet %s is already open at line %s in %s" % self._where)
-        self.files[arg] = DummyFile() if arg in self.duplicates else open(os.path.join(self.dir, arg), "a")
-        print("   A", arg)
+        self.files[arg] = DummyFile() if arg in self.duplicates else open(os.path.join(self.dir, arg) + ".txt", "a")
+        print("    A", arg)
 
     # directive: end of snippet
     def end(self, arg):
@@ -192,10 +191,10 @@ class Snipper:
 if __name__ == "__main__":
 
     # get output directory from command line, or error
-    if len(sys.argv) > 1 and os.path.isdir(sys.argv[1]):
+    if len(sys.argv) > 1 and os.path.isdir(sys.argv[1]) and not os.listdir(sys.argv[1]):
         snippetdir = sys.argv[1]
     else:
-        raise FileNotFoundError("snippet output directory not passed or does not exist")
+        raise FileNotFoundError("snippet output directory not passed, does not exist, or is not empty")
 
     # get filename of extersions list from command line, or use default, then load it
     if len(sys.argv) > 2:
