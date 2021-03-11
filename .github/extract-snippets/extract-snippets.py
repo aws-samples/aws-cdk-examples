@@ -191,7 +191,7 @@ class Snipper:
 if __name__ == "__main__":
 
     # get output directory from command line, or error
-    if len(sys.argv) > 1 and os.path.isdir(sys.argv[1]) and not os.listdir(sys.argv[1]):
+    if len(sys.argv) > 1 and os.path.isdir(sys.argv[1]):
         snippetdir = sys.argv[1]
     else:
         raise FileNotFoundError("snippet output directory not passed, does not exist, or is not empty")
