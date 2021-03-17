@@ -49,7 +49,7 @@ DIGITS = re.compile("[0-9][0-9]?")
 def cached(path, cache={}):
     if path not in cache:
         with open(path) as infile:
-            cache[path] = infile.read()
+            cache[path] = infile.read().rstrip()
     return cache[path]
 
 # our exception class to make error messages clearer
