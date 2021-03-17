@@ -225,7 +225,7 @@ if __name__ == "__main__":
                 continue
             seen += 1                               # count files seen (not hidden)
             ext = next((ext for ext in MAP_EXT_MARKER if path.endswith(ext)), None)
-            markers = MAP_EXT_MARKER.get(ext, ())
+            markers = MAP_EXT_MARKER.get(ext, None)
             if markers:                              # process it if we have comment markers
                 snipper(path, markers)               # returns 1 if file processed, 0 if not
                 processed += 1
