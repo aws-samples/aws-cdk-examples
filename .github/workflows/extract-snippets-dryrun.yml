@@ -14,4 +14,4 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: "3.9.x"
-      - run: find . -type f | python .github/extract-snippets/extract-snippets.py
+      - run: mkdir ../snippets ; find . -type f | python .github/extract-snippets/extract-snippets.py ../snippets
