@@ -83,14 +83,11 @@ class Snipper:
  
     # extract snippets from a single file
     # example snippet tag: // snippet-start:[snippet-name] 8
-    def __call__(self, path):
+    def __call__(self, path, markers):
         self.started    = set()         # snippets we've started in this source file
         self.duplicates = set()         # snippets we've determined are duplicates so we won't append/echo
-        ext = next(e for e in EXTENSIONS if path.endswith(e))       # get first matching filename extension
-        if not COMMENTS[ext]:           # if empty comment marker, do not process snippets in this file
-            return 0
         print(path)
-        tag = re.compile(f" *({'|'.join(COMMENTS[ext].split())}) ?snippet-") # e.g. if ext is "// #" end up with regex: " *(#|//) ?snippet-"
+        tag = re.compile(f" *({'|'.join(markers)}) ?snippet-") # e.g. if ext is "// #" end up with regex: " *(#|//) ?snippet-"
         self.files  = {}                # files currently open to write snippets
         self.dedent = {}                # amount of whitespace to strip from each line of snippet
         self.path = path                # source file we are working with (store it on instance so we can use it in error messages)
@@ -207,9 +204,10 @@ if __name__ == "__main__":
     if not os.path.isfile(commentfile):
         raise FileNotFoundError("source file extension map %s not found" % commentfile)
     with open(commentfile) as comments:
-        EXTENSIONS = tuple(COMMENTS := yaml.safe_load(comments))
+        MAP_EXT_MARKER = {k: v.split() for k, v in yaml.safe_load(comments).items()}
+
     print("extracting snippets in source files", 
-        " ".join(ex for ex in COMMENTS if COMMENTS[ex]), "\n")
+        " ".join(ex for ex in MAP_EXT_MARKER if MAP_EXT_MARKER[ex]), "\n")
 
     # initialize snipper instance and our counters
     snipper = Snipper(snippetdir)
@@ -227,8 +225,11 @@ if __name__ == "__main__":
             if "/." in path:                        # skip hidden file or directory
                 continue
             seen += 1                               # count files seen (not hidden)
-            if path.endswith(EXTENSIONS):           # process it if it's a source file
-                processed += snipper(path)          # returns 1 if file processed, 0 if not
+            ext = next((ext for ext in MAP_EXT_MARKER if path.endswith(ext)), "")
+            markers = MAP_EXT_MARKER.get(ext, "")
+            if markers:                              # process it if we have comment markers
+                snipper(path, markers)               # returns 1 if file processed, 0 if not
+                processed += 1
 
         # print summary of what we processed and exit (successfully)
         print("\n====", snipper.count, "snippet(s) extracted from", processed, 
