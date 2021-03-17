@@ -241,6 +241,5 @@ if __name__ == "__main__":
         while lines.append(str(tb.tb_lineno)) or tb.tb_next:    
             tb = tb.tb_next
         # print short error message and exit (unsuccessfully)
-        sys.stdout.flush()
-        print(f"@{'.'.join(reversed(lines))} {type(ex).__name__}: {ex}", file=sys.stderr)
+        print(f"@{'.'.join(reversed(lines))} {type(ex).__name__}: {ex}")
         sys.exit(1)
