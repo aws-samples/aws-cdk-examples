@@ -44,10 +44,10 @@ current directory.
 ## extract-snippets.py
 
 This script reads from standard input the names of the files containing the
-snippets to be extracted.  It ignores non-source files, hidden files, and files
-in hidden directories (it is not necessary to filter these out beforehand).
-The script's required argument is the directory that the snippets should be
-extracted into.
+snippets to be extracted.  It ignores non-source files, hidden files, files
+that don't exist, and files in hidden directories (it is not necessary to
+filter these out beforehand). The script's required argument is the directory
+that the snippets should be extracted into.
 
 For example, the following command runs the script on source files in the
 current directory, extracting snippets also into the current directory.
