@@ -1,0 +1,17 @@
+# v1.0.0
+name: Extract Snippets Dry Run
+on:
+  pull-request
+jobs:
+  extract-snippets:
+    if: github.repository_owner == 'aws' || github.repository_owner == 'jerry-aws'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-python@v2
+        with:
+          python-version: "3.9.x"
+      - run: find . -type f | python .github/extract-snippets/extract-snippets.py
