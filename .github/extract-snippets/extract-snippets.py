@@ -1,5 +1,3 @@
-#!/bin/python
-
 # extract-snippets.py v1.0.0
 # Jerry Kindall, Amazon Web Services
 

@@ -1,5 +1,3 @@
-#/bin/bash
-
 # extract-snippets.sh v1.0.0
 # Jerry Kindall, Amazon Web Services
 
