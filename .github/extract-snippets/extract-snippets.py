@@ -236,6 +236,7 @@ if __name__ == "__main__":
     except Exception as ex:
 
         # get all line numbers in traceback
+        raise
         tb = ex.__traceback__
         lines = []
         while lines.append(str(tb.tb_lineno)) or tb.tb_next:    
