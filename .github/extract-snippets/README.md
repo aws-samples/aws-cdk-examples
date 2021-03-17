@@ -54,6 +54,9 @@ current directory, extracting snippets also into the current directory.
 
 `ls | python3 extract-snippets.py .`
 
+The script is meant to be run from `extract-snippets.sh`, but can be run on
+its own (as in the Dry Run workflow).
+
 Both Windows and Linux-style paths are supported (they are converted to Linux-
 style paths internally).
 
