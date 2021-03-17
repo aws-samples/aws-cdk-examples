@@ -113,7 +113,6 @@ class Snipper:
         # done processing this file. make sure all snippets had snippet-end tags
         if self.files:
             raise SnipperError("snippet-end tag(s) for %s missing in %s" % (" ".join(self.files), path))
-        return 1
 
     # directive: beginning of snippet
     def start(self, arg):
