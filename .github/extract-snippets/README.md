@@ -5,18 +5,22 @@ Last update 10-Mar-2021
 
 ## What it is
 
-This is a GitHub Actions workflow with supporting scripts that extracts
+This is a collection of GitHub Actions workflows with supporting scripts that extracts
 snippets from source code files, which can then be used in documentation via
 include directives.  When the code changes, the snippets are automatically
 extracted again, and the documentation will pick them up on the next build.
 
-There are two separate workflows: 
+There are three separate workflows: 
 
 * Extract Snippets from Push (`extract-snippets-push.yaml`): Extracts snippets
   from the source files in the most recent push; meant to be triggered on push.
 
 * Extract Snippets in Repo (`extract-snippets-all.yaml`): Extracts snippets
   from all source files in the repo; meant to be run manually or on a schedule.
+
+* Extract Snippets Dry Run (`extract-snippets-dryrun.yml`): Extracts snippets
+  from all source files in a pull request but does not check in any snippets;
+  meant to validate PRs.
 
 As a practical matter, extracting from the entire repo is not noticeably slower
 than extracting from only the files in a push (the git commands take the lion's
@@ -26,10 +30,10 @@ repository grows.
 ## extract-snippets.sh
 
 This `bash` script calls the Python script (described next) to extract the
-snippets, then checks the results in to the `snippets` branch of the repo. This
-script's arguments are taken as a `bash` command that gathers the files to be
-examined for snippets; the output of that command should be a list of paths,
-one per line.  This list is piped to the Python script on standard input.
+snippets, then checks the results in to the `snippets` branch of the repo. 
+This script's arguments are taken as a `bash` command that gathers the files 
+to be examined for snippets; the output of that command should be a list of
+paths, one per line.  This is piped to the Python script on standard input.
 
 For example, the following invocation of the script will pipe the output of
 `ls` into the Python script to extract snippets from the source files in the
