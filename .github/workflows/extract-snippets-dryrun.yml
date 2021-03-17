@@ -1,7 +1,7 @@
 # v1.0.0
 name: Extract Snippets Dry Run
 on:
-  pull-request
+  pull_request
 jobs:
   extract-snippets:
     if: github.repository_owner == 'aws' || github.repository_owner == 'jerry-aws'
