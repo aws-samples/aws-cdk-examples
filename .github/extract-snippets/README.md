@@ -1,31 +1,31 @@
 # Extract Snippets for GitHub Actions
 
 Jerry Kindall, Amazon Web Services  
-Last update 16-Mar-2021
+Last updated 18-Mar-2021
 
 ## What it is
 
-This is a collection of GitHub Actions workflows with supporting scripts that extracts
-snippets from source code files, which can then be used in documentation via
-include directives.  When the code changes, the snippets are automatically
-extracted again, and the documentation will pick them up on the next build.
+This is a suite of GitHub Actions workflows with supporting scripts that
+extracts code snippets from source code files, which can then be used in
+documentation via include directives.  When the code changes, the snippets are
+automatically extracted again, and the documentation will pick them up on the
+next build.
 
-There are three separate workflows: 
+There are two separate workflows: 
 
-* Extract Snippets from Push (`extract-snippets-push.yaml`): Extracts snippets
-  from the source files in the most recent push; meant to be triggered on push.
-
-* Extract Snippets in Repo (`extract-snippets-all.yaml`): Extracts snippets
-  from all source files in the repo; meant to be run manually or on a schedule.
+* Extract Snippets (`extract-snippets.yaml`): Extracts snippets from all source
+  files in the repo.  Runs on a commit to the main or master branch; can also
+  be run manually.
 
 * Extract Snippets Dry Run (`extract-snippets-dryrun.yml`): Extracts snippets
   from all source files in a pull request but does not check in any snippets;
   meant to validate PRs.
 
-As a practical matter, extracting from the entire repo is not noticeably slower
-than extracting from only the files in a push (the git commands take the lion's
-share of either workflow's runtime), though this might become less true as the
-repository grows.
+To prevent the introduction of errors in the snippets (e.g. duplicate snippet
+filenames with different content), all files in the repo are always processed.
+This is not noticeably slower than e.g. processing only the files in a given
+commit; the overhead of the action setup and Git commands dwarfs the run time
+of the actual snippet extraction.
 
 ## extract-snippets.sh
 
@@ -41,13 +41,16 @@ current directory.
 
 `bash extract-snippets.sh ls`
 
+In the Extract Snippets workflow, this script is called with `find . -type f`,
+which causes all files in the repo to be examined.
+
 ## extract-snippets.py
 
 This script reads from standard input the names of the files containing the
-snippets to be extracted.  It ignores non-source files, hidden files, files
-that don't exist, and files in hidden directories (it is not necessary to
-filter these out beforehand). The script's required argument is the directory
-that the snippets should be extracted into.
+snippets to be extracted.  It ignores non-source files, hidden files,  and
+files in hidden directories (it is not necessary to filter out such files
+beforehand). The script's required argument is the directory that the snippets
+should be extracted into.
 
 For example, the following command runs the script on source files in the
 current directory, extracting snippets also into the current directory.
@@ -144,12 +147,16 @@ the original snippet extractor used in the AWS SDK Examples repo).
   but not the left, so you can match indentation.
 
 Unique to this extractor, `snippet-start` supports an optional number following
-the closing bracket.  If this number is present, that many spaces are removed
-from the beginning of each line of the snippet, allowing snippets to be
-dedented (have indentation removed), so their left margin is decreased.  Each
-snippet, even overlapping snippets, has its own dedent level.  If you use
-`snippet-append`, it uses the same dedent specified on `snippet-start`.  Dedent
-does not affect `snippet-echo` (provide the desired indentation yourself).
+the closing bracket.  
+
+`// snippet-start:[my-snippet] 8` 
+
+If this number is present, that many spaces are removed from the beginning of
+each line of the snippet, allowing snippets to be dedented (have indentation
+removed), so their left margin is decreased.  Each snippet, even overlapping
+snippets, has its own dedent level.  If you use `snippet-append`, it uses the
+same dedent specified on `snippet-start`.  Dedent does not affect
+`snippet-echo` (provide the desired indentation yourself).
 
 This extractor also recognizes the following tags (i.e. they are not errors),
 but does not do anything with them.  They are supported for compatibility with
