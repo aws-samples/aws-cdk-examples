@@ -1,5 +1,5 @@
 # v1.0.0
-name: Extract Snippets in Repo
+name: Extract Snippets
 on:
   # run on push
   push:
