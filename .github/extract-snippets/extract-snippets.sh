@@ -16,14 +16,17 @@ cp .github/extract-snippets/README-SNIPPETS.txt ../snippets/README.txt
 python -m pip install --upgrade pip pyyaml
 find . -type f | python .github/extract-snippets/extract-snippets.py ../snippets || exit 1
 
-test -n "$1" && exit 0   # dry run if any value in first argument
+if [[ -z $1 ]]; then
 
-git checkout --track origin/snippets
-mkdir -p snippets
-cp ../snippets/* snippets
+    git checkout --track origin/snippets
+    mkdir -p snippets
+    cp ../snippets/* snippets
 
-git config --local user.email  "41898282+github-actions[bot]@users.noreply.github.com"
-git config --local user.name   "github-actions[bot]"
-git add --all 
-git commit -m "Updated on `date -R`"
+    git config --local user.email  "41898282+github-actions[bot]@users.noreply.github.com"
+    git config --local user.name   "github-actions[bot]"
+    git add --all 
+    git commit -m "Updated on `date -R`"
+
+fi
+
 exit 0
