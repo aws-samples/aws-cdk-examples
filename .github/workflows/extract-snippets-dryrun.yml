@@ -1,7 +1,7 @@
 # v1.0.0
 name: Extract Snippets Dry Run
 on:
-  pull_request
+  pull_request:
   # run on demand
   workflow_dispatch:
 jobs:
