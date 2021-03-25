@@ -20,7 +20,7 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: "3.9.x"
-      - run: bash .github/extract-snippets/extract-snippets.sh find . -type f
+      - run: bash .github/extract-snippets/extract-snippets.sh
       - uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,7 +1,7 @@
 # Extract Snippets for GitHub Actions
 
 Jerry Kindall, Amazon Web Services  
-Last updated 18-Mar-2021
+Last updated 24-Mar-2021
 
 ## What it is
 
@@ -26,91 +26,6 @@ filenames with different content), all files in the repo are always processed.
 This is not noticeably slower than e.g. processing only the files in a given
 commit; the overhead of the action setup and Git commands dwarfs the run time
 of the actual snippet extraction.
-
-## extract-snippets.sh
-
-This `bash` script calls the Python script (described next) to extract the
-snippets, then checks the results in to the `snippets` branch of the repo. 
-This script's arguments are taken as a `bash` command that gathers the files 
-to be examined for snippets; the output of that command should be a list of
-paths, one per line.  This is piped to the Python script on standard input.
-
-For example, the following invocation of the script will pipe the output of
-`ls` into the Python script to extract snippets from the source files in the
-current directory.
-
-`bash extract-snippets.sh ls`
-
-In the Extract Snippets workflow, this script is called with `find . -type f`,
-which causes all files in the repo to be examined.
-
-## extract-snippets.py
-
-This script reads from standard input the names of the files containing the
-snippets to be extracted.  It ignores non-source files, hidden files,  and
-files in hidden directories (it is not necessary to filter out such files
-beforehand). The script's required argument is the directory that the snippets
-should be extracted into.
-
-For example, the following command runs the script on source files in the
-current directory, extracting snippets also into the current directory.
-
-`ls | python3 extract-snippets.py .`
-
-The script is meant to be run from `extract-snippets.sh`, but can be run on
-its own (as in the Dry Run workflow).
-
-Both Windows and Linux-style paths are supported (they are converted to Linux-
-style paths internally).
-
-The supported source file formats are stored in `snippet-extensions.yml`, which
-contains a map of filename extensions to comment markers.  If a language
-supports more than one line comment marker (I'm looking at you, PHP), you can
-provide them separated by whitespace in a single string:
-
-`php: "# //"`
-
-If a language does not support a line comment marker (e.g. C), you can use the
-starting block comment marker.  However, snippet tags must have the closing
-block comment marker on the same line, e.g.:
-
-`/* snippet-start:[terry.riley.in-c] */`
-
-Some languages support both line and block comments.  In this case, we suggest
-you always use the line comment marker for snippet tags.
-
-You may pass a different YAML (or JSON) file as the script's second argument --
-for example, the provided `snippet-extensions-more.yml`, which contains a more
-extensive map of source formats.  Note that if you specify only a filename, the
-file of that name in the same directory as the script (not in the working
-directory!) is used.  To specify a file in the current directory, use `./`,
-e.g. `./my-snippet-extensions.yml`.
-
-The keys in `snippet-extensions.yml` are matched case-sensitively at the end of
-full paths, and can be used to match more than extensions.  If you wanted to
-extract snippets from makefiles, for example, you could add to the mapping:
-
-`/makefile: "#"`
-
-If a given key could match more than one language, the first one listed in the
-extension file wins.
-
-To match all files, use `""` as the key, since there's an empty string at the
-end of every path.  You probably don't want to do this, but you can, perhaps
-in combination with excluding certain files as described next.
-
-To exclude a specific file from being processed, specify the end of its path
-and an empty string as the comment marker.  Such items should appear earlier
-in the file than others that might match, since the first match wins.
-
-`"/lambda/widgets.js": ""`
-
-The output of `extract-snippets.py` is a list of the source files processed.
-Indented under each source file is a list of the snippets extracted from it, if
-any, marked with `W`, `A` (for "write" or "append") or `X` for a duplicate
-snippet that has already been extracted.  At the end of the run, a summary line
-displays the number of unique snippets extracted and the number of source files
-examined.
 
 ## Snippet tags
 
@@ -171,13 +86,84 @@ metadata about each snippet.
 * `snippet-sourcesyntax`
 * `snippet-sourcetype`
 
+## extract-snippets.sh
+
+This `bash` script calls the Python script (described next) to extract the
+snippets, then checks the results in to the `snippets` branch of the repo. 
+If the script is passed any argument (value is irrelevant), it exits after
+extracting the snippets without adding them to the repo ("dry run" mode).
+
+## extract-snippets.py
+
+This script reads from standard input the paths of the files containing the
+snippets to be extracted.  It ignores non-source files, hidden files, and
+files in hidden directories (it is not necessary to filter out such files
+beforehand). The script's required argument is the directory that the snippets
+should be extracted into.
+
+For example, the following command runs the script on source files in the
+current directory, extracting snippets also into the current directory.
+
+`ls | python3 extract-snippets.py .`
+
+Both Windows and Linux-style paths are supported (they are converted to Linux-
+style paths internally).
+
+The supported source file formats are stored in `snippet-extensions.yml`, which
+contains a map of filename extensions to comment markers.  If a language
+supports more than one line comment marker, you can provide them separated by
+whitespace in a single string:
+
+`php: "# //"`
+
+If a language does not support a line comment marker (e.g. C), you can specify
+its starting block comment marker.  However, snippet tags must then have the
+closing block comment marker on the same line, e.g.:
+
+`/* snippet-start:[terry.riley.in-c] */`
+
+Some languages support both line and block comments.  In this case, we suggest
+you always use the line comment marker for snippet tags.
+
+You may pass a different YAML (or JSON) file as the script's second argument --
+for example, the provided `snippet-extensions-more.yml`, which contains a more
+extensive map of source formats.  Note that if you specify only a filename, the
+file of that name in the same directory as the script (not in the working
+directory!) is used.  To specify a file in the current directory, use `./`,
+e.g. `./my-snippet-extensions.yml`.
+
+The keys in `snippet-extensions.yml` are matched case-sensitively at the end of
+file paths, and can be used to match more than extensions.  If you wanted to
+extract snippets from makefiles, for example, you could add to the mapping:
+
+`/makefile: "#"`
+
+If a given key could match more than one language, the first one listed in the
+extension file wins.
+
+To match all files, use `""` as the key, since there's an empty string at the
+end of every path.  You probably shouldn't do this, but you *can.*
+
+To exclude a file or files from being processed, specify the end of its path
+and an empty string as the comment marker.  Such items should appear earlier
+in the file than others that might match, since the first match wins.
+
+`"/lambda/widgets.js": ""`
+
+The output of `extract-snippets.py` is a list of the source files processed.
+Indented under each source file is a list of the snippets extracted from it, if
+any, marked with `W`, `A` (for "write" or "append") or `X` for a duplicate
+snippet that has already been extracted.  At the end of the run, a summary line
+displays the number of unique snippets extracted and the number of source files
+examined.
+
 ## Errors
 
 The following situations are errors.
 
-* Unrecognized snippet tag (see preceding section for supported tags).
+* Unrecognized snippet tag (see earlier section for supported tags).
 
-* Text decoding error.  By default, source files are assumed to be in ASCII. To
+* Text decoding error.  By default, source files are assumed to be ASCII. To
   change the encoding used, sent the environment variable `SOURCE_ENCODING` to
   `utf8` or another encoding.  Use the Python name, which you can find here:
 
@@ -188,14 +174,14 @@ The following situations are errors.
 ```yaml
     # goes under the `steps` key
     env:
-        SOURCE_ENCODING: utf8
+        SOURCE_ENCODING: utf-8
 ```
 
 * `snippet-start` for a snippet file that has already been extracted, *unless*
   the source file has the same filename and contains exactly the same code.
   This behavior supports multiple examples that contain the same source code
   for an incorporated Lambda function or other asset, where that code contains
-  snippets that are extracted.
+  snippets.
 
 * `snippet-end` with no corresponding `snippet-start` or `snippet-append` in
   the same source file.
@@ -212,8 +198,8 @@ The following situations are errors.
 * Any snippet contains a tab character (ASCII 9), as indenting by tab is not
   supported in documentation.
 
-All errors stop processing, and the entire workflow fails.  Any snippets
-extracted before the error are not checked in to the repo.
+All errors stop processing, and the entire workflow fails.  No snippets will
+be checked in to the repo.
 
 # README-SNIPPETS.txt
 

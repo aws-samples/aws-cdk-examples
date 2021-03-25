@@ -14,7 +14,9 @@ mkdir ../snippets
 cp .github/extract-snippets/README-SNIPPETS.txt ../snippets/README.txt
 
 python -m pip install --upgrade pip pyyaml
-command $* | python .github/extract-snippets/extract-snippets.py ../snippets || exit 1
+find . -type f | python .github/extract-snippets/extract-snippets.py ../snippets || exit 1
+
+if [[ -n $1 ]] exit 0   # dry run if any value in first argument
 
 git checkout --track origin/snippets
 mkdir -p snippets
