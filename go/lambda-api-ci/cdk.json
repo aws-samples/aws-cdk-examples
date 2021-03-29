@@ -1,0 +1,3 @@
+{
+  "app": "go run github.com/aws-samples/aws-cdk-examples/go/lambda-api-ci/cmd/ci"
+}
