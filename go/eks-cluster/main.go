@@ -42,7 +42,7 @@ func main() {
 		UpdateType: autoscaling.UpdateType_ROLLING_UPDATE,
 	});
 
-	eksCluster.ConnectAutoScalingGroupCapacity(onDemandASG, nil);
+	eksCluster.ConnectAutoScalingGroupCapacity(onDemandASG, &eks.AutoScalingGroupOptions{});
 
 	app.Synth(nil)
 }
