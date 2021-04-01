@@ -1,9 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"io/ioutil"
-
 	"github.com/aws/aws-cdk-go/awscdk"
 	"github.com/aws/aws-cdk-go/awscdk/awsevents"
 	"github.com/aws/aws-cdk-go/awscdk/awseventstargets"
@@ -25,15 +22,9 @@ func NewLambdaCronStack(scope constructs.Construct, id string, props *LambdaCron
 
 	// The code that defines your stack goes here
 
-	code, err := ioutil.ReadFile("lambda-handler.py")
-
-	if err != nil {
-		panic(fmt.Sprintf("Failed reading handler code: %s", err))
-	}
-
 	lambdaFn := awslambda.NewFunction(stack, jsii.String("Singleton"), &awslambda.FunctionProps{
-		Code: awslambda.NewInlineCode(jsii.String(string(code))),
-		Handler: jsii.String("index.main"),
+		Code: awslambda.NewAssetCode(jsii.String("lambda"), nil),
+		Handler: jsii.String("handler.main"),
 		Timeout: awscdk.Duration_Seconds(jsii.Number(300)),
 		Runtime: awslambda.Runtime_PYTHON_3_6(),
 	});
