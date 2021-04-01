@@ -1,28 +1,27 @@
 package main
 
 import (
-	"os"
-
 	"github.com/aws/aws-cdk-go/awscdk"
 	"github.com/aws/jsii-runtime-go"
 )
 
 func main() {
-	App := awscdk.NewApp(nil)
+	app := awscdk.NewApp(nil)
+	stack := awscdk.NewStack(app, jsii.String("MyStaticSite"), nil)
 
-	domainName := awscdk.NewCfnParameter(App, jsii.String("DomainNameParameter"), &awscdk.CfnParameterProps{
+	domainName := awscdk.NewCfnParameter(stack, jsii.String("DomainNameParameter"), &awscdk.CfnParameterProps{
 		Type:        jsii.String("string"),
 		Description: jsii.String("Static site domain name"),
 	}).ValueAsString()
 
-	NewStaticSiteStack(App, "MySite", StaticSiteProps{
+	NewStaticSiteStack(stack, "MySite", StaticSiteProps{
 		DomainName: domainName,
 		StackProps: awscdk.StackProps{
 			Env: Env(),
 		},
 	})
 
-	App.Synth(nil)
+	app.Synth(nil)
 }
 
 // env determines the AWS environment (account+region) in which our stack is to
