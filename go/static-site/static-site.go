@@ -11,11 +11,13 @@ import (
 	"github.com/aws/aws-cdk-go/awscdk/awss3"
 	"github.com/aws/aws-cdk-go/awscdk/awss3assets"
 	"github.com/aws/aws-cdk-go/awscdk/awss3deployment"
+	"github.com/aws/constructs-go/constructs/v3"
 	"github.com/aws/jsii-runtime-go"
 )
 
 type StaticSiteProps struct {
-	DomainName string
+	awscdk.StackProps
+	DomainName *string
 }
 
 /**
@@ -24,13 +26,15 @@ type StaticSiteProps struct {
  * The site redirects from HTTP to HTTPS, using a CloudFront distribution,
  * Route53 alias record, and ACM certificate.
  */
-func NewStaticSite(parent awscdk.Construct, id *string, props *StaticSiteProps) {
-	zone := awsroute53.HostedZone_FromLookup(parent, jsii.String("Zone"), &awsroute53.HostedZoneProviderProps{
-		DomainName: &props.DomainName,
+func NewStaticSiteStack(scope constructs.Construct, id string, props StaticSiteProps) awscdk.Stack {
+	stack := awscdk.NewStack(scope, &id, &props.StackProps)
+
+	zone := awsroute53.HostedZone_FromLookup(stack, jsii.String("Zone"), &awsroute53.HostedZoneProviderProps{
+		DomainName: props.DomainName,
 	})
 
 	// Content Bucket
-	bucket := awss3.NewBucket(parent, jsii.String(fmt.Sprint("SiteBucket")), &awss3.BucketProps{
+	bucket := awss3.NewBucket(stack, jsii.String(fmt.Sprint("SiteBucket")), &awss3.BucketProps{
 		WebsiteIndexDocument: jsii.String("index.html"),
 		WebsiteErrorDocument: jsii.String("error.html"),
 		PublicReadAccess:     jsii.Bool(true),
@@ -39,29 +43,29 @@ func NewStaticSite(parent awscdk.Construct, id *string, props *StaticSiteProps) 
 		// will fail unless the bucket is empty.
 		RemovalPolicy: awscdk.RemovalPolicy_DESTROY,
 	})
-	awscdk.NewCfnOutput(parent, jsii.String("Bucket"), &awscdk.CfnOutputProps{
+	awscdk.NewCfnOutput(stack, jsii.String("Bucket"), &awscdk.CfnOutputProps{
 		Value: bucket.BucketName(),
 	})
 
 	// TLS Certificate
 	certificate := awscertificatemanager.NewDnsValidatedCertificate(
-		parent,
+		stack,
 		jsii.String("Certificate"),
 		&awscertificatemanager.DnsValidatedCertificateProps{
-			DomainName: &props.DomainName,
+			DomainName: props.DomainName,
 			HostedZone: zone,
 			Region:     jsii.String("us-east-1"),
 		})
 
 	// CloudFront distribution that provides HTTPS
 	distribution := awscloudfront.NewCloudFrontWebDistribution(
-		parent,
+		stack,
 		jsii.String("SiteDistribution"),
 		&awscloudfront.CloudFrontWebDistributionProps{
 			AliasConfiguration: &awscloudfront.AliasConfiguration{
 				AcmCertRef: certificate.CertificateArn(),
 				Names: &[]*string{
-					jsii.String(fmt.Sprintf("https://%s", props.DomainName)),
+					jsii.String(fmt.Sprintf("https://%v", props.DomainName)),
 				},
 				SslMethod:      awscloudfront.SSLMethod_SNI,
 				SecurityPolicy: awscloudfront.SecurityPolicyProtocol_TLS_V1_1_2016,
@@ -78,18 +82,18 @@ func NewStaticSite(parent awscdk.Construct, id *string, props *StaticSiteProps) 
 				},
 			},
 		})
-	awscdk.NewCfnOutput(parent, jsii.String("DistributionId"), &awscdk.CfnOutputProps{
+	awscdk.NewCfnOutput(stack, jsii.String("DistributionId"), &awscdk.CfnOutputProps{
 		Value: distribution.DistributionId(),
 	})
 
 	// Route53 ailas record for the CloudFront distribution
-	awsroute53.NewARecord(parent, jsii.String("SiteAliasRecord"), &awsroute53.ARecordProps{
-		RecordName: &props.DomainName,
+	awsroute53.NewARecord(stack, jsii.String("SiteAliasRecord"), &awsroute53.ARecordProps{
+		RecordName: props.DomainName,
 		Target:     awsroute53.NewRecordTarget(&[]*string{}, awsroute53targets.NewCloudFrontTarget(distribution)),
 		Zone:       zone,
 	})
 
-	awss3deployment.NewBucketDeployment(parent, jsii.String("DeployWithInvalidation"), &awss3deployment.BucketDeploymentProps{
+	awss3deployment.NewBucketDeployment(stack, jsii.String("DeployWithInvalidation"), &awss3deployment.BucketDeploymentProps{
 		Sources: &[]awss3deployment.ISource{
 			awss3deployment.Source_Asset(jsii.String("./site-contents"), &awss3assets.AssetOptions{}),
 		},
@@ -99,4 +103,6 @@ func NewStaticSite(parent awscdk.Construct, id *string, props *StaticSiteProps) 
 			jsii.String("/*"),
 		},
 	})
+
+	return stack
 }
