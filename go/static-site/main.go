@@ -5,22 +5,22 @@ import (
 	"os"
 
 	"github.com/aws/aws-cdk-go/awscdk"
-	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/jsii-runtime-go"
 )
 
 func main() {
-	App := awscdk.NewApp(&awscdk.AppProps{})
+	App := awscdk.NewApp(nil)
 
-	stack := awscdk.NewStack(App, aws.String("MyStack"), &awscdk.StackProps{
+	stack := awscdk.NewStack(App, jsii.String("MyStack"), &awscdk.StackProps{
 		Env: &awscdk.Environment{
-			Account: aws.String(os.Getenv("CDK_DEFAULT_ACCOUNT")),
-			Region:  aws.String(os.Getenv("CDK_DEFAULT_REGION")),
+			Account: jsii.String(os.Getenv("CDK_DEFAULT_ACCOUNT")),
+			Region:  jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
 		},
 	})
 
-	NewStaticSite(stack, aws.String("MySite"), &StaticSiteProps{
-		DomainName: fmt.Sprintf("%v", stack.Node().TryGetContext(aws.String("domainName"))),
+	NewStaticSite(stack, jsii.String("MySite"), &StaticSiteProps{
+		DomainName: fmt.Sprintf("%v", stack.Node().TryGetContext(jsii.String("domainName"))),
 	})
 
-	App.Synth(&awscdk.StageSynthesisOptions{})
+	App.Synth(nil)
 }

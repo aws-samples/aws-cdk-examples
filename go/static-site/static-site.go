@@ -11,7 +11,7 @@ import (
 	"github.com/aws/aws-cdk-go/awscdk/awss3"
 	"github.com/aws/aws-cdk-go/awscdk/awss3assets"
 	"github.com/aws/aws-cdk-go/awscdk/awss3deployment"
-	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/jsii-runtime-go"
 )
 
 type StaticSiteProps struct {
@@ -25,43 +25,43 @@ type StaticSiteProps struct {
  * Route53 alias record, and ACM certificate.
  */
 func NewStaticSite(parent awscdk.Construct, id *string, props *StaticSiteProps) {
-	zone := awsroute53.HostedZone_FromLookup(parent, aws.String("Zone"), &awsroute53.HostedZoneProviderProps{
+	zone := awsroute53.HostedZone_FromLookup(parent, jsii.String("Zone"), &awsroute53.HostedZoneProviderProps{
 		DomainName: &props.DomainName,
 	})
 
 	// Content Bucket
-	bucket := awss3.NewBucket(parent, aws.String(fmt.Sprint("SiteBucket")), &awss3.BucketProps{
-		WebsiteIndexDocument: aws.String("index.html"),
-		WebsiteErrorDocument: aws.String("error.html"),
-		PublicReadAccess:     aws.Bool(true),
+	bucket := awss3.NewBucket(parent, jsii.String(fmt.Sprint("SiteBucket")), &awss3.BucketProps{
+		WebsiteIndexDocument: jsii.String("index.html"),
+		WebsiteErrorDocument: jsii.String("error.html"),
+		PublicReadAccess:     jsii.Bool(true),
 		// By default the RETAIN removal policy requires manual removal.
 		// Setting it to DESTROY will attempt to delete the bucket and
 		// will fail unless the bucket is empty.
 		RemovalPolicy: awscdk.RemovalPolicy_DESTROY,
 	})
-	awscdk.NewCfnOutput(parent, aws.String("Bucket"), &awscdk.CfnOutputProps{
+	awscdk.NewCfnOutput(parent, jsii.String("Bucket"), &awscdk.CfnOutputProps{
 		Value: bucket.BucketName(),
 	})
 
 	// TLS Certificate
 	certificate := awscertificatemanager.NewDnsValidatedCertificate(
 		parent,
-		aws.String("Certificate"),
+		jsii.String("Certificate"),
 		&awscertificatemanager.DnsValidatedCertificateProps{
 			DomainName: &props.DomainName,
 			HostedZone: zone,
-			Region:     aws.String("us-east-1"),
+			Region:     jsii.String("us-east-1"),
 		})
 
 	// CloudFront distribution that provides HTTPS
 	distribution := awscloudfront.NewCloudFrontWebDistribution(
 		parent,
-		aws.String("SiteDistribution"),
+		jsii.String("SiteDistribution"),
 		&awscloudfront.CloudFrontWebDistributionProps{
 			AliasConfiguration: &awscloudfront.AliasConfiguration{
 				AcmCertRef: certificate.CertificateArn(),
 				Names: &[]*string{
-					aws.String(fmt.Sprintf("https://%s", props.DomainName)),
+					jsii.String(fmt.Sprintf("https://%s", props.DomainName)),
 				},
 				SslMethod:      awscloudfront.SSLMethod_SNI,
 				SecurityPolicy: awscloudfront.SecurityPolicyProtocol_TLS_V1_1_2016,
@@ -73,30 +73,30 @@ func NewStaticSite(parent awscdk.Construct, id *string, props *StaticSiteProps) 
 						OriginProtocolPolicy: awscloudfront.OriginProtocolPolicy_HTTP_ONLY,
 					},
 					Behaviors: &[]*awscloudfront.Behavior{
-						{IsDefaultBehavior: aws.Bool(true)},
+						{IsDefaultBehavior: jsii.Bool(true)},
 					},
 				},
 			},
 		})
-	awscdk.NewCfnOutput(parent, aws.String("DistributionId"), &awscdk.CfnOutputProps{
+	awscdk.NewCfnOutput(parent, jsii.String("DistributionId"), &awscdk.CfnOutputProps{
 		Value: distribution.DistributionId(),
 	})
 
 	// Route53 ailas record for the CloudFront distribution
-	awsroute53.NewARecord(parent, aws.String("SiteAliasRecord"), &awsroute53.ARecordProps{
+	awsroute53.NewARecord(parent, jsii.String("SiteAliasRecord"), &awsroute53.ARecordProps{
 		RecordName: &props.DomainName,
 		Target:     awsroute53.NewRecordTarget(&[]*string{}, awsroute53targets.NewCloudFrontTarget(distribution)),
 		Zone:       zone,
 	})
 
-	awss3deployment.NewBucketDeployment(parent, aws.String("DeployWithInvalidation"), &awss3deployment.BucketDeploymentProps{
+	awss3deployment.NewBucketDeployment(parent, jsii.String("DeployWithInvalidation"), &awss3deployment.BucketDeploymentProps{
 		Sources: &[]awss3deployment.ISource{
-			awss3deployment.Source_Asset(aws.String("./site-contents"), &awss3assets.AssetOptions{}),
+			awss3deployment.Source_Asset(jsii.String("./site-contents"), &awss3assets.AssetOptions{}),
 		},
 		DestinationBucket: bucket,
 		Distribution:      distribution,
 		DistributionPaths: &[]*string{
-			aws.String("/*"),
+			jsii.String("/*"),
 		},
 	})
 }
