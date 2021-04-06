@@ -8,7 +8,7 @@ It starts by creating a build machine with .NET 5 SDK, Docker, GIT and AWS CDK i
 
 ### Instructions
 
-1. Create a t4g.small instance with 64-bit (arm) selected, instantiate with the following User Data script: 
+1. Create a t4g.small instance with 64-bit (arm) selected, instantiate with the following *User Data* script: 
 
 
 ```bash
