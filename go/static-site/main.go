@@ -10,13 +10,8 @@ import (
 func main() {
 	App := awscdk.NewApp(nil)
 
-	domainName := awscdk.NewCfnParameter(App, jsii.String("DomainNameParameter"), &awscdk.CfnParameterProps{
-		Type:        jsii.String("string"),
-		Description: jsii.String("Static site domain name"),
-	}).ValueAsString()
-
 	NewStaticSiteStack(App, "MySite", StaticSiteProps{
-		DomainName: domainName,
+		DomainName: jsii.String("example.com"),
 		StackProps: awscdk.StackProps{
 			Env: Env(),
 		},
