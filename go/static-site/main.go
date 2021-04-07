@@ -1,8 +1,6 @@
 package main
 
 import (
-	"os"
-
 	"github.com/aws/aws-cdk-go/awscdk"
 	"github.com/aws/jsii-runtime-go"
 )
