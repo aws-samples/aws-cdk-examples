@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 WORKDIR /source
 
 COPY *.sln .
@@ -11,7 +11,7 @@ WORKDIR /source/webapp
 RUN dotnet publish -c release -o /app -r linux-musl-arm64 --self-contained false --no-restore
 
 # final stage/image
-FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine-arm64v8
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-alpine-arm64v8
 WORKDIR /app
 COPY --from=build /app ./
 ENTRYPOINT ["./webapp"]
