@@ -2,7 +2,7 @@
 
 This example demonstrates how to build and deploy a .NET application to Amazon Elastic Container Service.
 
-It starts by creating a build machine with .NET 5 SDK, Docker, GIT and AWS CDK installed. The AWS CDK is then used to build a container from the .NET code, push to Amazon ECR and then deploy to a load balanced ECS/EC2 graviton cluster.
+It starts by creating a build machine with .NET SDK, Docker, GIT and AWS CDK installed. The AWS CDK is then used to build a container from the .NET code, push to Amazon ECR and then deploy to a load balanced ECS/EC2 graviton cluster.
 
 
 
@@ -37,7 +37,7 @@ reboot
 2. Connect to the instance and start Docker 
 
 ```bash
-service docker start
+sudo service docker start
 ```
 
 3. Configure AWS credentials
