@@ -1,8 +1,8 @@
 # dotnet-graviton-ecs
 
-This example demonstrates how to build and deploy a .NET 5 application to Amazon Elastic Container Service.
+This example demonstrates how to build and deploy a .NET application to Amazon Elastic Container Service.
 
-It starts by creating a build machine with .NET 5 SDK, Docker, GIT and AWS CDK installed. The AWS CDK is then used to build a container from the .NET 5 code, push to Amazon ECR and then deploy to a load balanced ECS/EC2 graviton cluster.
+It starts by creating a build machine with .NET 5 SDK, Docker, GIT and AWS CDK installed. The AWS CDK is then used to build a container from the .NET code, push to Amazon ECR and then deploy to a load balanced ECS/EC2 graviton cluster.
 
 
 
@@ -14,10 +14,10 @@ It starts by creating a build machine with .NET 5 SDK, Docker, GIT and AWS CDK i
 ```bash
 #!/bin/bash
 
-# Install .NET 5 SDK
+# Install .NET SDK
 yum update -y
 yum -y install libicu60
-su ec2-user -c 'curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -c 5.0'
+su ec2-user -c 'curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -c 3.1'
 echo export PATH="$PATH:/home/ec2-user/.dotnet" >> /etc/profile
 
 # Install Node & AWS CDK
