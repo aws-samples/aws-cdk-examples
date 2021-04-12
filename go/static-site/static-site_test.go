@@ -29,6 +29,6 @@ func TestStaticSiteStack(t *testing.T) {
 	}
 
 	template := gjson.ParseBytes(bytes)
-	resources := template.Get("Resources").String()
-	assert.Equal(t, "never gets here", resources)
+	resources := template.Get("Resources.SiteBucket397A1860.Properties.WebsiteConfiguration.IndexDocument").String()
+	assert.Equal(t, "index.html", resources)
 }
