@@ -1,6 +1,3 @@
 {
-  "app": "go mod download && go run .",
-  "context": {
-    "domain": "example.com"
-  }
+  "app": "go mod download && go run ."
 }
