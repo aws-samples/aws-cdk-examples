@@ -17,7 +17,6 @@ import (
 
 type StaticSiteProps struct {
 	awscdk.StackProps
-	DomainName *string
 }
 
 /**
@@ -29,8 +28,13 @@ type StaticSiteProps struct {
 func NewStaticSiteStack(scope constructs.Construct, id string, props StaticSiteProps) awscdk.Stack {
 	stack := awscdk.NewStack(scope, &id, &props.StackProps)
 
+	domainName := awscdk.NewCfnParameter(stack, jsii.String("DomainName"), &awscdk.CfnParameterProps{
+		Default: "test.com",
+		Type:    jsii.String("string"),
+	}).ValueAsString()
+
 	zone := awsroute53.HostedZone_FromLookup(stack, jsii.String("Zone"), &awsroute53.HostedZoneProviderProps{
-		DomainName: props.DomainName,
+		DomainName: domainName,
 	})
 
 	// Content Bucket
@@ -52,7 +56,7 @@ func NewStaticSiteStack(scope constructs.Construct, id string, props StaticSiteP
 		stack,
 		jsii.String("Certificate"),
 		&awscertificatemanager.DnsValidatedCertificateProps{
-			DomainName: props.DomainName,
+			DomainName: domainName,
 			HostedZone: zone,
 			Region:     jsii.String("us-east-1"),
 		})
@@ -65,7 +69,7 @@ func NewStaticSiteStack(scope constructs.Construct, id string, props StaticSiteP
 			AliasConfiguration: &awscloudfront.AliasConfiguration{
 				AcmCertRef: certificate.CertificateArn(),
 				Names: &[]*string{
-					jsii.String(fmt.Sprintf("https://%v", props.DomainName)),
+					jsii.String(fmt.Sprintf("https://%v", domainName)),
 				},
 				SslMethod:      awscloudfront.SSLMethod_SNI,
 				SecurityPolicy: awscloudfront.SecurityPolicyProtocol_TLS_V1_1_2016,
@@ -88,7 +92,7 @@ func NewStaticSiteStack(scope constructs.Construct, id string, props StaticSiteP
 
 	// Route53 ailas record for the CloudFront distribution
 	awsroute53.NewARecord(stack, jsii.String("SiteAliasRecord"), &awsroute53.ARecordProps{
-		RecordName: props.DomainName,
+		RecordName: domainName,
 		Target:     awsroute53.NewRecordTarget(&[]*string{}, awsroute53targets.NewCloudFrontTarget(distribution)),
 		Zone:       zone,
 	})

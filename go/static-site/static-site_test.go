@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/aws/aws-cdk-go/awscdk"
-	"github.com/aws/jsii-runtime-go"
 	"github.com/stretchr/testify/assert"
 	"github.com/tidwall/gjson"
 )
@@ -16,7 +15,6 @@ func TestStaticSiteStack(t *testing.T) {
 
 	// WHEN
 	stack := NewStaticSiteStack(app, "MyStack", StaticSiteProps{
-		DomainName: jsii.String("test.com"),
 		StackProps: awscdk.StackProps{
 			Env: Env(),
 		},
