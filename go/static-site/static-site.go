@@ -28,11 +28,13 @@ type StaticSiteProps struct {
 func NewStaticSiteStack(scope constructs.Construct, id string, props StaticSiteProps) awscdk.Stack {
 	stack := awscdk.NewStack(scope, &id, &props.StackProps)
 
-	domainName := awscdk.NewCfnParameter(stack, jsii.String("DomainName"), &awscdk.CfnParameterProps{
+	var domainName *string
+	domainName = awscdk.NewCfnParameter(stack, jsii.String("DomainName"), &awscdk.CfnParameterProps{
 		Default: "test.com",
-		Type:    jsii.String("string"),
+		Type:    jsii.String("String"),
 	}).ValueAsString()
 
+	//domainName = jsii.String("test.com")
 	zone := awsroute53.HostedZone_FromLookup(stack, jsii.String("Zone"), &awsroute53.HostedZoneProviderProps{
 		DomainName: domainName,
 	})
