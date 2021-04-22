@@ -1,15 +1,16 @@
+import constructs
+import aws_cdk as core
 from aws_cdk import (
     aws_sqs as sqs,
     aws_iam as iam,
     aws_apigateway as apigw,
     aws_lambda as _lambda,
     aws_lambda_event_sources as lambda_event_source,
-    core
 )
 
 class ApiSqsLambdaStack(core.Stack):
 
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         #Create the SQS queue
@@ -68,7 +69,7 @@ class ApiSqsLambdaStack(core.Stack):
         sqs_lambda = _lambda.Function(self,'SQSTriggerLambda',
             handler='lambda-handler.handler',
             runtime=_lambda.Runtime.PYTHON_3_7,
-            code=_lambda.Code.asset('lambda'),
+            code=_lambda.Code.from_asset('lambda'),
         )
 
         #Create an SQS event source for Lambda
