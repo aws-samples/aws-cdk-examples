@@ -1,21 +1,21 @@
+import constructs
+import aws_cdk as core
 from aws_cdk import (
-    core,
-    aws_lambda as _lambda,
-    aws_apigateway as _apigw
+  aws_lambda as _lambda,
+  aws_apigateway as _apigw
 )
-
 
 class ApiCorsLambdaStack(core.Stack):
 
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         base_lambda = _lambda.Function(self,'ApiCorsLambda',
         handler='lambda-handler.handler',
         runtime=_lambda.Runtime.PYTHON_3_7,
-        code=_lambda.Code.asset('lambda'),
+        code=_lambda.Code.from_asset('lambda'),
         )
-        
+
         base_api = _apigw.RestApi(self, 'ApiGatewayWithCors',
         rest_api_name='ApiGatewayWithCors')
 
@@ -29,7 +29,7 @@ class ApiCorsLambdaStack(core.Stack):
             }
                 ]
             )
-        example_entity.add_method('GET', example_entity_lambda_integration, 
+        example_entity.add_method('GET', example_entity_lambda_integration,
                 method_responses=[{
                     'statusCode': '200',
                     'responseParameters': {
