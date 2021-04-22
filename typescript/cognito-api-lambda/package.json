@@ -12,15 +12,8 @@
     "name": "Campion Fellin <campionfellin@gmail.com>"
   },
   "license": "MIT",
-  "devDependencies": {
-    "@types/node": "^10.17.0",
-    "typescript": "~3.7.2"
-  },
   "dependencies": {
-    "@aws-cdk/aws-apigateway": "*",
-    "@aws-cdk/aws-cognito": "*",
-    "@aws-cdk/aws-dynamodb": "*",
-    "@aws-cdk/aws-lambda": "*",
-    "@aws-cdk/core": "*"
+    "aws-cdk-lib": "^2.0.0-alpha.13",
+    "constructs": "^10.0.0"
   }
 }
