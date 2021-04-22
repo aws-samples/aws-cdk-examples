@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import base64
+import aws_cdk as core
 from aws_cdk import (
     aws_autoscaling as autoscaling,
     aws_ec2 as ec2,
     aws_elasticloadbalancingv2 as elbv2,
-    core,
 )
 
 
@@ -39,7 +39,7 @@ class LoadBalancerStack(core.Stack):
         listener.add_targets("Target", port=80, targets=[asg])
         listener.connections.allow_default_port_from_any_ipv4("Open to the world")
 
-        asg.scale_on_request_count("AModestLoad", target_requests_per_second=1)
+        asg.scale_on_request_count("AModestLoad", target_requests_per_minute=60)
         core.CfnOutput(self,"LoadBalancer",export_name="LoadBalancer",value=lb.load_balancer_dns_name)
 
 
