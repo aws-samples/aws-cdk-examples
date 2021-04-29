@@ -28,7 +28,15 @@ public class SinkQueueTest {
     Stack stack = new Stack();
     new SinkQueue(stack, "MySinkQueue");
     assertTemplate(
-        stack, "{\"Resources\":{\"MySinkQueueEFCD79C2\":{\"Type\":\"AWS::SQS::Queue\"}}}");
+        stack, "{\n"
+            + "  \"Resources\" : {\n"
+            + "    \"MySinkQueueEFCD79C2\" : {\n"
+            + "      \"Type\" : \"AWS::SQS::Queue\",\n"
+            + "      \"UpdateReplacePolicy\": \"Delete\",\n"
+            + "      \"DeletionPolicy\": \"Delete\"\n"
+            + "    }\n"
+            + "  }\n"
+            + "}");
   }
 
   /** Defines a sink with custom queue props */
@@ -49,7 +57,9 @@ public class SinkQueueTest {
             + "      \"Type\" : \"AWS::SQS::Queue\",\n"
             + "      \"Properties\" : {\n"
             + "        \"VisibilityTimeout\" : 500\n"
-            + "      }\n"
+            + "      },\n"
+            + "      \"UpdateReplacePolicy\": \"Delete\",\n"
+            + "      \"DeletionPolicy\": \"Delete\"\n"
             + "    }\n"
             + "  }\n"
             + "}");
