@@ -15,7 +15,6 @@ class CdkRdsStack(core.Stack):
         #                                         engine=rds.DatabaseClusterEngine.arora_mysql(
         #                                             version=rds.AuroraMysqlEngineVersion.VER_5_7_12
         #                                         )
-        #                                         master_user=rds.Login(username="admin"),
         #                                         instance_props=rds.InstanceProps(
         #                                             vpc=vpc,
         #                                             vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.ISOLATED),
@@ -37,7 +36,6 @@ class CdkRdsStack(core.Stack):
                                              ),
                                              instance_type=ec2.InstanceType.of(
                                                  ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.SMALL),
-                                             master_username="admin",
                                              vpc=vpc,
                                              multi_az=True,
                                              allocated_storage=100,
