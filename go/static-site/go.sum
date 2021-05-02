@@ -4,6 +4,10 @@ github.com/aws/aws-cdk-go/awscdk v1.98.0-devpreview h1:4kcpl2n8NtorpQpx9puA9l05M
 github.com/aws/aws-cdk-go/awscdk v1.98.0-devpreview/go.mod h1:eOHVo39f3ZUjxOHTIpr1UbZM2o64KIYKZbHT6GHb/VE=
 github.com/aws/aws-cdk-go/awscdk v1.99.0-devpreview h1:aRDtu9YYUm3lBxKB9Y5OC3oGMsmC0+HzfEU6YFKOxlY=
 github.com/aws/aws-cdk-go/awscdk v1.99.0-devpreview/go.mod h1:12VFleJHCFGgxLaN6ZF90NdErCY9OfVlo082GFqvRDk=
+github.com/aws/aws-cdk-go/awscdk v1.100.0-devpreview h1:sCVOvP8LVTcbtyKSwG6vWNqsIILjbMx9HmwoEOMja6I=
+github.com/aws/aws-cdk-go/awscdk v1.100.0-devpreview/go.mod h1:12VFleJHCFGgxLaN6ZF90NdErCY9OfVlo082GFqvRDk=
+github.com/aws/aws-cdk-go/awscdk v1.101.0-devpreview h1:UAjvDXMkXF9M2A+wIZdpoocaFE522cH9hWykfKHcyHo=
+github.com/aws/aws-cdk-go/awscdk v1.101.0-devpreview/go.mod h1:12VFleJHCFGgxLaN6ZF90NdErCY9OfVlo082GFqvRDk=
 github.com/aws/constructs-go/constructs/v3 v3.3.71 h1:lq3sixPXy84dTq/dOxkZbLuAYz27+OMD4gNHnYHYbus=
 github.com/aws/constructs-go/constructs/v3 v3.3.71/go.mod h1:TKhHOxYZknZT552ufADDzpb+q+vDkr1XVDWjRxFCgfI=
 github.com/aws/jsii-runtime-go v1.26.0/go.mod h1:9ddMDdGQwew6pQrfuTID/LxDDrpyrybwsWN84etzjQ8=
@@ -12,6 +16,8 @@ github.com/aws/jsii-runtime-go v1.27.1 h1:Ui2k15QAuYeo5A0Bc/IIYWkn2+7lO65cj9xIxe
 github.com/aws/jsii-runtime-go v1.27.1/go.mod h1:6tZnlstx8bAB3vnLFF9n8bbkI//LDblAek9zFyMXV3E=
 github.com/aws/jsii-runtime-go v1.28.0 h1:2McYFFR9E48OPCNYRReJI0PyBZG6YzcTmm+gNoesJRA=
 github.com/aws/jsii-runtime-go v1.28.0/go.mod h1:6tZnlstx8bAB3vnLFF9n8bbkI//LDblAek9zFyMXV3E=
+github.com/aws/jsii-runtime-go v1.29.0 h1:JH4GHSauYskfzREWaQMAMTXDRgNR2e5XeLbjD/xf9J0=
+github.com/aws/jsii-runtime-go v1.29.0/go.mod h1:6tZnlstx8bAB3vnLFF9n8bbkI//LDblAek9zFyMXV3E=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
