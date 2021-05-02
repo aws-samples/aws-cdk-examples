@@ -2,14 +2,12 @@ package main
 
 import (
 	"github.com/aws/aws-cdk-go/awscdk"
-	"github.com/aws/jsii-runtime-go"
 )
 
 func main() {
 	App := awscdk.NewApp(nil)
 
 	NewStaticSiteStack(App, "MySite", StaticSiteProps{
-		DomainName: jsii.String("example.com"),
 		StackProps: awscdk.StackProps{
 			Env: Env(),
 		},
