@@ -38,7 +38,7 @@ While this is an excellent learning resource for the CDK, there are other resour
 - [CDK Repository](https://github.com/aws/aws-cdk)
 
 ### Unofficial/Community Resources
-- [AwsomeCDK](https://github.com/kolomied/awesome-cdk)
+- [AwesomeCDK](https://github.com/kolomied/awesome-cdk)
 
 > If you have created a CDK learning resource and would like it to be listed here, please read the related [CONTRIBUTING](https://github.com/aws-samples/aws-cdk-examples/blob/master/CONTRIBUTING.md#Resources) section for more info.
 
