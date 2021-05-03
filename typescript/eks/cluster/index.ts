@@ -16,6 +16,7 @@ class EKSCluster extends cdk.Stack {
     });
 
     const eksCluster = new eks.Cluster(this, 'Cluster', {
+      version: eks.KubernetesVersion.V1_17,
       vpc: vpc,
       defaultCapacity: 0,  // we want to manage capacity our selves
       version: eks.KubernetesVersion.V1_16,
@@ -28,7 +29,7 @@ class EKSCluster extends cdk.Stack {
       maxCapacity: 10,
       instanceType: new ec2.InstanceType('t3.medium'),
       machineImage: new eks.EksOptimizedImage({
-        kubernetesVersion: '1.14',
+        kubernetesVersion: '1.17',
         nodeType: eks.NodeType.STANDARD  // without this, incorrect SSM parameter for AMI is resolved
       }),
       updateType: autoscaling.UpdateType.ROLLING_UPDATE
