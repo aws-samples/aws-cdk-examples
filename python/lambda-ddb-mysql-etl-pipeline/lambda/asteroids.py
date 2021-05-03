@@ -1,5 +1,6 @@
 import requests
 import json
+from base64 import b64decode
 from requests.exceptions import Timeout
 from requests.exceptions import HTTPError
 from botocore.exceptions import ClientError
@@ -152,4 +153,3 @@ def handler(event, context):
     """
     asteroids = Asteroids()
     asteroids.execute(event)
-    
