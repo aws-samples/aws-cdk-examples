@@ -1,0 +1,30 @@
+{
+  "name": "codepipeline-using-cross-account-repos",
+  "version": "1.0.0",
+  "description": "a minimal codepipeline referencing a cross account codecommit repo",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "author": {
+    "name": "Amazon Web Services",
+    "url": "https://aws.amazon.com",
+    "organization": true
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/node": "^8.10.38",
+    "typescript": "^3.2.4"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-kms": "*",
+    "@aws-cdk/aws-s3": "*",
+    "@aws-cdk/aws-codepipeline": "*",
+    "@aws-cdk/aws-codepipeline-actions": "*",
+    "@aws-cdk/aws-codecommit": "*",
+    "@aws-cdk/core": "*",
+    "source-map-support": "*"
+  }
+}
