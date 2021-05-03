@@ -7,6 +7,7 @@ import acm = require('@aws-cdk/aws-certificatemanager');
 import cdk = require('@aws-cdk/core');
 import targets = require('@aws-cdk/aws-route53-targets/lib');
 import { Construct } from '@aws-cdk/core';
+import iam = require('@aws-cdk/aws-iam')
 
 export interface StaticSiteProps {
     domainName: string;
@@ -25,6 +26,8 @@ export class StaticSite extends Construct {
 
         const zone = route53.HostedZone.fromLookup(this, 'Zone', { domainName: props.domainName });
         const siteDomain = props.siteSubDomain + '.' + props.domainName;
+        const oai = new cloudfront.OriginAccessIdentity(this, 'OAI', {});
+        
         new cdk.CfnOutput(this, 'Site', { value: 'https://' + siteDomain });
 
         // Content bucket
@@ -32,13 +35,19 @@ export class StaticSite extends Construct {
             bucketName: siteDomain,
             websiteIndexDocument: 'index.html',
             websiteErrorDocument: 'error.html',
-            publicReadAccess: true,
+            publicReadAccess: false,
 
             // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
             // the new bucket, and it will remain in your account until manually deleted. By setting the policy to
             // DESTROY, cdk destroy will attempt to delete the bucket, but will error if the bucket is not empty.
             removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
         });
+        //Grant access to cloudfront
+         siteBucket.addToResourcePolicy(new iam.PolicyStatement({
+            actions: ['s3:GetObject'],
+            resources: [siteBucket.arnForObjects('*')],
+            principals: [new iam.CanonicalUserPrincipal(oai.cloudFrontOriginAccessIdentityS3CanonicalUserId)]
+        }));
         new cdk.CfnOutput(this, 'Bucket', { value: siteBucket.bucketName });
 
         // TLS certificate
@@ -59,10 +68,10 @@ export class StaticSite extends Construct {
             },
             originConfigs: [
                 {
-                    customOriginSource: {
-                        domainName: siteBucket.bucketWebsiteDomainName,
-                        originProtocolPolicy: cloudfront.OriginProtocolPolicy.HTTP_ONLY,
-                    },          
+                       s3OriginSource: {
+                        s3BucketSource: siteBucket,
+                        originAccessIdentity: oai
+                    },
                     behaviors : [ {isDefaultBehavior: true}],
                 }
             ]
