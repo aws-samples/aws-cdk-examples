@@ -20,10 +20,11 @@ To build this app, you need to be in this example's root folder. Then run the fo
 ```bash
 npm install -g aws-cdk
 npm install
+cd src && npm install && cd ..
 npm run build
 ```
 
-This will install the necessary CDK, then this example's dependencies, and then build your TypeScript files and your CloudFormation template.
+This will install the necessary CDK, then this example's dependencies, then the lambda functions' dependencies,and then build your TypeScript files and your CloudFormation template.
 
 ## Deploy
 
