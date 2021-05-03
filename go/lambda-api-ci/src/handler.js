@@ -1,0 +1,42 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.handler = void 0;
+const aws_sdk_1 = require("aws-sdk");
+const bucketName = process.env.BUCKET;
+// From https://docs.aws.amazon.com/cdk/latest/guide/serverless_example.html
+const handler = async function (event, context) {
+    const S3Client = new aws_sdk_1.S3();
+    try {
+        var method = event.httpMethod;
+        if (method === "GET") {
+            if (event.path === "/") {
+                const data = await S3Client.listObjectsV2({ Bucket: bucketName }).promise();
+                var body = {
+                    widgets: data.Contents.map(function (e) {
+                        return e.Key;
+                    }),
+                };
+                return {
+                    statusCode: 200,
+                    headers: {},
+                    body: JSON.stringify(body),
+                };
+            }
+        }
+        // We only accept GET for now
+        return {
+            statusCode: 400,
+            headers: {},
+            body: "We only accept GET /",
+        };
+    }
+    catch (error) {
+        const body = error.stack || JSON.stringify(error, null, 2);
+        return {
+            statusCode: 400,
+            headers: {},
+            body: JSON.stringify(body),
+        };
+    }
+};
+exports.handler = handler;
