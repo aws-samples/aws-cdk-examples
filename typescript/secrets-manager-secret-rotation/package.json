@@ -1,0 +1,38 @@
+{
+  "name": "secrets-manager-secret-rotation",
+  "version": "1.0.0",
+  "description": "Shows how to use a custom resource",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "author": {
+    "name": "Amazon Web Services",
+    "url": "https://aws.amazon.com",
+    "organization": true
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@aws-cdk/assert": "*",
+    "@types/jest": "^26.0.10",
+    "@types/node": "10.17.27",
+    "aws-cdk": "*",
+    "jest": "^26.4.2",
+    "ts-jest": "^26.2.0",
+    "ts-node": "^9.0.0",
+    "typescript": "~3.9.7"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-ec2": "*",
+    "@aws-cdk/aws-elasticache": "*",
+    "@aws-cdk/aws-iam": "*",
+    "@aws-cdk/aws-lambda": "*",
+    "@aws-cdk/aws-secretsmanager": "*",
+    "@aws-cdk/aws-sns": "*",
+    "@aws-cdk/aws-sns-subscriptions": "*",
+    "@aws-cdk/aws-sqs": "*",
+    "@aws-cdk/core": "*"
+  }
+}
