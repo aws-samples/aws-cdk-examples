@@ -1,11 +1,12 @@
 #!/usr/bin/env node
-import cloudfront = require('@aws-cdk/aws-cloudfront');
-import route53 = require('@aws-cdk/aws-route53');
-import s3 = require('@aws-cdk/aws-s3');
-import s3deploy = require('@aws-cdk/aws-s3-deployment');
-import acm = require('@aws-cdk/aws-certificatemanager');
-import cdk = require('@aws-cdk/core');
-import targets = require('@aws-cdk/aws-route53-targets/lib');
+import * as cdk from '@aws-cdk/core';
+import * as route53 from '@aws-cdk/aws-route53';
+import * as s3 from '@aws-cdk/aws-s3';
+import * as s3deploy from '@aws-cdk/aws-s3-deployment';
+import * as acm from '@aws-cdk/aws-certificatemanager';
+import * as targets  from '@aws-cdk/aws-route53-targets';
+import * as cloudfront from '@aws-cdk/aws-cloudfront';
+
 import { Construct } from '@aws-cdk/core';
 
 export interface StaticSiteProps {
@@ -32,12 +33,16 @@ export class StaticSite extends Construct {
             bucketName: siteDomain,
             websiteIndexDocument: 'index.html',
             websiteErrorDocument: 'error.html',
-            publicReadAccess: true,
 
             // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
             // the new bucket, and it will remain in your account until manually deleted. By setting the policy to
             // DESTROY, cdk destroy will attempt to delete the bucket, but will error if the bucket is not empty.
             removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
+
+            //For sample purposes only, if you create an S3 bucket then populate it, stack destruction fails.  THis
+            // setting will enabled full cleanup of the demo.
+            autoDeleteObjects: true //NOT recommended
+
         });
         new cdk.CfnOutput(this, 'Bucket', { value: siteBucket.bucketName });
 
@@ -49,21 +54,25 @@ export class StaticSite extends Construct {
         }).certificateArn;
         new cdk.CfnOutput(this, 'Certificate', { value: certificateArn });
 
+        const cloudfrontOAI = new cloudfront.OriginAccessIdentity(this, 'cdn-OAI', {
+            comment: `OAI for ${name}`
+          });
+
         // CloudFront distribution that provides HTTPS
         const distribution = new cloudfront.CloudFrontWebDistribution(this, 'SiteDistribution', {
-            aliasConfiguration: {
-                acmCertRef: certificateArn,
-                names: [ siteDomain ],
-                sslMethod: cloudfront.SSLMethod.SNI,
-                securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_1_2016,
-            },
             originConfigs: [
                 {
-                    customOriginSource: {
-                        domainName: siteBucket.bucketWebsiteDomainName,
-                        originProtocolPolicy: cloudfront.OriginProtocolPolicy.HTTP_ONLY,
-                    },          
-                    behaviors : [ {isDefaultBehavior: true}],
+                    s3OriginSource: {
+                        s3BucketSource: siteBucket,
+                        originAccessIdentity: cloudfrontOAI
+                      },
+                      behaviors: [
+                        {
+                          isDefaultBehavior: true,
+                          allowedMethods: cloudfront.CloudFrontAllowedMethods.GET_HEAD_OPTIONS,
+                          compress: true
+                        }
+                      ]
                 }
             ]
         });
