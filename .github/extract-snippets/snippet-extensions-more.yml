@@ -2,7 +2,7 @@
 # such as /makefile) to comemnt markers for a particular language, so that
 # snippet directives can be detected in that source file
 
-/lambda/widgets.js: ""    # example of excluding a file via empty comment marker
+somewhere/lambda/widgets.js: ""    # example of excluding a file via empty comment marker
 
 .ahk: ;           # AutoHotkey
 .bash: "#"        # bash shell (must quote "#" here as it is also the YAML comment marker)
@@ -14,19 +14,20 @@
 .cs: //           # C#
 .dart: //         # Dart
 .f: "* c !"       # FORTRAN (fixed field; most compilers also support ! even in fexed field)
-.f90: !           # FORTRAN (freeform)
+.f90: "!"         # FORTRAN (freeform)
 .fs: //           # F#
 .h: "/* //"       # C or Objective-C header (closing comment marker must be on same line)
 .hpp: //          # C++ header
 .go: //           # Go
 .html: <!--       # HTML (closing comment marker must be on same line)
 .js: //           # JavaScript
+.json: //         # JSON (not really supported, but often used anyway)
 .kt: //           # Kotlin
 .m: //            # Objective-C
 .pas: "(* {"      # Pascal or Delphi (closing comment marker must be on same line)
 .php: "# //"      # PHP (supports both # and //)
 .pl: "#"          # Perl
-.ps1: #           # PowerShell
+.ps1: "#"         # PowerShell
 .py: "#"          # Python
 .sh: "#"          # Shell
 .rb: "#"          # Ruby

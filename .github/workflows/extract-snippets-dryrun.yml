@@ -1,12 +1,12 @@
-# v1.0.0
+# v1.1.0
 name: Extract Snippets Dry Run
 on:
   pull_request:
   # run on demand
   workflow_dispatch:
 jobs:
-  extract-snippets:
-    if: github.repository_owner == 'aws' || github.repository_owner == 'jerry-aws'
+  extract-snippets-dryrun:
+    if: github.repository_owner == 'aws' || github.repository_owner == 'awsdocs' || github.repository_owner == 'aws-samples' || github.repository_owner == 'jerry-aws'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
