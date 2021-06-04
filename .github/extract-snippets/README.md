@@ -1,7 +1,7 @@
 # Extract Snippets for GitHub Actions
 
 Jerry Kindall, Amazon Web Services  
-Last updated 2-Jun-2021
+Last updated 4-Jun-2021
 
 ## What it is
 
@@ -24,8 +24,8 @@ There are two separate workflows:
 To prevent the introduction of errors in the snippets (e.g. duplicate snippet
 filenames with different content), all files in the repo are always processed.
 This is not noticeably slower than e.g. processing only the files in a given
-commit; the overhead of the action setup and Git commands dwarfs the run time
-of the actual snippet extraction.
+commit; the overhead of the action setup and Git commands overshadows the run
+time of the actual snippet extraction.
 
 ## Compared to other snippet extraction tools
 
@@ -38,14 +38,14 @@ features:
 * Can dedent (remove indentation from) extracted snippets.
 * Checks for and logs a variety of problems, including conflicting snippet
   tags (same tag in multiple files).
-* Besides a procesing log, produces a report of files with problems and an
+* Besides a processing log, produces a report of files with problems and an
   index mapping snippet tags back to the file(s) that contain them.
 
 It does not have the following features of the AWS Docs tool:
 
 * Extract metadata from snippets for use in catalogs.  The metadata tags are
   recognized, but do not do anything, in this snippet extractor.
-
+  
 ## Snippet tags
 
 Snippet tags are special single-line comments in source files.  They must not
@@ -57,9 +57,7 @@ snippet tag is followed by the snippet directive, a colon, and an argument in
 square brackets.  Whitespace is permitted (but optional) between the comment
 marker and the snippet directive. For example:
 
-```
-// snippet-start:[cdk.typescript.widget_service]
-```
+<tt>// snippet&#45;start:[cdk.typescript.widget_service]</tt>
 
 Here, the directive begins the extraction of a code snippet to the filename
 specified, with a `.txt` extension.
@@ -82,12 +80,10 @@ the snippet extractor used by the AWS Docs team).
   partial code block.  Whitespace is stripped from the right of the argument
   but not the left, so you can match indentation.
 
-ALso unique to this extractor, `snippet-start` supports an optional number
+Also unique to this extractor, `snippet-start` supports an optional number
 following the closing bracket.  
 
-```
-// snippet-start:[my-snippet] 8
-```
+<tt>// snippet&#45;start:[my-snippet] 8</tt>
 
 If this number is present, that many spaces are removed from the beginning of
 each line of the snippet, allowing snippets to be dedented (have indentation
@@ -122,7 +118,8 @@ This script reads from standard input the paths of the files containing the
 snippets to be extracted.  It ignores non-source files, hidden files, and
 files in hidden directories (it is not necessary to filter out such files
 beforehand). The script's required argument is the directory that the snippets
-should be extracted into.
+should be extracted into.  This directory must not contain any files named
+the same as a snippet being extracted.
 
 For example, the following command runs the script on source files in the
 current directory, extracting snippets also into the current directory.
@@ -131,7 +128,8 @@ current directory, extracting snippets also into the current directory.
 ls | python3 extract-snippets.py .
 ```
 
-Both Windows and Linux-style paths are supported.
+Both Windows and Linux-style paths are supported so you can test the script
+on Windows during development.
 
 The supported source file formats are stored in `snippet-extensions.yml` or
 another file specified as the second command-line argument. This file is a YAML
@@ -149,16 +147,12 @@ include the lines with the snippet tags in the snippets, so you should include
 the closing block comment marker on the same line to avoid the closing marker
 being included in the snippet.  For example:
 
-```
-/* snippet-start:[terry.riley.in-c] */
-```
+<tt>/* snippet&#45;start:[terry.riley.in-c] */</tt>
 
 Not:
 
-```
-/* snippet-start:[terry.riley.in-c]
- */
-```
+<tt>/* snippet&#45;start:[terry.riley.in-c]</tt><br/>
+<tt>*/</tt>
 
 Some languages support both line and block comments.  In this case, we suggest
 you always use the line comment marker for snippet tags.
