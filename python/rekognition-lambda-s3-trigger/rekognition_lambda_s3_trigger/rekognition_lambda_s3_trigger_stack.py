@@ -58,7 +58,9 @@ class RekognitionLambdaS3TriggerStack(core.Stack):
         # create trigger for Lambda function
         notification = s3_notifications.LambdaDestination(lambda_function)
         notification.bind(self, bucket)
-        bucket.add_object_created_notification(notification)
+        bucket.add_object_created_notification(notification, s3.NotificationKeyFilter(suffix='.jpg'))
+        bucket.add_object_created_notification(notification, s3.NotificationKeyFilter(suffix='.jpeg'))
+        bucket.add_object_created_notification(notification, s3.NotificationKeyFilter(suffix='.png'))
 
         # grant permissions for lambda to read/write to DynamoDB table and bucket
         table.grant_read_write_data(lambda_function)
