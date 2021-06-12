@@ -5,7 +5,6 @@ import * as cdk from '@aws-cdk/core';
 import * as s3 from '@aws-cdk/aws-s3';
 import * as lambda from '@aws-cdk/aws-lambda';
 import * as iam from '@aws-cdk/aws-iam';
-import * as path from 'path';
 
 export class SharedResourcesStack extends cdk.Stack {
   public readonly bucketName: string;
@@ -21,7 +20,7 @@ export class SharedResourcesStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_12_X,
       functionName: 'S3EventNotificationsManager',
       handler: 'manage-s3-event-notifications.handler',
-      code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
+      code: lambda.Code.fromAsset('lambda'),
       reservedConcurrentExecutions: 1,
       timeout: cdk.Duration.seconds(300)
     });
