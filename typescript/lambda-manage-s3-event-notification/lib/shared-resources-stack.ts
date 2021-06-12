@@ -5,7 +5,7 @@ import * as cdk from '@aws-cdk/core';
 import * as s3 from '@aws-cdk/aws-s3';
 import * as lambda from '@aws-cdk/aws-lambda';
 import * as iam from '@aws-cdk/aws-iam';
-import fs = require('fs');
+import * as path from 'path';
 
 export class SharedResourcesStack extends cdk.Stack {
   public readonly bucketName: string;
@@ -20,8 +20,8 @@ export class SharedResourcesStack extends cdk.Stack {
     const fn = new lambda.Function(this, 'S3EventNotificationsLambda', {
       runtime: lambda.Runtime.NODEJS_12_X,
       functionName: 'S3EventNotificationsManager',
-      handler: 'index.handler',
-      code: new lambda.InlineCode(fs.readFileSync('manage-s3-event-notifications.js', { encoding: 'utf-8' })),
+      handler: 'manage-s3-event-notifications.handler',
+      code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
       reservedConcurrentExecutions: 1,
       timeout: cdk.Duration.seconds(300)
     });
