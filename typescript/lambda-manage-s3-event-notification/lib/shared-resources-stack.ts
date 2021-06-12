@@ -21,7 +21,7 @@ export class SharedResourcesStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_12_X,
       functionName: 'S3EventNotificationsManager',
       handler: 'index.handler',
-      code: new lambda.InlineCode(fs.readFileSync('lambda/manage-s3-event-notifications.js', { encoding: 'utf-8' })),
+      code: new lambda.InlineCode(fs.readFileSync('manage-s3-event-notifications.js', { encoding: 'utf-8' })),
       reservedConcurrentExecutions: 1,
       timeout: cdk.Duration.seconds(300)
     });
