@@ -45,7 +45,7 @@ export class AStack extends cdk.Stack {
                   FilterRules: [
                     {
                       Name: 'prefix',
-                      Value: 'CategoryA2/'
+                      Value: 'CategoryA/'
                     }
                   ]
                 }
