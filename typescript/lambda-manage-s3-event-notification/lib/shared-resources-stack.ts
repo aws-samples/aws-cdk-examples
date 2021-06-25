@@ -7,7 +7,7 @@ import * as lambda from '@aws-cdk/aws-lambda';
 import * as iam from '@aws-cdk/aws-iam';
 import * as path from 'path';
 
-export class SharedResourcesStack extends cdk.Stack {
+export class SharedStack extends cdk.Stack {
   public readonly bucketName: string;
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);

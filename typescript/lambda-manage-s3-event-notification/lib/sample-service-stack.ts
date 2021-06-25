@@ -6,11 +6,11 @@ import * as sqs from '@aws-cdk/aws-sqs';
 import * as iam from '@aws-cdk/aws-iam';
 import * as sns from '@aws-cdk/aws-sns';
 
-export interface ServiceAStackProps extends cdk.StackProps {
+export interface AStackProps extends cdk.StackProps {
   readonly bucketName: string; // Bucket to enable SQS notifications
 }
-export class ServiceAStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props: ServiceAStackProps) {
+export class AStack extends cdk.Stack {
+  constructor(scope: cdk.Construct, id: string, props: AStackProps) {
     super(scope, id, props);
     
     const queue = new sqs.Queue(this, 'SampleQueue');
@@ -45,7 +45,7 @@ export class ServiceAStack extends cdk.Stack {
                   FilterRules: [
                     {
                       Name: 'prefix',
-                      Value: 'CategoryA/'
+                      Value: 'CategoryA2/'
                     }
                   ]
                 }
@@ -59,11 +59,11 @@ export class ServiceAStack extends cdk.Stack {
   }
 }
 
-export interface ServiceBStackProps extends cdk.StackProps {
+export interface BStackProps extends cdk.StackProps {
   readonly bucketName: string; // Bucket to enable SNS notifications
 }
-export class ServiceBStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props: ServiceBStackProps) {
+export class BStack extends cdk.Stack {
+  constructor(scope: cdk.Construct, id: string, props: BStackProps) {
     super(scope, id, props);
 
     const topic = new sns.Topic(this, 'SampleTopic');
