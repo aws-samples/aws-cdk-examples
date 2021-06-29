@@ -4,9 +4,8 @@ import * as route53 from '@aws-cdk/aws-route53';
 import * as s3 from '@aws-cdk/aws-s3';
 import * as s3deploy from '@aws-cdk/aws-s3-deployment';
 import * as acm from '@aws-cdk/aws-certificatemanager';
-import * as targets  from '@aws-cdk/aws-route53-targets';
+import * as targets from '@aws-cdk/aws-route53-targets';
 import * as cloudfront from '@aws-cdk/aws-cloudfront';
-
 import { Construct } from '@aws-cdk/core';
 
 export interface StaticSiteProps {
@@ -39,10 +38,9 @@ export class StaticSite extends Construct {
             // DESTROY, cdk destroy will attempt to delete the bucket, but will error if the bucket is not empty.
             removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
 
-            //For sample purposes only, if you create an S3 bucket then populate it, stack destruction fails.  THis
-            // setting will enabled full cleanup of the demo.
-            autoDeleteObjects: true //NOT recommended
-
+            // For sample purposes only, if you create an S3 bucket then populate it, stack destruction fails.  This
+            // setting will enable full cleanup of the demo.
+            autoDeleteObjects: true // NOT recommended
         });
         new cdk.CfnOutput(this, 'Bucket', { value: siteBucket.bucketName });
 
@@ -56,7 +54,7 @@ export class StaticSite extends Construct {
 
         const cloudfrontOAI = new cloudfront.OriginAccessIdentity(this, 'cdn-OAI', {
             comment: `OAI for ${name}`
-          });
+        });
 
         // CloudFront distribution that provides HTTPS
         const distribution = new cloudfront.CloudFrontWebDistribution(this, 'SiteDistribution', {
@@ -65,14 +63,14 @@ export class StaticSite extends Construct {
                     s3OriginSource: {
                         s3BucketSource: siteBucket,
                         originAccessIdentity: cloudfrontOAI
-                      },
-                      behaviors: [
+                    },
+                    behaviors: [
                         {
-                          isDefaultBehavior: true,
-                          allowedMethods: cloudfront.CloudFrontAllowedMethods.GET_HEAD_OPTIONS,
-                          compress: true
+                            isDefaultBehavior: true,
+                            allowedMethods: cloudfront.CloudFrontAllowedMethods.GET_HEAD_OPTIONS,
+                            compress: true
                         }
-                      ]
+                    ]
                 }
             ]
         });
@@ -87,10 +85,10 @@ export class StaticSite extends Construct {
 
         // Deploy site contents to S3 bucket
         new s3deploy.BucketDeployment(this, 'DeployWithInvalidation', {
-            sources: [ s3deploy.Source.asset('./site-contents') ],
+            sources: [s3deploy.Source.asset('./site-contents')],
             destinationBucket: siteBucket,
             distribution,
             distributionPaths: ['/*'],
-          });
+        });
     }
 }
