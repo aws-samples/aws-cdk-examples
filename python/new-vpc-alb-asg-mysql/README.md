@@ -10,8 +10,8 @@ This project also demonstrates:
 * Create security group and allow access from the other security group: Internet -> ALB -> EC2ASG -> RDS
 * Using customized EC2 user data and specifying generated AMI properties with no need to specify the AMI id in every region
 
-## Architeture 
-![Architecture](./img_demo_cdk_vpc.png)  
+## Architeture
+![Architecture](./img_demo_cdk_vpc.png)
 
 This project creates the new VPC part of the architecture. For the existing VPC part, please refer to the project in aws-cdk-examples/existing-vpc-new-ec2-ebs-userdata.
 
