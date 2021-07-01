@@ -21,15 +21,18 @@ class MyStaticSiteStack extends cdk.Stack {
             domainName: this.node.tryGetContext('domain'),
             siteSubDomain: this.node.tryGetContext('subdomain'),
         });
-   }
+    }
 }
 
 const app = new cdk.App();
 
-new MyStaticSiteStack(app, 'MyStaticSite', { env: {
-    // Stack must be in us-east-1, because the ACM certificate for a
-    // global CloudFront distribution must be requested in us-east-1.
-    region: 'us-east-1'
-}});
+new MyStaticSiteStack(app, 'MyStaticSite', {
+    env: {
+        // Stack must be in us-east-1, because the ACM certificate for a
+        // global CloudFront distribution must be requested in us-east-1.
+        region: 'us-east-1',
+        account: process.env.CDK_DEFAULT_ACCOUNT,
+    }
+});
 
 app.synth();

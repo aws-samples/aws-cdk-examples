@@ -27,7 +27,7 @@ export class StaticSite extends Construct {
         const zone = route53.HostedZone.fromLookup(this, 'Zone', { domainName: props.domainName });
         const siteDomain = props.siteSubDomain + '.' + props.domainName;
         const oai = new cloudfront.OriginAccessIdentity(this, 'OAI', {});
-        
+
         new cdk.CfnOutput(this, 'Site', { value: 'https://' + siteDomain });
 
         // Content bucket
@@ -43,7 +43,7 @@ export class StaticSite extends Construct {
             removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
         });
         //Grant access to cloudfront
-         siteBucket.addToResourcePolicy(new iam.PolicyStatement({
+        siteBucket.addToResourcePolicy(new iam.PolicyStatement({
             actions: ['s3:GetObject'],
             resources: [siteBucket.arnForObjects('*')],
             principals: [new iam.CanonicalUserPrincipal(oai.cloudFrontOriginAccessIdentityS3CanonicalUserId)]
@@ -62,17 +62,17 @@ export class StaticSite extends Construct {
         const distribution = new cloudfront.CloudFrontWebDistribution(this, 'SiteDistribution', {
             aliasConfiguration: {
                 acmCertRef: certificateArn,
-                names: [ siteDomain ],
+                names: [siteDomain],
                 sslMethod: cloudfront.SSLMethod.SNI,
                 securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_1_2016,
             },
             originConfigs: [
                 {
-                       s3OriginSource: {
+                    s3OriginSource: {
                         s3BucketSource: siteBucket,
                         originAccessIdentity: oai
                     },
-                    behaviors : [ {isDefaultBehavior: true}],
+                    behaviors: [{ isDefaultBehavior: true }],
                 }
             ]
         });
@@ -87,10 +87,10 @@ export class StaticSite extends Construct {
 
         // Deploy site contents to S3 bucket
         new s3deploy.BucketDeployment(this, 'DeployWithInvalidation', {
-            sources: [ s3deploy.Source.asset('./site-contents') ],
+            sources: [s3deploy.Source.asset('./site-contents')],
             destinationBucket: siteBucket,
             distribution,
             distributionPaths: ['/*'],
-          });
+        });
     }
 }
