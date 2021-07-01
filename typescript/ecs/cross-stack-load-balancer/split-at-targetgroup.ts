@@ -42,11 +42,7 @@ export class SplitAtTargetGroup_LoadBalancerStack extends Stack {
 export interface SplitAtTargetGroup_ServiceStackProps extends StackProps {
   vpc: ec2.IVpc;
   cluster: ecs.ICluster;
-
-  // NOTE: Temporarily an ApplicationTargetGroup (instead of the corresponding interface)
-  // because the interface does not contain addTarget() yet. Can be rectified after CDK
-  // 1.15.0.
-  targetGroup: elbv2.ApplicationTargetGroup;
+  targetGroup: elbv2.IApplicationTargetGroup;
 }
 
 export class SplitAtTargetGroup_ServiceStack extends Stack {
