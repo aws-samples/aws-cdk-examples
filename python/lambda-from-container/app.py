@@ -12,7 +12,6 @@ class LambdaContainerFunctionStack(core.Stack):
 
 
         image_name    = "lambdaContainerFunction"
-        image_version = "latest"
 
         ##
         ## If use_pre_existing_image is True
@@ -32,9 +31,9 @@ class LambdaContainerFunctionStack(core.Stack):
             ## Container was build previously, or elsewhere.
             ## Use the pre-existing container
             ##
-            ecr_repository = aws_ecr.Repository.from_repository_attributes(self, 
-                id              = "ECR", 
-                repository_arn  = '{0}.dkr.ecr.{1}.amazonaws.com/{2}:{3}'.format(core.Aws.ACCOUNT_ID, core.Aws.REGION, image_name, image_version),
+            ecr_repository = aws_ecr.Repository.from_repository_attributes(self,
+                id              = "ECR",
+                repository_arn  ='arn:aws:ecr:{0}:{1}'.format(core.Aws.REGION, core.Aws.ACCOUNT_ID),
                 repository_name = image_name
             ) ## aws_ecr.Repository.from_repository_attributes
 
@@ -60,7 +59,7 @@ class LambdaContainerFunctionStack(core.Stack):
         ##
         ## Lambda Function
         ##
-        aws_lambda.Function(self, 
+        aws_lambda.Function(self,
           id            = "lambdaContainerFunction",
           description   = "Sample Lambda Container Function",
           code          = ecr_image,
