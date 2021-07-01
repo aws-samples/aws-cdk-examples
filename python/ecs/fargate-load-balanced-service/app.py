@@ -9,7 +9,7 @@ from aws_cdk import (
 class BonjourFargate(core.Stack):
 
     def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
-        super().__init__(scope, id, *kwargs)
+        super().__init__(scope, id, **kwargs)
 
         # Create VPC and Fargate Cluster
         # NOTE: Limit AZs to avoid reaching resource quotas
