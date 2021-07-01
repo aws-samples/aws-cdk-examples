@@ -8,7 +8,6 @@ import (
 	ecs_patterns "github.com/aws/aws-cdk-go/awscdk/awsecspatterns"
 	"github.com/aws/constructs-go/constructs/v3"
 	"github.com/aws/jsii-runtime-go"
-	"os"
 )
 
 type ALBFargatePatternStackProps struct {
@@ -58,8 +57,15 @@ func main() {
 // env determines the AWS environment (account+region) in which our stack is to
 // be deployed. For more information see: https://docs.aws.amazon.com/cdk/latest/guide/environments.html
 func env() *cdk.Environment {
-	return &cdk.Environment{
-		Account: jsii.String(os.Getenv("CDK_DEFAULT_ACCOUNT")),
-		Region:  jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
-	}
+
+	return nil
+
+	// Uncomment to specialize this stack for the AWS Account and Region that are
+	// implied by the current CLI configuration. This is recommended for dev
+	// stacks.
+	//---------------------------------------------------------------------------
+	// return &awscdk.Environment{
+	//  Account: jsii.String(os.Getenv("CDK_DEFAULT_ACCOUNT")),
+	//  Region:  jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
+	// }
 }

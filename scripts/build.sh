@@ -6,3 +6,4 @@ $scriptdir/build-csharp.sh
 $scriptdir/build-java.sh
 $scriptdir/build-python.sh
 $scriptdir/build-typescript.sh
+$scriptdir/build-go.sh
