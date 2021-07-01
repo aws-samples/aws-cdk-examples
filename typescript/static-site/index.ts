@@ -9,7 +9,8 @@ import { StaticSite } from './static-site';
  * {
  *   "context": {
  *     "domain": "mystaticsite.com",
- *     "subdomain": "www"
+ *     "subdomain": "www",
+ *     "accountId": 1234567890,
  *   }
  * }
 **/
@@ -27,11 +28,20 @@ class MyStaticSiteStack extends cdk.Stack {
 const app = new cdk.App();
 
 new MyStaticSiteStack(app, 'MyStaticSite', {
+    /**
+     * This is required for our use of hosted-zone lookup.
+     *
+     * Lookups do not work at all without an explicit environment
+     * specified; to use them, you must specify env.
+     * @see https://docs.aws.amazon.com/cdk/latest/guide/environments.html
+     */
     env: {
-        // Stack must be in us-east-1, because the ACM certificate for a
-        // global CloudFront distribution must be requested in us-east-1.
+        account: app.node.tryGetContext('accountId'),
+        /**
+         * Stack must be in us-east-1, because the ACM certificate for a
+         * global CloudFront distribution must be requested in us-east-1.
+         */
         region: 'us-east-1',
-        account: process.env.CDK_DEFAULT_ACCOUNT,
     }
 });
 
