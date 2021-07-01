@@ -9,7 +9,7 @@ from aws_cdk import (
 class BonjourFargate(core.Stack):
 
     def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
-        super().__init__(scope, id, *kwargs)
+        super().__init__(scope, id, **kwargs)
 
         # Create VPC and Fargate Cluster
         # NOTE: Limit AZs to avoid reaching resource quotas
@@ -23,10 +23,18 @@ class BonjourFargate(core.Stack):
             vpc=vpc
         )
 
-        fargate_service = ecs_patterns.LoadBalancedFargateService(
+        fargate_service = ecs_patterns.NetworkLoadBalancedFargateService(
             self, "FargateService",
             cluster=cluster,
-            image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
+            task_image_options={
+                'image': ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
+            }
+        )
+
+        fargate_service.service.connections.security_groups[0].add_ingress_rule(
+            peer = ec2.Peer.ipv4(vpc.vpc_cidr_block),
+            connection = ec2.Port.tcp(80),
+            description="Allow http inbound from VPC"
         )
 
         core.CfnOutput(

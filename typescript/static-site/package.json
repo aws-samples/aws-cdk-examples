@@ -14,8 +14,8 @@
   },
   "license": "Apache-2.0",
   "devDependencies": {
-    "@types/node": "^10.9.4",
-    "typescript": "^3.2.4"
+    "@types/node": "^10.17.0",
+    "typescript": "~3.7.2"
   },
   "dependencies": {
     "@aws-cdk/aws-certificatemanager": "*",
@@ -24,6 +24,7 @@
     "@aws-cdk/aws-route53": "*",
     "@aws-cdk/aws-route53-targets": "*",
     "@aws-cdk/aws-s3": "*",
+    "@aws-cdk/aws-s3-deployment": "*",
     "@aws-cdk/core": "*",
     "aws-cdk": "*"
   }

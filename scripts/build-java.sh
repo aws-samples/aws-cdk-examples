@@ -9,11 +9,15 @@ npm install
 # Find and build all Maven projects
 for pomFile in $(find $scriptdir/../java -name pom.xml); do
     (
-        cd $(dirname $pomFile)
-        mvn compile test
+        echo "=============================="
+        echo "building project: $(dirname $pomFile)"
+        echo "=============================="
 
-        cp $scriptdir/fake.context.json cdk.context.json
-        npx cdk synth
-        rm cdk.context.json
+        cd $(dirname $pomFile)
+        if [[ -f DO_NOT_AUTOTEST ]]; then exit 0; fi
+
+        mvn -q compile test
+
+        $scriptdir/synth.sh
     )
 done

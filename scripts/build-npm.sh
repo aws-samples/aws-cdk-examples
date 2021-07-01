@@ -20,10 +20,13 @@ verify_star_dependencies() {
 }
 
 # Find and build all NPM projects
-for pkgJson in $(find typescript -name package.json | grep -v node_modules); do
+for pkgJson in $(find typescript -name cdk.json | grep -v node_modules); do
     (
-        cd $(dirname $pkgJson)
+        echo "=============================="
+        echo "building project: $(dirname $pkgJson)"
+        echo "=============================="
 
+        cd $(dirname $pkgJson)
         if [[ -f DO_NOT_AUTOTEST ]]; then exit 0; fi
 
         verify_star_dependencies
@@ -32,10 +35,6 @@ for pkgJson in $(find typescript -name package.json | grep -v node_modules); do
         npm install
         npm run build
 
-        export AWS_DEFAULT_REGION="us-east-1"
-
-        cp $scriptdir/fake.context.json cdk.context.json
-        npx cdk synth
-        rm cdk.context.json
+        $scriptdir/synth.sh
     )
 done

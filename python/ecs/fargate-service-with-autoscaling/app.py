@@ -9,7 +9,7 @@ from aws_cdk import (
 class AutoScalingFargateService(core.Stack):
 
     def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
-        super().__init__(scope, id, *kwargs)
+        super().__init__(scope, id, **kwargs)
 
         # Create a cluster
         vpc = ec2.Vpc(
@@ -23,10 +23,18 @@ class AutoScalingFargateService(core.Stack):
         )
 
         # Create Fargate Service
-        fargate_service = ecs_patterns.LoadBalancedFargateService(
+        fargate_service = ecs_patterns.NetworkLoadBalancedFargateService(
             self, "sample-app",
             cluster=cluster,
-            image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
+            task_image_options={
+                'image': ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
+            }
+        )
+
+        fargate_service.service.connections.security_groups[0].add_ingress_rule(
+            peer = ec2.Peer.ipv4(vpc.vpc_cidr_block),
+            connection = ec2.Port.tcp(80),
+            description="Allow http inbound from VPC"
         )
 
         # Setup AutoScaling policy

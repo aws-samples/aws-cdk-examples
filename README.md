@@ -4,104 +4,54 @@ This repository contains a set of example projects for the [AWS Cloud Developmen
 Kit](https://github.com/awslabs/aws-cdk).
 
 ## Table of Contents
-1. [TypeScript examples](#TypeScript)
-2. [Java examples](#Java)
-3. [Python examples](#Python)
-4. [JavaScript examples](#JavaScript)
+1. [About this Repo](#About)
+2. [Examples](#Examples)
+3. [Learning Resources](#Learning)
+4. [Additional Examples](#AddEx)
+4. [License](#License)
 
-## TypeScript examples <a name="TypeScript"></a>
+## About this Repo <a name="About"></a>
+This repo is our official list of CDK example code. The repo is subdivided into sections for each language (see ["Examples"](#Examples)). Each language has its own subsection of examples with the ultimate aim of complete language parity (same subset of examples exist in each language). These examples each provide a demonstration of a common service implementation, or infrastructure pattern that could be useful in your use of the CDK for building your own infrastructure.
 
-To run a TypeScript example, say my-widget-service:
+We welcome contributions to this repo in the form of fixes to existing examples or addition of new examples. For more information on contributing, please see the [CONTRIBUTING](https://github.com/aws-samples/aws-cdk-examples/blob/master/CONTRIBUTING.md) guide.
 
-```
-$ npm install -g aws-cdk
-$ cd typescript/my-widget-service
-$ npm install
-$ npm run build
-$ cdk deploy  // Deploys the CloudFormation template
+This is considered an intermediate learning resource and should typically be referenced after reading the Developer Guide or CDK Workshop (please see [Learning Resources](#Learning) for more information on these resources).
 
-# Afterwards
-$ cdk destroy
-```
+## Examples <a name="Examples"></a>
+This repo contains examples in each language supported by the CDK. Some languages are fully supported by [JSII](https://github.com/aws/jsii), but as additional languages are added, you will see those marked as `Developer Preview`. You can find the examples for each of those languages at the following links:
 
-| Example | Description |
-|---------|-------------|
-| [api-cors-lambda-crud-dynamodb](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/api-cors-lambda-crud-dynamodb/) | Creating a single API with CORS, and five Lambdas doing CRUD operations over a single DynamoDB |
-| [application-load-balancer](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/application-load-balancer/) | Using an AutoScalingGroup with an Application Load Balancer |
-| [appsync-graphql-dynamodb](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/appsync-graphql-dynamodb/) | Creating a single GraphQL API with an API Key, and four Resolvers doing CRUD operations over a single DynamoDB |
-| [classic-load-balancer](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/classic-load-balancer/) | Using an AutoScalingGroup with a Classic Load Balancer |
-| [custom-resource](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/custom-resource/) | Shows adding a Custom Resource to your CDK app |
-| [elasticbeanstalk](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/elasticbeanstalk/) | Elastic Beanstalk example using L1 with a Blue/Green pipeline (community contributed) |
-| [ecs-cluster](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/cluster/) | Provision an ECS Cluster with custom Autoscaling Group configuration |
-| [ecs-load-balanced-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-load-balanced-service/) | Starting a container fronted by a load balancer on ECS |
-| [ecs-service-with-task-placement](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-service-with-task-placement/) | Starting a container ECS with task placement specifications |
-| [ecs-service-with-advanced-alb-config](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-service-with-advanced-alb-config/) | Starting a container fronted by a load balancer on ECS with added load balancer configuration |
-| [ecs-service-with-task-networking](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-service-with-task-networking/) | Starting an ECS service with task networking, allowing ingress traffic to the task but blocking for the instance |
-| [fargate-load-balanced-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/fargate-load-balanced-service/) | Starting a container fronted by a load balancer on Fargate |
-| [fargate-service-with-auto-scaling](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/fargate-service-with-auto-scaling/) | Starting an ECS service of FARGATE launch type that auto scales based on average CPU Utilization |
-| [lambda-cron](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/lambda-cron/) | Running a Lambda on a schedule |
-| [my-widget-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/my-widget-service/) | Use Lambda to serve up widgets |
-| [resource-overrides](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/resource-overrides/) | Shows how to override generated CloudFormation code |
-| [static-site](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/static-site/) | A static site using CloudFront |
-| [stepfunctions-job-poller](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/stepfunctions-job-poller/) | A simple StepFunctions workflow |
-| [ecs-service-with-logging](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-service-with-logging/) | Starting a container fronted by a load balancer on ECS |
-| [fargate-service-with-logging](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/fargate-service-with-logging/) | Starting a container fronted by a load balancer on Fargate |
+| Language | JSII Language-Stability |
+|----------|-------------------------|
+| [Typescript Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript) | _Stable_ |
+| [Python Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/python) | _Stable_ |
+| [.NET Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/csharp) | _Stable_ |
+| [Java Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/java) | _Stable_ |
 
-## Java examples <a name="Java"></a>
 
-To run the Java examples:
+## Learning Resources <a name="Learning"></a>
+While this is an excellent learning resource for the CDK, there are other resources that can be referenced to assist with your learning/development process.
 
-```
-$ npm install -g aws-cdk
-$ mvn compile
-$ cdk deploy
+### Official Resources
+- [Developer Guide](https://docs.aws.amazon.com/cdk/latest/guide/home.html)
+- [API Reference](https://docs.aws.amazon.com/cdk/api/latest/docs/aws-construct-library.html)
+- [CDK Workshop](https://cdkworkshop.com/)
+- [CDK Repository](https://github.com/aws/aws-cdk)
 
-# Afterwards
-$ cdk destroy
-```
+### Unofficial/Community Resources
+- [AwsomeCDK](https://github.com/kolomied/awesome-cdk)
 
-| Example | Description |
-|---------|-------------|
-| [hello-world](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/hello-world/) | A demo application that uses the CDK in Java |
-| [lambda-cron](https://github.com/aws-samples/aws-cdk-examples/tree/master/java/lambda-cron/) | Running a Lambda on a schedule |
+> If you have created a CDK learning resource and would like it to be listed here, please read the related [CONTRIBUTING](https://github.com/aws-samples/aws-cdk-examples/blob/master/CONTRIBUTING.md#Resources) section for more info.
 
-## Python examples <a name="Python"></a>
+## Additional Examples <a name="AddEx"></a>
 
-To run a Python example, say my-widget-service:
+The examples listed below are larger examples hosted in their own repositories that demonstrate more complex or complete CDK applications. 
+>If you would like your repo to be listed here, please read the [CONTRIBUTING](https://github.com/aws-samples/aws-cdk-examples/blob/master/CONTRIBUTING.md#Resources) guide for more details.
 
-```
-$ npm install -g aws-cdk
-$ cd python/my-widget-service
-$ pip install -r requirements.txt    # Best to do this in a virtualenv
-$ cdk deploy                         # Deploys the CloudFormation template
+| Example | Description | Owner |
+|---------|-------------|-------|
+| [aws-cdk-changelogs-demo](https://github.com/aws-samples/aws-cdk-changelogs-demo) | A full serverless Node.js application stack deployed using CDK. It uses AWS Lambda, AWS Fargate, DynamoDB, Elasticache, S3, and CloudFront. | AWS |
 
-# Afterwards
-$ cdk destroy
-```
 
-| Example | Description |
-|---------|-------------|
-| [application-load-balancer](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/application-load-balancer/) | Using an AutoScalingGroup with an Application Load Balancer |
-| [classic-load-balancer](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/classic-load-balancer/) | Using an AutoScalingGroup with a Classic Load Balancer |
-| [custom-resource](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/custom-resource/) | Shows adding a Custom Resource to your CDK app |
-| [ecs-cluster](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/cluster/) | Provision an ECS Cluster with custom Autoscaling Group configuration |
-| [ecs-load-balanced-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/ecs-load-balanced-service/) | Starting a container fronted by a load balancer on ECS |
-| [ecs-service-with-task-placement](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/ecs-service-with-task-placement/) | Starting a container ECS with task placement specifications |
-| [ecs-service-with-advanced-alb-config](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/ecs-service-with-advanced-alb-config/) | Starting a container fronted by a load balancer on ECS with added load balancer configuration |
-| [ecs-service-with-task-networking](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/ecs-service-with-task-networking/) | Starting an ECS service with task networking, allowing ingress traffic to the task but blocking for the instance |
-| [fargate-load-balanced-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/fargate-load-balanced-service/) | Starting a container fronted by a load balancer on Fargate |
-| [fargate-service-with-autoscaling](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/fargate-service-with-autoscaling/) | Starting an ECS service of FARGATE launch type that auto scales based on average CPU Utilization |
-| [lambda-cron](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/lambda-cron/) | Running a Lambda on a schedule |
-| [stepfunctions](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/stepfunctions/) | A simple StepFunctions workflow |
-
-## JavaScript examples <a name="JavaScript"></a>
-
-Select the following link to see how to install and run the example.
-
-| Example | Description |
-|---------|-------------|
-| [aws-cdk-changelogs-demo](https://github.com/aws-samples/aws-cdk-changelogs-demo) | A full serverless Node.js application stack deployed using CDK. It uses AWS Lambda, AWS Fargate, DynamoDB, Elasticache, S3, and CloudFront. |
-
-# License
+# License <a name="License"></a>
 
 This library is licensed under the Apache 2.0 License.

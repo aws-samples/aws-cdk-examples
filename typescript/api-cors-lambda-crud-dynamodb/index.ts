@@ -12,13 +12,18 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
         name: 'itemId',
         type: dynamodb.AttributeType.STRING
       },
-      tableName: 'items'
+      tableName: 'items',
+
+      // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
+      // the new table, and it will remain in your account until manually deleted. By setting the policy to 
+      // DESTROY, cdk destroy will delete the table (even if it has data in it)
+      removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
     });
 
     const getOneLambda = new lambda.Function(this, 'getOneItemFunction', {
       code: new lambda.AssetCode('src'),
       handler: 'get-one.handler',
-      runtime: lambda.Runtime.NODEJS_8_10,
+      runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
         PRIMARY_KEY: 'itemId'
@@ -28,7 +33,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     const getAllLambda = new lambda.Function(this, 'getAllItemsFunction', {
       code: new lambda.AssetCode('src'),
       handler: 'get-all.handler',
-      runtime: lambda.Runtime.NODEJS_8_10,
+      runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
         PRIMARY_KEY: 'itemId'
@@ -38,7 +43,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     const createOne = new lambda.Function(this, 'createItemFunction', {
       code: new lambda.AssetCode('src'),
       handler: 'create.handler',
-      runtime: lambda.Runtime.NODEJS_8_10,
+      runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
         PRIMARY_KEY: 'itemId'
@@ -48,7 +53,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     const updateOne = new lambda.Function(this, 'updateItemFunction', {
       code: new lambda.AssetCode('src'),
       handler: 'update-one.handler',
-      runtime: lambda.Runtime.NODEJS_8_10,
+      runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
         PRIMARY_KEY: 'itemId'
@@ -58,7 +63,7 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
     const deleteOne = new lambda.Function(this, 'deleteItemFunction', {
       code: new lambda.AssetCode('src'),
       handler: 'delete-one.handler',
-      runtime: lambda.Runtime.NODEJS_8_10,
+      runtime: lambda.Runtime.NODEJS_10_X,
       environment: {
         TABLE_NAME: dynamoTable.tableName,
         PRIMARY_KEY: 'itemId'
