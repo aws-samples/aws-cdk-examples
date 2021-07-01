@@ -25,13 +25,13 @@ class RDSStack(core.Stack):
             connection=ec2.Port.tcp(3306)
         )
 
-        # Master data base word is automatically generated and
-        # stored in "AWS Secrets Manager"
+        # Master username is 'admin' and database password is automatically
+        # generated and stored in AWS Secrets Manager
         my_sql = rds.DatabaseInstance(
                 self, "RDS",
-                master_username="test",
-                engine_version="8.0.16",
-                engine=rds.DatabaseInstanceEngine.MYSQL,
+                engine=rds.DatabaseInstanceEngine.mysql(
+                    version=rds.MysqlEngineVersion.VER_8_0_16
+                ),
                 vpc=props['vpc'],
                 port=3306,
                 instance_type=ec2.InstanceType.of(

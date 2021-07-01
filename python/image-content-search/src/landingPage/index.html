@@ -1,0 +1,224 @@
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body{font-family:Arial}.tab{overflow:hidden;border:1px solid #ccc;background-color:#f1f1f1}.tab button{background-color:inherit;float:left;border:none;outline:0;cursor:pointer;padding:14px 16px;transition:.3s;font-size:17px}.tab button:hover{background-color:#ddd}.tab button.active{background-color:#ccc}.tabcontent{display:none;padding:6px 12px;-webkit-animation:fadeEffect 1s;animation:fadeEffect 1s}@-webkit-keyframes fadeEffect{from{opacity:0}to{opacity:1}}@keyframes fadeEffect{from{opacity:0}to{opacity:1}}
+    input[type=text],select{width:30%;padding:12px 20px;margin:8px 0;display:inline-block;border:1px solid #ccc;border-radius:4px;box-sizing:border-box}.submit[type=submit]{width:20%;background-color:#4caf50;color:#fff;padding:14px 20px;margin:8px 0;border:none;border-radius:4px;cursor:pointer}input[type=submit]:hover{background-color:#45a049}.div{border-radius:5px;background-color:#f2f2f2;padding:20px}
+    table{border-collapse:collapse;table-layout: fixed;width:100%}td,th{text-align:left;padding:8px;word-wrap:break-word;}tr:nth-child(even){background-color:#f2f2f2}
+  </style>
+  <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+  <script>
+    var authData = window.location.hash.substring(1);
+    var idToken = authData.split('&').find((rec) => rec.split('=')[0] == 'id_token').split('=')[1]
+    var getSignedUrlEndpoint = window.location.href.split('#')[0].replace('web', 'signedUrl')
+    var searchImageEndpoint = window.location.href.split('#')[0].replace('web', 'search')
+    var loginPage = '###loginPage###';
+    var logoutPage = loginPage.replace('login', 'logout');
+
+    function logout() {
+      window.location.replace(logoutPage);
+    }
+
+    function getSignedUrl() {
+      $.ajax({
+          url: getSignedUrlEndpoint,
+          headers: { 'Authorization': idToken },
+          type: "GET",
+          contentType: 'application/json; charset=utf-8',
+          success: function (result) {
+            console.log(result);
+            $("#upload_image_form").attr('action', result.url);
+            $('input[name="key"]').val(result.fields.key);
+            $('input[name="X-Amz-Credential"]').val(result.fields['x-amz-credential']);
+            $('input[name="X-Amz-Algorithm"]').val(result.fields['x-amz-algorithm']);
+            $('input[name="X-Amz-Date"]').val(result.fields['x-amz-date']);
+            $('input[name="x-amz-security-token"]').val(result.fields['x-amz-security-token']);
+            $('input[name="Policy"]').val(result.fields.policy);
+            $('input[name="X-Amz-Signature"]').val(result.fields['x-amz-signature']);
+          },
+          error: function (error) {
+            console.log(error);
+            if (error.status == 401) {logout();}
+          }
+        });
+    }
+
+    function listImagesByLabel(outputTab, label, language, country) {
+      console.log('Finding images with label: ' + label);
+      
+      var formData = language ? {label, language, country} : {label}
+      
+      $.ajax({
+        url: searchImageEndpoint,
+        headers: { 'Authorization': idToken },
+        type: "POST",
+        data: {...formData, 'source': 'API'},
+        contentType: 'application/json; charset=utf-8',
+        success: function (results) {
+          console.log(results);
+          $(outputTab + " tr").remove();
+          $(outputTab + " th").remove();
+          if (results) {
+            $(outputTab).append( '<tr><th>Image ID</th></tr>' );
+            results.forEach(item => {
+              $(outputTab).append( '<tr><td>' + item.id + '</th></tr>' );
+            });
+          }
+        },
+        error: function (error) {
+          console.log(error.responseText, error.status);
+          if (error.status == 401) {logout();}
+        }
+      });
+
+    }
+
+    $(document).ready(function () {
+      if (window.location.hash) {
+        // getSignedUrl();
+      } else {
+        console.log('Authorization information from cognito is not found!');
+      }
+    });
+
+    function submitSearchQuery() {
+      event.preventDefault();    
+      var language = $('#language').val();
+      var country = $('#country').val();
+      var label = $('input[name=label]').val();
+
+      listImagesByLabel('#search_image_result', label, language, country);
+    }
+
+    function openTab(evt, tabName) {
+      $("#upload_result").text('');
+      $("#upload_result").css("color", "black");
+      $("#file_select").val('');
+
+      if (tabName == 'upload') {
+        getSignedUrl();
+      }
+
+      if (tabName == 'report') {
+        listImagesByLabel('#report_image_result', 'offensive');
+      }
+
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+      document.getElementById(tabName).style.display = "block";
+      evt.currentTarget.className += " active";
+    }
+
+    function submitFileUpload() {
+      event.preventDefault();    
+
+      var formData = new FormData();
+      var selectedFile = $('input[name="file"]')[0]
+
+      $('#upload_image_form *').filter(':input').filter(":hidden").each(function(k, v){
+        formData.append(v.name, v.defaultValue);
+      });
+
+      formData.append("file", selectedFile.files[0]); 
+      
+      $.ajax({
+          url: $("#upload_image_form").attr('action'),
+          type: 'POST',
+          data: formData,
+          success: function (data) {
+            $("#upload_result").text('The file has been successfully uploaded!');
+            $("#upload_result").css("color", "green");
+            getSignedUrl();
+          },
+          error: function(xhr, textStatus, errorThrown){
+            $("#upload_result").text('The file upload failed!');
+            $("#upload_result").css("color", "red");
+            console.log(textStatus);
+            console.log(errorThrown);
+          },
+          cache: false,
+          contentType: false,
+          processData: false
+      });
+
+    };
+
+  </script>
+</head>
+
+<body>
+
+  <div style="width: 50%; margin-left: 25%;">
+
+    <div class="tab" style="margin-top: 10px;">
+      <button class="tablinks" onclick="openTab(event, 'upload')" id="default_tab">Upload</button>
+      <button class="tablinks" onclick="openTab(event, 'search')">Search</button>
+      <button class="tablinks" onclick="openTab(event, 'report')">Report</button>
+      <button class="tablinks" onclick="logout()" style="float: right;">Logout</button>
+    </div>
+
+    <div id="upload" class="tabcontent">
+      <h3>Upload Image</h3>
+      <p>Select image to upload:</p> 
+      <form id="upload_image_form" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="key"/><br />
+        <input type="hidden" name="X-Amz-Credential"/>
+        <input type="hidden" name="X-Amz-Algorithm"/>
+        <input type="hidden" name="X-Amz-Date"/>
+        <input type="hidden" name="x-amz-security-token"/>
+        <input type="hidden" name="Policy"/>
+        <input type="hidden" name="X-Amz-Signature"/>
+        <input type="file" id="file_select" name="file"/> <br />
+        <input type="submit" class="submit" value="Upload" onclick="submitFileUpload()"/>
+      </form>
+      <p id="upload_result"></p>
+    </div>
+    
+    <div id="search" class="tabcontent">
+      <h3>Search Labels</h3>
+      
+      <form id="search_image_form" method="post">
+        <label >Language:</label>
+        <select name="language" id="language">
+          <option value="en">English</option>
+          <option value="tr">Turkish</option>
+          <option value="nl">Dutch</option>
+        </select>
+        <br />
+        <label >Country:</label>
+        <select name="country" id="country">
+          <option value="nl">Netherlands</option>
+        </select>
+        <br />
+
+        <label >Label to search:</label>
+        <input type="text" name="label"/><br />
+        <input class="submit" type="submit" value="Search" onclick="submitSearchQuery()"/>
+      </form>
+    
+      <table id="search_image_result"></table>
+    </div>
+
+    <div id="report" class="tabcontent">
+      <h3>Report of offensive photos</h3>
+      <table id="report_image_result"></table>
+    </div>
+
+  </div>
+  
+  <script>
+    document.getElementById("default_tab").click();
+  </script>
+
+</body>
+
+</html>
