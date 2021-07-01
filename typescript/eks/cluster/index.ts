@@ -18,7 +18,6 @@ class EKSCluster extends cdk.Stack {
     const eksCluster = new eks.Cluster(this, 'Cluster', {
       version: eks.KubernetesVersion.V1_17,
       vpc: vpc,
-      kubectlEnabled: true,  // we want to be able to manage k8s resources using CDK
       defaultCapacity: 0,  // we want to manage capacity our selves
       version: eks.KubernetesVersion.V1_16,
     });
@@ -36,7 +35,7 @@ class EKSCluster extends cdk.Stack {
       updateType: autoscaling.UpdateType.ROLLING_UPDATE
     });
 
-    eksCluster.addAutoScalingGroup(onDemandASG, {});
+    eksCluster.connectAutoScalingGroupCapacity(onDemandASG, {});
   }
 }
 

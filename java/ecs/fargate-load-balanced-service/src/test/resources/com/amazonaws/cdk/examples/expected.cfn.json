@@ -389,6 +389,12 @@
         "FargateServiceLBB353E155": {
             "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
             "Properties": {
+                "LoadBalancerAttributes": [
+                  {
+                    "Key": "deletion_protection.enabled",
+                    "Value": "false"
+                  }
+                ],
                 "Scheme": "internet-facing",
                 "Subnets": [
                     {
@@ -554,9 +560,6 @@
         "FargateServiceECC8084D": {
             "Type": "AWS::ECS::Service",
             "Properties": {
-                "TaskDefinition": {
-                    "Ref": "FargateServiceTaskDef940E3A80"
-                },
                 "Cluster": {
                     "Ref": "Ec2ClusterEE43E89D"
                 },
@@ -597,6 +600,9 @@
                             }
                         ]
                     }
+                },
+                "TaskDefinition": {
+                  "Ref": "FargateServiceTaskDef940E3A80"
                 }
             },
             "DependsOn": [
