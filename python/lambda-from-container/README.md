@@ -9,7 +9,7 @@ Lambda Function from Container
 * Lambda functions with large sets of dependencies will can be easier to package and deploy as a Container.
 
 
-* The **Container Image** is defined in `app.py`. 
+* The **Container Image** is defined in `app.py`.
   * If `use_pre_existing_image` is **True**, then it is expected that a **Container Image** was **created elsewhere** and will be used by this CDK code.
   * If `use_pre_existing_image` is **False**, then a new container will be created using the `Dockerfile` from the the `lambda-image` sub-directory.
 
