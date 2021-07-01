@@ -33,16 +33,16 @@
                 "MapPublicIpOnLaunch": true,
                 "Tags": [
                     {
-                        "Key": "Name",
-                        "Value": "test/MyVpc/PublicSubnet1"
-                    },
-                    {
                         "Key": "aws-cdk:subnet-name",
                         "Value": "Public"
                     },
                     {
                         "Key": "aws-cdk:subnet-type",
                         "Value": "Public"
+                    },
+                    {
+                        "Key": "Name",
+                        "Value": "test/MyVpc/PublicSubnet1"
                     }
                 ]
             }
@@ -137,16 +137,16 @@
                 "MapPublicIpOnLaunch": true,
                 "Tags": [
                     {
-                        "Key": "Name",
-                        "Value": "test/MyVpc/PublicSubnet2"
-                    },
-                    {
                         "Key": "aws-cdk:subnet-name",
                         "Value": "Public"
                     },
                     {
                         "Key": "aws-cdk:subnet-type",
                         "Value": "Public"
+                    },
+                    {
+                        "Key": "Name",
+                        "Value": "test/MyVpc/PublicSubnet2"
                     }
                 ]
             }
@@ -241,16 +241,16 @@
                 "MapPublicIpOnLaunch": false,
                 "Tags": [
                     {
-                        "Key": "Name",
-                        "Value": "test/MyVpc/PrivateSubnet1"
-                    },
-                    {
                         "Key": "aws-cdk:subnet-name",
                         "Value": "Private"
                     },
                     {
                         "Key": "aws-cdk:subnet-type",
                         "Value": "Private"
+                    },
+                    {
+                        "Key": "Name",
+                        "Value": "test/MyVpc/PrivateSubnet1"
                     }
                 ]
             }
@@ -310,16 +310,16 @@
                 "MapPublicIpOnLaunch": false,
                 "Tags": [
                     {
-                        "Key": "Name",
-                        "Value": "test/MyVpc/PrivateSubnet2"
-                    },
-                    {
                         "Key": "aws-cdk:subnet-name",
                         "Value": "Private"
                     },
                     {
                         "Key": "aws-cdk:subnet-type",
                         "Value": "Private"
+                    },
+                    {
+                        "Key": "Name",
+                        "Value": "test/MyVpc/PrivateSubnet2"
                     }
                 ]
             }
@@ -389,6 +389,12 @@
         "FargateServiceLBB353E155": {
             "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
             "Properties": {
+                "LoadBalancerAttributes": [
+                  {
+                    "Key": "deletion_protection.enabled",
+                    "Value": "false"
+                  }
+                ],
                 "Scheme": "internet-facing",
                 "Subnets": [
                     {
@@ -554,9 +560,6 @@
         "FargateServiceECC8084D": {
             "Type": "AWS::ECS::Service",
             "Properties": {
-                "TaskDefinition": {
-                    "Ref": "FargateServiceTaskDef940E3A80"
-                },
                 "Cluster": {
                     "Ref": "Ec2ClusterEE43E89D"
                 },
@@ -597,6 +600,9 @@
                             }
                         ]
                     }
+                },
+                "TaskDefinition": {
+                  "Ref": "FargateServiceTaskDef940E3A80"
                 }
             },
             "DependsOn": [

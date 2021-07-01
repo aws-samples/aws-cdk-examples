@@ -29,7 +29,7 @@ class DynamodbLambdaStack(core.Stack):
 
         producer_lambda.add_environment("TABLE_NAME", demo_table.table_name)
 
-        # grant permission to lamnbda to write to demo table
+        # grant permission to lambda to write to demo table
         demo_table.grant_write_data(producer_lambda)
 
         # create consumer lambda function
@@ -40,7 +40,7 @@ class DynamodbLambdaStack(core.Stack):
 
         consumer_lambda.add_environment("TABLE_NAME", demo_table.table_name)
 
-        # grant permission to lamnbda to read from demo table
+        # grant permission to lambda to read from demo table
         demo_table.grant_read_data(consumer_lambda)
 
         # create a Cloudwatch Event rule
