@@ -1,29 +1,6 @@
 # See https://doc.mergify.io
 
 pull_request_rules:
-  - name: build
-    actions:
-      post_check:
-        title: |
-          {% if check_succeed %}
-          Your pull request was successfully built
-          {% else %}
-          Your pull request has caused a build to fail
-          {% endif %}
-    conditions:
-      - or:
-        - -files~=^typescript/ # if typescript files did not change, continue
-        - status-success=build-typescript # if typescript files have changed, wait for build
-      - or:
-        - -files~=^java/ # if java files did not change, continue
-        - status-success=build-java # if java files have changed, wait for build
-      - or:
-        - -files~=^python/ # if python files did not change, continue
-        - status-success=build-python # if python files have changed, wait for build
-      - or:
-        - -files~=^csharp/ # if csharp files did not change, continue
-        - status-success=build-csharp  # if csharp files have changed, wait for build
-
   - name: automatic merge
     actions:
       comment:
