@@ -21,11 +21,40 @@ pull_request_rules:
       - "#changes-requested-reviews-by=0"
       - status-success=build
       - status-success=Semantic Pull Request
+      - and:
+        - or: # if typescript files have changed, wait for build
+          - files~=^typescript/
+          - status-success=build-typescript
+        - or: # if typescript files did not change, continue
+          - -files~=^typescript/
+
+      - and:
+        - or: # if java files have changed, wait for build
+          - files~=^java/
+          - status-success=build-java
+        - or: # if java files did not change, continue
+          - -files~=^java/
+
+      - and:
+        - or: # if python files have changed, wait for build
+          - files~=^python/
+          - status-success=build-python
+        - or: # if python files did not change, continue
+          - -files~=^python/
+
+      - and:
+        - or: # if csharp files have changed, wait for build
+          - files~=^csharp/
+          - status-success=build-csharp
+        - or: # if csharp files did not change, continue
+          - -files~=^csharp/
+
   - name: remove stale reviews
     actions:
       dismiss_reviews: {}
     conditions:
       - base=master
+
   - name: if fails conventional commits
     actions:
       comment:
