@@ -1,0 +1,16 @@
+name: Build Typescript PR
+
+on:
+  pull_request:
+    paths:
+      - typescript/**
+
+jobs:
+  build-typescript:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Runs docker build with JSII superchain
+      run: docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain /bin/bash -c "scripts/build-typescript.sh"

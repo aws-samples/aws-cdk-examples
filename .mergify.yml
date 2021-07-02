@@ -1,6 +1,29 @@
 # See https://doc.mergify.io
 
 pull_request_rules:
+  - name: build
+    actions:
+      post_check:
+        title: |
+          {% if check_succeed %}
+          Your pull request was successfully built
+          {% else %}
+          Your pull request has caused a build to fail
+          {% endif %}
+    conditions:
+      - or:
+        - -files~=^typescript/ # if typescript files did not change, continue
+        - status-success=build-typescript # if typescript files have changed, wait for build
+      - or:
+        - -files~=^java/ # if java files did not change, continue
+        - status-success=build-java # if java files have changed, wait for build
+      - or:
+        - -files~=^python/ # if python files did not change, continue
+        - status-success=build-python # if python files have changed, wait for build
+      - or:
+        - -files~=^csharp/ # if csharp files did not change, continue
+        - status-success=build-csharp  # if csharp files have changed, wait for build
+
   - name: automatic merge
     actions:
       comment:
@@ -19,8 +42,9 @@ pull_request_rules:
       - "#approved-reviews-by>=1"
       - -approved-reviews-by~=author
       - "#changes-requested-reviews-by=0"
-      - status-success=build
       - status-success=Semantic Pull Request
+      - status-success=build
+
   - name: remove stale reviews
     actions:
       dismiss_reviews: {}
@@ -32,4 +56,3 @@ pull_request_rules:
         message: Title does not follow the guidelines of [Conventional Commits](https://www.conventionalcommits.org). Please adjust title before merge.
     conditions:
       - -status-success=Semantic Pull Request
-      
