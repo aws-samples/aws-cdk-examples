@@ -49,7 +49,7 @@ public class MyWidgetServiceStack extends Stack {
             .code(Code.fromAsset("resources"))
             .handler("widgets.main")
             .timeout(Duration.seconds(300))
-            .runtime(Runtime.NODEJS_10_X)
+            .runtime(Runtime.NODEJS_14_X)
             .environment(environmentVariables)
             .build();
 

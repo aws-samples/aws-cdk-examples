@@ -124,7 +124,7 @@ export class AppSyncCdkStack extends cdk.Stack {
         "exports.handler = (event, context) => { console.log(event); context.succeed(event); }"
       ),
       handler: "index.handler",
-      runtime: lambda.Runtime.NODEJS_10_X
+      runtime: lambda.Runtime.NODEJS_14_X
     });
 
     const rule = new Rule(this, "AppSyncEventBridgeRle", {

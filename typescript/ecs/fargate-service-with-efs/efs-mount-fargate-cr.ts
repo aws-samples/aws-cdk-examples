@@ -28,7 +28,7 @@ export class FargateEfsCustomResource extends cdk.Construct {
       code: new lambda.InlineCode(fs.readFileSync('lambda.js', { encoding: 'utf-8' })),
       handler: 'index.handler',
       timeout: cdk.Duration.seconds(300),
-      runtime: lambda.Runtime.NODEJS_12_X,
+      runtime: lambda.Runtime.NODEJS_14_X,
       initialPolicy:[
         new iam.PolicyStatement({
           actions: [ 'ecs:UpdateService', 'ecs:RegisterTaskDefinition', 'ecs:DescribeTaskDefinition', 'iam:PassRole', 'iam:GetRole' ],
