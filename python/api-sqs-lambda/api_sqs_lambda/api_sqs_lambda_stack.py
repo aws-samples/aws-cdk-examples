@@ -25,6 +25,7 @@ class ApiSqsLambdaStack(core.Stack):
 
         #Create an API GW Rest API
         base_api = apigw.RestApi(self, 'ApiGW',rest_api_name='TestAPI')
+        base_api.root.add_method("ANY")
 
         #Create a resource named "example" on the base API
         api_resource = base_api.root.add_resource('example')
