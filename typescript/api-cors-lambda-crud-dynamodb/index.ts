@@ -1,7 +1,9 @@
-import apigateway = require('@aws-cdk/aws-apigateway'); 
-import dynamodb = require('@aws-cdk/aws-dynamodb');
-import lambda = require('@aws-cdk/aws-lambda');
-import cdk = require('@aws-cdk/core');
+import * as  apigateway from '@aws-cdk/aws-apigateway';
+import * as  dynamodb from '@aws-cdk/aws-dynamodb';
+import * as  lambda from '@aws-cdk/aws-lambda';
+import * as  cdk from '@aws-cdk/core';
+import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs';
+import { join } from 'path'
 
 export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
   constructor(app: cdk.App, id: string) {
@@ -14,62 +16,94 @@ export class ApiLambdaCrudDynamoDBStack extends cdk.Stack {
       },
       tableName: 'items',
 
-      // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
-      // the new table, and it will remain in your account until manually deleted. By setting the policy to 
-      // DESTROY, cdk destroy will delete the table (even if it has data in it)
+      /**
+       *  The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
+       * the new table, and it will remain in your account until manually deleted. By setting the policy to
+       * DESTROY, cdk destroy will delete the table (even if it has data in it)
+       */
       removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
     });
 
-    const getOneLambda = new lambda.Function(this, 'getOneItemFunction', {
-      code: new lambda.AssetCode('src'),
-      handler: 'get-one.handler',
-      runtime: lambda.Runtime.NODEJS_10_X,
+    const getOneLambda = new NodejsFunction(this, 'getOneItemFunction', {
+      entry: join(__dirname, 'lambdas', 'get-one.ts'), // accepts .js, .jsx, .ts and .tsx files
+      depsLockFilePath: join(__dirname, 'lambdas', 'package-lock.json'),
+      handler: 'handler',
+      runtime: lambda.Runtime.NODEJS_14_X,
+      bundling: {
+        externalModules: [
+          'aws-sdk', // Use the 'aws-sdk' available in the Lambda runtime
+        ],
+      },
       environment: {
         TABLE_NAME: dynamoTable.tableName,
         PRIMARY_KEY: 'itemId'
       }
     });
 
-    const getAllLambda = new lambda.Function(this, 'getAllItemsFunction', {
-      code: new lambda.AssetCode('src'),
-      handler: 'get-all.handler',
-      runtime: lambda.Runtime.NODEJS_10_X,
+    const getAllLambda = new NodejsFunction(this, 'getAllItemsFunction', {
+      entry: join(__dirname, 'lambdas', 'get-all.ts'), // accepts .js, .jsx, .ts and .tsx files
+      depsLockFilePath: join(__dirname, 'lambdas', 'package-lock.json'),
+      handler: 'handler',
+      runtime: lambda.Runtime.NODEJS_14_X,
+      bundling: {
+        externalModules: [
+          'aws-sdk', // Use the 'aws-sdk' available in the Lambda runtime
+        ],
+      },
       environment: {
         TABLE_NAME: dynamoTable.tableName,
         PRIMARY_KEY: 'itemId'
       }
     });
 
-    const createOne = new lambda.Function(this, 'createItemFunction', {
-      code: new lambda.AssetCode('src'),
-      handler: 'create.handler',
-      runtime: lambda.Runtime.NODEJS_10_X,
+    const createOne = new NodejsFunction(this, 'createItemFunction', {
+      entry: join(__dirname, 'lambdas', 'create.ts'), // accepts .js, .jsx, .ts and .tsx files
+      depsLockFilePath: join(__dirname, 'lambdas', 'package-lock.json'),
+      handler: 'handler',
+      runtime: lambda.Runtime.NODEJS_14_X,
+      bundling: {
+        externalModules: [
+          'aws-sdk', // Use the 'aws-sdk' available in the Lambda runtime
+        ],
+      },
       environment: {
         TABLE_NAME: dynamoTable.tableName,
         PRIMARY_KEY: 'itemId'
       }
     });
 
-    const updateOne = new lambda.Function(this, 'updateItemFunction', {
-      code: new lambda.AssetCode('src'),
-      handler: 'update-one.handler',
-      runtime: lambda.Runtime.NODEJS_10_X,
+    const updateOne = new NodejsFunction(this, 'updateItemFunction', {
+      entry: join(__dirname, 'lambdas', 'update-one.ts'), // accepts .js, .jsx, .ts and .tsx files
+      depsLockFilePath: join(__dirname, 'lambdas', 'package-lock.json'),
+      handler: 'handler',
+      runtime: lambda.Runtime.NODEJS_14_X,
+      bundling: {
+        externalModules: [
+          'aws-sdk', // Use the 'aws-sdk' available in the Lambda runtime
+        ],
+      },
       environment: {
         TABLE_NAME: dynamoTable.tableName,
         PRIMARY_KEY: 'itemId'
       }
     });
 
-    const deleteOne = new lambda.Function(this, 'deleteItemFunction', {
-      code: new lambda.AssetCode('src'),
-      handler: 'delete-one.handler',
-      runtime: lambda.Runtime.NODEJS_10_X,
+    const deleteOne = new NodejsFunction(this, 'deleteItemFunction', {
+      entry: join(__dirname, 'lambdas', 'delete-one.ts'), // accepts .js, .jsx, .ts and .tsx files
+      depsLockFilePath: join(__dirname, 'lambdas', 'package-lock.json'),
+      handler: 'handler',
+      runtime: lambda.Runtime.NODEJS_14_X,
+      bundling: {
+        externalModules: [
+          'aws-sdk', // Use the 'aws-sdk' available in the Lambda runtime
+        ],
+      },
       environment: {
         TABLE_NAME: dynamoTable.tableName,
         PRIMARY_KEY: 'itemId'
       }
     });
-    
+
     dynamoTable.grantReadWriteData(getAllLambda);
     dynamoTable.grantReadWriteData(getOneLambda);
     dynamoTable.grantReadWriteData(createOne);
@@ -124,7 +158,7 @@ export function addCorsOptions(apiResource: apigateway.IResource) {
         'method.response.header.Access-Control-Allow-Methods': true,
         'method.response.header.Access-Control-Allow-Credentials': true,
         'method.response.header.Access-Control-Allow-Origin': true,
-      },  
+      },
     }]
   })
 }
