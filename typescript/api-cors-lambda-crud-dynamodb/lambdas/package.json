@@ -5,6 +5,7 @@
   "private": true,
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "*",
     "@types/uuid": "*"
   },
   "dependencies": {

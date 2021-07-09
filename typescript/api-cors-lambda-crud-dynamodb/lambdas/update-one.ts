@@ -8,6 +8,7 @@ const RESERVED_RESPONSE = `Error: You're using AWS reserved keywords as attribut
   DYNAMODB_EXECUTION_ERROR = `Error: Execution update, caused a Dynamodb error, please take a look at your CloudWatch Logs.`;
 
 const db = new AWS.DynamoDB.DocumentClient();
+
 export const handler = async (event: any = {}): Promise<any> => {
 
   if (!event.body) {
