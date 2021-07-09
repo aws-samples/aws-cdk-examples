@@ -18,7 +18,7 @@ Shown in `split-at-listener.ts`, create an `ApplicationLoadBalancer`
 in a shared stack, and an `ApplicationListener` in the service stack.
 
 
-Option 1: Split at target group
+Option 2: Split at target group
 -------------------------------
 
 Shown in `split-at-targetgroup.ts`, create an empty `TargetGroup` in the load

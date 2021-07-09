@@ -9,8 +9,14 @@ npm install
 # Find and build all Maven projects
 for pomFile in $(find $scriptdir/../java -name pom.xml); do
     (
+        echo "=============================="
+        echo "building project: $(dirname $pomFile)"
+        echo "=============================="
+
         cd $(dirname $pomFile)
-        mvn compile test
+        if [[ -f DO_NOT_AUTOTEST ]]; then exit 0; fi
+
+        mvn -q compile test
 
         $scriptdir/synth.sh
     )

@@ -1,0 +1,13 @@
+{
+	"context": {
+		"STAGE":"preprod",
+		"REGION":"us-east-1",
+		"ACCTID":"<INSERTACCTID>",
+		"NASA_KEY":"<INSERTNASAKEY>",
+		"SCHEMA":"DB_NAME_PREPROD",
+		"DB_SECRETS_REF":"<INSERTSECRETS_MGR_REF>",
+		"TOPIC_ARN":"<INSERT_TOPIC_ARN>",
+		"stack_name":"EtlPipelineCdkStackPreProd"
+	},
+    "app": "python3 app.py"
+}
