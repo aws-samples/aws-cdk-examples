@@ -17,8 +17,8 @@ class EKSCluster extends cdk.Stack {
 
     const eksCluster = new eks.Cluster(this, 'Cluster', {
       vpc: vpc,
-      kubectlEnabled: true,  // we want to be able to manage k8s resources using CDK
-      defaultCapacity: 0  // we want to manage capacity our selves
+      defaultCapacity: 0,  // we want to manage capacity our selves
+      version: eks.KubernetesVersion.V1_16,
     });
 
     const onDemandASG = new autoscaling.AutoScalingGroup(this, 'OnDemandASG', {
@@ -29,12 +29,12 @@ class EKSCluster extends cdk.Stack {
       instanceType: new ec2.InstanceType('t3.medium'),
       machineImage: new eks.EksOptimizedImage({
         kubernetesVersion: '1.14',
-        nodeType: eks.NodeType.STANDARD  // wihtout this, incorrect SSM parameter for AMI is resolved
+        nodeType: eks.NodeType.STANDARD  // without this, incorrect SSM parameter for AMI is resolved
       }),
       updateType: autoscaling.UpdateType.ROLLING_UPDATE
     });
 
-    eksCluster.addAutoScalingGroup(onDemandASG, {});
+    eksCluster.connectAutoScalingGroupCapacity(onDemandASG, {});
   }
 }
 
