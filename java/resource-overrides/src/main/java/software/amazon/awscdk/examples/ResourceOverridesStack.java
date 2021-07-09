@@ -143,7 +143,7 @@ class ResourceOverridesStack extends Stack {
         (CfnBucket)
             bucket.getNode().getChildren().stream()
                 .filter(
-                    child -> ((CfnResource) child).getCfnResourceType().equals("AWS::S3::Bucket"))
+                    child -> child instanceof CfnResource && ((CfnResource)child).getCfnResourceType().equals("AWS::S3::Bucket"))
                 .findFirst()
                 .get();
 
