@@ -1,0 +1,14 @@
+.classpath.txt
+target
+.classpath
+.project
+.idea
+.settings
+.vscode
+*.iml
+cdk.context.json
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+

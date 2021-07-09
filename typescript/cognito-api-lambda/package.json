@@ -1,0 +1,26 @@
+{
+  "name": "cognito-api-lambda",
+  "version": "1.0.0",
+  "description": "Running an API Gateway using Cognito User Pool as an Authorizer for Hello World Lambda",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "author": {
+    "name": "Campion Fellin <campionfellin@gmail.com>"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^10.17.0",
+    "typescript": "~3.7.2"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-apigateway": "*",
+    "@aws-cdk/aws-cognito": "*",
+    "@aws-cdk/aws-dynamodb": "*",
+    "@aws-cdk/aws-lambda": "*",
+    "@aws-cdk/core": "*"
+  }
+}
