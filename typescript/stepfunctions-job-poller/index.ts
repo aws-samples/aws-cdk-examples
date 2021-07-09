@@ -4,7 +4,7 @@ import * as sfn from '@aws-cdk/aws-stepfunctions';
 import * as tasks from '@aws-cdk/aws-stepfunctions-tasks';
 import * as events from '@aws-cdk/aws-events';
 import * as targets from '@aws-cdk/aws-events-targets';
-import fs = require('fs');
+import * as fs from 'fs'
 
 class JobPollerStack extends cdk.Stack {
   constructor(app: cdk.App, id: string) {
@@ -13,16 +13,16 @@ class JobPollerStack extends cdk.Stack {
     /** ------------------ Lambda Handlers Definition ------------------ */
 
     const getStatusLambda = new lambda.Function(this, 'CheckLambda', {
-      code: new lambda.InlineCode(fs.readFileSync('lambda-handler-check-status.py', { encoding: 'utf-8' })),
+      code: new lambda.InlineCode(fs.readFileSync('lambdas/check_status.py', { encoding: 'utf-8' })),
       handler: 'index.main',
-      timeout: cdk.Duration.seconds(300),
+      timeout: cdk.Duration.seconds(30),
       runtime: lambda.Runtime.PYTHON_3_6,
     });
 
     const submitLambda = new lambda.Function(this, 'SubmitLambda', {
-      code: new lambda.InlineCode(fs.readFileSync('lambda-handler-submit.py', { encoding: 'utf-8' })),
+      code: new lambda.InlineCode(fs.readFileSync('lambdas/submit.py', { encoding: 'utf-8' })),
       handler: 'index.main',
-      timeout: cdk.Duration.seconds(300),
+      timeout: cdk.Duration.seconds(30),
       runtime: lambda.Runtime.PYTHON_3_6,
     });
 
@@ -34,15 +34,14 @@ class JobPollerStack extends cdk.Stack {
       outputPath: '$.Payload',
     });
     const waitX = new sfn.Wait(this, 'Wait X Seconds', {
-      // You can also implement with the path stored in the state like:
-      // sfn.WaitTime.secondsPath('$.waitSeconds')
-      time: sfn.WaitTime.duration(cdk.Duration.seconds(300)),
+      /**
+       *  You can also implement with the path stored in the state like:
+       *  sfn.WaitTime.secondsPath('$.waitSeconds')
+       */
+      time: sfn.WaitTime.duration(cdk.Duration.seconds(30)),
     });
     const getStatus = new tasks.LambdaInvoke(this, 'Get Job Status', {
       lambdaFunction: getStatusLambda,
-      // Pass just the field named "guid" into the Lambda, put the
-      // Lambda's result in a field called "status" in the response
-      inputPath: '$.guid',
       outputPath: '$.Payload',
     });
 
@@ -50,14 +49,12 @@ class JobPollerStack extends cdk.Stack {
       cause: 'AWS Batch Job Failed',
       error: 'DescribeJob returned FAILED',
     });
-  
+
     const finalStatus = new tasks.LambdaInvoke(this, 'Get Final Job Status', {
       lambdaFunction: getStatusLambda,
-      // Use "guid" field as input
-      inputPath: '$.guid',
       outputPath: '$.Payload',
     });
-    
+
     // Create chain
     const definition = submitJob
       .next(waitX)
@@ -79,9 +76,11 @@ class JobPollerStack extends cdk.Stack {
     getStatusLambda.grantInvoke(stateMachine.role);
 
     /** ------------------ Events Rule Definition ------------------ */
-    
-    // Run every day at 6PM UTC
-    // See https://docs.aws.amazon.com/lambda/latest/dg/tutorial-scheduled-events-schedule-expressions.html
+
+    /**
+     *  Run every day at 6PM UTC
+     * See https://docs.aws.amazon.com/lambda/latest/dg/tutorial-scheduled-events-schedule-expressions.html
+     */
     const rule = new events.Rule(this, 'Rule', {
       schedule: events.Schedule.expression('cron(0 18 ? * MON-FRI *)')
     });
