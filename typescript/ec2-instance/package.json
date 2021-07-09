@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@aws-cdk/aws-ec2": "*",
+    "@aws-cdk/aws-lambda": "*",
     "@aws-cdk/core": "*",
     "cdk-ec2-key-pair": "*",
     "source-map-support": "^0.5.16"
