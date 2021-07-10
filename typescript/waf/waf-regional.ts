@@ -121,7 +121,7 @@ export class WafRegionalStack extends cdk.Stack {
     new cdk.CfnOutput(this, "wafAclRegionalArn", {
       value: wafAclRegional.attrArn,
       description: " WAF Regional arn",
-      exportName: "WafStack:WafAclRegionalArn"
+      exportName: "WafRegionalStack:WafAclRegionalArn"
     });
 
 

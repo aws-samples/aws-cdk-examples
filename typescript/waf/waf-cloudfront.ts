@@ -123,7 +123,7 @@ export class WafCloudFrontStack extends cdk.Stack {
     new cdk.CfnOutput(this, "wafAclCloudFrontArn", {
       value: wafAclCloudFront.attrArn,
       description: " WAF CloudFront arn",
-      exportName: "WafStack:WafAclCloudFrontArn"
+      exportName: "WafCloudFrontStack:WafAclCloudFrontArn"
     });
 
   } // constructor
