@@ -10,6 +10,7 @@ import * as neptune from '@aws-cdk/aws-neptune';
 import { ApplicationProtocol, TargetType } from '@aws-cdk/aws-elasticloadbalancingv2';
 import { AmazonLinuxGeneration, AmazonLinuxImage, InstanceClass, InstanceSize } from '@aws-cdk/aws-ec2';
 import { AccountPrincipal, ManagedPolicy, ServicePrincipal } from '@aws-cdk/aws-iam';
+import { RemovalPolicy } from '@aws-cdk/core';
 
 export class Ec2NeptuneGraphnotebookStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -42,13 +43,16 @@ export class Ec2NeptuneGraphnotebookStack extends cdk.Stack {
       ]
     })
 
+    const neptune2SG = new ec2.SecurityGroup(this, 'NeptuneSG', {vpc: vpc, allowAllOutbound: true, description: 'Allow access to Neptune', securityGroupName: 'NeptuneSG'});
+    neptune2SG.addIngressRule(neptune2SG, ec2.Port.tcp(8182), 'Allow connections ec2 to neptune');
     // create neptune cluster
     const cluster = new neptune.DatabaseCluster(this, 'NeptuneCluster', {
       vpc: vpc,
       instanceType: neptune.InstanceType.R5_LARGE,
       iamAuthentication: true,
+      securityGroups: [neptune2SG],
+      removalPolicy: RemovalPolicy.DESTROY
     });
-    cluster.connections.allowDefaultPortFromAnyIpv4('Open to the world');
 
     // create policy to read s3 bucket
     // we need this to get the jupyterhub authenticator and user-data script

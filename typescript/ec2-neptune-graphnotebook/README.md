@@ -23,7 +23,6 @@ This cdk project will provision a VPC, a Neptune cluster, an ALB, and an EC2 ins
 * Requires an S3 bucket to host JupyterHub authenticator and user-data.sh script
 * Requires an existing certificate in ACM
 * Requires an existing Cognito User Pool
-* EC2 Security Group needs to be tightened
 
 # Usage
 1) Upload the below files to an S3 bucket:
@@ -39,5 +38,6 @@ This cdk project will provision a VPC, a Neptune cluster, an ALB, and an EC2 ins
 3) Configure the user-data.sh script. There are three variables that need values.
 4) Assume a session for your AWS account
 5) Run `cdk deploy`
-6) Update the Cognito User Pool callback URL with "https://${ALB_URL}/oauth2/idpresponse"
+6) Update the Cognito User Pool callback URL with "https://${ALB_URL}/oauth2/idpresponse".
+    **NOTE**: Any upper-case letters in this URL need to be converted to lower-case 
 7) Get the ALB URL and use it to login into JupyterHub. This should spawn a graph notebook instance.
