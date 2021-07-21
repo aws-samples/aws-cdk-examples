@@ -1,0 +1,23 @@
+{
+  "name": "ec2-cdk",
+  "version": "0.1.0",
+  "bin": {
+    "ec2-cdk": "bin/ec2-cdk.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@types/node": "10.17.27",
+    "typescript": "~3.9.7"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-ec2": "*",
+    "@aws-cdk/aws-lambda": "*",
+    "@aws-cdk/core": "*",
+    "cdk-ec2-key-pair": "*",
+    "source-map-support": "^0.5.16"
+  }
+}
