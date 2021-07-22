@@ -6,7 +6,7 @@
 
 > **This is a stable example. It should successfully build out of the box**
 >
-> This examples only on the core CDK library, and does not have any infrastructure prerequisites to build.
+> This example uses the core CDK library, and does not have any infrastructure prerequisites to build.
 
 ---
 <!--END STABILITY BANNER-->
