@@ -35,6 +35,8 @@ This cdk project will provision a VPC, a Neptune cluster, an ALB, and an EC2 ins
     - COGUSERPOOLARN // This is your Cognito User Pool ARN
     - COGUSERPOOLID // This is the Id of the App Client configured in Cognito
     - COGDOMAIN // This is the domain of the App Client configured in Cognito
+    - NEPTUNETAGKEY // This tag key will be used for ABAC for Neptune access
+    - NEPTUNETAGVALUE // This value will hold the value for ABAC for Neptune access
 3) Configure the user-data.sh script. There are three variables that need values.
 4) Assume a session for your AWS account
 5) Run `cdk deploy`
