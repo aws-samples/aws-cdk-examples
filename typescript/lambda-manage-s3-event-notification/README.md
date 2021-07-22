@@ -13,6 +13,8 @@
 
 This example uses Lambda to manage event notifications for an S3 bucket. The solution allows other stacks to define their own event notifications on a shared bucket.
 
+View the related blog post here: https://aws.amazon.com/blogs/infrastructure-and-automation/manage-amazon-s3-event-notifications-using-lambda-function/
+
 ## Build
 To build this app, you need to be in this example's root folder. Then run the following:
 ```bash
