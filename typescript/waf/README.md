@@ -1,12 +1,25 @@
-WAF - Web Application Firewall
-==========================
+# WAF - Web Application Firewall
+
+<!--BEGIN STABILITY BANNER-->
+
+---
+
+![Stability: Experimental](https://img.shields.io/badge/stability-Experimental-important.svg?style=for-the-badge)
+
+> **This is an experimental example. It may not build out of the box**
+>
+> This example is built on Construct Libraries marked "Experimental" and may not be updated for latest breaking changes.
+>
+> If build is unsuccessful, please create an [issue](https://github.com/aws-samples/aws-cdk-examples/issues/new) so that we may debug the problem
+
+---
+<!--END STABILITY BANNER-->
 
 * Creates a **WAF** for use with **CloudFront** and a **WAF** for use with **Load Balancers**.
 * Both WAF stacks are virtually identical:
   * `waf-cloudfront.ts`
   * `waf-regional.ts`
 * Each stack is customized for the target usage scenario.
-
 
 ## Build
 
@@ -32,7 +45,6 @@ Run `cdk deploy`. This will deploy / redeploy your Stack to your AWS Account.
 
 After the deployment, you will be able to assign the WAF to the CloudFront or Load Balancer resources.
 
-
 ## WAF Rules
 
 * The WAF leverages the AWS Managed rules for most of the enabled rule list.
@@ -48,12 +60,10 @@ aws wafv2 list-available-managed-rule-groups --scope REGIONAL
 * The example code includes a rule based on the geographic region of the source IP.
 * If the IP is outside the list of country codes, then the IP will be blocked.
 
-
 ### Restrict connections based on flow
 
 * The example code includes a rule that will restrict connections based on flow rate.
 * In the included example, if the connection count is higher than 100 in a 5 minute period, the connection will be blocked.
-
 
 ## Using the WAF in other stacks and assigning to resources
 
@@ -62,7 +72,6 @@ aws wafv2 list-available-managed-rule-groups --scope REGIONAL
 * The exports are named:
   * `WafCloudFrontStack:WafAclCloudFrontArn`
   * `WafRegionalStack:WafAclRegionalArn`
-
 
 ### Assign WAF to CloudFront Distribution
 
@@ -78,7 +87,6 @@ new cloudfront.CloudFrontWebDistribution(this, 'frontendDistribution', {
   webACLId: wafAclCloudFrontArn
 });
 ```
-
 
 ### Assign WAF to AppSync GraphQL API
 
@@ -99,10 +107,3 @@ new wafv2.CfnWebACLAssociation(this, 'NeptuneGraphQLApiWaf', {
   webAclArn:   wafAclAppSyncArn
 });
 ```
-
-
-
-
-
-
-
