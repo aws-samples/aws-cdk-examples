@@ -9,5 +9,5 @@ cattrs>=1.1.1
 ##
 ## CDK Modules
 ##
-aws-cdk.core>=1.105.0
-aws-cdk.aws_wafv2>=1.105.0
+aws-cdk.core>=1.115.0
+aws-cdk.aws_wafv2>=1.115.0

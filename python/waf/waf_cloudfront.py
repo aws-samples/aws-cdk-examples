@@ -28,6 +28,79 @@ class WafCloudFrontStack(core.Stack):
         ) ## visibility_config
       ) ## wafv2.CfnWebACL.RuleProperty
       rules.append(rule)
+
+    ##
+    ## Allowed country list
+    ##
+    ruleGeoMatch = wafv2.CfnWebACL.RuleProperty(
+      name     = 'GeoMatch',
+      priority =  0,
+      action   = wafv2.CfnWebACL.RuleActionProperty(
+        block={} ## To disable, change to *count*
+      ),
+      statement = wafv2.CfnWebACL.StatementProperty(
+        not_statement = wafv2.CfnWebACL.NotStatementProperty(
+          statement = wafv2.CfnWebACL.StatementProperty(
+            geo_match_statement = wafv2.CfnWebACL.GeoMatchStatementProperty(
+              ##
+              ## block connection if source not in the below country list
+              ##
+              country_codes = [
+                "AR", ## Argentina
+                "BO", ## Bolivia
+                "BR", ## Brazil
+                "CL", ## Chile
+                "CO", ## Colombia
+                "EC", ## Ecuador
+                "FK", ## Falkland Islands
+                "GF", ## French Guiana
+                "GY", ## Guiana
+                "GY", ## Guyana
+                "PY", ## Paraguay
+                "PE", ## Peru
+                "SR", ## Suriname
+                "UY", ## Uruguay
+                "VE", ## Venezuela
+              ] ## country_codes
+            ) ## geo_match_statement
+          ) ## statement
+        ) ## not_statement
+      ), ## statement
+      visibility_config = wafv2.CfnWebACL.VisibilityConfigProperty(
+        cloud_watch_metrics_enabled = True,
+        metric_name                 = 'GeoMatch',
+        sampled_requests_enabled    = True
+      ) ## visibility_config
+    ) ## GeoMatch
+    rules.append(ruleGeoMatch)
+
+    ##
+    ## The rate limit is the maximum number of requests from a 
+    ## single IP address that are allowed in a five-minute period.
+    ## This value is continually evaluated, 
+    ## and requests will be blocked once this limit is reached. 
+    ## The IP address is automatically unblocked after it falls below the limit.
+    ##
+    ruleLimitRequests100 = wafv2.CfnWebACL.RuleProperty(
+          name     = 'LimitRequests100',
+          priority = 1,
+          action   = wafv2.CfnWebACL.RuleActionProperty(
+            block = {} ## To disable, change to *count*
+          ), ## action
+          statement= wafv2.CfnWebACL.StatementProperty(
+            rate_based_statement = wafv2.CfnWebACL.RateBasedStatementProperty(
+              limit              = 100,
+              aggregate_key_type = "IP"
+            ) ## rate_based_statement
+          ), ## statement
+          visibility_config= wafv2.CfnWebACL.VisibilityConfigProperty(
+            cloud_watch_metrics_enabled = True,
+            metric_name                 = 'LimitRequests100',
+            sampled_requests_enabled    = True
+          )
+        ) ## limit requests to 100
+    rules.append(ruleLimitRequests100);
+
     return rules
 
 
@@ -107,16 +180,4 @@ class WafCloudFrontStack(core.Stack):
 
 
     core.CfnOutput(self, "WafAclArn", export_name="WafCloudFrontStack:WafAclCloudFrontArn", value=wafacl.attr_arn)
-
-
-
-
-
-
-
-
-
-
-
-
 

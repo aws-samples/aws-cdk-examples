@@ -21,6 +21,7 @@ export class WafCloudFrontStack extends cdk.Stack {
       var mrgsp:wafv2.CfnWebACL.ManagedRuleGroupStatementProperty = {
               name:       r['name'],
               vendorName: "AWS",
+              excludedRules: []
             };
 
       var stateProp:wafv2.CfnWebACL.StatementProperty = {
@@ -29,10 +30,12 @@ export class WafCloudFrontStack extends cdk.Stack {
               vendorName: "AWS",
             }
       };
+      var overrideAction:wafv2.CfnWebACL.OverrideActionProperty = {none:{}}
 
-      var rule:wafv2.CfnRuleGroup.RuleProperty = {
+      var rule:wafv2.CfnWebACL.RuleProperty = {
           name:           r['name'],
           priority:       r['priority'],
+          overrideAction: overrideAction,
           statement: stateProp,
           visibilityConfig: {
             sampledRequestsEnabled:   true,
@@ -42,6 +45,80 @@ export class WafCloudFrontStack extends cdk.Stack {
         };
       rules.push(rule);
     }); // forEach
+
+
+    //
+    // Allowed country list
+    //
+    var ruleGeoMatch:wafv2.CfnWebACL.RuleProperty = {
+      name: 'GeoMatch',
+      priority: 0,
+      action: {
+        block: {} // To disable, change to *count*
+      },
+      statement: {
+        notStatement: {
+          statement: {
+            geoMatchStatement: {
+              //
+              // block connection if source not in the below country list
+              //
+              countryCodes: [
+                "AR", // Argentina
+                "BO", // Bolivia
+                "BR", // Brazil
+                "CL", // Chile
+                "CO", // Colombia
+                "EC", // Ecuador
+                "FK", // Falkland Islands
+                "GF", // French Guiana
+                "GY", // Guiana
+                "GY", // Guyana
+                "PY", // Paraguay
+                "PE", // Peru
+                "SR", // Suriname
+                "UY", // Uruguay
+                "VE", // Venezuela
+              ]
+            }
+          }
+        }
+      },
+      visibilityConfig: {
+        sampledRequestsEnabled: true,
+        cloudWatchMetricsEnabled: true,
+        metricName: 'GeoMatch'
+      }
+    }; // GeoMatch
+    rules.push(ruleGeoMatch);
+
+    //
+    // The rate limit is the maximum number of requests from a 
+    // single IP address that are allowed in a five-minute period.
+    // This value is continually evaluated, 
+    // and requests will be blocked once this limit is reached. 
+    // The IP address is automatically unblocked after it falls below the limit.
+    //
+    var ruleLimitRequests100:wafv2.CfnWebACL.RuleProperty = {
+          name: 'LimitRequests100',
+          priority: 1,
+          action: {
+            block: {} // To disable, change to *count*
+          },
+          statement: {
+            rateBasedStatement: {
+              limit: 100,
+              aggregateKeyType: "IP"
+            }
+          },
+          visibilityConfig: {
+            sampledRequestsEnabled: true,
+            cloudWatchMetricsEnabled: true,
+            metricName: 'LimitRequests100'
+          }
+        }; // limit requests to 100
+    rules.push(ruleLimitRequests100);
+
     return rules;
   } // function makeRules
 
@@ -84,8 +161,6 @@ export class WafCloudFrontStack extends cdk.Stack {
       "overrideAction"  : "none",
       "excludedRules"   : [],
     }];
-
-
 
 
     ////////////////////////////////////////////////////////////#
