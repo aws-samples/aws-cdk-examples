@@ -1,5 +1,3 @@
-
-
 from aws_cdk import (
   aws_wafv2      as wafv2,
   core,
@@ -22,8 +20,8 @@ class WafRegionalStack(core.Stack):
           ) ## managed_rule_group_statement
         ), ## statement
         visibility_config=wafv2.CfnWebACL.VisibilityConfigProperty(
-          cloud_watch_metrics_enabled = True, 
-          metric_name                 = r["name"], 
+          cloud_watch_metrics_enabled = True,
+          metric_name                 = r["name"],
           sampled_requests_enabled    = True
         ) ## visibility_config
       ) ## wafv2.CfnWebACL.RuleProperty
@@ -75,10 +73,10 @@ class WafRegionalStack(core.Stack):
     rules.append(ruleGeoMatch)
 
     ##
-    ## The rate limit is the maximum number of requests from a 
+    ## The rate limit is the maximum number of requests from a
     ## single IP address that are allowed in a five-minute period.
-    ## This value is continually evaluated, 
-    ## and requests will be blocked once this limit is reached. 
+    ## This value is continually evaluated,
+    ## and requests will be blocked once this limit is reached.
     ## The IP address is automatically unblocked after it falls below the limit.
     ##
     ruleLimitRequests100 = wafv2.CfnWebACL.RuleProperty(
@@ -102,7 +100,6 @@ class WafRegionalStack(core.Stack):
     rules.append(ruleLimitRequests100);
 
     return rules
-
 
 
   def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
@@ -156,21 +153,21 @@ class WafRegionalStack(core.Stack):
       ##
       ## The scope of this Web ACL.
       ## Valid options: CLOUDFRONT, REGIONAL.
-      ## For CLOUDFRONT, you must create your WAFv2 resources 
+      ## For CLOUDFRONT, you must create your WAFv2 resources
       ## in the US East (N. Virginia) Region, us-east-1
       ## https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wafv2-webacl.html#cfn-wafv2-webacl-scope
       ##
-      scope="REGIONAL", 
+      scope="REGIONAL",
       ##
-      ## Defines and enables Amazon CloudWatch metrics and web request sample collection. 
+      ## Defines and enables Amazon CloudWatch metrics and web request sample collection.
       ##
       visibility_config=wafv2.CfnWebACL.VisibilityConfigProperty(
-        cloud_watch_metrics_enabled=True, 
-        metric_name                ="waf-regional", 
+        cloud_watch_metrics_enabled=True,
+        metric_name                ="waf-regional",
         sampled_requests_enabled   =True
       ),
-      description = "WAFv2 ACL for Regional", 
-      name        = "waf-regional", 
+      description = "WAFv2 ACL for Regional",
+      name        = "waf-regional",
       rules       = self.make_rules(managed_rules),
     ) ## wafv2.CfnWebACL
 
@@ -178,6 +175,4 @@ class WafRegionalStack(core.Stack):
     core.Tags.of(wafacl).add("Purpose",   "WAF for Regional", priority=300)
     core.Tags.of(wafacl).add("CreatedBy", "Cloudformation",   priority=300)
 
-
     core.CfnOutput(self, "WafAclArn", export_name="WafRegionalStack:WafAclRegionalArn", value=wafacl.attr_arn)
-

@@ -1,5 +1,19 @@
-WAF - Web Application Firewall
-==========================
+# WAF - Web Application Firewall
+
+<!--BEGIN STABILITY BANNER-->
+
+---
+
+![Stability: Experimental](https://img.shields.io/badge/stability-Experimental-important.svg?style=for-the-badge)
+
+> **This is an experimental example. It may not build out of the box**
+>
+> This example is built on Construct Libraries marked "Experimental" and may not be updated for latest breaking changes.
+>
+> If build is unsuccessful, please create an [issue](https://github.com/aws-samples/aws-cdk-examples/issues/new) so that we may debug the problem
+
+---
+<!--END STABILITY BANNER-->
 
 * Creates a **WAF** for use with **CloudFront** and a **WAF** for use with **Load Balancers**.
 * Both WAF stacks are virtually identical:
@@ -7,17 +21,15 @@ WAF - Web Application Firewall
   * `waf_regional.py`
 * Each stack is customized for the target usage scenario.
 
-
-
-### Install CDK
+## Install CDK
 
 * **cdk** is a **NodeJS** app.
 * Install NodeJS.
 * Use `npm` to install `cdk`
 
 ```bash
-sudo npm install -g --force cdk
-`
+npm install -g cdk
+```
 
 ### Create Python Virtual Environment
 
@@ -26,15 +38,13 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-
-### Install Python-specific modules
+## Install Python-specific modules
 
 * Each service such as **wafv2** _(`aws_cdk.aws_wafv2`)_ or **ec2** _(`aws_cdk.aws_ec2`)_, has its own module which must be defined in `requirements.txt`.
 
 ```bash
 pip3 install -r requirements.txt
 ```
-
 
 ## Build the Cloudformation from CDK
 
@@ -58,9 +68,6 @@ Run `cdk deploy`. This will deploy / redeploy your Stack to your AWS Account.
 
 After the deployment, you will be able to assign the WAF to the CloudFront or Load Balancer resources.
 
-
-
-
 ## WAF Rules
 
 * The WAF leverages the AWS Managed rules for most of the enabled rule list.
@@ -76,12 +83,10 @@ aws wafv2 list-available-managed-rule-groups --scope REGIONAL
 * The example code includes a rule based on the geographic region of the source IP.
 * If the IP is outside the list of country codes, then the IP will be blocked.
 
-
 ### Restrict connections based on flow
 
 * The example code includes a rule that will restrict connections based on flow rate.
 * In the included example, if the connection count is higher than 100 in a 5 minute period, the connection will be blocked.
-
 
 ## Using the WAF in other stacks and assigning to resources
 
@@ -90,7 +95,6 @@ aws wafv2 list-available-managed-rule-groups --scope REGIONAL
 * The exports are named:
   * `WafCloudFrontStack:WafAclCloudFrontArn`
   * `WafRegionalStack:WafAclRegionalArn`
-
 
 ### Assign WAF to CloudFront Distribution
 
@@ -110,7 +114,6 @@ cloudfront.CloudFrontWebDistribution(self, 'frontendDistribution', {
   web_acl_id: wafacl_cloudfront_arn
 });
 ```
-
 
 ### Assign WAF to AppSync GraphQL API
 
@@ -134,9 +137,3 @@ wafv2.CfnWebACLAssociation(self, 'NeptuneGraphQLApiWaf',
   webAclArn:   wafacl_appsync_arn
 )
 ```
-
-
-
-
-
-

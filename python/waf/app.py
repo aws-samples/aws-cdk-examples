@@ -10,4 +10,3 @@ WafRegionalStack(app,   "WafRegionalStack",   env=env)
 WafCloudFrontStack(app, "WafCloudFrontStack", env=env)
 
 app.synth()
-

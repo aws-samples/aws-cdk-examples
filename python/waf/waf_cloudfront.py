@@ -1,5 +1,3 @@
-
-
 from aws_cdk import (
   aws_wafv2      as wafv2,
   core,
@@ -22,8 +20,8 @@ class WafCloudFrontStack(core.Stack):
           ) ## managed_rule_group_statement
         ), ## statement
         visibility_config=wafv2.CfnWebACL.VisibilityConfigProperty(
-          cloud_watch_metrics_enabled = True, 
-          metric_name                 = r["name"], 
+          cloud_watch_metrics_enabled = True,
+          metric_name                 = r["name"],
           sampled_requests_enabled    = True
         ) ## visibility_config
       ) ## wafv2.CfnWebACL.RuleProperty
@@ -75,10 +73,10 @@ class WafCloudFrontStack(core.Stack):
     rules.append(ruleGeoMatch)
 
     ##
-    ## The rate limit is the maximum number of requests from a 
+    ## The rate limit is the maximum number of requests from a
     ## single IP address that are allowed in a five-minute period.
-    ## This value is continually evaluated, 
-    ## and requests will be blocked once this limit is reached. 
+    ## This value is continually evaluated,
+    ## and requests will be blocked once this limit is reached.
     ## The IP address is automatically unblocked after it falls below the limit.
     ##
     ruleLimitRequests100 = wafv2.CfnWebACL.RuleProperty(
@@ -156,21 +154,21 @@ class WafCloudFrontStack(core.Stack):
       ##
       ## The scope of this Web ACL.
       ## Valid options: CLOUDFRONT, REGIONAL.
-      ## For CLOUDFRONT, you must create your WAFv2 resources 
+      ## For CLOUDFRONT, you must create your WAFv2 resources
       ## in the US East (N. Virginia) Region, us-east-1
       ## https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wafv2-webacl.html#cfn-wafv2-webacl-scope
       ##
-      scope="CLOUDFRONT", 
+      scope="CLOUDFRONT",
       ##
-      ## Defines and enables Amazon CloudWatch metrics and web request sample collection. 
+      ## Defines and enables Amazon CloudWatch metrics and web request sample collection.
       ##
       visibility_config=wafv2.CfnWebACL.VisibilityConfigProperty(
-        cloud_watch_metrics_enabled=True, 
-        metric_name                ="waf-cloudfront", 
+        cloud_watch_metrics_enabled=True,
+        metric_name                ="waf-cloudfront",
         sampled_requests_enabled   =True
       ),
-      description = "WAFv2 ACL for CloudFront", 
-      name        = "waf-cloudfront", 
+      description = "WAFv2 ACL for CloudFront",
+      name        = "waf-cloudfront",
       rules       = self.make_rules(managed_rules),
     ) ## wafv2.CfnWebACL
 
@@ -180,4 +178,3 @@ class WafCloudFrontStack(core.Stack):
 
 
     core.CfnOutput(self, "WafAclArn", export_name="WafCloudFrontStack:WafAclCloudFrontArn", value=wafacl.attr_arn)
-
