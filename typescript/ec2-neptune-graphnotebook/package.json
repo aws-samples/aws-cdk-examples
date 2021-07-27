@@ -22,14 +22,14 @@
   },
   "dependencies": {
     "@aws-cdk/aws-cognito": "^1.114.0",
-    "@aws-cdk/aws-ec2": "1.114.0",
-    "@aws-cdk/aws-elasticloadbalancingv2": "1.114.0",
+    "@aws-cdk/aws-ec2": "^1.114.0",
+    "@aws-cdk/aws-elasticloadbalancingv2": "^1.114.0",
     "@aws-cdk/aws-elasticloadbalancingv2-actions": "^1.114.0",
     "@aws-cdk/aws-elasticloadbalancingv2-targets": "^1.114.0",
     "@aws-cdk/aws-iam": "^1.114.0",
     "@aws-cdk/aws-s3": "^1.114.0",
     "@aws-cdk/aws-neptune": "^1.114.0",
-    "@aws-cdk/core": "1.114.0",
+    "@aws-cdk/core": "^1.114.0",
     "source-map-support": "^0.5.19"
   }
 }
