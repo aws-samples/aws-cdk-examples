@@ -1,4 +1,8 @@
-import { LambdaIntegration, MethodLoggingLevel, RestApi } from "@aws-cdk/aws-apigateway"
+import {
+    LambdaIntegration,
+    MethodLoggingLevel,
+    RestApi,
+} from "@aws-cdk/aws-apigateway"
 import { PolicyStatement } from "@aws-cdk/aws-iam"
 import { Function, Runtime, AssetCode, Code } from "@aws-cdk/aws-lambda"
 import { Construct, Duration, Stack, StackProps } from "@aws-cdk/core"
@@ -44,6 +48,9 @@ export class CDKExampleLambdaApiStack extends Stack {
             initialPolicy: [lambdaPolicy],
         })
 
-        this.restApi.root.addMethod("GET", new LambdaIntegration(this.lambdaFunction, {}))
+        this.restApi.root.addMethod(
+            "GET",
+            new LambdaIntegration(this.lambdaFunction, {})
+        )
     }
 }

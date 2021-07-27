@@ -1,4 +1,7 @@
-import { CodeCommitSourceAction, CodeBuildAction } from "@aws-cdk/aws-codepipeline-actions"
+import {
+    CodeCommitSourceAction,
+    CodeBuildAction,
+} from "@aws-cdk/aws-codepipeline-actions"
 import { PolicyStatement } from "@aws-cdk/aws-iam"
 import { Construct, Stack, StackProps } from "@aws-cdk/core"
 import { PipelineProject, LinuxBuildImage } from "@aws-cdk/aws-codebuild"

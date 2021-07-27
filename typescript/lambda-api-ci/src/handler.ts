@@ -11,7 +11,9 @@ const handler = async function (event: any, context: any) {
 
         if (method === "GET") {
             if (event.path === "/") {
-                const data = await S3Client.listObjectsV2({ Bucket: bucketName }).promise()
+                const data = await S3Client.listObjectsV2({
+                    Bucket: bucketName,
+                }).promise()
                 var body = {
                     widgets: data.Contents!.map(function (e) {
                         return e.Key
