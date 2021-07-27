@@ -1,8 +1,7 @@
-import ecs = require('@aws-cdk/aws-ecs');
-import ec2 = require('@aws-cdk/aws-ec2');
-import elbv2 = require('@aws-cdk/aws-elasticloadbalancingv2');
-import { Stack, Construct, StackProps, CfnOutput } from '@aws-cdk/core';
-
+import ecs = require("@aws-cdk/aws-ecs");
+import ec2 = require("@aws-cdk/aws-ec2");
+import elbv2 = require("@aws-cdk/aws-elasticloadbalancingv2");
+import { Stack, Construct, StackProps, CfnOutput } from "@aws-cdk/core";
 
 //---------------------------------------------------------------------------
 //  Load balancer stack
@@ -14,15 +13,25 @@ export interface SplitAtListener_LoadBalancerStackProps extends StackProps {
 export class SplitAtListener_LoadBalancerStack extends Stack {
   public readonly loadBalancer: elbv2.ApplicationLoadBalancer;
 
-  constructor(scope: Construct, id: string, props: SplitAtListener_LoadBalancerStackProps) {
+  constructor(
+    scope: Construct,
+    id: string,
+    props: SplitAtListener_LoadBalancerStackProps
+  ) {
     super(scope, id, props);
 
-    this.loadBalancer = new elbv2.ApplicationLoadBalancer(this, 'LoadBalancer', {
-      vpc: props.vpc,
-      internetFacing: true
-    });
+    this.loadBalancer = new elbv2.ApplicationLoadBalancer(
+      this,
+      "LoadBalancer",
+      {
+        vpc: props.vpc,
+        internetFacing: true,
+      }
+    );
 
-    new CfnOutput(this, 'LoadBalancerDNS', { value: this.loadBalancer.loadBalancerDnsName, });
+    new CfnOutput(this, "LoadBalancerDNS", {
+      value: this.loadBalancer.loadBalancerDnsName,
+    });
   }
 }
 
@@ -36,19 +45,23 @@ export interface SplitAtListener_ServiceStackProps extends StackProps {
 }
 
 export class SplitAtListener_ServiceStack extends Stack {
-  constructor(scope: Construct, id: string, props: SplitAtListener_ServiceStackProps) {
+  constructor(
+    scope: Construct,
+    id: string,
+    props: SplitAtListener_ServiceStackProps
+  ) {
     super(scope, id, props);
 
     // Standard ECS service setup
-    const taskDefinition = new ecs.FargateTaskDefinition(this, 'TaskDef');
-    const container = taskDefinition.addContainer('web', {
+    const taskDefinition = new ecs.FargateTaskDefinition(this, "TaskDef");
+    const container = taskDefinition.addContainer("web", {
       image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample"),
       memoryLimitMiB: 256,
     });
 
     container.addPortMappings({
       containerPort: 80,
-      protocol: ecs.Protocol.TCP
+      protocol: ecs.Protocol.TCP,
     });
 
     const service = new ecs.FargateService(this, "Service", {
@@ -57,12 +70,12 @@ export class SplitAtListener_ServiceStack extends Stack {
     });
 
     // Create a new listener in the current scope, add targets to it
-    const listener = new elbv2.ApplicationListener(this, 'Listener', {
+    const listener = new elbv2.ApplicationListener(this, "Listener", {
       loadBalancer: props.loadBalancer, // ! need to pass load balancer to attach to !
       port: 80,
     });
 
-    listener.addTargets('ECS', {
+    listener.addTargets("ECS", {
       port: 80,
       targets: [service],
     });

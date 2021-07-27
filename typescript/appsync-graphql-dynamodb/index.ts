@@ -1,26 +1,35 @@
-import cdk = require('@aws-cdk/core');
-import { CfnGraphQLApi, CfnApiKey, CfnGraphQLSchema, CfnDataSource, CfnResolver } from '@aws-cdk/aws-appsync';
-import { Table, AttributeType, StreamViewType, BillingMode } from '@aws-cdk/aws-dynamodb';
-import { Role, ServicePrincipal, ManagedPolicy } from '@aws-cdk/aws-iam';
-
+import cdk = require("@aws-cdk/core");
+import {
+  CfnGraphQLApi,
+  CfnApiKey,
+  CfnGraphQLSchema,
+  CfnDataSource,
+  CfnResolver,
+} from "@aws-cdk/aws-appsync";
+import {
+  Table,
+  AttributeType,
+  StreamViewType,
+  BillingMode,
+} from "@aws-cdk/aws-dynamodb";
+import { Role, ServicePrincipal, ManagedPolicy } from "@aws-cdk/aws-iam";
 
 export class AppSyncCdkStack extends cdk.Stack {
-
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const tableName = 'items'
+    const tableName = "items";
 
-    const itemsGraphQLApi = new CfnGraphQLApi(this, 'ItemsApi', {
-      name: 'items-api',
-      authenticationType: 'API_KEY'
+    const itemsGraphQLApi = new CfnGraphQLApi(this, "ItemsApi", {
+      name: "items-api",
+      authenticationType: "API_KEY",
     });
 
-    new CfnApiKey(this, 'ItemsApiKey', {
-      apiId: itemsGraphQLApi.attrApiId
+    new CfnApiKey(this, "ItemsApiKey", {
+      apiId: itemsGraphQLApi.attrApiId,
     });
 
-    const apiSchema = new CfnGraphQLSchema(this, 'ItemsSchema', {
+    const apiSchema = new CfnGraphQLSchema(this, "ItemsSchema", {
       apiId: itemsGraphQLApi.attrApiId,
       definition: `type ${tableName} {
         ${tableName}Id: ID!
@@ -41,45 +50,47 @@ export class AppSyncCdkStack extends cdk.Stack {
       type Schema {
         query: Query
         mutation: Mutation
-      }`
+      }`,
     });
 
-    const itemsTable = new Table(this, 'ItemsTable', {
+    const itemsTable = new Table(this, "ItemsTable", {
       tableName: tableName,
       partitionKey: {
         name: `${tableName}Id`,
-        type: AttributeType.STRING
+        type: AttributeType.STRING,
       },
       billingMode: BillingMode.PAY_PER_REQUEST,
       stream: StreamViewType.NEW_IMAGE,
 
       // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
-      // the new table, and it will remain in your account until manually deleted. By setting the policy to 
+      // the new table, and it will remain in your account until manually deleted. By setting the policy to
       // DESTROY, cdk destroy will delete the table (even if it has data in it)
       removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
     });
 
-    const itemsTableRole = new Role(this, 'ItemsDynamoDBRole', {
-      assumedBy: new ServicePrincipal('appsync.amazonaws.com')
+    const itemsTableRole = new Role(this, "ItemsDynamoDBRole", {
+      assumedBy: new ServicePrincipal("appsync.amazonaws.com"),
     });
 
-    itemsTableRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AmazonDynamoDBFullAccess'));
+    itemsTableRole.addManagedPolicy(
+      ManagedPolicy.fromAwsManagedPolicyName("AmazonDynamoDBFullAccess")
+    );
 
-    const dataSource = new CfnDataSource(this, 'ItemsDataSource', {
+    const dataSource = new CfnDataSource(this, "ItemsDataSource", {
       apiId: itemsGraphQLApi.attrApiId,
-      name: 'ItemsDynamoDataSource',
-      type: 'AMAZON_DYNAMODB',
+      name: "ItemsDynamoDataSource",
+      type: "AMAZON_DYNAMODB",
       dynamoDbConfig: {
         tableName: itemsTable.tableName,
-        awsRegion: this.region
+        awsRegion: this.region,
       },
-      serviceRoleArn: itemsTableRole.roleArn
+      serviceRoleArn: itemsTableRole.roleArn,
     });
 
-    const getOneResolver = new CfnResolver(this, 'GetOneQueryResolver', {
+    const getOneResolver = new CfnResolver(this, "GetOneQueryResolver", {
       apiId: itemsGraphQLApi.attrApiId,
-      typeName: 'Query',
-      fieldName: 'getOne',
+      typeName: "Query",
+      fieldName: "getOne",
       dataSourceName: dataSource.name,
       requestMappingTemplate: `{
         "version": "2017-02-28",
@@ -88,14 +99,14 @@ export class AppSyncCdkStack extends cdk.Stack {
           "${tableName}Id": $util.dynamodb.toDynamoDBJson($ctx.args.${tableName}Id)
         }
       }`,
-      responseMappingTemplate: `$util.toJson($ctx.result)`
+      responseMappingTemplate: `$util.toJson($ctx.result)`,
     });
     getOneResolver.addDependsOn(apiSchema);
 
-    const getAllResolver = new CfnResolver(this, 'GetAllQueryResolver', {
+    const getAllResolver = new CfnResolver(this, "GetAllQueryResolver", {
       apiId: itemsGraphQLApi.attrApiId,
-      typeName: 'Query',
-      fieldName: 'all',
+      typeName: "Query",
+      fieldName: "all",
       dataSourceName: dataSource.name,
       requestMappingTemplate: `{
         "version": "2017-02-28",
@@ -103,14 +114,14 @@ export class AppSyncCdkStack extends cdk.Stack {
         "limit": $util.defaultIfNull($ctx.args.limit, 20),
         "nextToken": $util.toJson($util.defaultIfNullOrEmpty($ctx.args.nextToken, null))
       }`,
-      responseMappingTemplate: `$util.toJson($ctx.result)`
+      responseMappingTemplate: `$util.toJson($ctx.result)`,
     });
     getAllResolver.addDependsOn(apiSchema);
 
-    const saveResolver = new CfnResolver(this, 'SaveMutationResolver', {
+    const saveResolver = new CfnResolver(this, "SaveMutationResolver", {
       apiId: itemsGraphQLApi.attrApiId,
-      typeName: 'Mutation',
-      fieldName: 'save',
+      typeName: "Mutation",
+      fieldName: "save",
       dataSourceName: dataSource.name,
       requestMappingTemplate: `{
         "version": "2017-02-28",
@@ -122,14 +133,14 @@ export class AppSyncCdkStack extends cdk.Stack {
           "name": $util.dynamodb.toDynamoDBJson($ctx.args.name)
         }
       }`,
-      responseMappingTemplate: `$util.toJson($ctx.result)`
+      responseMappingTemplate: `$util.toJson($ctx.result)`,
     });
     saveResolver.addDependsOn(apiSchema);
 
-    const deleteResolver = new CfnResolver(this, 'DeleteMutationResolver', {
+    const deleteResolver = new CfnResolver(this, "DeleteMutationResolver", {
       apiId: itemsGraphQLApi.attrApiId,
-      typeName: 'Mutation',
-      fieldName: 'delete',
+      typeName: "Mutation",
+      fieldName: "delete",
       dataSourceName: dataSource.name,
       requestMappingTemplate: `{
         "version": "2017-02-28",
@@ -138,13 +149,12 @@ export class AppSyncCdkStack extends cdk.Stack {
           "${tableName}Id": $util.dynamodb.toDynamoDBJson($ctx.args.${tableName}Id)
         }
       }`,
-      responseMappingTemplate: `$util.toJson($ctx.result)`
+      responseMappingTemplate: `$util.toJson($ctx.result)`,
     });
     deleteResolver.addDependsOn(apiSchema);
-
   }
 }
 
 const app = new cdk.App();
-new AppSyncCdkStack(app, 'AppSyncGraphQLDynamoDBExample');
+new AppSyncCdkStack(app, "AppSyncGraphQLDynamoDBExample");
 app.synth();

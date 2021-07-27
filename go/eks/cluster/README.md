@@ -17,8 +17,8 @@ Our cluster is comprised out of the following components:
 
 ## Useful commands
 
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk destroy`     destroy this stack from your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk synth`       emits the synthesized CloudFormation template
- * `go test`         run unit tests
+- `cdk deploy` deploy this stack to your default AWS account/region
+- `cdk destroy` destroy this stack from your default AWS account/region
+- `cdk diff` compare deployed stack with current state
+- `cdk synth` emits the synthesized CloudFormation template
+- `go test` run unit tests

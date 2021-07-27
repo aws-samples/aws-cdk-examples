@@ -1,6 +1,6 @@
 # Custom Resource
-<!--BEGIN STABILITY BANNER-->
----
+
+## <!--BEGIN STABILITY BANNER-->
 
 ![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
 
@@ -9,6 +9,7 @@
 > This examples only on the core CDK library, and does not have any infrastructure prerequisites to build.
 
 ---
+
 <!--END STABILITY BANNER-->
 
 This example shows adding a custom resource to a CDK app. This custom resource is useful when considering design of constructs, or separating your architecture into components.

@@ -9,7 +9,8 @@ export class ProxyStack extends cdk.Stack {
     super(app, id, props);
 
     const proxy = new Proxy(this, "Proxy", {
-      apiName: "HttpProxy", endpointType: EndpointType.EDGE
+      apiName: "HttpProxy",
+      endpointType: EndpointType.EDGE,
     });
 
     proxy.addProxy("aws", "https://aws.amazon.com/ko");

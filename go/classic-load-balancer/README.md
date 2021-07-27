@@ -1,14 +1,15 @@
 # Classic Load Balancer
-<!--BEGIN STABILITY BANNER-->
----
+
+## <!--BEGIN STABILITY BANNER-->
 
 ![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
 
 > **This is a stable example. It should successfully build out of the box**
 >
-> This examples does is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
+> This examples is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
 
 ---
+
 <!--END STABILITY BANNER-->
 
 **NOTICE**: Go support is still in Developer Preview. This implies that APIs may

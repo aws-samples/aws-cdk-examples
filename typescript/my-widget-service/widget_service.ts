@@ -38,7 +38,7 @@ export class WidgetService extends cdk.Construct {
 
     const bucket = new s3.Bucket(this, "WidgetStore", {
       // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
-      // the new bucket, and it will remain in your account until manually deleted. By setting the policy to 
+      // the new bucket, and it will remain in your account until manually deleted. By setting the policy to
       // DESTROY, cdk destroy will attempt to delete the bucket, but will error if the bucket is not empty.
       removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
     });
@@ -48,19 +48,19 @@ export class WidgetService extends cdk.Construct {
       code: lambda.AssetCode.asset("resources"),
       handler: "widgets.main",
       environment: {
-        BUCKET: bucket.bucketName
-      }
+        BUCKET: bucket.bucketName,
+      },
     });
 
     bucket.grantReadWrite(handler); // was: handler.role);
 
     const api = new apigateway.RestApi(this, "widgets-api", {
       restApiName: "Widget Service",
-      description: "This service serves widgets."
+      description: "This service serves widgets.",
     });
 
     const getWidgetsIntegration = new apigateway.LambdaIntegration(handler, {
-      requestTemplates: { "application/json": '{ "statusCode": "200" }' }
+      requestTemplates: { "application/json": '{ "statusCode": "200" }' },
     });
 
     api.root.addMethod("GET", getWidgetsIntegration); // GET /

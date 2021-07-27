@@ -1,9 +1,8 @@
-
 # Passing References Between Stacks!
 
 These two folders contain examples of how to pass resources between stacks.
 
-In each folder, you can run the following commands to synthesize the CDK 
+In each folder, you can run the following commands to synthesize the CDK
 Applications.
 
 To manually create a virtualenv on MacOS and Linux:
@@ -50,10 +49,10 @@ command.
 
 ## Useful commands
 
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk docs`        open CDK documentation
+- `cdk ls` list all stacks in the app
+- `cdk synth` emits the synthesized CloudFormation template
+- `cdk deploy` deploy this stack to your default AWS account/region
+- `cdk diff` compare deployed stack with current state
+- `cdk docs` open CDK documentation
 
 Enjoy!

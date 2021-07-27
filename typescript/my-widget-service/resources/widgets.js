@@ -26,42 +26,49 @@
 // language governing permissions and limitations under the License.
 //snippet-start:[cdk.typescript.widgets]
 //snippet-start:[cdk.typescript.widgets.imports]
-const AWS = require('aws-sdk');
+const AWS = require("aws-sdk");
 const S3 = new AWS.S3();
 //snippet-end:[cdk.typescript.widgets.imports]
 
 const bucketName = process.env.BUCKET;
 
 //snippet-start:[cdk.typescript.widgets.exports_main]
-exports.main = async function(event, context) {
+exports.main = async function (event, context) {
   try {
     var method = event.httpMethod;
     // Get name, if present
-    var widgetName = event.path.startsWith('/') ? event.path.substring(1) : event.path;
+    var widgetName = event.path.startsWith("/")
+      ? event.path.substring(1)
+      : event.path;
 
     if (method === "GET") {
       // GET / to get the names of all widgets
       if (event.path === "/") {
         const data = await S3.listObjectsV2({ Bucket: bucketName }).promise();
         var body = {
-          widgets: data.Contents.map(function(e) { return e.Key })
+          widgets: data.Contents.map(function (e) {
+            return e.Key;
+          }),
         };
         return {
           statusCode: 200,
           headers: {},
-          body: JSON.stringify(body)
+          body: JSON.stringify(body),
         };
       }
 
       if (widgetName) {
         // GET /name to get info on widget name
-        const data = await S3.getObject({ Bucket: bucketName, Key: widgetName}).promise();
-        var body = data.Body.toString('utf-8');
+        const data = await S3.getObject({
+          Bucket: bucketName,
+          Key: widgetName,
+        }).promise();
+        var body = data.Body.toString("utf-8");
 
         return {
           statusCode: 200,
           headers: {},
-          body: JSON.stringify(body)
+          body: JSON.stringify(body),
         };
       }
     }
@@ -73,7 +80,7 @@ exports.main = async function(event, context) {
         return {
           statusCode: 400,
           headers: {},
-          body: "Widget name missing"
+          body: "Widget name missing",
         };
       }
 
@@ -81,19 +88,19 @@ exports.main = async function(event, context) {
       const now = new Date();
       var data = widgetName + " created: " + now;
 
-      var base64data = new Buffer(data, 'binary');
+      var base64data = new Buffer(data, "binary");
 
       await S3.putObject({
         Bucket: bucketName,
         Key: widgetName,
         Body: base64data,
-        ContentType: 'application/json'
+        ContentType: "application/json",
       }).promise();
 
       return {
         statusCode: 200,
         headers: {},
-        body: JSON.stringify(event.widgets)
+        body: JSON.stringify(event.widgets),
       };
     }
 
@@ -104,18 +111,19 @@ exports.main = async function(event, context) {
         return {
           statusCode: 400,
           headers: {},
-          body: "Widget name missing"
+          body: "Widget name missing",
         };
       }
 
       await S3.deleteObject({
-        Bucket: bucketName, Key: widgetName
+        Bucket: bucketName,
+        Key: widgetName,
       }).promise();
 
       return {
         statusCode: 200,
         headers: {},
-        body: "Successfully deleted widget " + widgetName
+        body: "Successfully deleted widget " + widgetName,
       };
     }
 
@@ -123,16 +131,16 @@ exports.main = async function(event, context) {
     return {
       statusCode: 400,
       headers: {},
-      body: "We only accept GET, POST, and DELETE, not " + method
+      body: "We only accept GET, POST, and DELETE, not " + method,
     };
-  } catch(error) {
+  } catch (error) {
     var body = error.stack || JSON.stringify(error, null, 2);
     return {
       statusCode: 400,
       headers: {},
-      body: body
-    }
+      body: body,
+    };
   }
-}
+};
 //snippet-end:[cdk.typescript.widgets.exports_main]
 //snippet-end:[cdk.typescript.widgets]

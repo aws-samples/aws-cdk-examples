@@ -1,4 +1,4 @@
-import { Stack, CfnElement } from '@aws-cdk/core';
+import { Stack, CfnElement } from "@aws-cdk/core";
 
 /**
  * A base stack class that implements custom logical name
@@ -10,7 +10,7 @@ import { Stack, CfnElement } from '@aws-cdk/core';
 export class BaseStack extends Stack {
   public allocateLogicalId(element: CfnElement) {
     const orig = super.allocateLogicalId(element);
-    const prefix = this.node.tryGetContext('prefix');
+    const prefix = this.node.tryGetContext("prefix");
     return prefix ? prefix + orig : orig;
   }
 }

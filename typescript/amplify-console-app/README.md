@@ -1,6 +1,6 @@
 # Amplify Console App
-<!--BEGIN STABILITY BANNER-->
----
+
+## <!--BEGIN STABILITY BANNER-->
 
 ![Stability: Experimental](https://img.shields.io/badge/stability-Experimental-important.svg?style=for-the-badge)
 
@@ -10,9 +10,10 @@
 >
 > It additionally requires infrastructure prerequisites that must be created before successful build.
 >
-> If build is unsuccessful, please create an [issue](https://github.com/aws-samples/aws-cdk-examples/issues/new) so that we may debug the problem 
+> If build is unsuccessful, please create an [issue](https://github.com/aws-samples/aws-cdk-examples/issues/new) so that we may debug the problem
 
 ---
+
 <!--END STABILITY BANNER-->
 
 This an example of an Amplify Console App, triggering a build and deploy of a static site on every GitHub Repository master push.

@@ -1,14 +1,15 @@
-# CDK Java Example:  Resource Override
-<!--BEGIN STABILITY BANNER-->
----
+# CDK Java Example: Resource Override
+
+## <!--BEGIN STABILITY BANNER-->
 
 ![Stability: REFERENCE](https://img.shields.io/badge/stability-Reference-informational.svg?style=for-the-badge)
 
-> **This is a reference example. It may not build, and exists to demonstrate features*
+> \*_This is a reference example. It may not build, and exists to demonstrate features_
 >
 > This example has code elements that will block a successful build, and should be used for reference only.
 
 ---
+
 <!--END STABILITY BANNER-->
 
 This example shows the use of the resource overrides (["escape hatch"](https://docs.aws.amazon.com/cdk/latest/guide/cfn_layer.html)) mechanism.
@@ -18,9 +19,9 @@ of the underlying CloudFormation resource.
 
 There are two steps:
 
-* Access the underlying CloudFormation resource by using
+- Access the underlying CloudFormation resource by using
   `construct.getNode().getDefaultChild()` or `construct.getNode().findChild(childId)`.
-* Change the resource by the various `add[Property]Override()` methods,
+- Change the resource by the various `add[Property]Override()` methods,
   or assigning to properties or `getCfnOptions()`.
 
 **NOTE** The point is to show how to change various aspects of the generated

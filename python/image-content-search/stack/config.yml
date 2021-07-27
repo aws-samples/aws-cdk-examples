@@ -4,26 +4,26 @@ Region: eu-central-1
 ProjectName: ImageContentSearch
 
 DeadLetterQueue:
-    MaxReceiveCount: 3
+  MaxReceiveCount: 3
 
 Cognito:
-    SelfSignUp: True
-    DomainPrefix: image-content-search
-    AllowedOAuthScopes:
-        - phone
-        - email
-        - openid
-        - profile
+  SelfSignUp: True
+  DomainPrefix: image-content-search
+  AllowedOAuthScopes:
+    - phone
+    - email
+    - openid
+    - profile
 
 Database:
-    Name: images_labels
-    DeletionProtection: False
-    Scaling:
-        AutoPause: True
-        Min: 2
-        Max: 8
-        SecondsToAutoPause: 1800
+  Name: images_labels
+  DeletionProtection: False
+  Scaling:
+    AutoPause: True
+    Min: 2
+    Max: 8
+    SecondsToAutoPause: 1800
 
 Functions:
-    DefaultSignedUrlExpirySeconds: "3600"
-    DefaultMaxApiCallAttempts: "5"
+  DefaultSignedUrlExpirySeconds: "3600"
+  DefaultMaxApiCallAttempts: "5"

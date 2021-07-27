@@ -12,4 +12,3 @@ phases:
       - docker build -t ${tag}:latest pipeline_delivery/
       - docker tag $tag:latest $ecr:$tag
       - docker push $ecr
-

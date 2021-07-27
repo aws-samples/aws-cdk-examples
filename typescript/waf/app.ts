@@ -1,15 +1,18 @@
 #!/usr/bin/env node
 
-import 'source-map-support/register';
-import * as cdk from '@aws-cdk/core';
+import "source-map-support/register";
+import * as cdk from "@aws-cdk/core";
 
-import { WafRegionalStack }   from './waf-regional';
-import { WafCloudFrontStack } from './waf-cloudfront';
+import { WafRegionalStack } from "./waf-regional";
+import { WafCloudFrontStack } from "./waf-cloudfront";
 
 const app = new cdk.App();
 
-new WafRegionalStack(app,   'WafRegionalStack',   {env:{region:"us-east-1"}, description:"WAF Regional"});
-new WafCloudFrontStack(app, 'WafCloudFrontStack', {env:{region:"us-east-1"}, description:"WAF CloudFront"});
-
-
-
+new WafRegionalStack(app, "WafRegionalStack", {
+  env: { region: "us-east-1" },
+  description: "WAF Regional",
+});
+new WafCloudFrontStack(app, "WafCloudFrontStack", {
+  env: { region: "us-east-1" },
+  description: "WAF CloudFront",
+});

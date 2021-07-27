@@ -42,20 +42,20 @@ To connect to the instance:
 
 1. Download the private key from aws secretsmanager:
 
-    ```bash
-    # This will downloaded the key as `cdk-key.pem` and grant permissions.
-    $ aws secretsmanager get-secret-value --secret-id ec2-ssh-key/cdk-keypair/private --query SecretString --output text > cdk-key.pem && chmod 400 cdk-key.pem
-    ```
+   ```bash
+   # This will downloaded the key as `cdk-key.pem` and grant permissions.
+   $ aws secretsmanager get-secret-value --secret-id ec2-ssh-key/cdk-keypair/private --query SecretString --output text > cdk-key.pem && chmod 400 cdk-key.pem
+   ```
 
 2. SSH to the instance using the command provided from the stack's output `Ec2CdkStack.sshcommand`.
 
-    For example:
+   For example:
 
-    ```bash
-    $ ssh -i cdk-key.pem -o IdentitiesOnly=yes ec2-user@1.111.11.111
-    ```
+   ```bash
+   $ ssh -i cdk-key.pem -o IdentitiesOnly=yes ec2-user@1.111.11.111
+   ```
 
-    _Find the command for your specific instance in the stack's output._
+   _Find the command for your specific instance in the stack's output._
 
 ## To Destroy
 

@@ -1,7 +1,6 @@
-
-import * as cdk from '@aws-cdk/core';
-import * as ec2 from '@aws-cdk/aws-ec2';
-import * as neptune from '@aws-cdk/aws-neptune';
+import * as cdk from "@aws-cdk/core";
+import * as ec2 from "@aws-cdk/aws-ec2";
+import * as neptune from "@aws-cdk/aws-neptune";
 
 export class NeptuneWithVpcStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -21,22 +20,25 @@ export class NeptuneWithVpcStack extends cdk.Stack {
        * PRIVATE.: Subnet that routes to the internet, but not vice versa.
        * PUBLIC..: Subnet connected to the Internet.
        */
-      subnetConfiguration: [{
-        cidrMask: 24,
-        name: 'db',
-        subnetType: ec2.SubnetType.ISOLATED,
-      }, {
-        cidrMask: 24,
-        name: 'dmz',
-        subnetType: ec2.SubnetType.PUBLIC,
-      }],
+      subnetConfiguration: [
+        {
+          cidrMask: 24,
+          name: "db",
+          subnetType: ec2.SubnetType.ISOLATED,
+        },
+        {
+          cidrMask: 24,
+          name: "dmz",
+          subnetType: ec2.SubnetType.PUBLIC,
+        },
+      ],
     });
 
     // Output the VPC ID
     new cdk.CfnOutput(this, "VPCId", {
       value: neptuneVpc.vpcId,
       description: "Neptune VPC ID",
-      exportName: "NeptuneWithVpcStack:vpcId"
+      exportName: "NeptuneWithVpcStack:vpcId",
     });
 
     // Get lists of Subnets by type
@@ -45,20 +47,26 @@ export class NeptuneWithVpcStack extends cdk.Stack {
     var neptuneIsolatedSubnets = neptuneVpc.isolatedSubnets;
 
     // Create Subnet group list to be used with Neptune.
-    const neptuneSubnets: ec2.SubnetSelection = { subnets: neptuneIsolatedSubnets };
+    const neptuneSubnets: ec2.SubnetSelection = {
+      subnets: neptuneIsolatedSubnets,
+    };
 
     // Create Neptune Cluster
-    const clusterParams = new neptune.ClusterParameterGroup(this, 'ClusterParams', {
-      description: 'Cluster parameter group',
-      parameters: {
-        neptune_enable_audit_log: '1'
-      },
-    });
+    const clusterParams = new neptune.ClusterParameterGroup(
+      this,
+      "ClusterParams",
+      {
+        description: "Cluster parameter group",
+        parameters: {
+          neptune_enable_audit_log: "1",
+        },
+      }
+    );
 
-    const dbParams = new neptune.ParameterGroup(this, 'DbParams', {
-      description: 'Db parameter group',
+    const dbParams = new neptune.ParameterGroup(this, "DbParams", {
+      description: "Db parameter group",
       parameters: {
-        neptune_query_timeout: '120000'
+        neptune_query_timeout: "120000",
       },
     });
 
@@ -74,26 +82,28 @@ export class NeptuneWithVpcStack extends cdk.Stack {
     });
 
     // Update Neptune Security Group to allow-all-in
-    neptuneCluster.connections.allowDefaultPortFromAnyIpv4('Allow From All');
+    neptuneCluster.connections.allowDefaultPortFromAnyIpv4("Allow From All");
 
     // Add tags to all assets within this stack
-    cdk.Tags.of(this).add("CreatedBy", "CDK", { priority: 300 })
-    cdk.Tags.of(this).add("Purpose", "Neptune Cluster", { priority: 300 })
-    cdk.Tags.of(this).add('Owner', 'CDK', { priority: 300 });
+    cdk.Tags.of(this).add("CreatedBy", "CDK", { priority: 300 });
+    cdk.Tags.of(this).add("Purpose", "Neptune Cluster", { priority: 300 });
+    cdk.Tags.of(this).add("Owner", "CDK", { priority: 300 });
 
     // Output the Neptune read/write addresses
-    const neptuneClusterWriteAddress = neptuneCluster.clusterEndpoint.socketAddress;
-    const neptuneClusterReadAddress = neptuneCluster.clusterReadEndpoint.socketAddress;
+    const neptuneClusterWriteAddress =
+      neptuneCluster.clusterEndpoint.socketAddress;
+    const neptuneClusterReadAddress =
+      neptuneCluster.clusterReadEndpoint.socketAddress;
 
-    new cdk.CfnOutput(this, 'NeptuneClusterReadAddress', {
+    new cdk.CfnOutput(this, "NeptuneClusterReadAddress", {
       value: neptuneClusterReadAddress,
       description: "Neptune Cluster Read Address",
-      exportName: "NeptuneWithVpcStack:NeptuneClusterReadAddress"
+      exportName: "NeptuneWithVpcStack:NeptuneClusterReadAddress",
     });
-    new cdk.CfnOutput(this, 'NeptuneClusterWriteAddress', {
+    new cdk.CfnOutput(this, "NeptuneClusterWriteAddress", {
       value: neptuneClusterWriteAddress,
       description: "Neptune Cluster Write Address",
-      exportName: "NeptuneWithVpcStack:NeptuneClusterWriteAddress"
+      exportName: "NeptuneWithVpcStack:NeptuneClusterWriteAddress",
     });
   }
 }

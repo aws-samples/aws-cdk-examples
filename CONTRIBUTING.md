@@ -7,6 +7,7 @@ Please read through this document before submitting any issues or pull requests 
 information to effectively respond to your bug report or contribution.
 
 ## Table of Contents
+
 1. [Reporting Bugs/Feature Requests](#Reporting)
 2. [Contributing via Pull Requests](#Pulls)
 3. [Adding an Example](#New)
@@ -25,15 +26,16 @@ We welcome you to use the GitHub issue tracker to report bugs or suggest feature
 When filing an issue, please check [existing open](https://github.com/aws-samples/aws-cdk-examples/issues), or [recently closed](https://github.com/aws-samples/aws-cdk-examples/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aclosed%20), issues to make sure somebody else hasn't already
 reported the issue. Please try to include as much information as you can. Details like these are incredibly useful:
 
-* A reproducible test case or series of steps
-* The version of our code being used
-* Any modifications you've made relevant to the bug
-* Anything unusual about your environment or deployment
+- A reproducible test case or series of steps
+- The version of our code being used
+- Any modifications you've made relevant to the bug
+- Anything unusual about your environment or deployment
 
 ## Contributing via Pull Requests <a name="Pulls"></a>
+
 Contributions via pull requests are much appreciated. Before sending us a pull request, please ensure that:
 
-1. You are working against the latest source on the *master* branch.
+1. You are working against the latest source on the _master_ branch.
 2. You check existing open, and recently merged, pull requests to make sure someone else hasn't addressed the problem already.
 3. You open an issue to discuss any significant work - we would hate for your time to be wasted.
 
@@ -54,15 +56,17 @@ GitHub provides additional document on [forking a repository](https://help.githu
 When adding a new example, there are several things important to consider as you implement (please create a [`feature-request` issue](https://github.com/aws-samples/aws-cdk-examples/issues/new?labels=feature-request%2C+needs-triage&template=feature-request.md) to discuss these before writing your contribution):
 
 ### Added Value
+
 As an official learning resource, it is important that any new examples add value to our learning resources. This means that it should not duplicate an existing example, and cover one of the following topics:
 
-* Document a common infrastructure pattern - _(static website, cron triggered lambda, etc.)_
-* Outline usage of an L2 construct
-* Cover a less-obvious implementation of one or more constructs - _(cross-stack resource sharing, escape hatches, using SSM values during synthesis, etc.)_
+- Document a common infrastructure pattern - _(static website, cron triggered lambda, etc.)_
+- Outline usage of an L2 construct
+- Cover a less-obvious implementation of one or more constructs - _(cross-stack resource sharing, escape hatches, using SSM values during synthesis, etc.)_
 
 When we are considering merging a new contribution we will review the above criteria as well as evaluating quality based on the criteria in the following sections.
 
 ### Language Parity
+
 While we have historically allowed adding examples in just one of our supported languages, moving forward we would like to maintain language parity. This does not necessarily mean that you must write the example in each language yourself, but a PR will not be merged until the example has been added for each language.
 
 If you are looking for help to achieve language parity, you can request help in either the issue related to the new example, or directly through the PR.
@@ -80,26 +84,29 @@ When submitting the PR, please ensure that the directory includes all relevant p
 2. `README.md`
 
 Every example needs a comprehensive README at the root of its directory. This README can vary depending on the example, but has several required components:
-  - Stability Banner: You can use the banner code below to indicate whether an example consists of modules that are "Stable", "Dev-Preview", or "Cfn-Only" (for more information on state, see the [Module Lifecycle guide](https://github.com/aws/aws-cdk-rfcs/blob/master/text/0107-construct-library-module-lifecycle.md). Please reference the lowest common denominator (if all modules are stable except for one that is dev-preview, you must mark the example as dev-preview)
 
-    - __Stable__
+- Stability Banner: You can use the banner code below to indicate whether an example consists of modules that are "Stable", "Dev-Preview", or "Cfn-Only" (for more information on state, see the [Module Lifecycle guide](https://github.com/aws/aws-cdk-rfcs/blob/master/text/0107-construct-library-module-lifecycle.md). Please reference the lowest common denominator (if all modules are stable except for one that is dev-preview, you must mark the example as dev-preview)
+
+  - **Stable**
+
 ```md
-<!--BEGIN STABILITY BANNER-->
----
+## <!--BEGIN STABILITY BANNER-->
 
 ![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
 
 > **This is a stable example. It should successfully build out of the box**
 >
 > This example is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
+
 ---
+
 <!--END STABILITY BANNER-->
 ```
 
-- __Dev Preview__
+- **Dev Preview**
+
 ```md
-<!--BEGIN STABILITY BANNER-->
----
+## <!--BEGIN STABILITY BANNER-->
 
 ![Stability: Developer Preview](https://img.shields.io/badge/stability-Developer--Preview-important.svg?style=for-the-badge)
 
@@ -109,14 +116,16 @@ Every example needs a comprehensive README at the root of its directory. This RE
 >
 > It may additionally requires infrastructure prerequisites that must be created before successful build.
 >
-> If build is unsuccessful, please create an [issue](https://github.com/aws-samples/aws-cdk-examples/issues/new) so that we may debug the problem 
+> If build is unsuccessful, please create an [issue](https://github.com/aws-samples/aws-cdk-examples/issues/new) so that we may debug the problem
+
 ---
+
 <!--END STABILITY BANNER-->
 ```
 
-  - Overview: This should be a description of the example including, but not limited to, an overview of resources being created in the example, a description of any standard/common patterns being used, as well as the overall function of the example.
-  - Structure: If the example is more complex than a single stack, or the stack contains more than a couple resources, please describe the structure of application being deployed. This can be as simple as a bulleted list of resources, or as intricate as a complete infrastructure diagram.
-  - Build/Deploy: Finally, the README must include the basic build/deploy instructions required for that example in said language.
+- Overview: This should be a description of the example including, but not limited to, an overview of resources being created in the example, a description of any standard/common patterns being used, as well as the overall function of the example.
+- Structure: If the example is more complex than a single stack, or the stack contains more than a couple resources, please describe the structure of application being deployed. This can be as simple as a bulleted list of resources, or as intricate as a complete infrastructure diagram.
+- Build/Deploy: Finally, the README must include the basic build/deploy instructions required for that example in said language.
 
 ### Linking External Examples <a name="Extern"></a>
 
@@ -131,29 +140,33 @@ We strive to keep examples consistent in style and formatting. This hopefully ma
 New guidelines for various languages will be added as we define them.
 
 ### Typescript
+
 1. You can use [eslint](https://eslint.org/) with the standard configuration to check code syntax and style.
 
 ### Java
+
 1. Use builders wherever possible. Some classes are unable to have builders generated in JSII but for those that do, prefer them over constructing by hand.
 2. Format your code with [google-java-format](https://github.com/google/google-java-format). If you're using visual studio code, [see this comment](https://github.com/redhat-developer/vscode-java/issues/419#issuecomment-360820321) to get a formatter task setup.
 
 ## Finding Contributions to Work On <a name="Finding"></a>
+
 Looking at the existing issues is a great way to find something to contribute on. As our projects, by default, use the default GitHub issue labels (enhancement/bug/duplicate/help wanted/invalid/question/wontfix), looking at any ['help wanted'](https://github.com/aws-samples/aws-cdk-examples/labels/help%20wanted) issues is a great place to start.
 
 ## Adding Learning Resources <a name="Resources"></a>
+
 On the main README of this repo, we maintain a shortlist of additional learning resources related to the CDK. The "Officially Supported" section will be maintained by CDK project maintainers, however if you have a resource (workshop, example-set, etc.) you think should be added to the list, create a PR with your reasoning for adding in the description and a CDK maintainer will discuss with you in PR reviews.
 
 When adding a resource (or external example), please make the same considerations you would for [adding a new example](#New).
 
 ## Code of Conduct <a name="CoC"></a>
+
 This project has adopted the [Amazon Open Source Code of Conduct](https://aws.github.io/code-of-conduct).
 For more information see the [Code of Conduct FAQ](https://aws.github.io/code-of-conduct-faq) or contact
 opensource-codeofconduct@amazon.com with any additional questions or comments.
 
-
 ## Security Issue Notifications <a name="Security"></a>
-If you discover a potential security issue in this project we ask that you notify AWS/Amazon Security via our [vulnerability reporting page](http://aws.amazon.com/security/vulnerability-reporting/). Please do **not** create a public github issue.
 
+If you discover a potential security issue in this project we ask that you notify AWS/Amazon Security via our [vulnerability reporting page](http://aws.amazon.com/security/vulnerability-reporting/). Please do **not** create a public github issue.
 
 ## Licensing <a name="License"></a>
 

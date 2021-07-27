@@ -78,25 +78,17 @@
       "Type": "AWS::ApiGateway::Account",
       "Properties": {
         "CloudWatchRoleArn": {
-          "Fn::GetAtt": [
-            "widgetsapiCloudWatchRole13420B98",
-            "Arn"
-          ]
+          "Fn::GetAtt": ["widgetsapiCloudWatchRole13420B98", "Arn"]
         }
       },
-      "DependsOn": [
-        "widgetsapi0BCA0B12"
-      ]
+      "DependsOn": ["widgetsapi0BCA0B12"]
     },
     "widgetsapiGETApiPermissionMyWidgetServiceStackwidgetsapiFB659348GET647F652A": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::GetAtt": [
-            "WidgetHandlerF8A613CA",
-            "Arn"
-          ]
+          "Fn::GetAtt": ["WidgetHandlerF8A613CA", "Arn"]
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -134,10 +126,7 @@
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::GetAtt": [
-            "WidgetHandlerF8A613CA",
-            "Arn"
-          ]
+          "Fn::GetAtt": ["WidgetHandlerF8A613CA", "Arn"]
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -171,10 +160,7 @@
       "Properties": {
         "HttpMethod": "GET",
         "ResourceId": {
-          "Fn::GetAtt": [
-            "widgetsapi0BCA0B12",
-            "RootResourceId"
-          ]
+          "Fn::GetAtt": ["widgetsapi0BCA0B12", "RootResourceId"]
         },
         "RestApiId": {
           "Ref": "widgetsapi0BCA0B12"
@@ -200,10 +186,7 @@
                 },
                 ":lambda:path/2015-03-31/functions/",
                 {
-                  "Fn::GetAtt": [
-                    "WidgetHandlerF8A613CA",
-                    "Arn"
-                  ]
+                  "Fn::GetAtt": ["WidgetHandlerF8A613CA", "Arn"]
                 },
                 "/invocations"
               ]
@@ -216,10 +199,7 @@
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
         "ParentId": {
-          "Fn::GetAtt": [
-            "widgetsapi0BCA0B12",
-            "RootResourceId"
-          ]
+          "Fn::GetAtt": ["widgetsapi0BCA0B12", "RootResourceId"]
         },
         "PathPart": "{id}",
         "RestApiId": {
@@ -232,10 +212,7 @@
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::GetAtt": [
-            "WidgetHandlerF8A613CA",
-            "Arn"
-          ]
+          "Fn::GetAtt": ["WidgetHandlerF8A613CA", "Arn"]
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -273,10 +250,7 @@
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::GetAtt": [
-            "WidgetHandlerF8A613CA",
-            "Arn"
-          ]
+          "Fn::GetAtt": ["WidgetHandlerF8A613CA", "Arn"]
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -333,10 +307,7 @@
                 },
                 ":lambda:path/2015-03-31/functions/",
                 {
-                  "Fn::GetAtt": [
-                    "WidgetHandlerF8A613CA",
-                    "Arn"
-                  ]
+                  "Fn::GetAtt": ["WidgetHandlerF8A613CA", "Arn"]
                 },
                 "/invocations"
               ]
@@ -350,10 +321,7 @@
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::GetAtt": [
-            "WidgetHandlerF8A613CA",
-            "Arn"
-          ]
+          "Fn::GetAtt": ["WidgetHandlerF8A613CA", "Arn"]
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -391,10 +359,7 @@
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::GetAtt": [
-            "WidgetHandlerF8A613CA",
-            "Arn"
-          ]
+          "Fn::GetAtt": ["WidgetHandlerF8A613CA", "Arn"]
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -454,10 +419,7 @@
                 },
                 ":lambda:path/2015-03-31/functions/",
                 {
-                  "Fn::GetAtt": [
-                    "WidgetHandlerF8A613CA",
-                    "Arn"
-                  ]
+                  "Fn::GetAtt": ["WidgetHandlerF8A613CA", "Arn"]
                 },
                 "/invocations"
               ]
@@ -471,10 +433,7 @@
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::GetAtt": [
-            "WidgetHandlerF8A613CA",
-            "Arn"
-          ]
+          "Fn::GetAtt": ["WidgetHandlerF8A613CA", "Arn"]
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -512,10 +471,7 @@
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::GetAtt": [
-            "WidgetHandlerF8A613CA",
-            "Arn"
-          ]
+          "Fn::GetAtt": ["WidgetHandlerF8A613CA", "Arn"]
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -572,10 +528,7 @@
                 },
                 ":lambda:path/2015-03-31/functions/",
                 {
-                  "Fn::GetAtt": [
-                    "WidgetHandlerF8A613CA",
-                    "Arn"
-                  ]
+                  "Fn::GetAtt": ["WidgetHandlerF8A613CA", "Arn"]
                 },
                 "/invocations"
               ]
@@ -663,20 +616,14 @@
               "Effect": "Allow",
               "Resource": [
                 {
-                  "Fn::GetAtt": [
-                    "WidgetStoreDA467545",
-                    "Arn"
-                  ]
+                  "Fn::GetAtt": ["WidgetStoreDA467545", "Arn"]
                 },
                 {
                   "Fn::Join": [
                     "",
                     [
                       {
-                        "Fn::GetAtt": [
-                          "WidgetStoreDA467545",
-                          "Arn"
-                        ]
+                        "Fn::GetAtt": ["WidgetStoreDA467545", "Arn"]
                       },
                       "/*"
                     ]
@@ -738,10 +685,7 @@
         },
         "Handler": "widgets.main",
         "Role": {
-          "Fn::GetAtt": [
-            "WidgetHandlerServiceRole455C9244",
-            "Arn"
-          ]
+          "Fn::GetAtt": ["WidgetHandlerServiceRole455C9244", "Arn"]
         },
         "Runtime": "nodejs10.x",
         "Environment": {

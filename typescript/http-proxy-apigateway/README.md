@@ -1,6 +1,6 @@
 # Proxy-APIGateway
-<!--BEGIN STABILITY BANNER-->
----
+
+## <!--BEGIN STABILITY BANNER-->
 
 ![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
 
@@ -9,6 +9,7 @@
 > This example is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
 
 ---
+
 <!--END STABILITY BANNER-->
 
 This example creates Http proxy using API gateway of cdk.

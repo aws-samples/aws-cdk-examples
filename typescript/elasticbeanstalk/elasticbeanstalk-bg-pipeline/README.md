@@ -1,6 +1,6 @@
 ## Code Pipeline : Blue/Green deployments to Elastic Beanstalk
-<!--BEGIN STABILITY BANNER-->
----
+
+## <!--BEGIN STABILITY BANNER-->
 
 ![Stability: Experimental](https://img.shields.io/badge/stability-Experimental-important.svg?style=for-the-badge)
 
@@ -10,9 +10,10 @@
 >
 > It additionally requires infrastructure prerequisites that must be created before successful build.
 >
-> If build is unsuccessful, please create an [issue](https://github.com/aws-samples/aws-cdk-examples/issues/new) so that we may debug the problem 
+> If build is unsuccessful, please create an [issue](https://github.com/aws-samples/aws-cdk-examples/issues/new) so that we may debug the problem
 
 ---
+
 <!--END STABILITY BANNER-->
 
 Code Pipeline does not allow Blue/Green deployments to Elastic Beanstalk, which is a feature that is very useful towards zero-downtime production deployments.
@@ -23,7 +24,7 @@ There are a couple of requirements to make this work:
 
 2. A Lambda function that will be used to create an application version from the input artifact, deploy to the blue environment, and swap CNAMEs with the green environment.
 
-3. The Lambda execution role should have permissions to make calls to CodePipeline, and Elastic Beanstalk. 
+3. The Lambda execution role should have permissions to make calls to CodePipeline, and Elastic Beanstalk.
 
 ### Note: Leveraging L1 resources
 

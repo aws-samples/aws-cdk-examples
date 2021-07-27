@@ -15,10 +15,7 @@
               "DataExport": {
                 "Destination": {
                   "BucketArn": {
-                    "Fn::GetAtt": [
-                      "Other34654A52",
-                      "Arn"
-                    ]
+                    "Fn::GetAtt": ["Other34654A52", "Arn"]
                   },
                   "Format": "html"
                 },
@@ -46,15 +43,10 @@
           "Status": "NewStatus"
         },
         "Token": {
-          "Fn::GetAtt": [
-            "Other34654A52",
-            "Arn"
-          ]
+          "Fn::GetAtt": ["Other34654A52", "Arn"]
         }
       },
-      "DependsOn": [
-        "Other34654A52"
-      ],
+      "DependsOn": ["Other34654A52"],
       "UpdatePolicy": {
         "AutoScalingRollingUpdate": {
           "PauseTime": "390"
@@ -147,9 +139,7 @@
           "Ref": "VPCIGWB7E252D3"
         }
       },
-      "DependsOn": [
-        "VPCVPCGW99B986DC"
-      ]
+      "DependsOn": ["VPCVPCGW99B986DC"]
     },
     "VPCPublicSubnet1EIP6AD938E8": {
       "Type": "AWS::EC2::EIP",
@@ -157,8 +147,8 @@
         "Domain": "vpc",
         "Tags": [
           {
-              "Key": "Name",
-              "Value": "resource-overrides/VPC/PublicSubnet1"
+            "Key": "Name",
+            "Value": "resource-overrides/VPC/PublicSubnet1"
           }
         ]
       }
@@ -167,10 +157,7 @@
       "Type": "AWS::EC2::NatGateway",
       "Properties": {
         "AllocationId": {
-          "Fn::GetAtt": [
-            "VPCPublicSubnet1EIP6AD938E8",
-            "AllocationId"
-          ]
+          "Fn::GetAtt": ["VPCPublicSubnet1EIP6AD938E8", "AllocationId"]
         },
         "SubnetId": {
           "Ref": "VPCPublicSubnet1SubnetB4246D30"
@@ -351,10 +338,7 @@
         },
         "SecurityGroups": [
           {
-            "Fn::GetAtt": [
-              "ASGInstanceSecurityGroup0525485D",
-              "GroupId"
-            ]
+            "Fn::GetAtt": ["ASGInstanceSecurityGroup0525485D", "GroupId"]
           }
         ],
         "UserData": {
@@ -364,9 +348,7 @@
           "Bar": "Hello"
         }
       },
-      "DependsOn": [
-        "ASGInstanceRoleE263A41B"
-      ]
+      "DependsOn": ["ASGInstanceRoleE263A41B"]
     },
     "ASG46ED3070": {
       "Type": "AWS::AutoScaling::AutoScalingGroup",

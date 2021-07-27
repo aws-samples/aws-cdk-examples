@@ -1,6 +1,6 @@
 # Classic Load Balancer
-<!--BEGIN STABILITY BANNER-->
----
+
+## <!--BEGIN STABILITY BANNER-->
 
 ![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
 
@@ -9,6 +9,7 @@
 > This examples does is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
 
 ---
+
 <!--END STABILITY BANNER-->
 
 This example creates an AutoScalingGroup (containing a Micro-T2 EC2 machine running the Amazon Linux AMI), and a ClassicLoadBalancer inside a shared VPC. It hooks up an open listener from the Load Balancer to the Scaling Group to indicate how many targets to balance between.

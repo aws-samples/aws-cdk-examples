@@ -13,13 +13,14 @@
 > If build is unsuccessful, please create an [issue](https://github.com/aws-samples/aws-cdk-examples/issues/new) so that we may debug the problem
 
 ---
+
 <!--END STABILITY BANNER-->
 
-* Creates a **WAF** for use with **CloudFront** and a **WAF** for use with **Load Balancers**.
-* Both WAF stacks are virtually identical:
-  * `waf-cloudfront.ts`
-  * `waf-regional.ts`
-* Each stack is customized for the target usage scenario.
+- Creates a **WAF** for use with **CloudFront** and a **WAF** for use with **Load Balancers**.
+- Both WAF stacks are virtually identical:
+  - `waf-cloudfront.ts`
+  - `waf-regional.ts`
+- Each stack is customized for the target usage scenario.
 
 ## Build
 
@@ -31,8 +32,8 @@ npm install
 cdk synth
 ```
 
-* This will install the necessary CDK, then this example's dependencies, and then build the CloudFormation template. The resulting CloudFormation template will be in the `cdk.out` directory.
-* If you want to see the `yaml` formatted CDK for a Stack, pass it as a name to the `cdk synth` command:
+- This will install the necessary CDK, then this example's dependencies, and then build the CloudFormation template. The resulting CloudFormation template will be in the `cdk.out` directory.
+- If you want to see the `yaml` formatted CDK for a Stack, pass it as a name to the `cdk synth` command:
 
 ```bash
 cdk synth WafCloudFrontStack
@@ -47,8 +48,8 @@ After the deployment, you will be able to assign the WAF to the CloudFront or Lo
 
 ## WAF Rules
 
-* The WAF leverages the AWS Managed rules for most of the enabled rule list.
-* The list of available ruls can be quickly found using the AWS CLI:
+- The WAF leverages the AWS Managed rules for most of the enabled rule list.
+- The list of available ruls can be quickly found using the AWS CLI:
 
 ```bash
 aws wafv2 list-available-managed-rule-groups --scope CLOUDFRONT
@@ -57,21 +58,21 @@ aws wafv2 list-available-managed-rule-groups --scope REGIONAL
 
 ### Restrict connections based on country code
 
-* The example code includes a rule based on the geographic region of the source IP.
-* If the IP is outside the list of country codes, then the IP will be blocked.
+- The example code includes a rule based on the geographic region of the source IP.
+- If the IP is outside the list of country codes, then the IP will be blocked.
 
 ### Restrict connections based on flow
 
-* The example code includes a rule that will restrict connections based on flow rate.
-* In the included example, if the connection count is higher than 100 in a 5 minute period, the connection will be blocked.
+- The example code includes a rule that will restrict connections based on flow rate.
+- In the included example, if the connection count is higher than 100 in a 5 minute period, the connection will be blocked.
 
 ## Using the WAF in other stacks and assigning to resources
 
-* Each WAF stack produces a **CloudFormation Export**.
-* The CloudFormation Export records the WAF ARN for use with other stacks:
-* The exports are named:
-  * `WafCloudFrontStack:WafAclCloudFrontArn`
-  * `WafRegionalStack:WafAclRegionalArn`
+- Each WAF stack produces a **CloudFormation Export**.
+- The CloudFormation Export records the WAF ARN for use with other stacks:
+- The exports are named:
+  - `WafCloudFrontStack:WafAclCloudFrontArn`
+  - `WafRegionalStack:WafAclRegionalArn`
 
 ### Assign WAF to CloudFront Distribution
 

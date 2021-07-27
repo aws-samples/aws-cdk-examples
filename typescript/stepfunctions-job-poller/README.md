@@ -1,7 +1,6 @@
 # Step Functions Job Poller
 
-<!--BEGIN STABILITY BANNER-->
----
+## <!--BEGIN STABILITY BANNER-->
 
 ![Stability: Experimental](https://img.shields.io/badge/stability-Experimental-important.svg?style=for-the-badge)
 
@@ -12,6 +11,7 @@
 > If build is unsuccessful, please create an [issue](https://github.com/aws-samples/aws-cdk-examples/issues/new) so that we may debug the problem
 
 ---
+
 <!--END STABILITY BANNER-->
 
 This example creates a basic Step Function workflow that starts a task and then listens at regular intervals for completion, then reports completion and status.

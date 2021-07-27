@@ -1,6 +1,6 @@
 # APIGateway backed by Lambda and protected by Cognito User Pools.
-<!--BEGIN STABILITY BANNER-->
----
+
+## <!--BEGIN STABILITY BANNER-->
 
 ![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
 
@@ -9,6 +9,7 @@
 > This examples does is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
 
 ---
+
 <!--END STABILITY BANNER-->
 
 This an example of an APIGateway that is protected with a Cognito User Pool, pointing to a Hello World Lambda.

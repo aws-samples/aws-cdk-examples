@@ -1,4 +1,3 @@
-
 # API Gateway + SQS + Lambda
 
 Creates an API Gateway API with a POST Method, a SQS queue, and a Lambda function. Requests to the API are enqueued into the SQS queue, which triggers the Lambda function.
@@ -56,5 +55,5 @@ This request should complete with a 200 OK. The Lambda function should print the
 ```
 2020-05-27T11:50:44.755-05:00           Received Message Body from API GW: {key:value}
 ```
-	
+
 This message will also be visible in the SQS Queue metrics in CloudWatch. (https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-access-metrics.html)

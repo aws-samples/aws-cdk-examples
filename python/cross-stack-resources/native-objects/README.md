@@ -1,4 +1,3 @@
-
 # Native Objects Example For Passing Resources Between Stacks!
 
 One of my favorite parts about CDK is that I don't have to be concerned with how
@@ -13,6 +12,7 @@ In this example we create an AWS Lambda Function in one stack and then make it
 available as a property of that stack for other stacks to consume.
 
 in infrastructure_stack.py:
+
 ```python
 @property
 def main_function(self) -> lambda_.IFunction:
@@ -20,7 +20,9 @@ def main_function(self) -> lambda_.IFunction:
 ```
 
 We later refrence this property in app.py as follows:
+
 ```python
 infra.main_function
 ```
+
 where `infra` is the variable we use to identify our InfrastructureStack.

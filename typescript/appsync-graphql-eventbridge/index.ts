@@ -4,7 +4,7 @@ import {
   CfnApiKey,
   CfnGraphQLSchema,
   CfnDataSource,
-  CfnResolver
+  CfnResolver,
 } from "@aws-cdk/aws-appsync";
 import { Role, ServicePrincipal, PolicyStatement } from "@aws-cdk/aws-iam";
 import { Rule } from "@aws-cdk/aws-events";
@@ -20,12 +20,12 @@ export class AppSyncCdkStack extends cdk.Stack {
       "AppSync2EventBridgeApi",
       {
         name: "AppSync2EventBridge-API",
-        authenticationType: "API_KEY"
+        authenticationType: "API_KEY",
       }
     );
 
     new CfnApiKey(this, "AppSync2EventBridgeApiKey", {
-      apiId: appSync2EventBridgeGraphQLApi.attrApiId
+      apiId: appSync2EventBridgeGraphQLApi.attrApiId,
     });
 
     const apiSchema = new CfnGraphQLSchema(this, "ItemsSchema", {
@@ -45,17 +45,17 @@ export class AppSyncCdkStack extends cdk.Stack {
       schema {
         query: Query
         mutation: Mutation
-      }`
+      }`,
     });
 
     const appsyncEventBridgeRole = new Role(this, "AppSyncEventBridgeRole", {
-      assumedBy: new ServicePrincipal("appsync.amazonaws.com")
+      assumedBy: new ServicePrincipal("appsync.amazonaws.com"),
     });
 
     appsyncEventBridgeRole.addToPolicy(
       new PolicyStatement({
         resources: ["*"],
-        actions: ["events:Put*"]
+        actions: ["events:Put*"],
       })
     );
 
@@ -68,12 +68,12 @@ export class AppSyncCdkStack extends cdk.Stack {
           authorizationType: "AWS_IAM",
           awsIamConfig: {
             signingRegion: this.region,
-            signingServiceName: "events"
-          }
+            signingServiceName: "events",
+          },
         },
-        endpoint: "https://events." + this.region + ".amazonaws.com/"
+        endpoint: "https://events." + this.region + ".amazonaws.com/",
       },
-      serviceRoleArn: appsyncEventBridgeRole.roleArn
+      serviceRoleArn: appsyncEventBridgeRole.roleArn,
     });
 
     const putEventResolver = new CfnResolver(this, "PutEventMutationResolver", {
@@ -115,7 +115,7 @@ export class AppSyncCdkStack extends cdk.Stack {
       #else
           ## If response is not 200, append the response to error block.
           $utils.appendError($ctx.result.body, $ctx.result.statusCode)
-      #end`
+      #end`,
     });
     putEventResolver.addDependsOn(apiSchema);
 
@@ -124,13 +124,13 @@ export class AppSyncCdkStack extends cdk.Stack {
         "exports.handler = (event, context) => { console.log(event); context.succeed(event); }"
       ),
       handler: "index.handler",
-      runtime: lambda.Runtime.NODEJS_10_X
+      runtime: lambda.Runtime.NODEJS_10_X,
     });
 
     const rule = new Rule(this, "AppSyncEventBridgeRle", {
       eventPattern: {
-        source: ["appsync"]
-      }
+        source: ["appsync"],
+      },
     });
     rule.addTarget(new targets.LambdaFunction(echoLambda));
   }

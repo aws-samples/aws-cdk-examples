@@ -1,13 +1,12 @@
-import * as AWS from 'aws-sdk';
+import * as AWS from "aws-sdk";
 
-const TABLE_NAME = process.env.TABLE_NAME || '';
+const TABLE_NAME = process.env.TABLE_NAME || "";
 
 const db = new AWS.DynamoDB.DocumentClient();
 
 export const handler = async (): Promise<any> => {
-
   const params = {
-    TableName: TABLE_NAME
+    TableName: TABLE_NAME,
   };
 
   try {

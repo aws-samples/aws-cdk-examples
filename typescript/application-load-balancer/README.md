@@ -1,6 +1,6 @@
 # Application Load Balancer
-<!--BEGIN STABILITY BANNER-->
----
+
+## <!--BEGIN STABILITY BANNER-->
 
 ![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
 
@@ -9,12 +9,12 @@
 > This examples does is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
 
 ---
+
 <!--END STABILITY BANNER-->
 
 This example creates an AutoScalingGroup (containing a Micro-T2 EC2 machine running the Amazon Linux AMI), and an ApplicationLoadBalancer inside a shared VPC. It hooks up an open listener from the Load Balancer to the Scaling Group to indicate how many targets to balance between.
 
 For more info on using Auto Scaling with Load Balancing see the AutoScaling guide [here](https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-load-balancer.html).
-
 
 ## Build
 

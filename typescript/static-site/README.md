@@ -1,6 +1,6 @@
 # Static site
-<!--BEGIN STABILITY BANNER-->
----
+
+## <!--BEGIN STABILITY BANNER-->
 
 ![Stability: Experimental](https://img.shields.io/badge/stability-Experimental-important.svg?style=for-the-badge)
 
@@ -11,9 +11,10 @@
 > If build is unsuccessful, please create an [issue](https://github.com/aws-samples/aws-cdk-examples/issues/new) so that we may debug the problem
 
 ---
+
 <!--END STABILITY BANNER-->
 
-This example creates the infrastructure for a static site, which uses an S3 bucket for storing the content.  The site contents (located in the 'site-contents' sub-directory) are deployed to the bucket.
+This example creates the infrastructure for a static site, which uses an S3 bucket for storing the content. The site contents (located in the 'site-contents' sub-directory) are deployed to the bucket.
 
 The site redirects from HTTP to HTTPS, using a CloudFront distribution, Route53 alias record, and ACM certificate.
 

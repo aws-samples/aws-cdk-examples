@@ -18,6 +18,7 @@ Run `cdk deploy`. This will deploy / redeploy your Stack to your AWS Account.
 After the deployment you will see the API's URL, which represents the url you can then use.
 
 ## Test the service
+
 ```bash
 #List all widgets
 curl https://<api gateway domain/prod/
