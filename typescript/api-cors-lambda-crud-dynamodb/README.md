@@ -23,7 +23,7 @@ npm install
 npm run build
 ```
 
-This will install the necessary CDK, then this example's dependencies, and then build your TypeScript files and your CloudFormation template.
+This will install the necessary CDK, then this example's dependencies, then the lambda functions' dependencies, and then build your TypeScript files and your CloudFormation template.
 
 ## Deploy
 
@@ -36,11 +36,11 @@ After the deployment you will see the API's URL, which represents the url you ca
 The whole component contains:
 
 - An API, with CORS enabled on all HTTTP Methods. (Use with caution, for production apps you will want to enable only a certain domain origin to be able to query your API.)
-- Lambda pointing to `src/create.ts`, containing code for __storing__ an item  into the DynamoDB table.
-- Lambda pointing to `src/delete-one.ts`, containing code for __deleting__ an item from the DynamoDB table.
-- Lambda pointing to `src/get-all.ts`, containing code for __getting all items__ from the DynamoDB table.
-- Lambda pointing to `src/get-one.ts`, containing code for __getting an item__ from the DynamoDB table.
-- Lambda pointing to `src/update-one.ts`, containing code for __updating an item__ in the DynamoDB table.
+- Lambda pointing to `lambdas/create.ts`, containing code for __storing__ an item  into the DynamoDB table.
+- Lambda pointing to `lambdas/delete-one.ts`, containing code for __deleting__ an item from the DynamoDB table.
+- Lambda pointing to `lambdas/get-all.ts`, containing code for __getting all items__ from the DynamoDB table.
+- Lambda pointing to `lambdas/get-one.ts`, containing code for __getting an item__ from the DynamoDB table.
+- Lambda pointing to `lambdas/update-one.ts`, containing code for __updating an item__ in the DynamoDB table.
 - A DynamoDB table `items` that stores the data.
 - Five `LambdaIntegrations` that connect these Lambdas to the API.
 
@@ -49,8 +49,9 @@ The whole component contains:
 The [`cdk.json`](./cdk.json) file in the root of this repository includes
 instructions for the CDK toolkit on how to execute this program.
 
-After building your TypeScript code, you will be able to run the CDK toolkits commands as usual:
+After building your TypeScript code, you will be able to run the CDK toolkit commands as usual:
 
+```bash
     $ cdk ls
     <list all stacks in this program>
 
@@ -62,3 +63,4 @@ After building your TypeScript code, you will be able to run the CDK toolkits co
 
     $ cdk diff
     <shows diff against deployed stack>
+```
