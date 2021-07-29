@@ -5,6 +5,8 @@ Creates an API Gateway API with a POST Method, a SQS queue, and a Lambda functio
 
 ![Architecture](architecture.png)
 
+![Detailed diagram](diagram.png)
+
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
 This project is set up like a standard Python project. The initialization process also creates a virtualenv within this
