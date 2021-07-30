@@ -1,0 +1,8 @@
+aws-cdk.core
+aws-cdk.aws-lambda
+aws-cdk.aws-lambda-event-sources
+aws-cdk.aws-rds
+aws-cdk.aws-elasticloadbalancingv2
+aws-cdk.aws-elasticloadbalancingv2-actions
+aws-cdk.aws-elasticloadbalancingv2-targets
+boto3
