@@ -1,50 +1,91 @@
-import cdk = require('@aws-cdk/core');
-import sfn = require('@aws-cdk/aws-stepfunctions');
-import sfn_tasks = require('@aws-cdk/aws-stepfunctions-tasks');
+import * as cdk from '@aws-cdk/core';
+import * as lambda from '@aws-cdk/aws-lambda';
+import * as sfn from '@aws-cdk/aws-stepfunctions';
+import * as tasks from '@aws-cdk/aws-stepfunctions-tasks';
+import * as events from '@aws-cdk/aws-events';
+import * as targets from '@aws-cdk/aws-events-targets';
+import * as fs from 'fs'
 
 class JobPollerStack extends cdk.Stack {
-    constructor(scope: cdk.App, id: string, props: cdk.StackProps = {}) {
-        super(scope, id, props);
+  constructor(app: cdk.App, id: string) {
+    super(app, id);
 
-        const submitJobActivity = new sfn.Activity(this, 'SubmitJob');
-        const checkJobActivity = new sfn.Activity(this, 'CheckJob');
+    /** ------------------ Lambda Handlers Definition ------------------ */
 
-        const submitJob = new sfn.Task(this, 'Submit Job', {
-            task: new sfn_tasks.InvokeActivity(submitJobActivity),
-            resultPath: '$.guid',
-        });
-        const waitX = new sfn.Wait(this, 'Wait X Seconds', { 
-            time: sfn.WaitTime.secondsPath('$.wait_time') 
-        });
-        const getStatus = new sfn.Task(this, 'Get Job Status', {
-            task: new sfn_tasks.InvokeActivity(checkJobActivity),
-            inputPath: '$.guid',
-            resultPath: '$.status',
-        });
-        const isComplete = new sfn.Choice(this, 'Job Complete?');
-        const jobFailed = new sfn.Fail(this, 'Job Failed', {
-            cause: 'AWS Batch Job Failed',
-            error: 'DescribeJob returned FAILED',
-        });
-        const finalStatus = new sfn.Task(this, 'Get Final Job Status', {
-            task: new sfn_tasks.InvokeActivity(checkJobActivity),
-            inputPath: '$.guid',
-        });
+    const getStatusLambda = new lambda.Function(this, 'CheckLambda', {
+      code: new lambda.InlineCode(fs.readFileSync('lambdas/check_status.py', { encoding: 'utf-8' })),
+      handler: 'index.main',
+      timeout: cdk.Duration.seconds(30),
+      runtime: lambda.Runtime.PYTHON_3_6,
+    });
 
-        const chain = sfn.Chain
-            .start(submitJob)
-            .next(waitX)
-            .next(getStatus)
-            .next(isComplete
-                .when(sfn.Condition.stringEquals('$.status', 'FAILED'), jobFailed)
-                .when(sfn.Condition.stringEquals('$.status', 'SUCCEEDED'), finalStatus)
-                .otherwise(waitX));
+    const submitLambda = new lambda.Function(this, 'SubmitLambda', {
+      code: new lambda.InlineCode(fs.readFileSync('lambdas/submit.py', { encoding: 'utf-8' })),
+      handler: 'index.main',
+      timeout: cdk.Duration.seconds(30),
+      runtime: lambda.Runtime.PYTHON_3_6,
+    });
 
-        new sfn.StateMachine(this, 'StateMachine', {
-            definition: chain,
-            timeout: cdk.Duration.seconds(30)
-        });
-    }
+    /** ------------------ Step functions Definition ------------------ */
+
+    const submitJob = new tasks.LambdaInvoke(this, 'Submit Job', {
+      lambdaFunction: submitLambda,
+      // Lambda's result is in the attribute `Payload`
+      outputPath: '$.Payload',
+    });
+    const waitX = new sfn.Wait(this, 'Wait X Seconds', {
+      /**
+       *  You can also implement with the path stored in the state like:
+       *  sfn.WaitTime.secondsPath('$.waitSeconds')
+       */
+      time: sfn.WaitTime.duration(cdk.Duration.seconds(30)),
+    });
+    const getStatus = new tasks.LambdaInvoke(this, 'Get Job Status', {
+      lambdaFunction: getStatusLambda,
+      outputPath: '$.Payload',
+    });
+
+    const jobFailed = new sfn.Fail(this, 'Job Failed', {
+      cause: 'AWS Batch Job Failed',
+      error: 'DescribeJob returned FAILED',
+    });
+
+    const finalStatus = new tasks.LambdaInvoke(this, 'Get Final Job Status', {
+      lambdaFunction: getStatusLambda,
+      outputPath: '$.Payload',
+    });
+
+    // Create chain
+    const definition = submitJob
+      .next(waitX)
+      .next(getStatus)
+      .next(new sfn.Choice(this, 'Job Complete?')
+        // Look at the "status" field
+        .when(sfn.Condition.stringEquals('$.status', 'FAILED'), jobFailed)
+        .when(sfn.Condition.stringEquals('$.status', 'SUCCEEDED'), finalStatus)
+        .otherwise(waitX));
+
+    // Create state machine
+    const stateMachine = new sfn.StateMachine(this, 'CronStateMachine', {
+      definition,
+      timeout: cdk.Duration.minutes(5),
+    });
+
+    // Grant lambda execution roles
+    submitLambda.grantInvoke(stateMachine.role);
+    getStatusLambda.grantInvoke(stateMachine.role);
+
+    /** ------------------ Events Rule Definition ------------------ */
+
+    /**
+     *  Run every day at 6PM UTC
+     * See https://docs.aws.amazon.com/lambda/latest/dg/tutorial-scheduled-events-schedule-expressions.html
+     */
+    const rule = new events.Rule(this, 'Rule', {
+      schedule: events.Schedule.expression('cron(0 18 ? * MON-FRI *)')
+    });
+    rule.addTarget(new targets.SfnStateMachine(stateMachine));
+  }
 }
 
 const app = new cdk.App();
