@@ -40,7 +40,7 @@ If you are a Windows platform, you would activate the virtualenv like this:
 Once the virtualenv is activated, you can install the required dependencies.
 
 ```
-$ 
+$ pip install -r requirements.txt
 ```
 
 At this point you can now synthesize the CloudFormation template for this code.
@@ -48,6 +48,8 @@ At this point you can now synthesize the CloudFormation template for this code.
 ```
 $ cdk synth
 ```
+
+_Note: Make sure you are using Node.js 10.13.0 or a more recent version per [CDK Prerequisites](https://docs.aws.amazon.com/cdk/latest/guide/getting_started.html#getting_started_prerequisites)_
 
 To add additional dependencies, for example other CDK libraries, just add
 them to your `setup.py` file and rerun the `pip install -r requirements.txt`
