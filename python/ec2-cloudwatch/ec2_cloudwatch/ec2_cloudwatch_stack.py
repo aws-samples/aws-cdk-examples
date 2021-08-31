@@ -80,7 +80,7 @@ class Ec2CloudwatchStack(core.Stack):
         # create a BackupPlan
         plan = backup.BackupPlan(self, "AWS-Backup-Plan", backup_plan_name="CDK_Backup")
 
-        # add buackup resources with two way for two resources
+        # add backup resources with two way for two resources
         plan.add_selection("Selection", resources=[
             backup.BackupResource.from_ec2_instance(work_server),
             backup.BackupResource.from_tag("Name", "BastionHost")
