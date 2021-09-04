@@ -161,7 +161,3 @@ class KoiStack(cdk.Stack):
         )
         s3asset.grant_read(instance.role)
 
-#from
-#https://github.com/aws-samples/aws-cdk-examples/blob/master/python/ec2/instance/app.py#L25
-#tosync
-# C:\Users\Administrator\koi>aws s3 sync . s3://alekseiw-bucket1/koi/ --region us-east-1
