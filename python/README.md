@@ -70,4 +70,5 @@ $ cdk destroy
 | [stepfunctions](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/stepfunctions/) | A simple StepFunctions workflow |
 | [url-shortner](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/url-shortener) | Demo from the [Infrastructure ***is*** Code with the AWS CDK](https://youtu.be/ZWCvNFUN-sU) AWS Online Tech Talk |
 | [ec2-instance](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ec2/instance/) | Create EC2 Instance in new VPC with Systems Manager enabled |
+| [ec2-opsitem](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/opsitem/) | Launch EC2 with Alarm and Create OpsItem when Alarm Triggered |
 
