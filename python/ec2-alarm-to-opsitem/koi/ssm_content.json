@@ -1,0 +1,16 @@
+{
+	"schemaVersion": "2.2",
+	"description": "Run a script on Linux instances.",
+	"mainSteps": [
+		{
+			"action": "aws:runShellScript",
+			"name": "runCommands",
+			"inputs": {
+				"timeoutSeconds": "60",
+				"runCommand": [
+					"#!/usr/bin/bash\necho \"Staring script to create a fake alarm\"\necho \" \"\ninstanceid=`curl http://169.254.169.254/latest/meta-data/instance-id`\necho \"This is instance id: $instanceid\"\necho \" \"\naws cloudwatch set-alarm-state --alarm-name StatusCheckFailed-$instanceid --state-value ALARM --state-reason \"Simulate EC2 Instance Unreachable\"\nexit 0\n"
+				]
+			}
+		}
+	]
+}
