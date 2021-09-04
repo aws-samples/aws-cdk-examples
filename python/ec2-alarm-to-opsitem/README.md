@@ -1,19 +1,3 @@
-## :rocket: Feature Request
-
-### General Information
-<!--
-Check the box below (with an X) if you are able and willing to propose an
-implementation for the requested feature. This does not imply a commitment from
-you to actually do it!
--->
-* [x] :wave: I may be able to implement this feature request
-<!--
-Check the box below (with an X) if you think this feature might result in a
-breaking change (this requiring a major version bump when released). If unsure,
-please leave the box un-checked.
--->
-* [ ] :warning: This feature might incur a breaking change 
-
 ### Description
 This example shows how you can use the cdk to automate attaching an alarm to an ec2 instance at launch time, then when the alarm is triggered how it can create an systems manager opsitem with an associated run book.   
 
