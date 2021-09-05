@@ -19,7 +19,7 @@ class KoiStack(cdk.Stack):
     def __init__(self, scope: cdk.Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        f = open('.\ssm_content.json')
+        f = open('./koi/ssm_content.json')
         data = json.load(f)
 
         ssm.CfnDocument(
