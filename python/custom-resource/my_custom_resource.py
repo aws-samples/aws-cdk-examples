@@ -1,30 +1,55 @@
 from aws_cdk import (
-    aws_cloudformation as cfn,
-    aws_lambda as lambda_,
+    aws_logs as logs,
     core
 )
 
+from aws_cdk.custom_resources import (
+    AwsCustomResource,
+    AwsCustomResourcePolicy,
+    PhysicalResourceId,
+    AwsSdkCall
+)
 
 class MyCustomResource(core.Construct):
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+
+    def __init__(self, scope: core.Construct, id: str, bucket_name):
         super().__init__(scope, id)
 
-        with open("custom-resource-handler.py", encoding="utf-8") as fp:
-            code_body = fp.read()
-
-        resource = cfn.CustomResource(
-            self, "Resource",
-            provider=cfn.CustomResourceProvider.lambda_(
-                lambda_.SingletonFunction(
-                    self, "Singleton",
-                    uuid="f7d4f730-4ee1-11e8-9c2d-fa7ae01bbebc",
-                    code=lambda_.InlineCode(code_body),
-                    handler="index.main",
-                    timeout=core.Duration.seconds(300),
-                    runtime=lambda_.Runtime.PYTHON_3_7,
-                )
-            ),
-            properties=kwargs,
+        res = AwsCustomResource(
+            scope=self,
+            id='AWSCustomResource',
+            policy=AwsCustomResourcePolicy.from_sdk_calls(resources=[f'arn:aws:s3:::{bucket_name}/*']),
+            log_retention=logs.RetentionDays.INFINITE,
+            on_create=self.create(bucket_name),
+            on_delete=self.delete(bucket_name),
+            resource_type='Custom::MyCustomResource'
         )
 
-        self.response = resource.get_att("Response").to_string()
+    def create(self, bucket_name):
+
+        create_params = {
+            "Body": "Hello world",
+            "Bucket": bucket_name,
+            "Key": "helloWorld.txt"
+        }
+
+        return AwsSdkCall(
+            action='putObject',
+            service='S3',
+            parameters=create_params,
+            physical_resource_id=PhysicalResourceId.of('myAutomationExecution')
+        )
+
+    def delete(self, bucket_name):
+
+        delete_params = {
+            "Bucket": bucket_name,
+            "Key": "helloWorld.txt"
+        }
+
+        return AwsSdkCall(
+            action='deleteObject',
+            service='S3',
+            parameters=delete_params,
+            physical_resource_id=PhysicalResourceId.of('myAutomationExecution')
+        )
