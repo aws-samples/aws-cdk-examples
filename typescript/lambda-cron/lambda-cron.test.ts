@@ -56,13 +56,14 @@ describe('lambda tests', () => {
       Vpc: Match.absentProperty(),
     });
   });
+});
 
+describe('events tests', () => {
   test('event has correct rule', () => {
     assert.hasResourceProperties('AWS::Events::Rule', {
       ScheduleExpression: 'cron(0 18 ? * MON-FRI *)',
       State: 'ENABLED',
       Targets: Match.anyValue(),
-      Id: Match.anyValue(),
     });
   });
 });
