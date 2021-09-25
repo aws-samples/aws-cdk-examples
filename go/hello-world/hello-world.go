@@ -11,12 +11,12 @@ import (
 	"github.com/aws/jsii-runtime-go"
 )
 
-// If the stack required additional properties, they should be defined here
-// By default, this is simply the default stack properties
+// If the stack requires additional properties, they should be defined here
 type HelloWorldStackProps struct {
 	awscdk.StackProps
 }
 
+// The main entry point to the stack
 func NewHelloWorldStack(scope constructs.Construct, id string, props *HelloWorldStackProps) awscdk.Stack {
 	var sprops awscdk.StackProps
 	if props != nil {
@@ -25,7 +25,7 @@ func NewHelloWorldStack(scope constructs.Construct, id string, props *HelloWorld
 
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
-	// Define an S3 construct. Some of the properties are default values, but they're listed here for completeness
+	// Define an S3 construct. Some of the properties are default values, but they're listed here for demonstration purposes
 	awsS3 := awss3.NewBucket(stack, jsii.String("MyS3"), &awss3.BucketProps{
 		Versioned:         jsii.Bool(false),
 		AutoDeleteObjects: jsii.Bool(false),
@@ -67,26 +67,12 @@ func main() {
 // env determines the AWS environment (account+region) in which our stack is to
 // be deployed. For more information see: https://docs.aws.amazon.com/cdk/latest/guide/environments.html
 func env() *awscdk.Environment {
-	// If unspecified, this stack will be "environment-agnostic".
-	// Account/Region-dependent features and context lookups will not work, but a
-	// single synthesized template can be deployed anywhere.
-	//---------------------------------------------------------------------------
+
+	// If unspecified, this stack will be "environment-agnostic"
+	// If the stack is environment-agnostic, then environment-specific details must be provided at synth time
+
+	// One of the simpler ways to do this is via the AWS CLI profile. An example command:
+	// cdk deploy --profile $AWS_PROFILE
+
 	return nil
-
-	// Uncomment if you know exactly what account and region you want to deploy
-	// the stack to. This is the recommendation for production stacks.
-	//---------------------------------------------------------------------------
-	// return &awscdk.Environment{
-	//  Account: jsii.String("123456789012"),
-	//  Region:  jsii.String("us-east-1"),
-	// }
-
-	// Uncomment to specialize this stack for the AWS Account and Region that are
-	// implied by the current CLI configuration. This is recommended for dev
-	// stacks.
-	//---------------------------------------------------------------------------
-	// return &awscdk.Environment{
-	//  Account: jsii.String(os.Getenv("CDK_DEFAULT_ACCOUNT")),
-	//  Region:  jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
-	// }
 }

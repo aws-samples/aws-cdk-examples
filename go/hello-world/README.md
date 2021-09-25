@@ -111,6 +111,7 @@ The simplest way to configure account credentials is by logging in via the AWS C
 There are a number of ways to do this, but the simplest is via `aws configure`.
 
 Once logged in, credentials should be made available via environment variables.
+Furthermore, the profile created should be set via the environment variable `$AWS_PROFILE`
 
 For additional information about configuring credentials with the AWS CLI, please
 refer to the following article:
@@ -126,29 +127,76 @@ to bootstrap the account. This is done by running the following command:
 This command creates an initial set of resources within the target AWS account, and
 ensures that deployments will have the necessary access.
 
+Running
+`aws cloudformation list-stacks`
+should provide output similar to the following:
+
+```
+{
+    "StackSummaries": [
+        {
+            "StackId": "<Stack ARN Removed>",
+            "StackName": "CDKToolkit",
+            "TemplateDescription": "The CDK Toolkit Stack. It was created by `cdk bootstrap` and manages resources necessary for managing your Cloud Applications with AWS CDK.",
+            "CreationTime": "2021-09-19T21:49:10.942000+00:00",
+            "LastUpdatedTime": "2021-09-19T21:49:16.489000+00:00",
+            "StackStatus": "CREATE_COMPLETE",
+            "DriftInformation": {
+                "StackDriftStatus": "NOT_CHECKED"
+            }
+        }
+    ]
+}
+```
+
+In addition, navigating in the AWS Console to CloudFormation should show the same stack.
+From within the stack, there should be two resources:
+ - StagingBucket: An S3 bucket used for staging purposes
+ - StagingBucketPolicy: An IAM policy to allow access to the StagingBucket
+
 ### Deploy the CDK / CloudFormation resources
 
 To deploy the resources described in the Go code, execute the following command:
 
-`cdk deploy`
+`cdk deploy --profile $AWS_PROFILE`
+
+**NOTE:** If you haven't defined an environment variable for the profile, you can explicitly
+state the name of it instead of using an environment variable.
 
 This command will upload the defined resources, and start the deployment process.
 The progress of the deployment is available via CloudFormation commands. For example,
-the following command will provide details about all stacks defined within the account:
+the following command will provide status information regarding all stacks in
+the current account and region:
 
-`aws cloudformation describe-stacks`
+`aws cloudformation list-stacks`
 
+When the deployment is complete, the CloudFormation status will be `CREATE_COMPLETE`.
+At that time, it's possible to verify the success of the deployment by listing the
+contents of the S3 bucket:
+
+`aws s3 ls my-happy-bucket-name`
+
+The output should be similar to the following:
+
+```
+2021-09-25 16:05:14         12 hello_world.txt
+```
+
+Congratulations - the stack has been successfully deployed!
 
 ## Destroy the previously deployed resources
 
 It's possible to destroy the previously provisioned and deployed resources by executing
 the following command:
 
-`cdk destroy`
+`cdk destroy --profile $AWS_PROFILE`
 
 **Note:** By default, this command will not destroy an S3 bucket which contains files.
+Therefore, it's necessary to manually delete the S3 bucket.
 There is an option to remove the bucket - even if the bucket isn't empty. However, since
 this is not a best practice, it's left as an exercise for the reader.
+
+
 
 ## Additional resources
 

@@ -23,6 +23,8 @@ func TestHelloWorldStack(t *testing.T) {
 	}
 
 	template := gjson.ParseBytes(bytes)
-	displayName := template.Get("Resources.MyTopic86869434.Properties.DisplayName").String()
-	assert.Equal(t, "MyCoolTopic", displayName)
+
+	// Check the bucket and make sure that it's properly named
+	displayName := template.Get("Resources.MyS3C8F64D14.Properties.BucketName").String()
+	assert.Equal(t, "my-happy-bucket-name", displayName)
 }
