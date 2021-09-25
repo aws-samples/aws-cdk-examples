@@ -17,7 +17,7 @@ cd hello-world
 cdk init app --language go
 ```
 
-**Note:** The directly name is used to generate some of the file names, so when
+**Note:** The directory name is used to generate some of the file names, so when
 using the `init` command, be sure to use a name appropriate for your particular situation.
 
 
