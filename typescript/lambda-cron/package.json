@@ -6,8 +6,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "cdk": "cdk",
-    "test": "jest --config=jest.config.js"
+    "cdk": "cdk"
   },
   "author": {
     "name": "Amazon Web Services",
@@ -17,12 +16,9 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/node": "^10.17.0",
-    "@types/jest": "^26.0.24",
-    "jest": "^26.6.3",
-    "typescript": "~3.9.7"
+    "typescript": "~3.7.2"
   },
   "dependencies": {
-    "@aws-cdk/assertions": "*",
     "@aws-cdk/aws-events": "*",
     "@aws-cdk/aws-events-targets": "*",
     "@aws-cdk/aws-lambda": "*",
