@@ -15,6 +15,8 @@
 
 This an example of an AppSync GraphQL API, pointing to four resolvers doing CRUD operations with a single DynamoDB table.
 
+![Detailed diagram](diagram.png)
+
 ## Build
 
 To build this app, you need to be in this example's root folder. Then run the following:
