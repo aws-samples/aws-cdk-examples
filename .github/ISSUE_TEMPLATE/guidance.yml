@@ -1,0 +1,79 @@
+name: Guidance
+description: Ask a guidance question
+title: "(module name): short issue description"
+labels: [needs-triage, guidance]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        If there is an issue regarding developer guide, please create an issue [here](https://github.com/awsdocs/aws-cdk-guide/issues).
+
+  - type: input
+    id: issue
+    attributes:
+      label: Guidance Question
+      description: |
+        Please make sure you have gone through the [existing questions](https://github.com/aws-samples/aws-cdk-examples/issues?utf8=✓&q=is%3Aissue+label%3Aguidance) before filing a new issue! If your question was already asked, but the answer does not satisfy your curiosity, prefer re-opening the existing issue to ask for further clarification, instead of filing a new issue.
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: The Question
+      description: |
+        Ask your question here. Include any details relevant. Make sure you are not falling prey to the [X/Y problem](http://xyproblem.info)!
+    validations:
+      required: true
+
+  - type: input
+    id: cdk-version
+    attributes:
+      label: CDK CLI Version
+      description: Output of `cdk version`
+    validations:
+      required: true
+
+  - type: input
+    id: example
+    attributes:
+      label: Example
+    validations:
+      required: false
+
+  - type: input
+    id: example-version
+    attributes:
+      label: Example Version
+    validations:
+      required: false
+
+  - type: input
+    id: operating-system
+    attributes:
+      label: OS
+    validations:
+      required: false
+
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language
+      multiple: true
+      options:
+        - Typescript
+        - Python
+        - .NET
+        - Java
+        - Go
+    validations:
+      required: true
+
+  - type: textarea
+    id: other
+    attributes:
+      label: Other information
+      description: |
+        e.g. detailed explanation, stacktraces, related issues, suggestions how to fix, links for us to have context, eg. associated pull-request, stackoverflow, slack, etc
+    validations:
+      required: false
