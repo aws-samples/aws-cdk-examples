@@ -1,4 +1,2 @@
 aws-cdk.core
-
-aws-cdk.aws-cloudformation
-aws-cdk.aws-lambda
+aws_cdk.custom_resources
