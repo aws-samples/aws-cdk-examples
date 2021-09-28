@@ -10,7 +10,7 @@ This example includes:
 
 ## Useful commands
 
- * `cdk bootstrap`   initialice assets before deploy
+ * `cdk bootstrap`   initialize assets before deploy
  * `cdk synth`       emits the synthesized CloudFormation template
  * `cdk deploy`      deploy this stack to your default AWS account/region
  * `aws ssm start-session --target i-xxxxxxxxx` remote session for shell access
