@@ -26,6 +26,12 @@ npm run build
 
 This will install the necessary CDK, then this example's dependencies, and then build your TypeScript files and your CloudFormation template.
 
+## Test
+
+To test the app after it is built, you can run `npm test` in this example's root folder. This will utilize the CDK
+[assertions](https://docs.aws.amazon.com/cdk/api/latest/docs/assertions-readme.html) library and run Jest
+on `lambda-cron.test.js`.
+
 ## Deploy
 
 Run `cdk deploy`. This will deploy / redeploy your Stack to your AWS Account.
