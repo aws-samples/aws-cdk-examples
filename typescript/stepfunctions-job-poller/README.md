@@ -1,4 +1,5 @@
-# Stepfunctions Job Poller
+# Step Functions Job Poller
+
 <!--BEGIN STABILITY BANNER-->
 ---
 
@@ -6,24 +7,41 @@
 
 > **This is an experimental example. It may not build out of the box**
 >
-> This examples does is built on Construct Libraries marked "Experimental" and may not be updated for latest breaking changes.
+> This examples is built on Construct Libraries marked "Experimental" and may not be updated for latest breaking changes.
 >
-> If build is unsuccessful, please create an [issue](https://github.com/aws-samples/aws-cdk-examples/issues/new) so that we may debug the problem 
+> If build is unsuccessful, please create an [issue](https://github.com/aws-samples/aws-cdk-examples/issues/new) so that we may debug the problem
 
 ---
 <!--END STABILITY BANNER-->
 
-This example creates a basic Stepfunction workflow that starts a task and then listens at regular intervals for completion, then reports completion and status.
+This example creates a basic Step Function workflow that starts a task and then listens at regular intervals for completion, then reports completion and status.
 
+<kbd>
+<img src="./step-function-graph.png" width="500px" margin="auto" />
+</kbd>
+
+Tasks:
+
+1. `Start`
+2. `Submit Lambda`: Invoke Submit Lambda which sets status
+3. `Wait X Seconds`: Wait
+4. `Get Job Status`: Invoke Check Status Lambda which validates status
+5. `Job Complete?`: Choice: Read `"status"` of payload
+   a. If `"status"` is `"SUCCEEDED"` then continue to `#7 Get Final Job Status` task
+   b. If `"status"` is `"FAILED"` then continue to `#6 Job Failed` task
+   c. else return to task `#3 Wait X Seconds`
+6. `Job Failed`: Define a Fail state in the state machine.
+7. `Get Final Job Status`: Invoke Check Status Lambda
+8. `End`
 
 ## Build
 
 To build this app, you need to be in this example's root folder. Then run the following:
 
 ```bash
-npm install -g aws-cdk
-npm install
-npm run build
+$ npm install -g aws-cdk
+$ npm install
+$ npm run build
 ```
 
 This will install the necessary CDK, then this example's dependencies, and then build your TypeScript files and your CloudFormation template.
