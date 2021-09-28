@@ -6,12 +6,14 @@
 
 > **This is a stable example. It should successfully build out of the box**
 >
-> This examples only on the core CDK library, and does not have any infrastructure prerequisites to build.
+> This example uses the core CDK library, and does not have any infrastructure prerequisites to build.
 
 ---
 <!--END STABILITY BANNER-->
 
 This example uses Lambda to manage event notifications for an S3 bucket. The solution allows other stacks to define their own event notifications on a shared bucket.
+
+View the AWS blog post here: https://aws.amazon.com/blogs/infrastructure-and-automation/manage-amazon-s3-event-notifications-using-lambda-function/
 
 ## Build
 To build this app, you need to be in this example's root folder. Then run the following:
