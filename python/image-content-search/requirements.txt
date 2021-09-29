@@ -1,0 +1,17 @@
+awscli
+aws_cdk.core
+aws-cdk.aws-apigateway
+aws-cdk.aws-cognito
+aws-cdk.aws-s3-notifications
+aws-cdk.aws-sqs
+aws_cdk.aws_ec2
+aws_cdk.aws_iam
+aws_cdk.aws_lambda_event_sources
+aws_cdk.aws_lambda
+aws_cdk.aws_s3
+aws_cdk.aws_events
+aws_cdk.aws_events_targets
+aws_cdk.aws_rds
+aws_cdk.aws_secretsmanager
+aws_cdk.custom_resources
+boto3
