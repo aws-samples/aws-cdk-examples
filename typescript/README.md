@@ -41,6 +41,7 @@ $ cdk destroy
 | [fargate-service-with-auto-scaling](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/fargate-service-with-auto-scaling/) | Starting an ECS service of FARGATE launch type that auto scales based on average CPU Utilization |
 | [ecs-cross-stack-load-balancer](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/cross-stack-load-balancer/) | Shows how to use a single load balancer with services in other stacks |
 | [lambda-cron](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/lambda-cron/) | Running a Lambda on a schedule |
+| [lambda-layer](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/lambda-layer/) | Running a Lambda with a lambda layer |
 | [my-widget-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/my-widget-service/) | Use Lambda to serve up widgets |
 | [resource-overrides](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/resource-overrides/) | Shows how to override generated CloudFormation code |
 | [static-site](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/static-site/) | A static site using CloudFront |
@@ -50,4 +51,3 @@ $ cdk destroy
 | [custom-logical-names](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/custom-logical-names/) | Example of how to override logical name allocation |
 | [fargate-service-with-efs](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/fargate-service-with-efs/) | Starting a container fronted by an application load balancer on Fargate with an EFS Mount |
 | [http-proxy-apigateway](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/http-proxy-apigateway/) | Use ApiGateway to set up a http proxy |
-
