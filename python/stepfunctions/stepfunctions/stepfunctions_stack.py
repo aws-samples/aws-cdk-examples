@@ -1,6 +1,7 @@
 from aws_cdk import (
-    aws_stepfunctions as sfn,
-    aws_stepfunctions_tasks as sfn_tasks,
+    aws_stepfunctions as _aws_stepfunctions,
+    aws_stepfunctions_tasks as _aws_stepfunctions_tasks,
+    aws_lambda as _lambda,
     core,
 )
 
@@ -9,81 +10,61 @@ class JobPollerStack(core.Stack):
     def __init__(self, app: core.App, id: str, **kwargs) -> None:
         super().__init__(app, id, **kwargs)
 
-        submit_job_activity = sfn.Activity(
-            self, "SubmitJob"
-        )
-        check_job_activity = sfn.Activity(
-            self, "CheckJob"
-        )
-        do_mapping_activity1 = sfn.Activity(
-            self, "MapJOb1"
-        )
-        do_mapping_activity2 = sfn.Activity(
-            self, "MapJOb2"
-        )
+        # Lambda Handlers Definitions
 
-        submit_job = sfn.Task(
+        submit_lambda = _lambda.Function(self, 'submitLambda',
+                                         handler='lambda_function.lambda_handler',
+                                         runtime=_lambda.Runtime.PYTHON_3_9,
+                                         code=_lambda.Code.asset('lambdas/submit'))
+
+        status_lambda = _lambda.Function(self, 'statusLambda',
+                                         handler='lambda_function.lambda_handler',
+                                         runtime=_lambda.Runtime.PYTHON_3_9,
+                                         code=_lambda.Code.asset('lambdas/status'))
+
+        # Step functions Definition
+
+        submit_job = _aws_stepfunctions_tasks.LambdaInvoke(
             self, "Submit Job",
-            task=sfn_tasks.InvokeActivity(submit_job_activity),
-            result_path="$.guid",
+            lambda_function=submit_lambda,
+            output_path="$.Payload",
         )
 
-        task1 = sfn.Task(
-            self, "Task 1 in Mapping",
-            task=sfn_tasks.InvokeActivity(do_mapping_activity1),
-            result_path="$.guid",
+        wait_job = _aws_stepfunctions.Wait(
+            self, "Wait 30 Seconds",
+            time=_aws_stepfunctions.WaitTime.duration(
+                core.Duration.seconds(30))
         )
 
-        task2 = sfn.Task(
-            self, "Task 2 in Mapping",
-            task=sfn_tasks.InvokeActivity(do_mapping_activity2),
-            result_path="$.guid",
+        status_job = _aws_stepfunctions_tasks.LambdaInvoke(
+            self, "Get Status",
+            lambda_function=status_lambda,
+            output_path="$.Payload",
         )
 
-        wait_x = sfn.Wait(
-            self, "Wait X Seconds",
-            time=sfn.WaitTime.seconds_path('$.wait_time'),
-        )
-        get_status = sfn.Task(
-            self, "Get Job Status",
-            task=sfn_tasks.InvokeActivity(check_job_activity),
-            input_path="$.guid",
-            result_path="$.status",
-        )
-        is_complete = sfn.Choice(
-            self, "Job Complete?"
-        )
-        job_failed = sfn.Fail(
-            self, "Job Failed",
-            cause="AWS Batch Job Failed",
-            error="DescribeJob returned FAILED"
-        )
-        final_status = sfn.Task(
-            self, "Get Final Job Status",
-            task=sfn_tasks.InvokeActivity(check_job_activity),
-            input_path="$.guid",
+        fail_job = _aws_stepfunctions.Fail(
+            self, "Fail",
+            cause='AWS Batch Job Failed',
+            error='DescribeJob returned FAILED'
         )
 
-        definition_map = task1.next(task2)
+        succeed_job = _aws_stepfunctions.Succeed(
+            self, "Succeeded",
+            comment='AWS Batch Job succeeded'
+        )
 
-        process_map = sfn.Map(
-            self, "Process_map",
-            max_concurrency=10
-        ).iterator(definition_map)
+        # Create Chain
 
-        definition = submit_job \
-            .next(process_map) \
-            .next(wait_x) \
-            .next(get_status) \
-            .next(is_complete
-                  .when(sfn.Condition.string_equals(
-                    "$.status", "FAILED"), job_failed)
-                  .when(sfn.Condition.string_equals(
-                    "$.status", "SUCCEEDED"), final_status)
-                  .otherwise(wait_x))
+        definition = submit_job.next(wait_job)\
+            .next(status_job)\
+            .next(_aws_stepfunctions.Choice(self, 'Job Complete?')
+                  .when(_aws_stepfunctions.Condition.string_equals('$.status', 'FAILED'), fail_job)
+                  .when(_aws_stepfunctions.Condition.string_equals('$.status', 'SUCCEEDED'), succeed_job)
+                  .otherwise(wait_job))
 
-        sfn.StateMachine(
+        # Create state machine
+        sm = _aws_stepfunctions.StateMachine(
             self, "StateMachine",
             definition=definition,
-            timeout=core.Duration.seconds(30),
+            timeout=core.Duration.minutes(5),
         )
