@@ -6,7 +6,7 @@
 
 > **This is an experimental example. It may not build out of the box**
 >
-> This examples does is built on Construct Libraries marked "Experimental" and may not be updated for latest breaking changes.
+> This examples is built on Construct Libraries marked "Experimental" and may not be updated for latest breaking changes.
 >
 > It additionally requires infrastructure prerequisites that must be created before successful build.
 >
