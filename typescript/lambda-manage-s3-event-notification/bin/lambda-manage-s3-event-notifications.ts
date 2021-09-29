@@ -7,8 +7,16 @@ import { SharedStack } from '../lib/shared-resources-stack';
 import { AStack, BStack } from '../lib/sample-service-stack';
 
 const app = new cdk.App();
-const sharedStack = new SharedStack(app, 'SharedStack');
+const sharedStack = new SharedStack(app, 'SharedStack', {
+  description: "Creates shared S3 bucket and Lambda function to manage notifications on the bucket (qs-1s4376pnc)"
+});
 
 // Demonstrate this can work with S3 bucket and S3 Event Notification configuration defined in separate stacks
-new AStack(app, 'AStack', { bucketName: sharedStack.bucketName });
-new BStack(app, 'BStack', { bucketName: sharedStack.bucketName });
+new AStack(app, 'AStack', {
+  description: "Stack that synthesizes S3 event notifications to an SQS queue (qs-1s4376pnc)",
+  bucketName: sharedStack.bucketName
+});
+new BStack(app, 'BStack', {
+  description: "Stack that synthesizes S3 event notifications to an SNS topic (qs-1s4376pnc)",
+  bucketName: sharedStack.bucketName
+});
