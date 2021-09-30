@@ -1,0 +1,2 @@
+aws-cdk.aws-lambda
+aws-cdk.core

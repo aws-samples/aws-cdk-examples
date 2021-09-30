@@ -38,8 +38,11 @@ exports.handler = function(event, context, callback) {
             delete data['taskDefinition']['status'];
             delete data['taskDefinition']['requiresAttributes'];
             delete data['taskDefinition']['compatibilities'];
+            delete data['taskDefinition']['registeredAt'];
+            delete data['taskDefinition']['registeredBy'];
 
             console.log("Register New Task Definition");
+            console.log(data['taskDefinition']);
             ecs.registerTaskDefinition(data['taskDefinition'], function(err, data) {
               if (err)
                 console.log(err, err.stack);
@@ -68,8 +71,6 @@ exports.handler = function(event, context, callback) {
     }
 };
 
-
-// Send response to the pre-signed S3 URL
 function sendResponse (event, context, responseStatus, responseData) {
   console.log('Sending response ' + responseStatus);
   var responseBody = JSON.stringify({
@@ -104,17 +105,14 @@ function sendResponse (event, context, responseStatus, responseData) {
   var request = https.request(options, function (response) {
     console.log('STATUS: ' + response.statusCode);
     console.log('HEADERS: ' + JSON.stringify(response.headers));
-    // Tell AWS Lambda that the function execution is done
     context.done()
   });
 
   request.on('error', function (error) {
     console.log('sendResponse Error:' + error);
-    // Tell AWS Lambda that the function execution is done
     context.done()
   });
 
-  // write data to request body
   request.write(responseBody);
   request.end()
 }
