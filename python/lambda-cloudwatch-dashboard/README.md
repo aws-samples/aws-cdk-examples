@@ -4,7 +4,7 @@
 This project demonstrates how to setup a CloudWatch Dashboard for Lambda Functions.
 CloudWatch dashboards are used to create customized views of the metrics and alarms for your AWS resources.
 
-This CDK sample uses an AWS Lambda Function, as an example, for the source of CloudWatch metrics. This 
+This CDK sample uses an AWS Lambda Function, as an example, for the source of CloudWatch metrics. This
 approach can used with AWS Services that create [CloudWatch metrics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/working_with_metrics.html) or even [Custom CloudWatch metrics](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html) that you publish yourself.
 
 The following resources are defined in the CDK Stack:
@@ -27,59 +27,43 @@ After deploying solution, you will have created a CloudWatch Dashboard, like the
 
 ## Setup
 
-First, you will need to install the AWS CDK:
-
-```
-sudo npm install -g aws-cdk
-```
-
-You can check the toolkit version with this command:
-
-```
-cdk --version
-```
-
-Next, you will want to create a project directory:
-
-```
-mkdir ~/cdk-samples
-```
+This project is set up like a standard Python project.  The initialization process also creates
+a virtualenv within this project, stored under the .env directory.  To create the virtualenv
+it assumes that there is a `python3` executable in your path with access to the `venv` package.
+If for any reason the automatic creation of the virtualenv fails, you can create the virtualenv
+manually once the init process completes.
 
 To manually create a virtualenv on MacOS and Linux:
 
 ```
-cd ~/cdk-samples
-python3 -m venv .venv
+$ python3 -m venv .env
 ```
 
 After the init process completes and the virtualenv is created, you can use the following
 step to activate your virtualenv.
 
 ```
-source .venv/bin/activate
+$ source .env/bin/activate
 ```
 
 If you are a Windows platform, you would activate the virtualenv like this:
 
 ```
-.venv\Scripts\activate.bat
+% .env\Scripts\activate.bat
 ```
 
-Now you're ready to clone this repo and change to this sample directory:
+Once the virtualenv is activated, you can install the required dependencies.
 
 ```
-git clone https://github.com/aws-samples/aws-cdk-examples.git
-cd aws-cdk-examples/python/lambda-cloudwatch-dashboard
+$ pip install -r requirements.txt
 ```
 
-Install the required dependencies:
-```
-pip install -r requirements.txt
-```
 
-To add additional dependencies, for example other CDK libraries, just add
-them to your `setup.py` file and rerun the `pip install -r requirements.txt`
-command.
+Install the latest version of the AWS CDK CLI:
+
+```
+$ npm i -g aws-cdk
+```
 
 ## Deployment
 
