@@ -6,7 +6,7 @@
 
 > **This is an experimental example. It may not build out of the box**
 >
-> This examples does is build on Construct Libraries marked "Experimental" and may not be updated for latest breaking changes.
+> This examples is build on Construct Libraries marked "Experimental" and may not be updated for latest breaking changes.
 >
 > If build is unsuccessful, please create an [issue](https://github.com/aws-samples/aws-cdk-examples/issues/new) so that we may debug the problem 
 
@@ -14,6 +14,8 @@
 <!--END STABILITY BANNER-->
 
 This an example of an AppSync GraphQL API, pointing to four resolvers doing CRUD operations with a single DynamoDB table.
+
+![Detailed diagram](diagram.png)
 
 ## Build
 
