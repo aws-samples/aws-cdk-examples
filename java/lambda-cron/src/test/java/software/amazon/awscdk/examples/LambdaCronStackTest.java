@@ -1,85 +1,91 @@
 package software.amazon.awscdk.examples;
 
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.stringContainsInOrder;
 import static org.junit.Assert.assertThat;
-import static software.amazon.awscdk.examples.TestUtils.toCloudFormationJson;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 import software.amazon.awscdk.core.App;
 import software.amazon.awscdk.core.Stack;
+import software.amazon.awscdk.assertions.Template;
+import software.amazon.awscdk.assertions.Capture;
+import software.amazon.awscdk.assertions.Match;
+
 
 public class LambdaCronStackTest {
-  private JsonNode actualStack;
-  private JsonNode expectedStack;
+  private Template template;
 
   @Before
   public void setUp() throws IOException {
     App app = new App();
     Stack stack = new LambdaCronStack(app, "lambdaResource-cdk-lambda-cron");
-    actualStack = toCloudFormationJson(stack).path("Resources");
-    expectedStack =
-        TestUtils.fromFileResource(getClass().getResource("testCronLambdaExpected.json"))
-            .path("Resources");
+    template = Template.fromStack(stack);
   }
 
   @Test
-  public void testTypes() {
-    List<String> actual =
-        actualStack.findValues("Type").stream()
-            .map(JsonNode::textValue)
-            .collect(Collectors.toList());
-    String[] expected =
-        expectedStack.findValues("Type").stream().map(JsonNode::textValue).toArray(String[]::new);
-    assertThat(actual, containsInAnyOrder(expected));
+  public void testSpecifiedResourcesCreated() {
+    template.resourceCountIs("AWS::Lambda::Function", 1);
+    template.resourceCountIs("AWS::Events::Rule", 1);
   }
 
   @Test
-  public void testPermission() {
-    final String type = "AWS::Lambda::Permission";
-    JsonNode actual = TestUtils.getJsonNode(actualStack, type);
-    JsonNode expected = TestUtils.getJsonNode(expectedStack, type);
-    String[] keys = {"ManagedPolicyArns", "AssumeRolePolicyDocument"};
-    for (String key : keys) {
-      assertThat(actual.get(key), equalTo(expected.get(key)));
-    }
+  public void testLambdaProperties() {
+    Capture dependencyCapture = new Capture();
+    template.hasResource("AWS::Lambda::Function", Map.of(
+      "Properties", Map.of(
+        "Code", Map.of(
+          "ZipFile", "def main(event, context):\n    print(\"I'm running!\")\n"
+        ),
+        "Handler", "index.main",
+        "Runtime", "python2.7",
+        "Timeout", 300
+      ),
+      "DependsOn", Arrays.asList(dependencyCapture)
+    ));
+
+    assertThat(dependencyCapture.asString(), stringContainsInOrder(Arrays.asList("Singleton", "ServiceRole")));
   }
 
   @Test
-  public void testRole() {
-    final String type = "AWS::IAM::Role";
-    JsonNode actual = TestUtils.getJsonNode(actualStack, type);
-    JsonNode expected = TestUtils.getJsonNode(expectedStack, type);
-    String[] keys = {"ManagedPolicyArns", "AssumeRolePolicyDocument"};
-    for (String key : keys) {
-      assertThat(actual.get(key), equalTo(expected.get(key)));
-    }
+  public void testLambdaIamPermissions() {
+    Capture roleCapture = new Capture();
+    template.hasResourceProperties("AWS::IAM::Role", Map.of(
+      "AssumeRolePolicyDocument", Match.objectLike(Map.of(
+        "Statement", Arrays.asList(Map.of(
+          "Action", "sts:AssumeRole",
+          "Effect", "Allow",
+          "Principal", Map.of(
+            "Service", "lambda.amazonaws.com"
+          )
+        ))
+      )),
+      "ManagedPolicyArns", Arrays.asList(Map.of(
+        "Fn::Join", Match.arrayWith(Arrays.asList(
+          Arrays.asList("arn:", Map.of("Ref", "AWS::Partition"), roleCapture)
+        ))
+      ))
+    ));
+
+    assertThat(roleCapture.asString(), stringContainsInOrder(Arrays.asList("AWSLambdaBasicExecutionRole")));
   }
 
   @Test
-  public void testLambda() {
-    final String type = "AWS::Lambda::Function";
-    JsonNode actual = TestUtils.getJsonNode(actualStack, type);
-    JsonNode expected = TestUtils.getJsonNode(expectedStack, type);
-    String[] keys = {"Runtime", "Description", "Timeout", "Handler", "Code", "FunctionName"};
-    for (String key : keys) {
-      assertThat(actual.get(key), equalTo(expected.get(key)));
-    }
+  public void testLambdaNotInVpc() {
+    template.hasResource("AWS::Lambda::Function", Map.of(
+      "Vpc", Match.absentProperty()
+    ));
   }
 
   @Test
-  public void testRule() {
-    final String type = "AWS::Events::Rule";
-    JsonNode actual = TestUtils.getJsonNode(actualStack, type);
-    JsonNode expected = TestUtils.getJsonNode(expectedStack, type);
-    String[] keys = {"ScheduleExpression", "Description", "State"};
-    for (String key : keys) {
-      assertThat(actual.get(key), equalTo(expected.get(key)));
-    }
+  public void testEventHasCorrectRule() {
+    template.hasResourceProperties("AWS::Events::Rule", Map.of(
+      "ScheduleExpression", "cron(0 18 ? * MON-FRI *)",
+      "State", "ENABLED",
+      "Targets", Match.anyValue()
+    ));
   }
 }
