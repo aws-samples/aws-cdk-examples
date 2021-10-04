@@ -14,7 +14,7 @@ import org.junit.Test;
 import software.amazon.awscdk.core.App;
 import software.amazon.awscdk.core.Stack;
 
-public class LambdaCronStackTest {
+public class OldLambdaCronStackTest {
   private JsonNode actualStack;
   private JsonNode expectedStack;
 
