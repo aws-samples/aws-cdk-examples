@@ -65,6 +65,7 @@ $ cdk destroy
 | [fargate-load-balanced-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/fargate-load-balanced-service/) | Starting a container fronted by a load balancer on Fargate |
 | [fargate-service-with-autoscaling](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/fargate-service-with-autoscaling/) | Starting an ECS service of FARGATE launch type that auto scales based on average CPU Utilization |
 | [lambda-cron](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/lambda-cron/) | Running a Lambda on a schedule |
+| [lambda-layer](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/lambda-layer/) | Running a Lambda with a lambda layer |
 | [lambda-s3-trigger](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/lambda-s3-trigger/) | S3 trigger for Lambda |
 | [rds](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/rds/) | Creating a MySQL RDS database inside its dedicated VPC |
 | [stepfunctions](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/stepfunctions/) | A simple StepFunctions workflow |
