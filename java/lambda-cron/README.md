@@ -13,7 +13,7 @@ CDK toolkit if you wish to synthesize/deploy stacks.
 ## Testing
 
 To test this app after building, run `mvn test`. This will run two testing files, each with 5 tests. Tests in `OldLambdaCronStackTest.java` are legacy tests that require an additional file,
-`TestUtils.java`, to run. `LambdaCronStackTest.java` is the newest version that depends on the CDK
+`TestUtils.java`, to run. `NewLambdaCronStackTest.java` is the newest version that depends on the CDK
 [Assertions](https://docs.aws.amazon.com/cdk/api/latest/java/index.html) module. The API in the
 Assertions module replaces the need to write a `TestUtils` class and allows you to focus on writing
 robust tests for your CDK app. 
