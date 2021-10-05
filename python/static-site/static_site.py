@@ -103,12 +103,15 @@ class StaticSite(cdk.Construct):
                 certificate_arn=self.__domain_certificate_arn,
             )
         else:
-            # If certificate arn is not provided, create a new one
-            self.certificate = acm.Certificate(
+            # If certificate arn is not provided, create a new one.
+            # ACM certificates that are used with CloudFront must be in 
+            # the us-east-1 region.
+            self.certificate = acm.DnsValidatedCertificate(
                 self,
                 "site_certificate",
                 domain_name=self._site_domain_name,
-                validation=acm.CertificateValidation.from_dns(hosted_zone),
+                hosted_zone=hosted_zone,
+                region="us-east-1",
             )
 
 
