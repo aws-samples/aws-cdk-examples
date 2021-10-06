@@ -25,6 +25,15 @@ dotnet build src
 
 This will install the necessary CDK, then this example's dependencies, and then build your .Net Project files and your CloudFormation template.
 
+## Test
+
+To test this app after it is built, you need to be in the `LambdaCron.Tests` folder. Then you can call `dotnet test` to run the test suite that uses the XUnit along with the CDK [Assertions](https://docs.aws.amazon.com/cdk/api/latest/dotnet/api/Amazon.CDK.Assertions.html) library. Assuming you are in the root folder:
+
+```bash
+cd src/LambdaCron.Tests
+dotnet test
+```
+
 ## Deploy
 
 Run `cdk deploy LambdaCronStack`. This will deploy / redeploy your Stack to your AWS Account.
