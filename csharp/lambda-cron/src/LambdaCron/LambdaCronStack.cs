@@ -12,7 +12,7 @@ namespace LambdaCron
             var lambdaFn = new Function(this, "Singleton", new FunctionProps {
                 Runtime = Runtime.PYTHON_3_6,
                 Code = Code.FromInline("def main(event, context):\n" + "    print(\"I'm running!\")\n"),
-                Handler = "lambda-handler.main",
+                Handler = "index.main",
                 Timeout = Duration.Seconds(300),
             });
 
