@@ -11,7 +11,7 @@ namespace LambdaCron
         {
             var lambdaFn = new Function(this, "Singleton", new FunctionProps {
                 Runtime = Runtime.PYTHON_3_6,
-                Code = Code.FromAsset("src/LambdaCron/resources"),
+                Code = Code.FromInline("def main(event, context):\n" + "    print(\"I'm running!\")\n"),
                 Handler = "lambda-handler.main",
                 Timeout = Duration.Seconds(300),
             });
