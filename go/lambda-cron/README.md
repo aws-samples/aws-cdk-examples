@@ -8,7 +8,7 @@ about your experience through GitHub issues.
 
 ## Test
 
-Run `go test`. This will run the test suite using Testify and the CDK
+In the root folder, run `go test`. This will run the test suite using Testify and the CDK
 [Assertions](https://pkg.go.dev/github.com/aws/aws-cdk-go/awscdk/assertions) Library.
 
 ## Deploy
