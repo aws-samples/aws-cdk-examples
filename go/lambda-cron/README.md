@@ -6,6 +6,11 @@ This example creates a new lambda function that executes every day at 6pm UTC, a
 change while we address early feedback from the community. We would love to hear
 about your experience through GitHub issues.
 
+## Test
+
+Run `go test`. This will run the test suite using Testify and the CDK
+[Assertions](https://pkg.go.dev/github.com/aws/aws-cdk-go/awscdk/assertions) Library.
+
 ## Deploy
 
 Run `cdk deploy`. This will deploy / redeploy your Stack to your AWS Account.
