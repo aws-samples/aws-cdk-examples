@@ -1,4 +1,18 @@
 # hello-world
+<!--BEGIN STABILITY BANNER-->
+---
+
+![Stability: Developer Preview](https://img.shields.io/badge/stability-Developer--Preview-important.svg?style=for-the-badge)
+
+> **This is an experimental example. It may not build out of the box**
+>
+> This example is built on Construct Libraries marked "Developer Preview" and may not be updated for latest breaking changes.
+>
+> It may additionally requires infrastructure prerequisites that must be created before successful build.
+>
+> If build is unsuccessful, please create an [issue](https://github.com/aws-samples/aws-cdk-examples/issues/new) so that we may debug the problem 
+---
+<!--END STABILITY BANNER-->
 
 This example is an introduction to the use of Go with the CDK. The code
 defines an S3 bucket and specifies that a file should be uploaded into the bucket.
