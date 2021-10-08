@@ -17,7 +17,7 @@ class S3SnsSqsLambdaChainStack(cdk.Stack):
 
         lambda_dir = kwargs["lambda_dir"]
 
-        # The code that defines your stack goes here
+        # Note: A dead-letter queue is optional but it helps capture any failed messages
         dlq = sqs.Queue(
             self,
             id="dead_letter_queue_id",
@@ -45,8 +45,11 @@ class S3SnsSqsLambdaChainStack(cdk.Stack):
             id="sample_sns_topic_id"
         )
 
+        # This binds the SNS Topic to the SQS Queue
         upload_event_topic.add_subscription(sqs_subscription)
 
+        # Note: Lifecycle Rules are optional but are included here to keep costs
+        #       low by cleaning up old files or moving them to lower cost storage options
         s3_bucket = s3.Bucket(
             self,
             id="sample_bucket_id",
@@ -70,6 +73,9 @@ class S3SnsSqsLambdaChainStack(cdk.Stack):
             ]
         )
 
+        # Note: If you don't specify a filter all uploads will trigger an event.
+        #       Also, modifying the event type will handle other object operations
+        # This binds the S3 bucket to the SNS Topic
         s3_bucket.add_event_notification(
             s3.EventType.OBJECT_CREATED_PUT,
             s3n.SnsDestination(upload_event_topic),
@@ -81,5 +87,6 @@ class S3SnsSqsLambdaChainStack(cdk.Stack):
                                     handler="lambda_function.handler",
                                     code=_lambda.Code.asset(lambda_dir))
 
+        # This binds the lambda to the SQS Queue
         invoke_event_source = lambda_events.SqsEventSource(upload_queue)
         function.add_event_source(invoke_event_source)
