@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <!-- Roll forward to future major versions of the netcoreapp as needed -->
+    <RollForward>Major</RollForward>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- CDK Construct Library dependencies -->
+    <PackageReference Include="Amazon.CDK" Version="1.126.0" />
+
+    <!-- jsii Roslyn analyzers (un-comment to obtain compile-time checks for missing required props
+    <PackageReference Include="Amazon.Jsii.Analyzers" Version="*" PrivateAssets="all" />
+    -->
+    <PackageReference Include="Amazon.CDK.AWS.Lambda" Version="1.126.0" />
+    <PackageReference Include="Amazon.CDK.AWS.Events" Version="1.126.0" />
+    <PackageReference Include="Amazon.CDK.AWS.Events.Targets" Version="1.126.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="AWSSDK.Lambda" />
+    <None Remove="Amazon.CDK.AWS.Lambda" />
+    <None Remove="Amazon.CDK.AWS.Events" />
+    <None Remove="lambda-handler.py" />
+    <None Remove="Amazon.CDK.AWS.Events.Targets" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lambda-handler.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+</Project>
