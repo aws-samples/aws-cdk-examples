@@ -75,7 +75,7 @@ public class NewLambdaCronStackTest {
   @Test
   public void testLambdaNotInVpc() {
     template.hasResource("AWS::Lambda::Function", Map.of(
-      "Vpc", Match.absentProperty()
+      "Vpc", Match.absent()
     ));
   }
 
