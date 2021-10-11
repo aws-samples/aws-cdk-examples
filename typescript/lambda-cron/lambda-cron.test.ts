@@ -53,7 +53,7 @@ describe('lambda tests', () => {
 
   test('lambda not running in vpc', () => {
     assert.hasResource('AWS::Lambda::Function', {
-      Vpc: Match.absentProperty(),
+      Vpc: Match.absent(),
     });
   });
 });
