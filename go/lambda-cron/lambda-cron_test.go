@@ -71,7 +71,7 @@ func (suite *LambdaCronTestSuite) TestCorrectIamPermissions() {
 
 func (suite *LambdaCronTestSuite) TestLambdaNotInVpc() {
 	suite.Template.HasResource(jsii.String("AWS::Lambda::Function"), map[string]interface{}{
-		"Vpc": assertions.Match_AbsentProperty(),
+		"Vpc": assertions.Match_Absent(),
 	})
 }
 
