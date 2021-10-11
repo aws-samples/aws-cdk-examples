@@ -80,7 +80,7 @@ namespace LambdaCron.UnitTests
         public void notInVpc()
         {
             template.HasResource("AWS::Lambda::Function", new Dictionary<string,object> {
-                {"Vpc", Match.AbsentProperty()}
+                {"Vpc", Match.Absent()}
             });
         }
 

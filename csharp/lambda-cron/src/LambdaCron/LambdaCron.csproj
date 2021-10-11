@@ -8,13 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Amazon.CDK" Version="*" />
-    <PackageReference Include="Amazon.CDK.AWS.Events" Version="*" />
-    <PackageReference Include="Amazon.CDK.AWS.Events.Targets" Version="*" />
-    <PackageReference Include="Amazon.CDK.AWS.Lambda" Version="*" />
-    <PackageReference Include="Amazon.CDK.Assertions" Version="*" />
-
-    <PackageReference Include="Amazon.JSII.Analyzers" Version="*" />
+    <PackageReference Include="Amazon.CDK" Version="1.127.0" />
+    <PackageReference Include="Amazon.CDK.AWS.Events" Version="1.127.0" />
+    <PackageReference Include="Amazon.CDK.AWS.Events.Targets" Version="1.127.0" />
+    <PackageReference Include="Amazon.CDK.AWS.Lambda" Version="1.127.0" />
+    <PackageReference Include="Amazon.CDK.Assertions" Version="1.127.0" />
   </ItemGroup>
 
 </Project>
