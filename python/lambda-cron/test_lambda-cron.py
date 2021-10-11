@@ -52,7 +52,7 @@ class TestLambda:
 
   def test_lambda_not_running_in_vpc(self):
     template.has_resource('AWS::Lambda::Function', {
-      'Vpc': Match.absent_property()
+      'Vpc': Match.absent()
     })
 
 class TestEvents:
