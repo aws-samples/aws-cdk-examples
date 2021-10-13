@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <!-- Roll forward to future major versions of the netcoreapp as needed -->
+    <RollForward>Major</RollForward>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  </PropertyGroup>  
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " />
+  <ItemGroup>
+    <!-- CDK Construct Library dependencies -->
+    <PackageReference Include="Amazon.CDK" Version="1.127.0" />
+
+    <!-- jsii Roslyn analyzers (un-comment to obtain compile-time checks for missing required props
+    <PackageReference Include="Amazon.Jsii.Analyzers" Version="*" PrivateAssets="all" />
+    -->
+    <PackageReference Include="Amazon.CDK.AWS.Lambda" Version="1.127.0" />
+    <PackageReference Include="Amazon.CDK.AWS.APIGateway" Version="1.127.0" />
+    <PackageReference Include="Amazon.CDK.AWS.DynamoDB" Version="1.127.0" />
+    <PackageReference Include="Amazon.JSII.Analyzers" Version="1.38.0" />
+    <PackageReference Include="Amazon.CDK.AWS.Lambda.Nodejs" Version="1.127.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Amazon.CDK.AWS.Lambda" />
+    <None Remove="Amazon.CDK.AWS.APIGateway" />
+    <None Remove="Amazon.CDK.AWS.DynamoDB" />
+    <None Remove="Amazon.JSII.Analyzers" />
+    <None Remove="Amazon.CDK.AWS.Lambda.Nodejs" />
+  </ItemGroup>
+</Project>

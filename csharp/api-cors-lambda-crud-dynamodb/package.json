@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "lambda-crud-dynamodb": "file:src/ApiCorsLambdaCrudDynamodb/lambdas"
+  }
+}
