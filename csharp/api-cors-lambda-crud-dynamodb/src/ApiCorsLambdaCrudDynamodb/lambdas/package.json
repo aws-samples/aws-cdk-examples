@@ -9,9 +9,6 @@
     "watch": "tsc -w",
     "cdk": "cdk"
   },
-  "engines": {
-    "node": "^14.5.0"
-  },
   "devDependencies": {
     "@types/node": "*",
     "@types/uuid": "*"
