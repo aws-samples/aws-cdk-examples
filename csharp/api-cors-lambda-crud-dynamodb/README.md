@@ -12,6 +12,7 @@
 <!--END STABILITY BANNER-->
 
 This an example of an APIGateway with CORS enabled, pointing to five Lambdas executing CRUD operations on a single DynamoDB table.
+It uses the [.NET Core CLI](https://docs.microsoft.com/dotnet/articles/core/) to compile and execute your project.
 
 ## Build
 
@@ -19,8 +20,9 @@ To build this app, you need to be in this example's root folder. Then run the fo
 
 ```bash
 npm install -g aws-cdk
-npm install ./src/ApiCorsLambdaCrudDynamodb/lambdas
-npm run --prefix ./src/ApiCorsLambdaCrudDynamodb/lambdas build
+cd src/ApiCorsLambdaCrudDynamodb/lambdas
+npm install && npm run build
+cd ../../..
 dotnet build src
 ```
 This will install the necessary CDK, then the lambda function's dependencies, builder your TypeScript Lambda files and your CloudFormation template.
@@ -64,11 +66,3 @@ After building your TypeScript code, you will be able to run the CDK toolkit com
     $ cdk diff
     <shows diff against deployed stack>
 ```
-It uses the [.NET Core CLI](https://docs.microsoft.com/dotnet/articles/core/) to compile and execute your project.
-
-## Useful commands
-
-* `npm install ./src/ApiCorsLambdaCrudDynamodb/lambdas && npm run --prefix ./src/ApiCorsLambdaCrudDynamodb/lambdas build && dotnet build src` compile this app
-* `cdk deploy`       deploy this stack to your default AWS account/region
-* `cdk diff`         compare deployed stack with current state
-* `cdk synth`        emits the synthesized CloudFormation template
