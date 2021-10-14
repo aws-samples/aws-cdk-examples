@@ -57,6 +57,7 @@ namespace ApiCorsLambdaCrudDynamodb
         Environment = environmentVariables,
         Bundling = bundlingOptions,
         Entry = $"{relativeLambdaPath}/get-one.ts",
+        DepsLockFilePath = relativeLambdaPath + "/package-lock.json",
         Tracing = Tracing.ACTIVE
       });
 
@@ -66,6 +67,7 @@ namespace ApiCorsLambdaCrudDynamodb
         Environment = environmentVariables,
         Bundling = bundlingOptions,
         Entry = $"{relativeLambdaPath}/get-all.ts",
+        DepsLockFilePath = relativeLambdaPath + "/package-lock.json",
         Tracing = Tracing.ACTIVE
       });
 
@@ -75,6 +77,7 @@ namespace ApiCorsLambdaCrudDynamodb
         Environment = environmentVariables,
         Bundling = bundlingOptions,
         Entry = $"{relativeLambdaPath}/create.ts",
+        DepsLockFilePath = relativeLambdaPath + "/package-lock.json",
         Tracing = Tracing.ACTIVE
       });
 
@@ -84,6 +87,7 @@ namespace ApiCorsLambdaCrudDynamodb
         Environment = environmentVariables,
         Bundling = bundlingOptions,
         Entry = $"{relativeLambdaPath}/update-one.ts",
+        DepsLockFilePath = relativeLambdaPath + "/package-lock.json",
         Tracing = Tracing.ACTIVE
       });
 
@@ -93,6 +97,7 @@ namespace ApiCorsLambdaCrudDynamodb
         Environment = environmentVariables,
         Bundling = bundlingOptions,
         Entry = $"{relativeLambdaPath}/delete-one.ts",
+        DepsLockFilePath = relativeLambdaPath + "/package-lock.json",
         Tracing = Tracing.ACTIVE
       });
 
