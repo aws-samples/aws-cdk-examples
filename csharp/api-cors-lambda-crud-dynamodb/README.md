@@ -25,7 +25,7 @@ npm install && npm run build
 cd ../../..
 dotnet build src
 ```
-This will install the necessary CDK, then the lambda function's dependencies, builder your TypeScript Lambda files and your CloudFormation template.
+This will install the necessary CDK, then the lambda function's dependencies, build your TypeScript Lambda files and your CloudFormation template.
 
 ## Deploy
 
