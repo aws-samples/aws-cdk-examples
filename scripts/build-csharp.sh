@@ -1,5 +1,5 @@
  #!/bin/bash
- set -euo pipefail
+ set -euxo pipefail
  scriptdir=$(cd $(dirname $0) && pwd)
 
  # install CDK CLI from npm, so that npx can find it later
