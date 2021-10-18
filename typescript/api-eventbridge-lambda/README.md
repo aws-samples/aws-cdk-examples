@@ -23,7 +23,7 @@
 - Lambda as Data Producer
 - EventBridge that routes to AWS services based on Rules
 - Two Lambda functions which consume data based on Rules
-- Kinesis Data Firehose that receives data from EventBridge based on Rules, then stores data in S3 bucket.
+- Kinesis Data Data Firehose which receives data from EventBridge based on Rules, then stores data in S3 bucket.
 
 ![Architecture](architecture.png)
 
@@ -39,7 +39,7 @@ npm install
 npm run build
 ```
 
-This will install the necessary CDK, then this example's dependencies, and then build your TypeScript files and your CloudFormation template.
+This will install the necessary CDK, install dependencies, and then build TypeScript files and CloudFormation template.
 
 ## Deploy
 
