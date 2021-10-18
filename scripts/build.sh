@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -euxo pipefail
 scriptdir=$(cd $(dirname $0) && pwd)
 
 $scriptdir/build-csharp.sh
