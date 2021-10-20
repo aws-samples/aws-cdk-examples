@@ -25,6 +25,8 @@
   },
   "exclude": [
     "node_modules",
-    "cdk.out"
+    "cdk.out",
+    "bin",
+    "infra/api-eventbridge-lambda-stack.ts"
   ]
 }
