@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk')
 const eventBridgeClient = new AWS.EventBridge();
 
-exports.handler = async function(event) {
+exports.handler = async function(event:{body:any, [key:string]:any}) {
     try {
         console.log('Request:', JSON.stringify(event, undefined, 2));
 
@@ -38,4 +38,4 @@ exports.handler = async function(event) {
       body: `from Producer...`
     };
   };
-  
+
