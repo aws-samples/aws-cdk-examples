@@ -23,7 +23,7 @@ export class ApiEventbridgeLambdaStack extends cdk.Stack {
     // Producer Lambda
     const eventProducerLambda = new Function(this, "Event-Producer-Lambda", {
       runtime: Runtime.NODEJS_14_X,
-      code: Code.fromAsset("lambda"),
+      code: Code.fromAsset("dist"),
       handler: "eventProducerLambda.handler",
     });
 
@@ -38,7 +38,7 @@ export class ApiEventbridgeLambdaStack extends cdk.Stack {
     // Approved Consumer1
     const eventConsumer1Lambda = new Function(this, "Event-Consumer-1-Lambda", {
       runtime: Runtime.NODEJS_14_X,
-      code: Code.fromAsset("lambda"),
+      code: Code.fromAsset("dist"),
       handler: "eventConsumerLambda.handler",
     });
 
@@ -52,7 +52,7 @@ export class ApiEventbridgeLambdaStack extends cdk.Stack {
     // Approved Consumer2
     const eventConsumer2Lambda = new Function(this, "Event-Consumer-2-Lambda", {
       runtime: Runtime.NODEJS_14_X,
-      code: Code.fromAsset("lambda"),
+      code: Code.fromAsset("dist"),
       handler: "eventConsumerLambda.handler",
     });
 
