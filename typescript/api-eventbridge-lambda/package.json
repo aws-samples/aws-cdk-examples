@@ -5,7 +5,7 @@
     "api-eventbridge-lambda": "bin/api-eventbridge-lambda.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --outDir ./dist",
     "watch": "tsc -w",
     "cdk": "cdk"
   },

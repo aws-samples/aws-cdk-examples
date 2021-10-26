@@ -23,8 +23,12 @@
       "./node_modules/@types"
     ]
   },
+  "include": ["lambda"],
   "exclude": [
+    "dist",
     "node_modules",
-    "cdk.out"
+    "cdk.out",
+    "bin",
+    "infra/api-eventbridge-lambda-stack.ts"
   ]
 }
