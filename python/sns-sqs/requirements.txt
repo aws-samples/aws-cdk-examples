@@ -1,0 +1,3 @@
+aws-cdk.aws-sns
+aws-cdk.aws-sqs
+aws-cdk.aws_sns_subscriptions
