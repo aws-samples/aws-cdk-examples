@@ -4,7 +4,6 @@ from aws_cdk import (
     core,
 )
 
-# Creates reference to already existing s3 bucket and lambda code
 
 class LambdaS3Code(core.Stack):
     def __init__(self, app: core.App, id: str) -> None:
