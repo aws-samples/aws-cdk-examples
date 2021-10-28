@@ -3,14 +3,14 @@ from aws_cdk.core import Stack, Construct, Environment
 from aws_cdk import aws_apigateway, aws_route53, aws_route53_targets, aws_certificatemanager, aws_ec2
 
 # we need default values here since aws-cdk-examples build synthesizes the app
-ACCOUNT=os.environ.get('WALTERSCO_ACCOUNT', '111111111111')
-REGION=os.environ.get('WALTERSCO_REGION', 'us-east-1')
+ACCOUNT = os.environ.get('WALTERSCO_ACCOUNT', '111111111111')
+REGION = os.environ.get('WALTERSCO_REGION', 'us-east-1')
 VPC_ID = os.environ.get('WALTERSCO_VPC_ID', 'vpc-11111111111111111')
 ZONE_NAME = os.environ.get('WALTERSCO_ZONE_NAME', 'yourdomain.com')
 ZONE_ID = os.environ.get('WALTERSCO_ZONE_ID', 'Z11FE11Z11DV1')
 ZONE_CERT = os.environ.get('WALTERSCO_ZONE_CERT', 'arn:aws:acm:us-east-1:111111111111:certificate/11111111-1111-1111-1111-111111111111')
 
-AWS_ENV = Environment(account=ACCOUNT, region=REGION)
+AWS_ENV = Environment(account = ACCOUNT, region = REGION)
 
 class WaltersCoStack(Stack):
     """
