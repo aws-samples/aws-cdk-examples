@@ -24,7 +24,7 @@ class ECSCluster(core.Stack):
             update_type=autoscaling.UpdateType.REPLACING_UPDATE,
             desired_capacity=3,
             vpc=vpc,
-            vpc_subnets={ 'subnet_type': ec2.SubnetType.PUBLIC },
+            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
         )
 
         cluster = ecs.Cluster(
@@ -35,6 +35,7 @@ class ECSCluster(core.Stack):
         cluster.add_auto_scaling_group(asg)
         cluster.add_capacity("DefaultAutoScalingGroup",
                              instance_type=ec2.InstanceType("t2.micro"))
+
 
 app = core.App()
 ECSCluster(app, "MyFirstEcsCluster")
