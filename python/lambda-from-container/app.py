@@ -1,4 +1,5 @@
 import os
+import typing
 from aws_cdk import (
     core,
     aws_lambda,
@@ -41,9 +42,9 @@ class LambdaContainerFunctionStack(core.Stack):
             ## Container Image.
             ## Pulled from the ECR repository.
             ##
-            ecr_image = aws_lambda.EcrImageCode(
+            ecr_image = typing.cast("aws_lambda.Code", aws_lambda.EcrImageCode(
                 repository = ecr_repository
-            ) ## aws_lambda.EcrImageCode
+            )) ## aws_lambda.EcrImageCode
 
         else:
             ##
