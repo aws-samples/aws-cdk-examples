@@ -34,7 +34,7 @@ class RekognitionLambdaS3TriggerStack(core.Stack):
         # create DynamoDB table to hold Rekognition results
         table = ddb.Table(
             self, 'Classifications',
-            partition_key={'name': 'image_name', 'type': ddb.AttributeType.STRING}
+            partition_key=ddb.Attribute(name='image_name', type=ddb.AttributeType.STRING)
         )
 
         # create Lambda function

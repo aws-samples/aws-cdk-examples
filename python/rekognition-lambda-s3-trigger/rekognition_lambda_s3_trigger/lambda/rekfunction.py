@@ -3,7 +3,7 @@
 # Author: Katreena Mullican
 # Contact: mullicak@amazon.com
 #
-import boto3
+import boto3  # type: ignore
 import os
 import json
 
@@ -39,7 +39,7 @@ def handler(event, context):
         db_labels = json.loads(json_labels)
         for label in db_labels:
             db_result.append(label["Name"])
-        
+
         # Write results to DynamoDB
         dynamodb.put_item(TableName=(os.environ['TABLE_NAME']),
             Item = {
