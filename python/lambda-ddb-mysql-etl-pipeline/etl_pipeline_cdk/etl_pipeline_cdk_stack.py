@@ -49,10 +49,7 @@ class EtlPipelineCdkStack(core.Stack):
         ddb_asteroids_table = ddb.Table(
             self, "Table",
             table_name="asteroids_table",
-            partition_key={
-                "name": "id",
-                "type": ddb.AttributeType.STRING
-            },
+            partition_key=ddb.Attribute(name="id", type=ddb.AttributeType.STRING),
             removal_policy=core.RemovalPolicy.DESTROY # NOT recommended for production code
         )
 
