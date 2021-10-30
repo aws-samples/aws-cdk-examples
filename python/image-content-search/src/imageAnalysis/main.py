@@ -1,5 +1,5 @@
-import boto3
-import botocore.config
+import boto3  # type: ignore
+import botocore.config  # type: ignore
 import os, sys
 import logging
 import json
@@ -8,7 +8,7 @@ aws_config = botocore.config.Config(
     region_name = os.getenv('REGION'),
     signature_version = 'v4',
     retries = {
-        'max_attempts': int(os.getenv('DEFAULT_MAX_CALL_ATTEMPTS')),
+        'max_attempts': int(os.getenv('DEFAULT_MAX_CALL_ATTEMPTS', '1')),
         'mode': 'standard'
     }
 )
@@ -45,10 +45,10 @@ def handler(event, context):
             Image={'S3Object': {'Bucket': bucket, 'Name': key}},
             MaxLabels=20,
             MinConfidence=85)
-            
+
         detected_unsafe_contents = rekognition_client.detect_moderation_labels(
             Image={'S3Object': {'Bucket': bucket, 'Name': key}})
-               
+
         object_labels = []
 
         for l in detected_labels['Labels']:

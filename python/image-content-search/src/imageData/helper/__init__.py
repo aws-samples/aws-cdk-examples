@@ -1,5 +1,5 @@
-import boto3
-import botocore.config
+import boto3  # type: ignore
+import botocore.config  # type: ignore
 import logging
 import os
 
@@ -11,7 +11,7 @@ aws_config = botocore.config.Config(
     region_name = os.getenv('REGION'),
     signature_version = 'v4',
     retries = {
-        'max_attempts': int(os.getenv('DEFAULT_MAX_CALL_ATTEMPTS')),
+        'max_attempts': int(os.getenv('DEFAULT_MAX_CALL_ATTEMPTS', '1')),
         'mode': 'standard'
     }
 )
