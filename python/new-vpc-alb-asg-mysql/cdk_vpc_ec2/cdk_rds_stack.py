@@ -17,7 +17,7 @@ class CdkRdsStack(core.Stack):
         #                                         )
         #                                         instance_props=rds.InstanceProps(
         #                                             vpc=vpc,
-        #                                             vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.ISOLATED),
+        #                                             vpc_subnets=ec2.SubnetSelection(subnet_group_name="DB"),
         #                                             instance_type=ec2.InstanceType(instance_type_identifier="t2.small")
         #                                         ),
         #                                         instances=2,
@@ -37,6 +37,7 @@ class CdkRdsStack(core.Stack):
                                              instance_type=ec2.InstanceType.of(
                                                  ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.SMALL),
                                              vpc=vpc,
+                                             vpc_subnets=ec2.SubnetSelection(subnet_group_name="DB"),
                                              multi_az=True,
                                              allocated_storage=100,
                                              storage_type=rds.StorageType.GP2,
