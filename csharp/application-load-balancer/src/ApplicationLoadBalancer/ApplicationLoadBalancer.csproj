@@ -2,15 +2,15 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <!-- CDK Construct Library dependencies -->
-    <PackageReference Include="Amazon.CDK" Version="1.18.0" />
-    <PackageReference Include="Amazon.CDK.AWS.EC2" Version="1.18.0" />
-    <PackageReference Include="Amazon.CDK.AWS.ElasticLoadBalancingV2" Version="1.18.0" />
-    <PackageReference Include="Amazon.CDK.AWS.AutoScaling" Version="1.18.0" />
+    <PackageReference Include="Amazon.CDK" Version="*" />
+    <PackageReference Include="Amazon.CDK.AWS.EC2" Version="*" />
+    <PackageReference Include="Amazon.CDK.AWS.ElasticLoadBalancingV2" Version="*" />
+    <PackageReference Include="Amazon.CDK.AWS.AutoScaling" Version="*" />
   </ItemGroup>
 
 </Project>
