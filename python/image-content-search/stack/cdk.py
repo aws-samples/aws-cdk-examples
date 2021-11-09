@@ -16,7 +16,7 @@ from aws_cdk import (
 )
 
 from aws_cdk.aws_apigateway import (
-    RestApi, 
+    RestApi,
     LambdaIntegration,
     CfnAuthorizer,
     AuthorizationType,
@@ -25,7 +25,7 @@ from aws_cdk.aws_apigateway import (
 )
 
 from aws_cdk.aws_lambda import (
-    Code, 
+    Code,
     Function,
     Runtime
 )
@@ -77,8 +77,8 @@ class ImageContentSearchStack(core.Stack):
             code=Code.asset("./src/landingPage"))
 
         get_landing_page_integration = LambdaIntegration(
-            get_landing_page_function, 
-            proxy=True, 
+            get_landing_page_function,
+            proxy=True,
             integration_responses=[{
                 'statusCode': '200',
                'responseParameters': {
@@ -102,7 +102,7 @@ class ImageContentSearchStack(core.Stack):
             standard_attributes=_cognito.StandardAttributes(email=required_attribute), #required for self sign-up
             self_sign_up_enabled=configs["Cognito"]["SelfSignUp"])
 
-        user_pool_app_client = _cognito.CfnUserPoolClient(self, "ICS_USERS_POOL_APP_CLIENT", 
+        user_pool_app_client = _cognito.CfnUserPoolClient(self, "ICS_USERS_POOL_APP_CLIENT",
             supported_identity_providers=["COGNITO"],
             allowed_o_auth_flows=["implicit"],
             allowed_o_auth_scopes=configs["Cognito"]["AllowedOAuthScopes"],
@@ -111,8 +111,8 @@ class ImageContentSearchStack(core.Stack):
             allowed_o_auth_flows_user_pool_client=True,
             explicit_auth_flows=["ALLOW_REFRESH_TOKEN_AUTH"])
 
-        user_pool_domain = _cognito.UserPoolDomain(self, "ICS_USERS_POOL_DOMAIN", 
-            user_pool=users_pool, 
+        user_pool_domain = _cognito.UserPoolDomain(self, "ICS_USERS_POOL_DOMAIN",
+            user_pool=users_pool,
             cognito_domain=_cognito.CognitoDomainOptions(domain_prefix=configs["Cognito"]["DomainPrefix"]))
 
         ### get signed URL function
@@ -127,8 +127,8 @@ class ImageContentSearchStack(core.Stack):
             code=Code.asset("./src/getSignedUrl"))
 
         get_signedurl_integration = LambdaIntegration(
-            get_signedurl_function, 
-            proxy=True, 
+            get_signedurl_function,
+            proxy=True,
             integration_responses=[{
                 'statusCode': '200',
                'responseParameters': {
@@ -167,11 +167,11 @@ class ImageContentSearchStack(core.Stack):
         images_S3_bucket.grant_write(image_massage_function, "processed/*")
         images_S3_bucket.grant_delete(image_massage_function, "new/*")
         images_S3_bucket.grant_read(image_massage_function, "new/*")
-        
+
         new_image_added_notification = _s3notification.LambdaDestination(image_massage_function)
 
-        images_S3_bucket.add_event_notification(_s3.EventType.OBJECT_CREATED, 
-            new_image_added_notification, 
+        images_S3_bucket.add_event_notification(_s3.EventType.OBJECT_CREATED,
+            new_image_added_notification,
             _s3.NotificationKeyFilter(prefix="new/")
             )
 
@@ -188,15 +188,15 @@ class ImageContentSearchStack(core.Stack):
                 "REGION": core.Aws.REGION,
                 },
             handler="main.handler",
-            code=Code.asset("./src/imageAnalysis")) 
+            code=Code.asset("./src/imageAnalysis"))
 
         image_analyzer_function.add_event_source(_lambda_event_source.SqsEventSource(queue=image_queue, batch_size=10))
         image_queue.grant_consume_messages(image_massage_function)
 
         lambda_rekognition_access = _iam.PolicyStatement(
-            effect=_iam.Effect.ALLOW, 
+            effect=_iam.Effect.ALLOW,
             actions=["rekognition:DetectLabels", "rekognition:DetectModerationLabels"],
-            resources=["*"]                    
+            resources=["*"]
         )
 
         image_analyzer_function.add_to_role_policy(lambda_rekognition_access)
@@ -207,7 +207,7 @@ class ImageContentSearchStack(core.Stack):
         self.add_cors_options(api_gateway_landing_page_resource)
         self.add_cors_options(api_gateway_image_search_resource)
 
-        ### database 
+        ### database
         database_secret = _secrets_manager.Secret(self, "ICS_DATABASE_SECRET",
             secret_name="rds-db-credentials/image-content-search-rds-secret",
             generate_secret_string=_secrets_manager.SecretStringGenerator(
@@ -236,7 +236,7 @@ class ImageContentSearchStack(core.Stack):
         )
 
         database_cluster_arn = "arn:aws:rds:{}:{}:cluster:{}".format(core.Aws.REGION, core.Aws.ACCOUNT_ID, database.ref)
-   
+
         secret_target = _secrets_manager.CfnSecretTargetAttachment(self,"ICS_DATABASE_SECRET_TARGET",
             target_type="AWS::RDS::DBCluster",
             target_id=database.ref,
@@ -255,7 +255,7 @@ class ImageContentSearchStack(core.Stack):
                 _iam.ManagedPolicy.from_aws_managed_policy_name("AmazonRDSDataFullAccess")
             ]
         )
-        
+
         image_data_function = Function(self, "ICS_IMAGE_DATA",
             function_name="ICS_IMAGE_DATA",
             runtime=Runtime.PYTHON_3_7,
@@ -270,11 +270,11 @@ class ImageContentSearchStack(core.Stack):
                 },
             handler="main.handler",
             code=Code.asset("./src/imageData")
-        ) 
+        )
 
         image_search_integration = LambdaIntegration(
-            image_data_function, 
-            proxy=True, 
+            image_data_function,
+            proxy=True,
             integration_responses=[{
                 'statusCode': '200',
                'responseParameters': {
@@ -285,7 +285,7 @@ class ImageContentSearchStack(core.Stack):
         api_gateway_image_search_authorizer = CfnAuthorizer(self, "ICS_API_GATEWAY_IMAGE_SEARCH_AUTHORIZER",
             rest_api_id=api_gateway_image_search_resource.rest_api.rest_api_id,
             name="ICS_API_GATEWAY_IMAGE_SEARCH_AUTHORIZER",
-            type="COGNITO_USER_POOLS", 
+            type="COGNITO_USER_POOLS",
             identity_source="method.request.header.Authorization",
             provider_arns=[users_pool.user_pool_arn])
 
@@ -301,19 +301,19 @@ class ImageContentSearchStack(core.Stack):
 
 
         lambda_access_search = _iam.PolicyStatement(
-            effect=_iam.Effect.ALLOW, 
+            effect=_iam.Effect.ALLOW,
             actions=["translate:TranslateText"],
-            resources=["*"]            
-        ) 
+            resources=["*"]
+        )
 
         image_data_function.add_to_role_policy(lambda_access_search)
 
         ### custom resource
-        lambda_provider = Provider(self, 'ICS_IMAGE_DATA_PROVIDER', 
+        lambda_provider = Provider(self, 'ICS_IMAGE_DATA_PROVIDER',
             on_event_handler=image_data_function
         )
 
-        core.CustomResource(self, 'ICS_IMAGE_DATA_RESOURCE', 
+        core.CustomResource(self, 'ICS_IMAGE_DATA_RESOURCE',
             service_token=lambda_provider.service_token,
             pascal_case_properties=False,
             resource_type="Custom::SchemaCreation",
@@ -323,7 +323,7 @@ class ImageContentSearchStack(core.Stack):
         )
 
         ### event bridge
-        event_bus = _events.EventBus(self, "ICS_IMAGE_CONTENT_BUS")
+        event_bus = _events.EventBus(self, "ICS_IMAGE_CONTENT_BUS", event_bus_name="ImageContentBus")
 
         event_rule = _events.Rule(self, "ICS_IMAGE_CONTENT_RULE",
             rule_name="ICS_IMAGE_CONTENT_RULE",

@@ -22,10 +22,7 @@
         "@aws-cdk/aws-codepipeline": "*",
         "@aws-cdk/aws-codepipeline-actions": "*",
         "@aws-cdk/aws-cloudformation": "*",
-        "@types/jest": "^24.0.18",
         "@types/node": "^13.7.0",
-        "jest": "^24.9.0",
-        "ts-jest": "^24.0.2",
         "ts-node": "^8.1.0",
         "typescript": "^3.8.3",
         "prettier": "^2.0.4"
