@@ -54,7 +54,7 @@
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>core</artifactId>
-            <version>[1.19.0, 2)</version>
+            <version>[1.132.0, 2)</version>
         </dependency>
 
         <!-- Respective AWS Construct Libraries -->
@@ -62,12 +62,12 @@
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>stepfunctions</artifactId>
-            <version>[1.19.0, 2)</version>
+            <version>[1.132.0, 2)</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>stepfunctions-tasks</artifactId>
-            <version>[1.19.0, 2)</version>
+            <version>[1.132.0, 2)</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/junit/junit -->

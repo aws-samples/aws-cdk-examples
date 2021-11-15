@@ -51,7 +51,7 @@ public class ProjectStack extends Stack {
             }
         };
 
-        IBucket s3Bucket = Bucket.fromBucketName(this, id, "s3BucketName");
+        IBucket s3Bucket = Bucket.fromBucketName(this, id, "s3bucketname");
         ISource source = Source.s3(S3SourceProps.builder().bucket(s3Bucket).path("S3Path").build());
 
         IRole role = Role.fromRoleArn(this, "someId", "arn:partition:service:region:account-id:resource-type:resource-id");

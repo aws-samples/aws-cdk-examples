@@ -55,22 +55,22 @@
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>core</artifactId>
-            <version>[1.0.0,)</version>
+            <version>[1.132.0, 2)</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>ec2</artifactId>
-            <version>[1.0.0,)</version>
+            <version>[1.132.0, 2)</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>autoscaling</artifactId>
-            <version>[1.0.0,)</version>
+            <version>[1.132.0, 2)</version>
         </dependency>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>elasticloadbalancing</artifactId>
-            <version>[1.0.0,)</version>
+            <version>[1.132.0, 2)</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/junit/junit -->
         <dependency>
