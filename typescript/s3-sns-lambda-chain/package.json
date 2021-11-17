@@ -1,0 +1,33 @@
+{
+  "name": "s3_sns_sqs_lambda_chain",
+  "version": "0.1.0",
+  "bin": {
+    "s3_sns_sqs_lambda_chain": "bin/s3_sns_sqs_lambda_chain.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@aws-cdk/assertions": "1.132.0",
+    "@types/jest": "^26.0.10",
+    "@types/node": "10.17.27",
+    "aws-cdk": "1.132.0",
+    "jest": "^26.4.2",
+    "ts-jest": "^26.2.0",
+    "ts-node": "^9.0.0",
+    "typescript": "~3.9.7"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-lambda": "^1.132.0",
+    "@aws-cdk/aws-lambda-event-sources": "^1.132.0",
+    "@aws-cdk/aws-s3": "^1.132.0",
+    "@aws-cdk/aws-s3-notifications": "^1.132.0",
+    "@aws-cdk/aws-sns": "^1.132.0",
+    "@aws-cdk/aws-sns-subscriptions": "^1.132.0",
+    "@aws-cdk/aws-sqs": "^1.132.0",
+    "@aws-cdk/core": "1.132.0"
+  }
+}
