@@ -11,23 +11,23 @@
     "cdk": "cdk"
   },
   "devDependencies": {
-    "@aws-cdk/assertions": "*",
+    "@aws-cdk/assertions": "1.132.0",
     "@types/jest": "^26.0.10",
     "@types/node": "10.17.27",
-    "aws-cdk": "*",
+    "aws-cdk": "1.132.0",
     "jest": "^26.4.2",
     "ts-jest": "^26.2.0",
     "ts-node": "^9.0.0",
     "typescript": "~3.9.7"
   },
   "dependencies": {
-    "@aws-cdk/aws-lambda": "^*",
-    "@aws-cdk/aws-lambda-event-sources": "^*",
-    "@aws-cdk/aws-s3": "^*",
-    "@aws-cdk/aws-s3-notifications": "^*",
-    "@aws-cdk/aws-sns": "^*",
-    "@aws-cdk/aws-sns-subscriptions": "^*",
-    "@aws-cdk/aws-sqs": "^*",
+    "@aws-cdk/aws-lambda-nodejs": "*",
+    "@aws-cdk/aws-lambda-event-sources": "*",
+    "@aws-cdk/aws-s3": "*",
+    "@aws-cdk/aws-s3-notifications": "*",
+    "@aws-cdk/aws-sns": "*",
+    "@aws-cdk/aws-sns-subscriptions": "*",
+    "@aws-cdk/aws-sqs": "*",
     "@aws-cdk/core": "*"
   }
 }

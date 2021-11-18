@@ -3,10 +3,12 @@ import * as cdk from '@aws-cdk/core';
 import * as sqs from '@aws-cdk/aws-sqs';
 import * as sns from '@aws-cdk/aws-sns';
 import * as s3 from '@aws-cdk/aws-s3';
-import * as lambda from '@aws-cdk/aws-lambda';
+import * as lambdaNodejs from '@aws-cdk/aws-lambda-nodejs';
 import * as lambdaEvents from '@aws-cdk/aws-lambda-event-sources';
 import * as snsSubscriptions from '@aws-cdk/aws-sns-subscriptions';
 import * as s3Notifications from '@aws-cdk/aws-s3-notifications';
+import { join } from 'path'
+
 export class S3SnsSqsLambdaChainStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -83,14 +85,11 @@ export class S3SnsSqsLambdaChainStack extends cdk.Stack {
         }
     );
 
-    const lambdaFunction = new lambda.Function(
-      this,
-      'lambdaFunction', {
-        runtime: lambda.Runtime.NODEJS_14_X,
-        handler: 'lambda.handler',
-        code: lambda.Code.fromAsset('lambda')
-      }
-    );
+
+    const lambdaFunction = new lambdaNodejs.NodejsFunction(this, 'lambdaFunction', {
+      entry: join(__dirname, '..', 'lambda', 'lambda.ts'),
+      handler: 'lambda.handler'
+    });
 
     // This binds the lambda to the SQS Queue
     const invokeEventSource = new lambdaEvents.SqsEventSource(uploadQueue);
