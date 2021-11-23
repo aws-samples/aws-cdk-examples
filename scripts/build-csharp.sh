@@ -7,7 +7,7 @@ cd $scriptdir/../csharp
 npm install
 
 # Find and build all CSharp projects
-for projFile in $(find $scriptdir/../csharp -name cdk.json); do
+for projFile in $(find $scriptdir/../csharp -name cdk.json | grep -v node_modules); do
     (
         echo "=============================="
         echo "building project: $projFile"
