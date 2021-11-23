@@ -16,6 +16,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "*",
+    "aws-cdk": "*",
     "esbuild": "*",
     "typescript": "^3.8"
   },
