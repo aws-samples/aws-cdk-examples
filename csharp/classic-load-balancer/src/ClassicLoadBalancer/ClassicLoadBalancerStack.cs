@@ -2,6 +2,7 @@ using Amazon.CDK;
 using Amazon.CDK.AWS.AutoScaling;
 using Amazon.CDK.AWS.EC2;
 using Amazon.CDK.AWS.ElasticLoadBalancing;
+using Constructs;
 
 namespace ClassicLoadBalancer
 {
