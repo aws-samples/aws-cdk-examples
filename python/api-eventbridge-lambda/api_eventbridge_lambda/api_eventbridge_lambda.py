@@ -1,3 +1,4 @@
+from constructs import Construct
 from aws_cdk import (
     aws_lambda as _lambda,
     aws_apigateway as api_gw,
@@ -6,13 +7,13 @@ from aws_cdk import (
     aws_kinesisfirehose as _firehose,
     aws_iam as iam,
     aws_s3 as s3,
-    core
+    Stack
 )
 
 
-class ApiEventBridgeLambdaStack(core.Stack):
+class ApiEventBridgeLambdaStack(Stack):
 
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         #

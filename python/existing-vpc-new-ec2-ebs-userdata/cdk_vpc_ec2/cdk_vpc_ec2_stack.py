@@ -1,5 +1,6 @@
-from aws_cdk import core
+from aws_cdk import CfnOutput, Stack
 import aws_cdk.aws_ec2 as ec2
+from constructs import Construct
 
 vpc_id = "MY-VPC-ID"  # Import an Exist VPC
 ec2_type = "t2.micro"
@@ -12,9 +13,9 @@ with open("./user_data/user_data.sh") as f:
     user_data = f.read()
 
 
-class CdkVpcEc2Stack(core.Stack):
+class CdkVpcEc2Stack(Stack):
 
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # The code that defines your stack goes here
@@ -50,5 +51,5 @@ class CdkVpcEc2Stack(core.Stack):
         host.connections.allow_from_any_ipv4(
             ec2.Port.tcp(80), "Allow http from internet")
 
-        core.CfnOutput(self, "Output",
+        CfnOutput(self, "Output",
                        value=host.instance_public_ip)

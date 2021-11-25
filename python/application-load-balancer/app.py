@@ -4,12 +4,12 @@ from aws_cdk import (
     aws_autoscaling as autoscaling,
     aws_ec2 as ec2,
     aws_elasticloadbalancingv2 as elbv2,
-    core,
+    App, CfnOutput, Stack
 )
 
 
-class LoadBalancerStack(core.Stack):
-    def __init__(self, app: core.App, id: str) -> None:
+class LoadBalancerStack(Stack):
+    def __init__(self, app: App, id: str) -> None:
         super().__init__(app, id)
 
         vpc = ec2.Vpc(self, "VPC")
@@ -40,9 +40,9 @@ class LoadBalancerStack(core.Stack):
         listener.connections.allow_default_port_from_any_ipv4("Open to the world")
 
         asg.scale_on_request_count("AModestLoad", target_requests_per_second=1)
-        core.CfnOutput(self,"LoadBalancer",export_name="LoadBalancer",value=lb.load_balancer_dns_name)
+        CfnOutput(self,"LoadBalancer",export_name="LoadBalancer",value=lb.load_balancer_dns_name)
 
 
-app = core.App()
+app = App()
 LoadBalancerStack(app, "LoadBalancerStack")
 app.synth()
