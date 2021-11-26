@@ -7,7 +7,7 @@ cd $scriptdir/../java
 npm install
 
 # Find and build all Maven projects
-for pomFile in $(find $scriptdir/../java -name pom.xml); do
+for pomFile in $(find $scriptdir/../java -name pom.xml | grep -v node_modules); do
     (
         echo "=============================="
         echo "building project: $(dirname $pomFile)"
