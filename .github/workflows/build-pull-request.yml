@@ -18,6 +18,11 @@ jobs:
         with:
           fetch-depth: 2
 
+      - name: Set up Node
+        uses: actions/setup-node@v2.4.1
+        with:
+          node-version: 14
+
       - name: Check files
         id: check_files
         run: |
