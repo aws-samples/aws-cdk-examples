@@ -54,20 +54,14 @@
         <!-- AWS Cloud Development Kit -->
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
-            <artifactId>core</artifactId>
-            <version>[1.132.0, 2)</version>
+            <artifactId>aws-cdk-lib</artifactId>
+            <version>[2.0.0-rc.33,)</version>
         </dependency>
 
-        <!-- Respective AWS Construct Libraries -->
         <dependency>
-            <groupId>software.amazon.awscdk</groupId>
-            <artifactId>cloudformation</artifactId>
-            <version>[1.132.0, 2)</version>
-        </dependency>
-        <dependency>
-            <groupId>software.amazon.awscdk</groupId>
-            <artifactId>lambda</artifactId>
-            <version>[1.132.0, 2)</version>
+            <groupId>software.constructs</groupId>
+            <artifactId>constructs</artifactId>
+            <version>[10.0.0,)</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/junit/junit -->

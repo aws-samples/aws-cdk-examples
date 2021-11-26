@@ -1,14 +1,14 @@
 from aws_cdk import (
-    core,
     aws_apigateway as apigw,
     aws_s3 as s3,
-    aws_iam as iam
+    aws_iam as iam,
+    App, Stack
 )
 
 
-class MyWidgetServiceStack(core.Stack):
+class MyWidgetServiceStack(Stack):
 
-    def __init__(self, app: core.App, id: str, **kwargs) -> None:
+    def __init__(self, app: App, id: str, **kwargs) -> None:
         super().__init__(app, id)
 
         bucket: s3.Bucket = s3.Bucket(self, "WidgetStore")

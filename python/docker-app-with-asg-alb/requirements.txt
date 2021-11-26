@@ -1,6 +1,2 @@
--e .
-aws-cdk.aws-ec2
-aws-cdk.aws-autoscaling
-aws-cdk.aws-elasticloadbalancingv2
-aws-cdk.aws-rds
-aws-cdk.aws-efs
+aws-cdk-lib>=2.0.0rc33
+constructs>=10.0.0

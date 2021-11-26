@@ -1,10 +1,10 @@
-from aws_cdk import core
+from aws_cdk import CfnOutput, Stack
 import aws_cdk.aws_ec2 as ec2
+from constructs import Construct
 
+class CdkVpcStack(Stack):
 
-class CdkVpcStack(core.Stack):
-
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # The code that defines your stack goes here
@@ -18,11 +18,11 @@ class CdkVpcStack(core.Stack):
                                name="Public",
                                cidr_mask=24
                            ), ec2.SubnetConfiguration(
-                               subnet_type=ec2.SubnetType.PRIVATE,
+                               subnet_type=ec2.SubnetType.PRIVATE_WITH_NAT,
                                name="Private",
                                cidr_mask=24
                            ), ec2.SubnetConfiguration(
-                               subnet_type=ec2.SubnetType.ISOLATED,
+                               subnet_type=ec2.SubnetType.PRIVATE_ISOLATED,
                                name="DB",
                                cidr_mask=24
                            )
@@ -30,5 +30,5 @@ class CdkVpcStack(core.Stack):
                            # nat_gateway_provider=ec2.NatProvider.gateway(),
                            nat_gateways=2,
                            )
-        core.CfnOutput(self, "Output",
+        CfnOutput(self, "Output",
                        value=self.vpc.vpc_id)

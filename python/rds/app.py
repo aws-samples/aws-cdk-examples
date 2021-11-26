@@ -3,12 +3,12 @@
 from aws_cdk import (
     aws_ec2 as ec2,
     aws_rds as rds,
-    core,
+    App, RemovalPolicy, Stack
 )
 
 
-class RDSStack(core.Stack):
-    def __init__(self, app: core.App, id: str, **kwargs) -> None:
+class RDSStack(Stack):
+    def __init__(self, app: App, id: str, **kwargs) -> None:
         super().__init__(app, id, **kwargs)
 
         vpc = ec2.Vpc(self, "VPC")
@@ -25,11 +25,11 @@ class RDSStack(core.Stack):
                 ec2.InstanceClass.MEMORY4,
                 ec2.InstanceSize.LARGE,
             ),
-            removal_policy=core.RemovalPolicy.DESTROY,
+            removal_policy=RemovalPolicy.DESTROY,
             deletion_protection=False
         ),
 
 
-app = core.App()
+app = App()
 RDSStack(app, "RDSStack")
 app.synth()

@@ -1,4 +1,2 @@
-aws-cdk.aws-kinesis
-aws-cdk.aws-lambda
-aws-cdk-aws-lambda-event-sources
-aws-cdk.core
+aws-cdk-lib>=2.0.0rc33
+constructs>=10.0.0

@@ -1,7 +1,3 @@
+aws-cdk-lib>=2.0.0rc33
+constructs>=10.0.0
 pytest
-aws-cdk.core
-aws-cdk.aws-s3
-aws-cdk.aws-cloudfront
-aws-cdk.aws-cloudfront-origins
-aws-cdk.aws-route53
-aws-cdk.aws-route53-targets

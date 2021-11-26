@@ -1,12 +1,12 @@
 package main
 
 import (
-	cdk "github.com/aws/aws-cdk-go/awscdk"
+	cdk "github.com/aws/aws-cdk-go/awscdk/v2"
 
-	ec2 "github.com/aws/aws-cdk-go/awscdk/awsec2"
-	ecs "github.com/aws/aws-cdk-go/awscdk/awsecs"
-	elb "github.com/aws/aws-cdk-go/awscdk/awselasticloadbalancingv2"
-	"github.com/aws/constructs-go/constructs/v3"
+	ec2 "github.com/aws/aws-cdk-go/awscdk/v2/awsec2"
+	ecs "github.com/aws/aws-cdk-go/awscdk/v2/awsecs"
+	elb "github.com/aws/aws-cdk-go/awscdk/v2/awselasticloadbalancingv2"
+	"github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
 	"os"
 )

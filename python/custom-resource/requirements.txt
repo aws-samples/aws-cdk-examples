@@ -1,2 +1,0 @@
-aws-cdk.core
-aws_cdk.custom_resources
