@@ -18,11 +18,11 @@ class CdkVpcStack(Stack):
                                name="Public",
                                cidr_mask=24
                            ), ec2.SubnetConfiguration(
-                               subnet_type=ec2.SubnetType.PRIVATE,
+                               subnet_type=ec2.SubnetType.PRIVATE_WITH_NAT,
                                name="Private",
                                cidr_mask=24
                            ), ec2.SubnetConfiguration(
-                               subnet_type=ec2.SubnetType.ISOLATED,
+                               subnet_type=ec2.SubnetType.PRIVATE_ISOLATED,
                                name="DB",
                                cidr_mask=24
                            )

@@ -31,7 +31,7 @@ class ASGStack(Stack):
                 generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2
                 ),
             key_name="evan",
-            vpc_subnets=ec2.SubnetSelection(subnet_type=SubnetType.PRIVATE),
+            vpc_subnets=ec2.SubnetSelection(subnet_type=SubnetType.PRIVATE_WITH_NAT),
             user_data=userdata,
         )
 

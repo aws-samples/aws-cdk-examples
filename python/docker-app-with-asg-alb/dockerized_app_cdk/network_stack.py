@@ -14,7 +14,7 @@ class NetworkStack(Stack):
                 cidr_mask=24)
         subnet2 = SubnetConfiguration(
                 name="Private",
-                subnet_type=SubnetType.PRIVATE,
+                subnet_type=SubnetType.PRIVATE_WITH_NAT,
                 cidr_mask=24)
 
         vpc = Vpc(self,

@@ -49,7 +49,7 @@ class CdkEc2Stack(Stack):
         # Create Autoscaling Group with fixed 2*EC2 hosts
         self.asg = autoscaling.AutoScalingGroup(self, "myASG",
                                                 vpc=vpc,
-                                                vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE),
+                                                vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE_WITH_NAT),
                                                 instance_type=ec2.InstanceType(instance_type_identifier=ec2_type),
                                                 machine_image=linux_ami,
                                                 key_name=key_name,
