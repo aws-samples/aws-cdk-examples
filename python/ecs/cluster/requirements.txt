@@ -1,7 +1,2 @@
-aws-cdk.core
-aws-cdk.aws_autoscaling
-aws-cdk.aws_ec2
-aws-cdk.aws_ecs
-
-# Work around for jsii#413
-aws-cdk.aws-autoscaling-common
+aws-cdk-lib>=2.0.0rc33
+constructs>=10.0.0

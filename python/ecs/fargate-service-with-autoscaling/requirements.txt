@@ -1,8 +1,3 @@
-aws-cdk.core
-aws-cdk.aws_ec2
-aws-cdk.aws_ecs
-aws-cdk.aws_ecs_patterns
-aws-cdk.aws_elasticloadbalancingv2
-
+aws-cdk-lib>=2.0.0rc33
+constructs>=10.0.0
 # Work around for jsii#413
-aws-cdk.aws-autoscaling-common

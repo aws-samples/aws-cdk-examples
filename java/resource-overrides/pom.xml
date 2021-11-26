@@ -53,29 +53,16 @@
     </build>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/software.amazon.awscdk/core -->
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
-            <artifactId>core</artifactId>
-            <version>[1.132.0, 2)</version>
+            <artifactId>aws-cdk-lib</artifactId>
+            <version>[2.0.0-rc.33,)</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/software.amazon.awscdk/s3 -->
+
         <dependency>
-            <groupId>software.amazon.awscdk</groupId>
-            <artifactId>s3</artifactId>
-            <version>[1.132.0, 2)</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/software.amazon.awscdk/ec2 -->
-        <dependency>
-            <groupId>software.amazon.awscdk</groupId>
-            <artifactId>ec2</artifactId>
-            <version>[1.132.0, 2)</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/software.amazon.awscdk/autoscaling -->
-        <dependency>
-            <groupId>software.amazon.awscdk</groupId>
-            <artifactId>autoscaling</artifactId>
-            <version>[1.132.0, 2)</version>
+            <groupId>software.constructs</groupId>
+            <artifactId>constructs</artifactId>
+            <version>[10.0.0,)</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->

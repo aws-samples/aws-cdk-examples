@@ -2,12 +2,12 @@ from aws_cdk import (
     aws_stepfunctions as _aws_stepfunctions,
     aws_stepfunctions_tasks as _aws_stepfunctions_tasks,
     aws_lambda as _lambda,
-    core,
+    App, Duration, Stack
 )
 
 
-class JobPollerStack(core.Stack):
-    def __init__(self, app: core.App, id: str, **kwargs) -> None:
+class JobPollerStack(Stack):
+    def __init__(self, app: App, id: str, **kwargs) -> None:
         super().__init__(app, id, **kwargs)
 
         # Lambda Handlers Definitions
@@ -15,12 +15,12 @@ class JobPollerStack(core.Stack):
         submit_lambda = _lambda.Function(self, 'submitLambda',
                                          handler='lambda_function.lambda_handler',
                                          runtime=_lambda.Runtime.PYTHON_3_9,
-                                         code=_lambda.Code.asset('lambdas/submit'))
+                                         code=_lambda.Code.from_asset('lambdas/submit'))
 
         status_lambda = _lambda.Function(self, 'statusLambda',
                                          handler='lambda_function.lambda_handler',
                                          runtime=_lambda.Runtime.PYTHON_3_9,
-                                         code=_lambda.Code.asset('lambdas/status'))
+                                         code=_lambda.Code.from_asset('lambdas/status'))
 
         # Step functions Definition
 
@@ -33,7 +33,7 @@ class JobPollerStack(core.Stack):
         wait_job = _aws_stepfunctions.Wait(
             self, "Wait 30 Seconds",
             time=_aws_stepfunctions.WaitTime.duration(
-                core.Duration.seconds(30))
+                Duration.seconds(30))
         )
 
         status_job = _aws_stepfunctions_tasks.LambdaInvoke(
@@ -66,5 +66,5 @@ class JobPollerStack(core.Stack):
         sm = _aws_stepfunctions.StateMachine(
             self, "StateMachine",
             definition=definition,
-            timeout=core.Duration.minutes(5),
+            timeout=Duration.minutes(5),
         )

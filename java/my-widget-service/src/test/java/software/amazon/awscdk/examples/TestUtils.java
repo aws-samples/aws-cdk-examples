@@ -7,8 +7,8 @@ import java.net.URL;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
-import software.amazon.awscdk.core.ConstructNode;
-import software.amazon.awscdk.core.Stack;
+import software.amazon.awscdk.App;
+import software.amazon.awscdk.Stack;
 
 public class TestUtils {
   private static ObjectMapper JSON = new ObjectMapper();
@@ -17,11 +17,10 @@ public class TestUtils {
     return JSON.readTree(fileResource);
   }
 
-  static JsonNode toCloudFormationJson(final Stack stack) throws IOException {
-    ConstructNode rootNode = stack.getNode().getRoot().getNode();
+  static JsonNode toCloudFormationJson(final App app, final Stack stack) throws IOException {
     JsonNode n =
         JSON.valueToTree(
-            ConstructNode.synth(rootNode).getStack(stack.getStackName()).getTemplate());
+            app.synth().getStackByName(stack.getStackName()).getTemplate());
     System.out.println(JSON.writerWithDefaultPrettyPrinter().writeValueAsString(n));
     return n;
   }

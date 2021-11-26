@@ -1,6 +1,7 @@
 using Amazon.CDK;
 using Amazon.CDK.AWS.StepFunctions;
 using Amazon.CDK.AWS.StepFunctions.Tasks;
+using Constructs;
 
 namespace StepfunctionsJobPoller
 {
@@ -10,11 +11,11 @@ namespace StepfunctionsJobPoller
         {
             var submitJobActivity = new Activity(this, "SubmitJob");
             var checkJobActivity = new Activity(this, "CheckJob");
-            
-            var submitJob = new Task(this, "Submit Job", new TaskProps
+
+            var submitJob = new StepFunctionsInvokeActivity(this, "Submit Job", new StepFunctionsInvokeActivityProps
             {
-                Task = new InvokeActivity(submitJobActivity),
-                ResultPath= "$.guid"
+                Activity = submitJobActivity,
+                ResultPath = "$.guid"
             });
 
             var waitX = new Wait(this, "Wait X Seconds", new WaitProps
@@ -22,9 +23,9 @@ namespace StepfunctionsJobPoller
                 Time = WaitTime.SecondsPath("$.wait_time")
             });
 
-            var getStatus = new Task(this, "Get Job Status", new TaskProps
+            var getStatus = new StepFunctionsInvokeActivity(this, "Get Job Status", new StepFunctionsInvokeActivityProps
             {
-                Task = new InvokeActivity(checkJobActivity),
+                Activity = checkJobActivity,
                 InputPath = "$.guid",
                 ResultPath = "$.status"
             });
@@ -37,9 +38,9 @@ namespace StepfunctionsJobPoller
                 Error = "DescribeJob returned FAILED"
             });
 
-            var finalStatus = new Task(this, "Get Final Job Status", new TaskProps
+            var finalStatus = new StepFunctionsInvokeActivity(this, "Get Final Job Status", new StepFunctionsInvokeActivityProps
             {
-                Task = new InvokeActivity(checkJobActivity),
+                Activity = checkJobActivity,
                 InputPath = "$.guid"
             });
 
@@ -51,7 +52,7 @@ namespace StepfunctionsJobPoller
                 .When(Condition.StringEquals("$.status", "FAILED"), jobFailed)
                 .When(Condition.StringEquals("$.status", "SUCCEEDED"), finalStatus)
                 .Otherwise(waitX));
-            
+
             new StateMachine(this, "StateMachine", new StateMachineProps
             {
                 Definition = chain,

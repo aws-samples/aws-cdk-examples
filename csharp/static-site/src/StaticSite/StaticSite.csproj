@@ -3,17 +3,13 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <!-- Roll forward to future major versions of the netcoreapp as needed -->
+    <RollForward>Major</RollForward>
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- CDK Construct Library dependencies -->
-    <PackageReference Include="Amazon.CDK" Version="*" />
-    <PackageReference Include="Amazon.CDK.AWS.CloudFront" Version="*" />
-    <PackageReference Include="Amazon.CDK.AWS.Route53" Version="*" />
-    <PackageReference Include="Amazon.CDK.AWS.Route53.Targets" Version="*" />
-    <PackageReference Include="Amazon.CDK.AWS.S3" Version="*" />
-    <PackageReference Include="Amazon.CDK.AWS.S3.Deployment" Version="*" />
-    <PackageReference Include="Amazon.CDK.AWS.CertificateManager" Version="*" />
+    <PackageReference Include="Amazon.CDK.Lib" Version="2.0.0-*" />
+    <PackageReference Include="Constructs" Version="10.0.0" />
   </ItemGroup>
 
 </Project>
