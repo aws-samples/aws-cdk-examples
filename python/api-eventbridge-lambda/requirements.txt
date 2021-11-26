@@ -1,3 +1,3 @@
-aws-cdk-lib>=2.0.0rc31
+aws-cdk-lib>=2.0.0rc32
 constructs>=10.0.0
 aws_lambda_powertools

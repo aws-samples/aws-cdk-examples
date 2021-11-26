@@ -16,7 +16,7 @@ for projFile in $(find $scriptdir/../go -name cdk.json | grep -v node_modules); 
         cd $(dirname $projFile)
         if [[ -f DO_NOT_AUTOTEST ]]; then exit 0; fi
 
-        go build
+        go get -d -t && go build
 
         $scriptdir/synth.sh
     )
