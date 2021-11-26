@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import software.amazon.awscdk.core.Construct;
-import software.amazon.awscdk.core.Duration;
-import software.amazon.awscdk.core.Stack;
+import software.constructs.Construct;
+import software.amazon.awscdk.Duration;
+import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.services.apigateway.LambdaIntegration;
 import software.amazon.awscdk.services.apigateway.Resource;
 import software.amazon.awscdk.services.apigateway.RestApi;
@@ -35,11 +35,10 @@ public class MyWidgetServiceStack extends Stack {
     managedPolicyArray.add(
         (IManagedPolicy) ManagedPolicy.fromAwsManagedPolicyName("AmazonS3FullAccess"));
 
-    Role restApiRole =
-        Role.Builder.create(this, "RestAPIRole")
-            .assumedBy(new ServicePrincipal("apigateway.amazonaws.com"))
-            .managedPolicies(managedPolicyArray)
-            .build();
+    Role.Builder.create(this, "RestAPIRole")
+        .assumedBy(new ServicePrincipal("apigateway.amazonaws.com"))
+        .managedPolicies(managedPolicyArray)
+        .build();
 
     Map<String, String> environmentVariables = new HashMap<String, String>();
     environmentVariables.put("BUCKET", bucket.getBucketName());

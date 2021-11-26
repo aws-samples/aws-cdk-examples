@@ -5,6 +5,7 @@ using Amazon.CDK.AWS.S3;
 using Amazon.CDK.AWS.S3.Deployment;
 using Amazon.CDK.AWS.CertificateManager;
 using Amazon.CDK.AWS.CloudFront;
+using Constructs;
 using System.Linq;
 
 namespace StaticSite
@@ -18,7 +19,7 @@ namespace StaticSite
 
     public class StaticSiteConstruct : Construct
     {
-        
+
         // A simple construct that contains a collection of AWS S3 buckets.
         public StaticSiteConstruct(Construct scope, string id, StaticSiteConstructProps props) : base(scope, id)
         {
@@ -32,7 +33,7 @@ namespace StaticSite
             {
                 Value = $"https://{siteDomain}"
             });
-            
+
             var siteBucket = new Bucket(this, "SiteBucket", new BucketProps
             {
                 BucketName = siteDomain,

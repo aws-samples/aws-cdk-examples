@@ -45,24 +45,15 @@
 
   <dependencies>
     <dependency>
-      <groupId>software.amazon.awscdk</groupId>
-      <artifactId>core</artifactId>
-      <version>[1.19.0, 2)</version>
+        <groupId>software.amazon.awscdk</groupId>
+        <artifactId>aws-cdk-lib</artifactId>
+        <version>[2.0.0-rc.33,)</version>
     </dependency>
-   <dependency>
-      <groupId>software.amazon.awscdk</groupId>
-      <artifactId>s3</artifactId>
-      <version>[1.19.0, 2)</version>
-    </dependency>
+
     <dependency>
-      <groupId>software.amazon.awscdk</groupId>
-      <artifactId>lambda</artifactId>
-      <version>[1.19.0, 2)</version>
-    </dependency>
-    <dependency>
-      <groupId>software.amazon.awscdk</groupId>
-      <artifactId>s3-notifications</artifactId>
-      <version>1.130.0</version>
+        <groupId>software.constructs</groupId>
+        <artifactId>constructs</artifactId>
+        <version>[10.0.0,)</version>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/junit/junit -->

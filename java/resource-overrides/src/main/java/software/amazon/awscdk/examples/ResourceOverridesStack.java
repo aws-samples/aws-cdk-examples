@@ -3,13 +3,14 @@ package software.amazon.awscdk.examples;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
-import software.amazon.awscdk.core.*;
+import software.amazon.awscdk.*;
 import software.amazon.awscdk.services.autoscaling.AutoScalingGroup;
 import software.amazon.awscdk.services.autoscaling.CfnLaunchConfiguration;
 import software.amazon.awscdk.services.ec2.*;
 import software.amazon.awscdk.services.s3.Bucket;
 import software.amazon.awscdk.services.s3.BucketEncryption;
 import software.amazon.awscdk.services.s3.CfnBucket;
+import software.constructs.Construct;
 
 /**
  * This is an example of how to override properties of underlying CloudFormation resource of

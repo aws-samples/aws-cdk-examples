@@ -1,2 +1,2 @@
-aws-cdk.aws-lambda
-aws-cdk.core
+aws-cdk-lib>=2.0.0rc33
+constructs>=10.0.0

@@ -1,21 +1,17 @@
 package software.amazon.awscdk.examples;
 
-import software.amazon.awscdk.core.Aws;
-import software.amazon.awscdk.core.Stack;
-import software.amazon.awscdk.core.Construct;
-import software.amazon.awscdk.core.Duration;
+import software.amazon.awscdk.Stack;
+import software.constructs.Construct;
+import software.amazon.awscdk.Duration;
 import software.amazon.awscdk.services.iam.*;
 import software.amazon.awscdk.services.lambda.Code;
 import software.amazon.awscdk.services.lambda.Function;
-import software.amazon.awscdk.services.lambda.Permission;
 import software.amazon.awscdk.services.s3.Bucket;
 import software.amazon.awscdk.services.s3.notifications.LambdaDestination;
 import software.amazon.awscdk.services.lambda.Runtime;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
-import static software.amazon.awscdk.services.s3.EventType.*;
 import static software.amazon.awscdk.services.s3.EventType.OBJECT_CREATED;
 
 
@@ -86,15 +82,6 @@ class S3LambdaStack extends Stack {
       //configure s3 notifications
       LambdaDestination functionDestination = new LambdaDestination(lambda);
       s3.addEventNotification(OBJECT_CREATED,functionDestination);
-
-
-
-    }
-
-    @Override
-    public List<String> validate() {
-      System.err.println("Validating S3NotificationsLambda...");
-      return Collections.emptyList();
     }
   }
 }

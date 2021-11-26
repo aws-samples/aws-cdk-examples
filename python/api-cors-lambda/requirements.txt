@@ -1,4 +1,2 @@
-aws-cdk.core
-
-aws-cdk.aws_lambda
-aws-cdk.aws_apigateway
+aws-cdk-lib>=2.0.0rc33
+constructs>=10.0.0

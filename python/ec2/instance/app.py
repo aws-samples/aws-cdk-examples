@@ -5,15 +5,17 @@ from aws_cdk.aws_s3_assets import Asset
 from aws_cdk import (
     aws_ec2 as ec2,
     aws_iam as iam,
-    core    
+    App, Stack
 )
+
+from constructs import Construct
 
 dirname = os.path.dirname(__file__)
 
 
-class EC2InstanceStack(core.Stack):
+class EC2InstanceStack(Stack):
 
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # VPC
@@ -22,7 +24,7 @@ class EC2InstanceStack(core.Stack):
             subnet_configuration=[ec2.SubnetConfiguration(name="public",subnet_type=ec2.SubnetType.PUBLIC)]
             )
 
-        # AMI 
+        # AMI
         amzn_linux = ec2.MachineImage.latest_amazon_linux(
             generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2,
             edition=ec2.AmazonLinuxEdition.STANDARD,
@@ -56,7 +58,7 @@ class EC2InstanceStack(core.Stack):
             )
         asset.grant_read(instance.role)
 
-app = core.App()
+app = App()
 EC2InstanceStack(app, "ec2-instance")
 
 app.synth()

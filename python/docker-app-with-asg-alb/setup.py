@@ -18,10 +18,6 @@ setuptools.setup(
     package_dir={"": "dockerized_app_cdk"},
     packages=setuptools.find_packages(where="dockerized_app_cdk"),
 
-    install_requires=[
-        "aws-cdk.core",
-    ],
-
     python_requires=">=3.6",
 
     classifiers=[

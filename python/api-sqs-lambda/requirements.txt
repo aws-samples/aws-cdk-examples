@@ -1,7 +1,2 @@
-aws-cdk.core
-
-aws-cdk.aws_lambda
-aws-cdk.aws_lambda_event_sources
-aws-cdk.aws_sqs
-aws-cdk.aws_iam
-aws-cdk.aws_apigateway
+aws-cdk-lib>=2.0.0rc33
+constructs>=10.0.0

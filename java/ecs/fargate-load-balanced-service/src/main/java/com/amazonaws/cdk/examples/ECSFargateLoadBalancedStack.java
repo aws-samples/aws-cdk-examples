@@ -1,6 +1,6 @@
 package com.amazonaws.cdk.examples;
 
-import software.amazon.awscdk.core.*;
+import software.amazon.awscdk.*;
 import software.amazon.awscdk.services.ec2.Vpc;
 import software.amazon.awscdk.services.ec2.VpcProps;
 import software.amazon.awscdk.services.ecs.Cluster;
@@ -9,6 +9,7 @@ import software.amazon.awscdk.services.ecs.ContainerImage;
 import software.amazon.awscdk.services.ecs.patterns.NetworkLoadBalancedFargateService;
 import software.amazon.awscdk.services.ecs.patterns.NetworkLoadBalancedFargateServiceProps;
 import software.amazon.awscdk.services.ecs.patterns.NetworkLoadBalancedTaskImageOptions;
+import software.constructs.Construct;
 
 public class ECSFargateLoadBalancedStack extends Stack {
 
@@ -26,7 +27,7 @@ public class ECSFargateLoadBalancedStack extends Stack {
         Cluster cluster = new Cluster(this, "Ec2Cluster", ClusterProps.builder().vpc(vpc).build());
 
         // Use the ECS Network Load Balanced Fargate Service construct to create a ECS service
-        NetworkLoadBalancedFargateService fargateService = new NetworkLoadBalancedFargateService(
+        new NetworkLoadBalancedFargateService(
                 this,
                 "FargateService",
                 NetworkLoadBalancedFargateServiceProps.builder()
