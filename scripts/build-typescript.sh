@@ -12,8 +12,6 @@ for pkgJson in $(find typescript -name cdk.json | grep -v node_modules | sort); 
         cd $(dirname $pkgJson)
         if [[ -f DO_NOT_AUTOTEST ]]; then exit 0; fi
 
-        verify_star_dependencies
-
         rm -rf package-lock.json node_modules
         npm install
         npm run build
