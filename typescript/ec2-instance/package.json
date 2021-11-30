@@ -15,10 +15,8 @@
     "typescript": "~3.9.7"
   },
   "dependencies": {
-    "@aws-cdk/aws-ec2": "*",
-    "@aws-cdk/aws-lambda": "*",
-    "@aws-cdk/core": "*",
-    "cdk-ec2-key-pair": "*",
+    "aws-cdk-lib": "^2.0.0-rc.33",
+    "constructs": "^10.0.0",
     "source-map-support": "^0.5.16"
   }
 }

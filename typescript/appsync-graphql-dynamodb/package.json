@@ -16,12 +16,10 @@
   "devDependencies": {
     "@types/node": "^10.17.0",
     "aws-cdk": "*",
-    "typescript": "~3.7.2"
+    "typescript": "~3.9.7"
   },
   "dependencies": {
-    "@aws-cdk/aws-appsync": "*",
-    "@aws-cdk/aws-dynamodb": "*",
-    "@aws-cdk/aws-iam": "*",
-    "@aws-cdk/core": "*"
+    "aws-cdk-lib": "^2.0.0-rc.33",
+    "constructs": "^10.0.0"
   }
 }

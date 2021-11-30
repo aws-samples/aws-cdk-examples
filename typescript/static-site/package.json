@@ -16,17 +16,10 @@
   "devDependencies": {
     "@types/node": "^10.17.0",
     "aws-cdk": "*",
-    "typescript": "^3.8"
+    "typescript": "~3.9.7"
   },
   "dependencies": {
-    "@aws-cdk/aws-certificatemanager": "*",
-    "@aws-cdk/aws-cloudfront": "*",
-    "@aws-cdk/aws-iam": "*",
-    "@aws-cdk/aws-route53": "*",
-    "@aws-cdk/aws-route53-targets": "*",
-    "@aws-cdk/aws-s3": "*",
-    "@aws-cdk/aws-s3-deployment": "*",
-    "@aws-cdk/core": "*",
-    "aws-cdk": "*"
+    "aws-cdk-lib": "^2.0.0-rc.33",
+    "constructs": "^10.0.0"
   }
 }

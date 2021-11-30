@@ -15,16 +15,12 @@
   "devDependencies": {
     "@types/node": "10.17.0",
     "aws-cdk": "*",
-    "typescript": "~3.7.2",
+    "typescript": "~3.9.7",
     "ts-node": "^8.1.0"
   },
   "dependencies": {
-    "@aws-cdk/aws-appsync": "*",
-    "@aws-cdk/aws-iam": "*",
-    "@aws-cdk/aws-events": "*",
-    "@aws-cdk/aws-events-targets": "*",
-    "@aws-cdk/aws-lambda": "*",
-    "@aws-cdk/core": "*",
+    "aws-cdk-lib": "^2.0.0-rc.33",
+    "constructs": "^10.0.0",
     "source-map-support": "^0.5.9"
   }
 }

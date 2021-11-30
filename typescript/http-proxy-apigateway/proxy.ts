@@ -1,6 +1,6 @@
-import { Construct, CfnOutput } from "@aws-cdk/core";
-
-import * as apiGateway from "@aws-cdk/aws-apigateway";
+import { CfnOutput } from "aws-cdk-lib";
+import * as apiGateway from "aws-cdk-lib/aws-apigateway";
+import { Construct } from 'constructs';
 
 export interface ProxyProps {
   readonly apiName: string;

@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-import {AssetCode, Function, Runtime} from "@aws-cdk/aws-lambda";
-import {CfnApi, CfnDeployment, CfnIntegration, CfnRoute, CfnStage} from "@aws-cdk/aws-apigatewayv2";
-import {App, ConcreteDependable, Construct, Duration, RemovalPolicy, Stack, StackProps} from '@aws-cdk/core';
-import {Effect, PolicyStatement, Role, ServicePrincipal} from "@aws-cdk/aws-iam";
-import {AttributeType, Table} from "@aws-cdk/aws-dynamodb";
+import {AssetCode, Function, Runtime} from "aws-cdk-lib/aws-lambda";
+import {CfnApi, CfnDeployment, CfnIntegration, CfnRoute, CfnStage} from "aws-cdk-lib/aws-apigatewayv2";
+import {App, Duration, RemovalPolicy, Stack, StackProps} from 'aws-cdk-lib';
+import {Effect, PolicyStatement, Role, ServicePrincipal} from "aws-cdk-lib/aws-iam";
+import { AttributeType, Table } from "aws-cdk-lib/aws-dynamodb";
+import { Construct } from 'constructs';
 
 import config from './config.json';
 
@@ -148,11 +149,9 @@ class ChatAppStack extends Stack {
             stageName: "dev"
         });
 
-        const dependencies = new ConcreteDependable();
-        dependencies.add(connectRoute)
-        dependencies.add(disconnectRoute)
-        dependencies.add(messageRoute)
-        deployment.node.addDependency(dependencies);
+        deployment.node.addDependency(connectRoute)
+        deployment.node.addDependency(disconnectRoute)
+        deployment.node.addDependency(messageRoute)
     }
 }
 const app = new App();

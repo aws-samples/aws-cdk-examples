@@ -1,7 +1,8 @@
-import ecs = require('@aws-cdk/aws-ecs');
-import ec2 = require('@aws-cdk/aws-ec2');
-import elbv2 = require('@aws-cdk/aws-elasticloadbalancingv2');
-import { Stack, Construct, StackProps, CfnOutput } from '@aws-cdk/core';
+import ecs = require('aws-cdk-lib/aws-ecs');
+import ec2 = require('aws-cdk-lib/aws-ec2');
+import elbv2 = require('aws-cdk-lib/aws-elasticloadbalancingv2');
+import { Stack, StackProps, CfnOutput } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 
 
 //---------------------------------------------------------------------------
