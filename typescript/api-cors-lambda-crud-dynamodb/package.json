@@ -18,13 +18,10 @@
     "@types/node": "*",
     "aws-cdk": "*",
     "esbuild": "*",
-    "typescript": "^3.8"
+    "typescript": "~3.9.7"
   },
   "dependencies": {
-    "@aws-cdk/aws-apigateway": "*",
-    "@aws-cdk/aws-dynamodb": "*",
-    "@aws-cdk/aws-lambda": "*",
-    "@aws-cdk/core": "*",
-    "@aws-cdk/aws-lambda-nodejs": "*"
+    "aws-cdk-lib": "^2.0.0-rc.33",
+    "constructs": "^10.0.0"
   }
 }

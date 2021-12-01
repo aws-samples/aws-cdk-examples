@@ -1,18 +1,19 @@
-import cdk = require("@aws-cdk/core");
+import cdk = require("aws-cdk-lib");
 import {
   CfnGraphQLApi,
   CfnApiKey,
   CfnGraphQLSchema,
   CfnDataSource,
   CfnResolver
-} from "@aws-cdk/aws-appsync";
-import { Role, ServicePrincipal, PolicyStatement } from "@aws-cdk/aws-iam";
-import { Rule } from "@aws-cdk/aws-events";
-import lambda = require("@aws-cdk/aws-lambda");
-import targets = require("@aws-cdk/aws-events-targets");
+} from "aws-cdk-lib/aws-appsync";
+import { Role, ServicePrincipal, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Rule } from "aws-cdk-lib/aws-events";
+import lambda = require("aws-cdk-lib/aws-lambda");
+import targets = require("aws-cdk-lib/aws-events-targets");
+import { Construct } from 'constructs';
 
 export class AppSyncCdkStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
     const appSync2EventBridgeGraphQLApi = new CfnGraphQLApi(
@@ -33,15 +34,15 @@ export class AppSyncCdkStack extends cdk.Stack {
       definition: `type Event {
         result: String
       }
-      
+
       type Mutation {
         putEvent(event: String!): Event
       }
-      
+
       type Query {
         getEvent: Event
       }
-      
+
       schema {
         query: Query
         mutation: Mutation
@@ -91,7 +92,7 @@ export class AppSyncCdkStack extends cdk.Stack {
             "x-amz-target":"AWSEvents.PutEvents"
           },
           "body": {
-            "Entries":[ 
+            "Entries":[
               {
                 "Source":"appsync",
                 "EventBusName": "default",

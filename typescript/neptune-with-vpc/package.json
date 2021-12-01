@@ -11,6 +11,9 @@
     "cdk": "cdk"
   },
   "dependencies": {
+    "aws-cdk-lib": "^2.0.0-rc.33",
+    "constructs": "^10.0.0",
+    "@aws-cdk/aws-neptune-alpha": "^2.0.0-alpha.10",
     "@types/jest": "^26.0.10",
     "@types/node": "10.17.27",
     "jest": "^26.4.2",
@@ -18,10 +21,6 @@
     "ts-node": "^9.0.0",
     "typescript": "~3.9.7",
     "aws-cdk": "*",
-    "@aws-cdk/assert": "*",
-    "@aws-cdk/aws-ec2": "*",
-    "@aws-cdk/aws-neptune": "*",
-    "@aws-cdk/core": "*",
     "source-map-support": "^0.5.16"
   }
 }

@@ -1,14 +1,14 @@
 #!/usr/bin/env node
-import * as cdk from '@aws-cdk/core';
-import * as route53 from '@aws-cdk/aws-route53';
-import * as s3 from '@aws-cdk/aws-s3';
-import * as s3deploy from '@aws-cdk/aws-s3-deployment';
-import * as acm from '@aws-cdk/aws-certificatemanager';
-import * as targets from '@aws-cdk/aws-route53-targets';
-import * as cloudfront from '@aws-cdk/aws-cloudfront';
-import * as cloudwatch from "@aws-cdk/aws-cloudwatch";
-import * as iam from '@aws-cdk/aws-iam';
-import { Construct, Stack } from '@aws-cdk/core';
+import * as route53 from 'aws-cdk-lib/aws-route53';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
+import * as targets from 'aws-cdk-lib/aws-route53-targets';
+import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
+import * as cloudwatch from "aws-cdk-lib/aws-cloudwatch";
+import * as iam from 'aws-cdk-lib/aws-iam';
+import { Aws, CfnOutput, RemovalPolicy, Stack } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 
 export interface StaticSiteProps {
   domainName: string;
@@ -31,7 +31,7 @@ export class StaticSite extends Construct {
       comment: `OAI for ${name}`
     });
 
-    new cdk.CfnOutput(this, 'Site', { value: 'https://' + siteDomain });
+    new CfnOutput(this, 'Site', { value: 'https://' + siteDomain });
 
     // Content bucket
     const siteBucket = new s3.Bucket(this, 'SiteBucket', {
@@ -46,7 +46,7 @@ export class StaticSite extends Construct {
        * the new bucket, and it will remain in your account until manually deleted. By setting the policy to
        * DESTROY, cdk destroy will attempt to delete the bucket, but will error if the bucket is not empty.
        */
-      removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
+      removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
 
       /**
        * For sample purposes only, if you create an S3 bucket then populate it, stack destruction fails.  This
@@ -60,7 +60,7 @@ export class StaticSite extends Construct {
       resources: [siteBucket.arnForObjects('*')],
       principals: [new iam.CanonicalUserPrincipal(cloudfrontOAI.cloudFrontOriginAccessIdentityS3CanonicalUserId)]
     }));
-    new cdk.CfnOutput(this, 'Bucket', { value: siteBucket.bucketName });
+    new CfnOutput(this, 'Bucket', { value: siteBucket.bucketName });
 
     // TLS certificate
     const certificateArn = new acm.DnsValidatedCertificate(this, 'SiteCertificate', {
@@ -68,14 +68,14 @@ export class StaticSite extends Construct {
       hostedZone: zone,
       region: 'us-east-1', // Cloudfront only checks this region for certificates.
     }).certificateArn;
-    new cdk.CfnOutput(this, 'Certificate', { value: certificateArn });
+    new CfnOutput(this, 'Certificate', { value: certificateArn });
 
     // Specifies you want viewers to use HTTPS & TLS v1.1 to request your objects
     const viewerCertificate = cloudfront.ViewerCertificate.fromAcmCertificate({
       certificateArn: certificateArn,
       env: {
-        region: cdk.Aws.REGION,
-        account: cdk.Aws.ACCOUNT_ID
+        region: Aws.REGION,
+        account: Aws.ACCOUNT_ID
       },
       node: this.node,
       stack: parent,
@@ -108,7 +108,7 @@ export class StaticSite extends Construct {
         }
       ]
     });
-    new cdk.CfnOutput(this, 'DistributionId', { value: distribution.distributionId });
+    new CfnOutput(this, 'DistributionId', { value: distribution.distributionId });
 
     // Route53 alias record for the CloudFront distribution
     new route53.ARecord(this, 'SiteAliasRecord', {

@@ -1,8 +1,8 @@
-import * as cdk from '@aws-cdk/core';
-import * as ec2 from '@aws-cdk/aws-ec2';
-import * as ad from '@aws-cdk/aws-directoryservice';
-import * as fsx from '@aws-cdk/aws-fsx';
-import * as sm from '@aws-cdk/aws-secretsmanager';
+import * as cdk from 'aws-cdk-lib';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as ad from 'aws-cdk-lib/aws-directoryservice';
+import * as fsx from 'aws-cdk-lib/aws-fsx';
+import * as sm from 'aws-cdk-lib/aws-secretsmanager';
 
 class AdFsxStack extends cdk.Stack {
   constructor(app: cdk.App, id: string, adDnsDomainName: string) {

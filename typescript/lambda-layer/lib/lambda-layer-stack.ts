@@ -1,8 +1,9 @@
-import * as cdk from '@aws-cdk/core';
-import * as lambda from '@aws-cdk/aws-lambda';
+import * as cdk from 'aws-cdk-lib';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { Construct } from 'constructs';
 
 export class LambdaLayerStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
     const layer = new lambda.LayerVersion(this, 'HelperLayer', {
