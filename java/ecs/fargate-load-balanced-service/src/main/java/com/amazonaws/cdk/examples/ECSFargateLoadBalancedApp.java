@@ -1,6 +1,6 @@
 package com.amazonaws.cdk.examples;
 
-import software.amazon.awscdk.core.App;
+import software.amazon.awscdk.App;
 
 public class ECSFargateLoadBalancedApp {
     public static void main(final String argv[]) {

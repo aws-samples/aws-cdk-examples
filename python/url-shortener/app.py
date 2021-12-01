@@ -1,11 +1,10 @@
-from aws_cdk.core import App, Construct, Duration
+from aws_cdk import App, Duration
 from aws_cdk import aws_dynamodb, aws_lambda, aws_apigateway
+from constructs import Construct
 
 from waltersco_common import WaltersCoStack
 
 from gengen import GenGen
-from cdk_watchful import Watchful
-
 
 # our main application stack
 class UrlShortenerStack(WaltersCoStack):
@@ -22,7 +21,7 @@ class UrlShortenerStack(WaltersCoStack):
 
         # define the API gateway request handler. all API requests will go to the same function.
         handler = aws_lambda.Function(self, "UrlShortenerFunction",
-                                      code=aws_lambda.Code.asset("./lambda"),
+                                      code=aws_lambda.Code.from_asset("./lambda"),
                                       handler="handler.main",
                                       timeout=Duration.minutes(5),
                                       runtime=aws_lambda.Runtime.PYTHON_3_7)
@@ -44,8 +43,9 @@ class UrlShortenerStack(WaltersCoStack):
         # define a Watchful monitoring system and watch the entire scope
         # this will automatically find all watchable resources and add
         # them to our dashboard
-        wf = Watchful(self, 'watchful', alarm_email='your@email.com')
-        wf.watch_scope(self)
+        # This has been temporarily disabled while cdk_watchful is upgraded to CDKv2
+        # wf = Watchful(self, 'watchful', alarm_email='your@email.com')
+        # wf.watch_scope(self)
 
 
 # separate stack that includes the traffic generator

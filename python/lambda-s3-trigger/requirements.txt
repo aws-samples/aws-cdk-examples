@@ -1,5 +1,2 @@
-aws-cdk.core
-
-aws-cdk.aws-s3
-aws-cdk.aws-lambda
-aws-cdk.aws_s3_notifications
+aws-cdk-lib>=2.0.0rc33
+constructs>=10.0.0

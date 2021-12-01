@@ -18,13 +18,6 @@ setuptools.setup(
     package_dir={"": "raw_strings"},
     packages=setuptools.find_packages(where="raw_strings"),
 
-    install_requires=[
-        "aws-cdk.core",
-        "aws-cdk.aws_apigateway",
-        "aws-cdk.aws_lambda",
-        "aws-cdk.aws_dynamodb"
-    ],
-
     python_requires=">=3.6",
 
     classifiers=[

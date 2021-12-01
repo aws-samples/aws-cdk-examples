@@ -41,24 +41,14 @@
     <dependencies>
         <dependency>
             <groupId>software.amazon.awscdk</groupId>
-            <artifactId>core</artifactId>
-            <version>[1.20.0, 2)</version>
-        </dependency>
-        <dependency>
-            <groupId>software.amazon.awscdk</groupId>
-            <artifactId>apigateway</artifactId>
-            <version>[1.20.0, 2)</version>
+            <artifactId>aws-cdk-lib</artifactId>
+            <version>[2.0.0-rc.33,)</version>
         </dependency>
 
         <dependency>
-            <groupId>software.amazon.awscdk</groupId>
-            <artifactId>dynamodb</artifactId>
-            <version>[1.20.0, 2)</version>
-        </dependency>
-        <dependency>
-            <groupId>software.amazon.awscdk</groupId>
-            <artifactId>lambda</artifactId>
-            <version>[1.20.0, 2)</version>
+            <groupId>software.constructs</groupId>
+            <artifactId>constructs</artifactId>
+            <version>[10.0.0,)</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/junit/junit -->

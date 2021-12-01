@@ -27,18 +27,19 @@
 // OF ANY KIND, either express or implied. See the License for the specific
 // language governing permissions and limitations under the License.
 // snippet-start:[cdk.typescript.widget_service]
-import cdk = require("@aws-cdk/core");
-import apigateway = require("@aws-cdk/aws-apigateway");
-import lambda = require("@aws-cdk/aws-lambda");
-import s3 = require("@aws-cdk/aws-s3");
+import cdk = require("aws-cdk-lib");
+import apigateway = require("aws-cdk-lib/aws-apigateway");
+import lambda = require("aws-cdk-lib/aws-lambda");
+import s3 = require("aws-cdk-lib/aws-s3");
+import { Construct } from 'constructs';
 
-export class WidgetService extends cdk.Construct {
-  constructor(scope: cdk.Construct, id: string) {
+export class WidgetService extends Construct {
+  constructor(scope: Construct, id: string) {
     super(scope, id);
 
     const bucket = new s3.Bucket(this, "WidgetStore", {
       // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
-      // the new bucket, and it will remain in your account until manually deleted. By setting the policy to 
+      // the new bucket, and it will remain in your account until manually deleted. By setting the policy to
       // DESTROY, cdk destroy will attempt to delete the bucket, but will error if the bucket is not empty.
       removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
     });

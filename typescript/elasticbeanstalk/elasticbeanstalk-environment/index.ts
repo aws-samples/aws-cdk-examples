@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import * as cdk from '@aws-cdk/core';
-import * as elasticbeanstalk from '@aws-cdk/aws-elasticbeanstalk';
+import * as cdk from 'aws-cdk-lib';
+import * as elasticbeanstalk from 'aws-cdk-lib/aws-elasticbeanstalk';
 
 
 export class CdkStack extends cdk.Stack {

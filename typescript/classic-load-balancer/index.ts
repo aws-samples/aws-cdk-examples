@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-import autoscaling = require('@aws-cdk/aws-autoscaling');
-import ec2 = require('@aws-cdk/aws-ec2');
-import elb = require('@aws-cdk/aws-elasticloadbalancing');
-import cdk = require('@aws-cdk/core');
+import autoscaling = require('aws-cdk-lib/aws-autoscaling');
+import ec2 = require('aws-cdk-lib/aws-ec2');
+import elb = require('aws-cdk-lib/aws-elasticloadbalancing');
+import cdk = require('aws-cdk-lib');
 
 class LoadBalancerStack extends cdk.Stack {
   constructor(app: cdk.App, id: string) {

@@ -1,9 +1,7 @@
 package software.amazon.awscdk.examples;
 
-import java.util.Collections;
-import java.util.List;
-import software.amazon.awscdk.core.Construct;
-import software.amazon.awscdk.core.Stack;
+import software.constructs.Construct;
+import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.services.autoscaling.AutoScalingGroup;
 import software.amazon.awscdk.services.ec2.AmazonLinuxImage;
 import software.amazon.awscdk.services.ec2.InstanceType;
@@ -47,12 +45,6 @@ class HelloJavaStack extends Stack {
           .machineImage(new AmazonLinuxImage())
           .vpc(props.vpc)
           .build();
-    }
-
-    @Override
-    public List<String> validate() {
-      System.err.println("Validating MyAutoScalingGroup...");
-      return Collections.emptyList();
     }
   }
 }
