@@ -19,14 +19,14 @@ setuptools.setup(
     packages=setuptools.find_packages(where="s3_sns_sqs_lambda_chain"),
 
     install_requires=[
-        "aws-cdk.core==1.126.0",
-        "aws-cdk.aws-sqs==1.126.0",
-        "aws-cdk.aws-sns==1.126.0",
-        "aws-cdk.aws-s3==1.126.0",
-        "aws-cdk.aws-s3-notifications==1.126.0",
-        "aws-cdk.aws-lambda==1.126.0",
-        "aws-cdk.aws-lambda-event-sources==1.126.0",
-        "aws-cdk.assertions==1.126.0",
+        "aws-cdk.core==1.134.0",
+        "aws-cdk.aws-sqs==1.134.0",
+        "aws-cdk.aws-sns==1.134.0",
+        "aws-cdk.aws-s3==1.134.0",
+        "aws-cdk.aws-s3-notifications==1.134.0",
+        "aws-cdk.aws-lambda==1.134.0",
+        "aws-cdk.aws-lambda-event-sources==1.134.0",
+        "aws-cdk.assertions==1.134.0",
         "pytest"
     ],
 
