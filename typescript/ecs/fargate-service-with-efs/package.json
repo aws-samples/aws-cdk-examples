@@ -17,14 +17,10 @@
   "devDependencies": {
     "@types/node": "^8.10.38",
     "aws-cdk": "*",
-    "typescript": "^3.9.5"
+    "typescript": "~3.9.7"
   },
   "dependencies": {
-    "@aws-cdk/aws-ec2": "*",
-    "@aws-cdk/aws-ecs": "*",
-    "@aws-cdk/aws-ecs-patterns": "*",
-    "@aws-cdk/aws-efs": "*",
-    "@aws-cdk/core": "*",
-    "@aws-cdk/custom-resources": "*"
+    "aws-cdk-lib": "^2.0.0-rc.33",
+    "constructs": "^10.0.0"
   }
 }

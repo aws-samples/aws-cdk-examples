@@ -16,17 +16,12 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/node": "^8.10.40",
-    "typescript": "~3.7.2",
+    "typescript": "~3.9.7",
     "aws-cdk": "*"
   },
   "dependencies": {
-    "@aws-cdk/aws-elasticbeanstalk": "*",
-    "@aws-cdk/aws-codepipeline-actions": "*",
-    "@aws-cdk/aws-codepipeline": "*",
-    "@aws-cdk/aws-codecommit": "*",
-    "@aws-cdk/aws-lambda": "*",
-    "@aws-cdk/aws-s3": "*",
-    "@aws-cdk/core": "*",
+    "aws-cdk-lib": "^2.0.0-rc.33",
+    "constructs": "^10.0.0",
     "source-map-support": "^0.5.9"
   }
 }
