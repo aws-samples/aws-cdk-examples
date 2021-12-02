@@ -11,7 +11,7 @@
     "cdk": "cdk"
   },
   "dependencies": {
-    "aws-cdk-lib": "^2.0.0-rc.33",
+    "aws-cdk-lib": "^2.0.0",
     "constructs": "^10.0.0",
     "@aws-cdk/aws-neptune-alpha": "^2.0.0-alpha.10",
     "@types/jest": "^26.0.10",
