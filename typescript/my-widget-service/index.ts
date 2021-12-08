@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import cdk = require('@aws-cdk/core');
+import cdk = require('aws-cdk-lib');
 import widget_service = require('./widget_service');
 
 export class MyWidgetServiceStack extends cdk.Stack {

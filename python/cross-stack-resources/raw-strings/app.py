@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
-from aws_cdk import core
+from aws_cdk import App
 
 from raw_strings.application_stack import ApplicationStack
 from raw_strings.infrastructure_stack import InfrastructureStack
 
 
-app = core.App()
+app = App()
 
 env={'region': 'us-west-2'}
 # Base infrastructure stack, Lambda Functions, DynamoDB Tables, etc....

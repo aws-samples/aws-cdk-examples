@@ -1,9 +1,9 @@
 package com.myorg;
 
-import software.amazon.awscdk.core.Construct;
-import software.amazon.awscdk.core.Duration;
-import software.amazon.awscdk.core.Stack;
-import software.amazon.awscdk.core.StackProps;
+import software.constructs.Construct;
+import software.amazon.awscdk.Duration;
+import software.amazon.awscdk.Stack;
+import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.codebuild.Artifacts;
 import software.amazon.awscdk.services.codebuild.ArtifactsProps;
 import software.amazon.awscdk.services.codebuild.BuildEnvironment;

@@ -1,12 +1,12 @@
 from aws_cdk import (
+    aws_autoscaling as autoscaling,
     aws_ec2 as ec2,
     aws_ecs as ecs,
-    aws_elasticloadbalancingv2 as elbv2,
-    core,
+    App, Stack
 )
 
-app = core.App()
-stack = core.Stack(app, "aws-ecs-integ-ecs")
+app = App()
+stack = Stack(app, "aws-ecs-integ-ecs")
 
 # Create a cluster
 vpc = ec2.Vpc(
@@ -18,8 +18,17 @@ cluster = ecs.Cluster(
     stack, "EcsCluster",
     vpc=vpc
 )
-cluster.add_capacity("DefaultAutoScalingGroup",
-                     instance_type=ec2.InstanceType("t2.micro"))
+
+asg = autoscaling.AutoScalingGroup(
+    stack, "DefaultAutoScalingGroup",
+    instance_type=ec2.InstanceType("t2.micro"),
+    machine_image=ecs.EcsOptimizedImage.amazon_linux2(),
+    vpc=vpc,
+)
+capacity_provider = ecs.AsgCapacityProvider(stack, "AsgCapacityProvider",
+    auto_scaling_group=asg
+)
+cluster.add_asg_capacity_provider(capacity_provider)
 
 # Create a task definition with placement constraints
 task_definition = ecs.Ec2TaskDefinition(
