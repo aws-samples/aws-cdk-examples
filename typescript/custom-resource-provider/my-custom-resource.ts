@@ -1,7 +1,8 @@
-import * as cdk from '@aws-cdk/core';
-import * as logs from '@aws-cdk/aws-logs';
-import * as cr from '@aws-cdk/custom-resources';
-import * as lambda from '@aws-cdk/aws-lambda';
+import * as cdk from 'aws-cdk-lib';
+import * as logs from 'aws-cdk-lib/aws-logs';
+import * as cr from 'aws-cdk-lib/custom-resources';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { Construct } from 'constructs';
 import fs = require('fs');
 
 export interface MyCustomResourceProps {
@@ -11,10 +12,10 @@ export interface MyCustomResourceProps {
   Message: string;
 }
 
-export class MyCustomResource extends cdk.Construct {
+export class MyCustomResource extends Construct {
   public readonly response: string;
 
-  constructor(scope: cdk.Construct, id: string, props: MyCustomResourceProps) {
+  constructor(scope: Construct, id: string, props: MyCustomResourceProps) {
     super(scope, id);
 
 

@@ -1,12 +1,12 @@
-import cdk = require('@aws-cdk/core');
-import { CfnGraphQLApi, CfnApiKey, CfnGraphQLSchema, CfnDataSource, CfnResolver } from '@aws-cdk/aws-appsync';
-import { Table, AttributeType, StreamViewType, BillingMode } from '@aws-cdk/aws-dynamodb';
-import { Role, ServicePrincipal, ManagedPolicy } from '@aws-cdk/aws-iam';
-
+import cdk = require('aws-cdk-lib');
+import { CfnGraphQLApi, CfnApiKey, CfnGraphQLSchema, CfnDataSource, CfnResolver } from 'aws-cdk-lib/aws-appsync';
+import { Table, AttributeType, StreamViewType, BillingMode } from 'aws-cdk-lib/aws-dynamodb';
+import { Role, ServicePrincipal, ManagedPolicy } from 'aws-cdk-lib/aws-iam';
+import { Construct } from 'constructs';
 
 export class AppSyncCdkStack extends cdk.Stack {
 
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
     const tableName = 'items'
@@ -54,7 +54,7 @@ export class AppSyncCdkStack extends cdk.Stack {
       stream: StreamViewType.NEW_IMAGE,
 
       // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
-      // the new table, and it will remain in your account until manually deleted. By setting the policy to 
+      // the new table, and it will remain in your account until manually deleted. By setting the policy to
       // DESTROY, cdk destroy will delete the table (even if it has data in it)
       removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
     });

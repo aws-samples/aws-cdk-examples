@@ -1,8 +1,8 @@
-import { IResource, LambdaIntegration, MockIntegration, PassthroughBehavior, RestApi } from '@aws-cdk/aws-apigateway';
-import { AttributeType, Table } from '@aws-cdk/aws-dynamodb';
-import { Runtime } from '@aws-cdk/aws-lambda';
-import { App, Stack, RemovalPolicy } from '@aws-cdk/core';
-import { NodejsFunction, NodejsFunctionProps } from '@aws-cdk/aws-lambda-nodejs';
+import { IResource, LambdaIntegration, MockIntegration, PassthroughBehavior, RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { AttributeType, Table } from 'aws-cdk-lib/aws-dynamodb';
+import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { App, Stack, RemovalPolicy } from 'aws-cdk-lib';
+import { NodejsFunction, NodejsFunctionProps } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { join } from 'path'
 
 export class ApiLambdaCrudDynamoDBStack extends Stack {

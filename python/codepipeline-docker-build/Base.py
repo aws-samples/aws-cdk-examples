@@ -3,19 +3,19 @@ from aws_cdk import (
     aws_ecr,
     aws_codebuild,
     aws_ssm,
-    core,
+    App, Aws, CfnOutput, Duration, RemovalPolicy, Stack
 )
 
-class Base(core.Stack):
-    def __init__(self, app: core.App, id: str, props, **kwargs) -> None:
+class Base(Stack):
+    def __init__(self, app: App, id: str, props, **kwargs) -> None:
         super().__init__(app, id, **kwargs)
 
         # pipeline requires versioned bucket
         bucket = aws_s3.Bucket(
             self, "SourceBucket",
-            bucket_name=f"{props['namespace'].lower()}-{core.Aws.ACCOUNT_ID}",
+            bucket_name=f"{props['namespace'].lower()}-{Aws.ACCOUNT_ID}",
             versioned=True,
-            removal_policy=core.RemovalPolicy.DESTROY)
+            removal_policy=RemovalPolicy.DESTROY)
         # ssm parameter to get bucket name later
         bucket_param = aws_ssm.StringParameter(
             self, "ParameterB",
@@ -27,7 +27,7 @@ class Base(core.Stack):
         ecr = aws_ecr.Repository(
             self, "ECR",
             repository_name=f"{props['namespace']}",
-            removal_policy=core.RemovalPolicy.DESTROY
+            removal_policy=RemovalPolicy.DESTROY
         )
         # codebuild project meant to run in pipeline
         cb_docker_build = aws_codebuild.PipelineProject(
@@ -46,7 +46,7 @@ class Base(core.Stack):
                     value='cdk')
             },
             description='Pipeline for CodeBuild',
-            timeout=core.Duration.minutes(60),
+            timeout=Duration.minutes(60),
         )
         # codebuild iam permissions to read write s3
         bucket.grant_read_write(cb_docker_build)
@@ -54,12 +54,12 @@ class Base(core.Stack):
         # codebuild permissions to interact with ecr
         ecr.grant_pull_push(cb_docker_build)
 
-        core.CfnOutput(
+        CfnOutput(
             self, "ECRURI",
             description="ECR URI",
             value=ecr.repository_uri,
         )
-        core.CfnOutput(
+        CfnOutput(
             self, "S3Bucket",
             description="S3 Bucket",
             value=bucket.bucket_name

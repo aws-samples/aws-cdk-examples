@@ -3,15 +3,14 @@ package software.amazon.awscdk.examples;
 import java.nio.file.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
-import software.amazon.awscdk.core.CfnOutput;
-import software.amazon.awscdk.core.Construct;
-import software.amazon.awscdk.core.Duration;
-import software.amazon.awscdk.core.Stack;
-import software.amazon.awscdk.services.cloudformation.*;
-import software.amazon.awscdk.services.lambda.*;
-import software.amazon.awscdk.services.lambda.Runtime;
+import software.constructs.Construct;
+import software.amazon.awscdk.CfnOutput;
+import software.amazon.awscdk.CustomResource;
+import software.amazon.awscdk.CustomResourceProvider;
+import software.amazon.awscdk.CustomResourceProviderProps;
+import software.amazon.awscdk.CustomResourceProviderRuntime;
+import software.amazon.awscdk.Stack;
 
 public class CustomResourceStack extends Stack {
 
@@ -20,36 +19,27 @@ public class CustomResourceStack extends Stack {
 
     try {
 
-      // Get the lambda function code
-      String LambdaContent = readFileAsString("./lambda/custom-resource-handler.py");
-
-      // Sample Lambda Function Resource
-      final SingletonFunction lambdaFunction =
-          SingletonFunction.Builder.create(this, "cdk-lambda-customresource")
-              .description("My Custom Resource Lambda")
-              .code(Code.fromInline(LambdaContent))
-              .handler("index.handler")
-              .timeout(Duration.seconds(300))
-              .runtime(Runtime.PYTHON_2_7)
-              .uuid(UUID.randomUUID().toString())
-              .build();
-
       // Sample Property to send to Lambda Function
       Map<String, Object> map = new HashMap<String, Object>();
       map.put("Message", "AWS CDK");
 
-      final CustomResource myCustomResource =
-          CustomResource.Builder.create(this, "MyCustomResource")
-              .provider(CustomResourceProvider.fromLambda(lambdaFunction))
-              .properties(map)
-              .build();
+      String serviceToken = CustomResourceProvider.getOrCreate(this, "Custom::MyCustomResourceType", CustomResourceProviderProps.builder()
+        .codeDirectory("./lambda/custom-resource-handler.py")
+        .runtime(CustomResourceProviderRuntime.NODEJS_14_X)
+        .description("Lambda function created by the custom resource provider")
+        .build());
+
+      final CustomResource myCustomResource =  CustomResource.Builder.create(this, "MyResource")
+        .resourceType("Custom::MyCustomResourceType")
+        .serviceToken(serviceToken)
+        .properties(map)
+        .build();
 
       // Publish the custom resource output
-      CfnOutput cfnoutput =
-          CfnOutput.Builder.create(this, "MyCustomResourceOutput")
-              .description("The message that came back from the Custom Resource")
-              .value(myCustomResource.getAtt("Response").toString())
-              .build();
+      CfnOutput.Builder.create(this, "MyCustomResourceOutput")
+        .description("The message that came back from the Custom Resource")
+        .value(myCustomResource.getAtt("Response").toString())
+        .build();
 
     } catch (Exception e) {
       e.printStackTrace();

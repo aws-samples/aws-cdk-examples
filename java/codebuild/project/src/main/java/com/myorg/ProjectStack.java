@@ -1,9 +1,9 @@
 package com.myorg;
 
-import software.amazon.awscdk.core.Construct;
-import software.amazon.awscdk.core.Duration;
-import software.amazon.awscdk.core.Stack;
-import software.amazon.awscdk.core.StackProps;
+import software.constructs.Construct;
+import software.amazon.awscdk.Duration;
+import software.amazon.awscdk.Stack;
+import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.codebuild.Artifacts;
 import software.amazon.awscdk.services.codebuild.ArtifactsProps;
 import software.amazon.awscdk.services.codebuild.BuildEnvironment;
@@ -51,7 +51,7 @@ public class ProjectStack extends Stack {
             }
         };
 
-        IBucket s3Bucket = Bucket.fromBucketName(this, id, "s3BucketName");
+        IBucket s3Bucket = Bucket.fromBucketName(this, id, "s3bucketname");
         ISource source = Source.s3(S3SourceProps.builder().bucket(s3Bucket).path("S3Path").build());
 
         IRole role = Role.fromRoleArn(this, "someId", "arn:partition:service:region:account-id:resource-type:resource-id");

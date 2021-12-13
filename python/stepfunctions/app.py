@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-from aws_cdk import core
+from aws_cdk import App
 from stepfunctions.stepfunctions_stack import JobPollerStack
 
-app = core.App()
+app = App()
 JobPollerStack(app, "aws-stepfunctions-integ")
 app.synth()
