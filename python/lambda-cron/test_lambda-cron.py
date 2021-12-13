@@ -1,6 +1,6 @@
 import pytest
 
-from aws_cdk.core import App, Stack
+from aws_cdk import App, Stack
 from aws_cdk.assertions import Capture, Match, Template
 from app import LambdaCronStack
 
@@ -12,7 +12,7 @@ class TestLambda:
   def test_specified_resources_created(self):
     template.resource_count_is('AWS::Lambda::Function', 1)
     template.resource_count_is('AWS::Events::Rule', 1)
-  
+
   def test_lambda_function_has_correct_properties(self):
     dependency_capture = Capture()
     template.has_resource('AWS::Lambda::Function', {
@@ -61,4 +61,4 @@ class TestEvents:
       'ScheduleExpression': 'cron(0 18 ? * MON-FRI *)',
       'State': 'ENABLED',
       'Targets': Match.any_value(),
-    }) 
+    })

@@ -1,6 +1,6 @@
-import * as cdk from "@aws-cdk/core";
+import * as cdk from "aws-cdk-lib";
 
-import { EndpointType } from "@aws-cdk/aws-apigateway";
+import { EndpointType } from "aws-cdk-lib/aws-apigateway";
 
 import { Proxy } from "./proxy";
 

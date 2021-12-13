@@ -2,10 +2,10 @@ package software.amazon.awscdk.examples;
 
 import java.util.HashMap;
 import java.util.Map;
-import software.amazon.awscdk.core.App;
-import software.amazon.awscdk.core.Environment;
-import software.amazon.awscdk.core.Stack;
-import software.amazon.awscdk.core.StackProps;
+import software.amazon.awscdk.App;
+import software.amazon.awscdk.Environment;
+import software.amazon.awscdk.Stack;
+import software.amazon.awscdk.StackProps;
 
 public class StaticSiteApp extends Stack {
 

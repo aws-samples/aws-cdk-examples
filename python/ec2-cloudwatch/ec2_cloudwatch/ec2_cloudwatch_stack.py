@@ -1,20 +1,26 @@
-from aws_cdk import core
+from aws_cdk import CfnOutput, Duration, Stack
 from aws_cdk import aws_ec2, aws_cloudwatch
 from aws_cdk import aws_backup as backup
 from aws_cdk.aws_events import Rule, Schedule
 from aws_cdk.aws_events_targets import AwsApi
+from constructs import Construct
 
 
-class Ec2CloudwatchStack(core.Stack):
+class Ec2CloudwatchStack(Stack):
 
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # The code from zhxinyua to create VPC, s3_endpoint, bastion, EC2, EBS, Cloudwatch event rule stop EC2, Backup for EC2
 
         # create a new VPC
         vpc_new = aws_ec2.Vpc(self, "VpcFromCDK", cidr="10.0.0.0/16")
-        vpc_new.add_s3_endpoint("Endpoint for S3 in CDK VPC")
+        vpc_new.add_gateway_endpoint("S3Endpoint",
+            service=aws_ec2.GatewayVpcEndpointAwsService.S3,
+            # Add only to ISOLATED subnets
+            subnets=[aws_ec2.SubnetSelection(subnet_type=aws_ec2.SubnetType.PUBLIC)
+            ]
+        )
 
         # only allow a specific rang of IP to conncet bastion
         # BastionHostLinux support two way to connect, one is SSM, second is EC2 Instance Connect
@@ -90,13 +96,13 @@ class Ec2CloudwatchStack(core.Stack):
         plan.add_rule(backup.BackupPlanRule(backup_vault=vault,
                                             rule_name="CDK_Backup_Rule",
                                             schedule_expression=Schedule.cron(minute="0", hour="16", day="1", month="1-12"),
-                                            delete_after=core.Duration.days(130),
-                                            move_to_cold_storage_after=core.Duration.days(10)))
+                                            delete_after=Duration.days(130),
+                                            move_to_cold_storage_after=Duration.days(10)))
 
         # output information after deploy
-        output = core.CfnOutput(self, "BastionHost_information",
+        output = CfnOutput(self, "BastionHost_information",
                                 value=host_bastion.instance_public_ip,
                                 description="BastionHost's Public IP")
-        output = core.CfnOutput(self, "WebHost_information",
+        output = CfnOutput(self, "WebHost_information",
                                 value=work_server.instance_public_ip,
                                 description="Web server's Public IP")

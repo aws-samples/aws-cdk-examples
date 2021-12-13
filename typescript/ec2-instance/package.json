@@ -11,13 +11,12 @@
   },
   "devDependencies": {
     "@types/node": "10.17.27",
+    "aws-cdk": "*",
     "typescript": "~3.9.7"
   },
   "dependencies": {
-    "@aws-cdk/aws-ec2": "*",
-    "@aws-cdk/aws-lambda": "*",
-    "@aws-cdk/core": "*",
-    "cdk-ec2-key-pair": "*",
+    "aws-cdk-lib": "^2.0.0",
+    "constructs": "^10.0.0",
     "source-map-support": "^0.5.16"
   }
 }

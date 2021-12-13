@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "aws-cdk": "^2.0.0-rc.32"
+  }
+}

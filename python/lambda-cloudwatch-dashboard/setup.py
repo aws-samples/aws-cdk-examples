@@ -18,13 +18,6 @@ setuptools.setup(
     package_dir={"": "lambda_cloudwatch_dashboard"},
     packages=setuptools.find_packages(where="lambda_cloudwatch_dashboard"),
 
-    install_requires=[
-        "aws-cdk.core>=1.99.0",
-        "aws-cdk.aws_cloudwatch>=1.99.0",
-        "aws-cdk.aws_lambda>=1.99.0",
-        "aws-cdk.aws_iam>=1.99.0",
-    ],
-
     python_requires=">=3.6",
 
     classifiers=[

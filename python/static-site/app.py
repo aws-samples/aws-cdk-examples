@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 import os
-from aws_cdk import core as cdk
+from aws_cdk import App, Environment
 from site_stack import StaticSiteStack
 
 
-app = cdk.App()
+app = App()
 props = {
     "namespace": app.node.try_get_context("namespace"),
     "domain_name": app.node.try_get_context("domain_name"),
@@ -23,7 +23,7 @@ props = {
     "hosted_zone_name": app.node.try_get_context("hosted_zone_name"),
 }
 
-env = cdk.Environment(
+env = Environment(
     account=os.environ.get(
         "CDK_DEPLOY_ACCOUNT", os.environ.get("CDK_DEFAULT_ACCOUNT")
     ),
