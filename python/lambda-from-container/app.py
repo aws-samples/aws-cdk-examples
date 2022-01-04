@@ -1,13 +1,14 @@
 import os
 from aws_cdk import (
-    core,
     aws_lambda,
-    aws_ecr
+    aws_ecr,
+    App, Aws, Duration, Stack
 )
+from constructs import Construct
 
 
-class LambdaContainerFunctionStack(core.Stack):
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+class LambdaContainerFunctionStack(Stack):
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
 
@@ -33,7 +34,7 @@ class LambdaContainerFunctionStack(core.Stack):
             ##
             ecr_repository = aws_ecr.Repository.from_repository_attributes(self,
                 id              = "ECR",
-                repository_arn  ='arn:aws:ecr:{0}:{1}'.format(core.Aws.REGION, core.Aws.ACCOUNT_ID),
+                repository_arn  ='arn:aws:ecr:{0}:{1}'.format(Aws.REGION, Aws.ACCOUNT_ID),
                 repository_name = image_name
             ) ## aws_ecr.Repository.from_repository_attributes
 
@@ -73,7 +74,7 @@ class LambdaContainerFunctionStack(core.Stack):
           function_name = "sampleContainerFunction",
           memory_size   = 128,
           reserved_concurrent_executions = 10,
-          timeout       = core.Duration.seconds(10),
+          timeout       = Duration.seconds(10),
         ) ## aws_lambda.Function
 
 
@@ -81,7 +82,7 @@ class LambdaContainerFunctionStack(core.Stack):
 
 
 
-app = core.App()
+app = App()
 env = {'region': 'us-east-1'}
 
 LambdaContainerFunctionStack(app, "LambdaContainerFunctionStack", env=env)

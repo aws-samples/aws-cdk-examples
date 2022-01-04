@@ -1,6 +1,6 @@
 from aws_cdk import (
     aws_s3 as s3,
-    core as cdk
+    App, Stack
 )
 
 from my_custom_resource import MyCustomResource
@@ -8,8 +8,8 @@ from my_custom_resource import MyCustomResource
 # A Stack that sets up MyCustomResource and shows how to get an
 # attribute from it.
 
-class MyStack(cdk.Stack):
-    def __init__(self, scope: cdk.App, id: str, **kwargs) -> None:
+class MyStack(Stack):
+    def __init__(self, scope: App, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # Create s3 bucket
@@ -21,6 +21,6 @@ class MyStack(cdk.Stack):
             bucket_name=bucket.bucket_name
         )
 
-app = cdk.App()
+app = App()
 MyStack(app, "CustomResourceDemoStack")
 app.synth()
