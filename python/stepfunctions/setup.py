@@ -18,12 +18,6 @@ setuptools.setup(
     package_dir={"": "stepfunctions"},
     packages=setuptools.find_packages(where="stepfunctions"),
 
-    install_requires=[
-        "aws-cdk.core",
-        "aws-cdk.aws-stepfunctions",
-        "aws-cdk.aws-stepfunctions-tasks"
-    ],
-
     python_requires=">=3.6",
 
     classifiers=[

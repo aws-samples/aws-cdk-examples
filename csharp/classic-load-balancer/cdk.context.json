@@ -1,3 +1,0 @@
-{
-  "@aws-cdk/core:enableStackNameDuplicates": "true"
-}

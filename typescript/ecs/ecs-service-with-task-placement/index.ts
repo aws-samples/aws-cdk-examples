@@ -1,6 +1,6 @@
-import ecs = require('@aws-cdk/aws-ecs');
-import ec2 = require('@aws-cdk/aws-ec2');
-import cdk = require('@aws-cdk/core');
+import ecs = require('aws-cdk-lib/aws-ecs');
+import ec2 = require('aws-cdk-lib/aws-ec2');
+import cdk = require('aws-cdk-lib');
 
 const app = new cdk.App();
 const stack = new cdk.Stack(app, 'aws-ecs-integ-ecs');

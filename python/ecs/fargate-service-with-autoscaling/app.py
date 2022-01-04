@@ -2,13 +2,14 @@ from aws_cdk import (
     aws_ec2 as ec2,
     aws_ecs as ecs,
     aws_ecs_patterns as ecs_patterns,
-    core,
+    App, CfnOutput, Duration, Stack
 )
+from constructs import Construct
 
 
-class AutoScalingFargateService(core.Stack):
+class AutoScalingFargateService(Stack):
 
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # Create a cluster
@@ -44,15 +45,15 @@ class AutoScalingFargateService(core.Stack):
         scaling.scale_on_cpu_utilization(
             "CpuScaling",
             target_utilization_percent=50,
-            scale_in_cooldown=core.Duration.seconds(60),
-            scale_out_cooldown=core.Duration.seconds(60),
+            scale_in_cooldown=Duration.seconds(60),
+            scale_out_cooldown=Duration.seconds(60),
         )
 
-        core.CfnOutput(
+        CfnOutput(
             self, "LoadBalancerDNS",
             value=fargate_service.load_balancer.load_balancer_dns_name
         )
 
-app = core.App()
+app = App()
 AutoScalingFargateService(app, "aws-fargate-application-autoscaling")
 app.synth()

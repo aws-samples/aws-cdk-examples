@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/aws/aws-cdk-go/awscdk"
-	"github.com/aws/aws-cdk-go/awscdk/awsec2"
-	"github.com/aws/aws-cdk-go/awscdk/awsautoscaling"
-	"github.com/aws/aws-cdk-go/awscdk/awsecs"
-	"github.com/aws/constructs-go/constructs/v3"
+	"github.com/aws/aws-cdk-go/awscdk/v2"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awsec2"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awsautoscaling"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awsecs"
+	"github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
 )
 
@@ -28,8 +28,7 @@ func NewClusterStack(scope constructs.Construct, id string, props *ClusterStackP
 
 	asg := awsautoscaling.NewAutoScalingGroup(stack, jsii.String("MyFleet"), &awsautoscaling.AutoScalingGroupProps{
 		InstanceType: awsec2.NewInstanceType(jsii.String("t2.xlarge")),
-		MachineImage: awsecs.NewEcsOptimizedAmi(nil),
-		UpdateType: awsautoscaling.UpdateType_REPLACING_UPDATE,
+		MachineImage: awsecs.EcsOptimizedImage_AmazonLinux2(awsecs.AmiHardwareType_STANDARD, &awsecs.EcsOptimizedImageOptions{}),
 		DesiredCapacity: jsii.Number(3),
 		Vpc: vpc,
 	});
@@ -38,10 +37,10 @@ func NewClusterStack(scope constructs.Construct, id string, props *ClusterStackP
 		Vpc: vpc,
 	});
 
-	cluster.AddAutoScalingGroup(asg, nil);
-	cluster.AddCapacity(jsii.String("DefaultAutoScalingGroup"), &awsecs.AddCapacityOptions{
-		InstanceType: awsec2.NewInstanceType(jsii.String("t2.micro")),
+  capacity_provider := awsecs.NewAsgCapacityProvider(stack, jsii.String("AsgCapacityProvider"), &awsecs.AsgCapacityProviderProps{
+		AutoScalingGroup: asg,
 	});
+	cluster.AddAsgCapacityProvider(capacity_provider, &awsecs.AddAutoScalingGroupCapacityOptions{})
 
 	return stack
 }

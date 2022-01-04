@@ -1,10 +1,11 @@
 
-import * as cdk from '@aws-cdk/core';
-import * as ec2 from '@aws-cdk/aws-ec2';
-import * as neptune from '@aws-cdk/aws-neptune';
+import * as cdk from 'aws-cdk-lib';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as neptune from '@aws-cdk/aws-neptune-alpha';
+import { Construct } from 'constructs';
 
 export class NeptuneWithVpcStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
     // Create VPC for use with Neptune

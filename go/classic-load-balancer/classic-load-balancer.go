@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/aws/aws-cdk-go/awscdk"
-	"github.com/aws/aws-cdk-go/awscdk/awsec2"
-	"github.com/aws/aws-cdk-go/awscdk/awsautoscaling"
-	"github.com/aws/aws-cdk-go/awscdk/awselasticloadbalancing"
-	"github.com/aws/constructs-go/constructs/v3"
+	"github.com/aws/aws-cdk-go/awscdk/v2"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awsec2"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awsautoscaling"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awselasticloadbalancing"
+	"github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
 )
 

@@ -1,9 +1,10 @@
 from aws_cdk import (
   aws_wafv2      as wafv2,
-  core,
+  CfnOutput, Stack, Tags
 )
+from constructs import Construct
 
-class WafRegionalStack(core.Stack):
+class WafRegionalStack(Stack):
 
   def make_rules(self, list_of_rules={}):
     rules = list()
@@ -102,7 +103,7 @@ class WafRegionalStack(core.Stack):
     return rules
 
 
-  def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+  def __init__(self, scope: Construct, id: str, **kwargs) -> None:
     super().__init__(scope, id, **kwargs)
 
     ##
@@ -171,8 +172,8 @@ class WafRegionalStack(core.Stack):
       rules       = self.make_rules(managed_rules),
     ) ## wafv2.CfnWebACL
 
-    core.Tags.of(wafacl).add("Name",      "waf-regional",     priority=300)
-    core.Tags.of(wafacl).add("Purpose",   "WAF for Regional", priority=300)
-    core.Tags.of(wafacl).add("CreatedBy", "Cloudformation",   priority=300)
+    Tags.of(wafacl).add("Name",      "waf-regional",     priority=300)
+    Tags.of(wafacl).add("Purpose",   "WAF for Regional", priority=300)
+    Tags.of(wafacl).add("CreatedBy", "Cloudformation",   priority=300)
 
-    core.CfnOutput(self, "WafAclArn", export_name="WafRegionalStack:WafAclRegionalArn", value=wafacl.attr_arn)
+    CfnOutput(self, "WafAclArn", export_name="WafRegionalStack:WafAclRegionalArn", value=wafacl.attr_arn)

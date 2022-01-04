@@ -18,12 +18,6 @@ setuptools.setup(
     package_dir={"": "my_widget_service"},
     packages=setuptools.find_packages(where="my_widget_service"),
 
-    install_requires=[
-        "aws-cdk.core",
-        "aws-cdk.aws_apigateway",
-        "aws-cdk.aws_s3"
-    ],
-
     python_requires=">=3.6",
 
     classifiers=[
