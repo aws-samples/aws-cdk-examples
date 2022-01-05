@@ -1,0 +1,5 @@
+aws-cdk.aws-iam
+aws-cdk.aws-lambda
+aws-cdk.aws-s3
+aws-cdk.aws-s3objectlambda
+aws-cdk.core
