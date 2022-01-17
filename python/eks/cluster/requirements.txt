@@ -1,1 +1,5 @@
+aws-cdk.aws-autoscaling
+aws-cdk.custom-resources
+aws-cdk.aws-ec2
 aws-cdk.aws-eks
+aws-cdk.aws-iam
