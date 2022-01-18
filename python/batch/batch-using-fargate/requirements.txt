@@ -1,3 +1,4 @@
+aws-cdk-lib>=2.0.0
 aws-cdk.core>=1.139.0
 aws-cdk.aws-batch>=1.139.0
 aws-cdk.aws-ec2>=1.139.0
