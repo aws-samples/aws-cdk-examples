@@ -1,4 +1,4 @@
 {
-    "app": "python3 app.py",
-    "versionReporting": false
+  "app": "python3 app.py",
+  "versionReporting": false
 }

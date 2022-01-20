@@ -1,17 +1,17 @@
-from aws_cdk import (core, 
-                     aws_ec2 as _ec2, 
-                     aws_batch as _batch,
-                     aws_ecs as _ecs,
-                     aws_iam as _iam,
+from aws_cdk import (aws_ec2 as ec2, 
+                     aws_batch_alpha as batch,
+                     aws_ecs as ecs,
+                     App, CfnOutput, Stack
                      )
+from constructs import Construct
 
-class BatchEC2Stack(core.Stack):
+class BatchEC2Stack(Stack):
 
-    def __init__(self, app: core.App, id: str, **kwargs):
-        super().__init__(app, id, **kwargs)
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
+        super().__init__(scope, id, **kwargs)
 
         # This resource alone will create a private/public subnet in each AZ as well as nat/internet gateway(s)
-        vpc = _ec2.Vpc(self, "VPC")
+        vpc = ec2.Vpc(self, "VPC")
 
         # To create number of Batch Compute Environment
         count = 3
@@ -21,40 +21,37 @@ class BatchEC2Stack(core.Stack):
         # For loop to create Batch Compute Environments
         for i in range(count):
             name = "MyBatchARM64Env" + str(i)
-            batch_environment = _batch.ComputeEnvironment(self, name,
-            compute_resources=_batch.ComputeResources(
-                type=_batch.ComputeResourceType.SPOT,
+            batch_environment = batch.ComputeEnvironment(self, name,compute_resources=batch.ComputeResources(
+                type=batch.ComputeResourceType.SPOT,
                 bid_percentage=75,
-                instance_types=[_ec2.InstanceType("a1.medium"),_ec2.InstanceType("a1.large")],
-                image=_ecs.EcsOptimizedImage.amazon_linux2(_ecs.AmiHardwareType.ARM),
-                vpc_subnets=_ec2.SubnetSelection(
-                    subnet_type=_ec2.SubnetType.PRIVATE
-                ),
+                instance_types=[ec2.InstanceType("a1.medium"),ec2.InstanceType("a1.large")],
+                image=ecs.EcsOptimizedImage.amazon_linux2(ecs.AmiHardwareType.ARM),
+                vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE_WITH_NAT),
                 vpc=vpc
                 )
             )
 
-            batch_ce.append(_batch.JobQueueComputeEnvironment(compute_environment=batch_environment,order=i))
+            batch_ce.append(batch.JobQueueComputeEnvironment(compute_environment=batch_environment,order=i))
 
         # Create AWS Batch Job Queue and associate all Batch CE.
-        self.batch_queue = _batch.JobQueue(self, "JobQueueArm64",
+        self.batch_queue = batch.JobQueue(self, "JobQueueArm64",
                                            compute_environments=batch_ce)
 
 
         # Create Job Definition to submit job in batch job queue. 
-        batch_jobDef = _batch.JobDefinition(self, "MyJobDefArm64",
+        batch_jobDef = batch.JobDefinition(self, "MyJobDefArm64",
                                            job_definition_name="CDKJobDefArm64",
-                                           container=_batch.JobDefinitionContainer(image=_ecs.ContainerImage.from_registry(
+                                           container=batch.JobDefinitionContainer(image=ecs.ContainerImage.from_registry(
                                                "public.ecr.aws/amazonlinux/amazonlinux:latest"), command=["sleep", "60"], memory_limit_mib=512, vcpus=1),
                                            )
 
 
         # Output resources
-        core.CfnOutput(self, "BatchJobQueue",value=self.batch_queue.job_queue_name)
-        core.CfnOutput(self, "JobDefinition",value=batch_jobDef.job_definition_name)
+        CfnOutput(self, "BatchJobQueue",value=self.batch_queue.job_queue_name)
+        CfnOutput(self, "JobDefinition",value=batch_jobDef.job_definition_name)
 
 
 
-app = core.App()
+app = App()
 BatchEC2Stack(app, "BatchEC2Stack")
 app.synth()

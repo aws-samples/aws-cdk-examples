@@ -1,2 +1,2 @@
-.venv
-cdk.out
+.venv/*
+cdk.out/*
