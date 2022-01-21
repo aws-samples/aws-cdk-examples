@@ -1,9 +1,12 @@
 from aws_cdk import (
+    App,
+    Aws,
+    CfnOutput,
+    Stack,
     aws_iam as iam,
     aws_lambda as _lambda,
     aws_s3 as s3,
     aws_s3objectlambda as s3_object_lambda,
-    core as cdk,
 )
 
 # configurable variables
@@ -11,10 +14,10 @@ S3_ACCESS_POINT_NAME = "example-test-ap"
 OBJECT_LAMBDA_ACCESS_POINT_NAME = "s3-object-lambda-ap"
 
 
-class S3ObjectLambdaStack(cdk.Stack):
-    def __init__(self, app: cdk.App, id: str) -> None:
+class S3ObjectLambdaStack(Stack):
+    def __init__(self, app: App, id: str) -> None:
         super().__init__(app, id)
-        self.access_point = f"arn:aws:s3:{cdk.Aws.REGION}:{cdk.Aws.ACCOUNT_ID}:accesspoint/" \
+        self.access_point = f"arn:aws:s3:{Aws.REGION}:{Aws.ACCOUNT_ID}:accesspoint/" \
                             f"{S3_ACCESS_POINT_NAME}"
 
         # Set up a bucket
@@ -34,7 +37,7 @@ class S3ObjectLambdaStack(cdk.Stack):
             conditions={
                 "StringEquals":
                     {
-                        "s3:DataAccessPointAccount": f"{cdk.Aws.ACCOUNT_ID}"
+                        "s3:DataAccessPointAccount": f"{Aws.ACCOUNT_ID}"
                     }
             }
         ))
@@ -44,7 +47,7 @@ class S3ObjectLambdaStack(cdk.Stack):
             self, "retrieve_transformed_obj_lambda",
             runtime=_lambda.Runtime.PYTHON_3_8,
             handler="index.handler",
-            code=_lambda.Code.asset("lambda/retrieve_transformed_object_lambda"))
+            code=_lambda.Code.from_asset("lambda/retrieve_transformed_object_lambda"))
 
         # Object lambda s3 access
         retrieve_transformed_object_lambda.add_to_role_policy(iam.PolicyStatement(
@@ -56,7 +59,7 @@ class S3ObjectLambdaStack(cdk.Stack):
         retrieve_transformed_object_lambda.add_permission("invocationRestriction",
                                                           action="lambda:InvokeFunction",
                                                           principal=iam.AccountRootPrincipal(),
-                                                          source_account=cdk.Aws.ACCOUNT_ID)
+                                                          source_account=Aws.ACCOUNT_ID)
 
         # Associate Bucket's access point with lambda get access
         policy_doc = iam.PolicyDocument()
@@ -100,10 +103,10 @@ class S3ObjectLambdaStack(cdk.Stack):
             )
         )
 
-        cdk.CfnOutput(self, "exampleBucketArn", value=bucket.bucket_arn)
-        cdk.CfnOutput(self, "objectLambdaArn",
+        CfnOutput(self, "exampleBucketArn", value=bucket.bucket_arn)
+        CfnOutput(self, "objectLambdaArn",
                       value=retrieve_transformed_object_lambda.function_arn)
-        cdk.CfnOutput(self, "objectLambdaAccessPointArn", value=object_lambda_ap.attr_arn)
-        cdk.CfnOutput(self, "objectLambdaAccessPointUrl",
-                      value=f"https://console.aws.amazon.com/s3/olap/{cdk.Aws.ACCOUNT_ID}/"
-                            f"{OBJECT_LAMBDA_ACCESS_POINT_NAME}?region={cdk.Aws.REGION}")
+        CfnOutput(self, "objectLambdaAccessPointArn", value=object_lambda_ap.attr_arn)
+        CfnOutput(self, "objectLambdaAccessPointUrl",
+                      value=f"https://console.aws.amazon.com/s3/olap/{Aws.ACCOUNT_ID}/"
+                            f"{OBJECT_LAMBDA_ACCESS_POINT_NAME}?region={Aws.REGION}")
