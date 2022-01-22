@@ -1,0 +1,31 @@
+{
+  "name": "rekognition-lambda-s3-trigger",
+  "version": "1.0.0",
+  "bin": {
+    "rekognition-lambda-s3-trigger": "bin/rekognition-lambda-s3-trigger.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@aws-cdk/assert": "*",
+    "@types/node": "10.17.27",
+    "aws-cdk": "*",
+    "ts-node": "^9.0.0",
+    "typescript": "~3.9.7"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-dynamodb": "*",
+    "@aws-cdk/aws-iam": "*",
+    "@aws-cdk/aws-lambda": "*",
+    "@aws-cdk/aws-lambda-event-sources": "*",
+    "@aws-cdk/aws-s3": "*",
+    "@aws-cdk/core": "*",
+    "aws-cdk-lib": "^2.8.0",
+    "aws-sdk": "^2.1062.0",
+    "source-map-support": "^0.5.16"
+  }
+}
