@@ -1,0 +1,28 @@
+{
+  "name": "product-stack",
+  "version": "0.1.0",
+  "bin": {
+    "product-stack": "bin/ec2-product-stack.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@aws-cdk/assertions": "1.134.0",
+    "@types/jest": "^26.0.10",
+    "@types/node": "10.17.27",
+    "jest": "^26.4.2",
+    "ts-jest": "^26.2.0",
+    "aws-cdk": "1.134.0",
+    "ts-node": "^9.0.0",
+    "typescript": "~3.9.7"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.0.0",
+    "constructs": "^10.0.0",
+    "@aws-cdk/aws-servicecatalog-alpha": "2.8.0-alpha.0"
+  }
+}
