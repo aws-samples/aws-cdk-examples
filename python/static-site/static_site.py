@@ -9,7 +9,6 @@ uses Origin Custom Header (referer) to limit the access of s3 objects to the
 CloudFront only.
 """
 from aws_cdk import (
-    core as cdk,
     aws_s3 as s3,
     aws_cloudfront as cloudfront,
     aws_cloudfront_origins as origins,
@@ -18,10 +17,11 @@ from aws_cdk import (
     aws_route53_targets as targets,
     aws_iam as iam,
     aws_ssm as ssm,
+    RemovalPolicy
 )
+from constructs import Construct
 
-
-class StaticSite(cdk.Construct):
+class StaticSite(Construct):
     """The base class for StaticSite constructs"""
 
     def __init__(
@@ -104,7 +104,7 @@ class StaticSite(cdk.Construct):
             )
         else:
             # If certificate arn is not provided, create a new one.
-            # ACM certificates that are used with CloudFront must be in 
+            # ACM certificates that are used with CloudFront must be in
             # the us-east-1 region.
             self.certificate = acm.DnsValidatedCertificate(
                 self,
@@ -134,7 +134,7 @@ class StaticSitePrivateS3(StaticSite):
             bucket_name=self._site_domain_name,
             encryption=s3.BucketEncryption.S3_MANAGED,
             block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
-            removal_policy=cdk.RemovalPolicy.DESTROY,
+            removal_policy=RemovalPolicy.DESTROY,
             auto_delete_objects=True,
         )
 
@@ -183,7 +183,7 @@ class StaticSitePublicS3(StaticSite):
             bucket_name=self._site_domain_name,
             website_index_document="index.html",
             website_error_document="404.html",
-            removal_policy=cdk.RemovalPolicy.DESTROY,
+            removal_policy=RemovalPolicy.DESTROY,
             auto_delete_objects=True,
         )
         bucket_policy = iam.PolicyStatement(
@@ -209,11 +209,10 @@ class StaticSitePublicS3(StaticSite):
         self.distribution = cloudfront.CloudFrontWebDistribution(
             self,
             "cloudfront_distribution",
-            alias_configuration=cloudfront.AliasConfiguration(
-                acm_cert_ref=self.certificate.certificate_arn,
-                names=[self._site_domain_name],
-                ssl_method=cloudfront.SSLMethod.SNI,
+            viewer_certificate = cloudfront.ViewerCertificate.from_acm_certificate(self.certificate,
+                aliases=[self._site_domain_name],
                 security_policy=cloudfront.SecurityPolicyProtocol.TLS_V1_2_2019,
+                ssl_method=cloudfront.SSLMethod.SNI
             ),
             origin_configs=[
                 cloudfront.SourceConfiguration(

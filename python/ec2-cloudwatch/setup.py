@@ -18,18 +18,6 @@ setuptools.setup(
     package_dir={"": "ec2_cloudwatch"},
     packages=setuptools.find_packages(where="ec2_cloudwatch"),
 
-    install_requires=[
-        "aws-cdk.core",
-        "aws-cdk.aws-ec2",
-        "aws-cdk.aws-backup",
-        "aws-cdk.aws-cloudwatch",
-        "aws-cdk.aws-events",
-        "aws-cdk.aws-events-targets",
-        "aws-cdk.aws-lambda",
-        "aws-cdk.aws-logs",
-        "aws-cdk.aws-iam"
-    ],
-
     python_requires=">=3.6",
 
     classifiers=[

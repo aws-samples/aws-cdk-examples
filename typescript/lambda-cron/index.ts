@@ -1,7 +1,7 @@
-import events = require('@aws-cdk/aws-events');
-import targets = require('@aws-cdk/aws-events-targets');
-import lambda = require('@aws-cdk/aws-lambda');
-import cdk = require('@aws-cdk/core');
+import events = require('aws-cdk-lib/aws-events');
+import targets = require('aws-cdk-lib/aws-events-targets');
+import lambda = require('aws-cdk-lib/aws-lambda');
+import cdk = require('aws-cdk-lib');
 
 import fs = require('fs');
 

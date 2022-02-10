@@ -1,2 +1,2 @@
-aws-cdk.core
-aws_cdk.custom_resources
+aws-cdk-lib>=2.0.0
+constructs>=10.0.0

@@ -15,10 +15,11 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^8.10.38",
-    "typescript": "~3.7.2"
+    "aws-cdk": "*",
+    "typescript": "~3.9.7"
   },
   "dependencies": {
-    "@aws-cdk/aws-amplify": "*",
-    "@aws-cdk/core": "*"
+    "aws-cdk-lib": "^2.0.0",
+    "constructs": "^10.0.0"
   }
 }

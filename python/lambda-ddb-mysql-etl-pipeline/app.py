@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-from aws_cdk import core
+from aws_cdk import App
 from etl_pipeline_cdk.etl_pipeline_cdk_stack import EtlPipelineCdkStack
 
-app = core.App()
+app = App()
 STAGE = app.node.try_get_context("STAGE")
 ENV={
 	"region": app.node.try_get_context("REGION"),
