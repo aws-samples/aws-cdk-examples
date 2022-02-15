@@ -1,9 +1,10 @@
-import { CodeCommitSourceAction, CodeBuildAction } from "@aws-cdk/aws-codepipeline-actions"
-import { PolicyStatement } from "@aws-cdk/aws-iam"
-import { Construct, Stack, StackProps } from "@aws-cdk/core"
-import { PipelineProject, LinuxBuildImage } from "@aws-cdk/aws-codebuild"
-import { Artifact, Pipeline } from "@aws-cdk/aws-codepipeline"
-import { Repository } from "@aws-cdk/aws-codecommit"
+import { CodeCommitSourceAction, CodeBuildAction } from "aws-cdk-lib/aws-codepipeline-actions"
+import { PolicyStatement } from "aws-cdk-lib/aws-iam"
+import { ArnFormat, Stack, StackProps } from "aws-cdk-lib"
+import { PipelineProject, LinuxBuildImage } from "aws-cdk-lib/aws-codebuild"
+import { Artifact, Pipeline } from "aws-cdk-lib/aws-codepipeline"
+import { Repository } from "aws-cdk-lib/aws-codecommit"
+import { Construct } from "constructs"
 import { lambdaApiStackName, lambdaFunctionName } from "../bin/lambda"
 
 interface CIStackProps extends StackProps {
@@ -76,7 +77,7 @@ export class CIStack extends Stack {
             this.formatArn({
                 service: "lambda",
                 resource: "function",
-                sep: ":",
+                arnFormat: ArnFormat.COLON_RESOURCE_NAME,
                 resourceName: lambdaFunctionName,
             }),
             "arn:aws:s3:::cdktoolkit-stagingbucket-*"

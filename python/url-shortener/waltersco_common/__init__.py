@@ -1,6 +1,7 @@
 import os
-from aws_cdk.core import Stack, Construct, Environment
+from aws_cdk import Stack, Environment
 from aws_cdk import aws_apigateway, aws_route53, aws_route53_targets, aws_certificatemanager, aws_ec2
+from constructs import Construct
 
 # we need default values here since aws-cdk-examples build synthesizes the app
 ACCOUNT=os.environ.get('WALTERSCO_ACCOUNT', '111111111111')

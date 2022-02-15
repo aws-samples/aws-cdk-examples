@@ -1,7 +1,7 @@
-import { Construct, Duration, Stack, StackProps, CfnOutput, Aws } from "@aws-cdk/core";
-
-import { GraphWidget, Dashboard, LogQueryWidget, TextWidget } from '@aws-cdk/aws-cloudwatch';
-import { Function, Runtime, AssetCode } from "@aws-cdk/aws-lambda";
+import { Duration, Stack, StackProps, CfnOutput, Aws } from "aws-cdk-lib";
+import { GraphWidget, Dashboard, LogQueryWidget, TextWidget } from 'aws-cdk-lib/aws-cloudwatch';
+import { Function, Runtime, AssetCode } from "aws-cdk-lib/aws-lambda";
+import { Construct } from 'constructs';
 
 interface LambdaCloudwatchDashboardStackProps extends StackProps {
   dashboardName: string
@@ -66,10 +66,10 @@ export class LambdaCloudwatchDashboardStack extends Stack {
       queryLines:[
         "fields @timestamp, @message",
         "sort @timestamp desc",
-        "limit 20"], 
+        "limit 20"],
       width: 24,
       }))
-    
+
     // Generate Outputs
     const cloudwatchDashboardURL = `https://${Aws.REGION}.console.aws.amazon.com/cloudwatch/home?region=${Aws.REGION}#dashboards:name=${props.dashboardName}`;
     new CfnOutput(this, 'DashboardOutput', {

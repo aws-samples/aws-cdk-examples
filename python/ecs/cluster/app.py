@@ -2,13 +2,13 @@ from aws_cdk import (
     aws_autoscaling as autoscaling,
     aws_ec2 as ec2,
     aws_ecs as ecs,
-    core,
+    App, Stack
 )
+from constructs import Construct
 
+class ECSCluster(Stack):
 
-class ECSCluster(core.Stack):
-
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, *kwargs)
 
         vpc = ec2.Vpc(
@@ -19,9 +19,8 @@ class ECSCluster(core.Stack):
         asg = autoscaling.AutoScalingGroup(
             self, "MyFleet",
             instance_type=ec2.InstanceType("t2.xlarge"),
-            machine_image=ecs.EcsOptimizedAmi(),
+            machine_image=ecs.EcsOptimizedImage.amazon_linux2(),
             associate_public_ip_address=True,
-            update_type=autoscaling.UpdateType.REPLACING_UPDATE,
             desired_capacity=3,
             vpc=vpc,
             vpc_subnets={ 'subnet_type': ec2.SubnetType.PUBLIC },
@@ -32,10 +31,11 @@ class ECSCluster(core.Stack):
             vpc=vpc
         )
 
-        cluster.add_auto_scaling_group(asg)
-        cluster.add_capacity("DefaultAutoScalingGroup",
-                             instance_type=ec2.InstanceType("t2.micro"))
+        capacity_provider = ecs.AsgCapacityProvider(self, "AsgCapacityProvider",
+            auto_scaling_group=asg
+        )
+        cluster.add_asg_capacity_provider(capacity_provider)
 
-app = core.App()
+app = App()
 ECSCluster(app, "MyFirstEcsCluster")
 app.synth()
