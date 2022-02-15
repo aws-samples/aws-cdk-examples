@@ -2,10 +2,10 @@ package com.myorg;
 
 import com.myorg.utils.PropertyLoader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import software.amazon.awscdk.core.Construct;
-import software.amazon.awscdk.core.Stack;
-import software.amazon.awscdk.core.StackProps;
+import software.amazon.awscdk.Stack;
+import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.autoscaling.AutoScalingGroup;
 import software.amazon.awscdk.services.ec2.AmazonLinuxImage;
 import software.amazon.awscdk.services.ec2.InstanceClass;
@@ -18,11 +18,13 @@ import software.amazon.awscdk.services.elasticloadbalancingv2.ApplicationLoadBal
 import software.amazon.awscdk.services.elasticloadbalancingv2.ApplicationProtocol;
 import software.amazon.awscdk.services.elasticloadbalancingv2.ApplicationTargetGroup;
 import software.amazon.awscdk.services.elasticloadbalancingv2.ApplicationTargetGroupProps;
-import software.amazon.awscdk.services.elasticloadbalancingv2.ContentType;
-import software.amazon.awscdk.services.elasticloadbalancingv2.FixedResponse;
+import software.amazon.awscdk.services.elasticloadbalancingv2.FixedResponseOptions;
 import software.amazon.awscdk.services.elasticloadbalancingv2.IApplicationLoadBalancerTarget;
 import software.amazon.awscdk.services.elasticloadbalancingv2.IApplicationTargetGroup;
+import software.amazon.awscdk.services.elasticloadbalancingv2.ListenerAction;
+import software.amazon.awscdk.services.elasticloadbalancingv2.ListenerCondition;
 import software.amazon.awscdk.services.elasticloadbalancingv2.TargetType;
+import software.constructs.Construct;
 
 public class ALBProjectStack extends Stack {
 
@@ -35,7 +37,7 @@ public class ALBProjectStack extends Stack {
 
     // property loader
     PropertyLoader propertyLoad = new PropertyLoader();
-    
+
     // create ALB and all anciliarry services
     Vpc vpc = Vpc.Builder.create(this, "VPC").build();
     AutoScalingGroup asg =
@@ -84,63 +86,67 @@ public class ALBProjectStack extends Stack {
     // adding application listern rules
     ApplicationListenerRule alrProdApi =
         ApplicationListenerRule.Builder.create(this, "prodApi")
-            .pathPattern("/production")
+            .conditions(Arrays.asList(
+                ListenerCondition.pathPatterns(Arrays.asList("/production")),
+                ListenerCondition.hostHeaders(Arrays.asList(propertyLoad.getRestAPIHostHeader())))
+            )
             .priority(1)
             .listener(http)
-            .hostHeader(propertyLoad.getRestAPIHostHeader())
             .build();
-    
+
     ApplicationListenerRule alrProdM =
         ApplicationListenerRule.Builder.create(this, "prodMobile")
-            .pathPattern("/production")
+            .conditions(Arrays.asList(
+                ListenerCondition.pathPatterns(Arrays.asList("/production")),
+                ListenerCondition.hostHeaders(Arrays.asList(propertyLoad.getRestMobileHostHeader())))
+            )
             .priority(2)
             .listener(http)
-            .hostHeader(propertyLoad.getRestMobileHostHeader())
             .build();
 
     ApplicationListenerRule alrSandboxApi =
         ApplicationListenerRule.Builder.create(this, "sandboxApi")
-            .pathPattern("/sandbox")
+            .conditions(Arrays.asList(
+                ListenerCondition.pathPatterns(Arrays.asList("/sandbox")),
+                ListenerCondition.hostHeaders(Arrays.asList(propertyLoad.getRestAPIHostHeader())))
+            )
             .priority(3)
             .listener(http)
-            .hostHeader(propertyLoad.getRestAPIHostHeader())
             .build();
 
     ApplicationListenerRule alrSandboxM =
         ApplicationListenerRule.Builder.create(this, "sandboxMobile")
-            .pathPattern("/sandbox")
+            .conditions(Arrays.asList(
+                ListenerCondition.pathPatterns(Arrays.asList("/sandbox")),
+                ListenerCondition.hostHeaders(Arrays.asList(propertyLoad.getRestMobileHostHeader())))
+            )
             .priority(4)
             .listener(http)
-            .hostHeader(propertyLoad.getRestMobileHostHeader())
             .build();
 
     // adding fixed responses
-    alrProdApi.addFixedResponse(
-        FixedResponse.builder()
-            .statusCode("200")
-            .contentType(ContentType.APPLICATION_JSON)
-            .messageBody(propertyLoad.getProdApiMessageBody())
-            .build());
+    alrProdApi.configureAction(
+        ListenerAction.fixedResponse(200, FixedResponseOptions.builder()
+        .contentType("application/json")
+        .messageBody(propertyLoad.getProdApiMessageBody())
+        .build()));
 
-    alrProdM.addFixedResponse(
-        FixedResponse.builder()
-            .statusCode("200")
-            .contentType(ContentType.APPLICATION_JSON)
-            .messageBody(propertyLoad.getProdMobileMessageBody())
-            .build());
+    alrProdM.configureAction(
+        ListenerAction.fixedResponse(200, FixedResponseOptions.builder()
+        .contentType("application/json")
+        .messageBody(propertyLoad.getProdMobileMessageBody())
+        .build()));
 
-    alrSandboxApi.addFixedResponse(
-        FixedResponse.builder()
-            .statusCode("200")
-            .contentType(ContentType.APPLICATION_JSON)
-            .messageBody(propertyLoad.getSandboxApiMessageBody())
-            .build());
+    alrSandboxApi.configureAction(
+        ListenerAction.fixedResponse(200, FixedResponseOptions.builder()
+        .contentType("application/json")
+        .messageBody(propertyLoad.getSandboxApiMessageBody())
+        .build()));
 
-    alrSandboxM.addFixedResponse(
-        FixedResponse.builder()
-            .statusCode("200")
-            .contentType(ContentType.APPLICATION_JSON)
-            .messageBody(propertyLoad.getSandboxMobileMessageBody())
-            .build());
+    alrSandboxM.configureAction(
+        ListenerAction.fixedResponse(200, FixedResponseOptions.builder()
+        .contentType("application/json")
+        .messageBody(propertyLoad.getSandboxMobileMessageBody())
+        .build()));
   }
 }

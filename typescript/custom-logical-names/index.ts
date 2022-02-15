@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 import { BaseStack } from './base-stack';
-import { App, Construct, StackProps } from '@aws-cdk/core';
-import s3 = require('@aws-cdk/aws-s3');
-import sns = require('@aws-cdk/aws-sns');
+import { App, StackProps } from 'aws-cdk-lib';
+import s3 = require('aws-cdk-lib/aws-s3');
+import sns = require('aws-cdk-lib/aws-sns');
+import { Construct } from 'constructs';
 
 class MyStack extends BaseStack {
   constructor(scope: Construct, id: string, props?: StackProps) {

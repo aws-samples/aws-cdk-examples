@@ -1,11 +1,11 @@
-from aws_cdk import core
+from aws_cdk import Duration, Stack
 import aws_cdk.aws_ec2 as ec2
 import aws_cdk.aws_rds as rds
+from constructs import Construct
 
+class CdkRdsStack(Stack):
 
-class CdkRdsStack(core.Stack):
-
-    def __init__(self, scope: core.Construct, id: str, vpc, asg_security_groups, **kwargs) -> None:
+    def __init__(self, scope: Construct, id: str, vpc, asg_security_groups, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # Ceate Aurora Cluster with 2 instances with CDK High Level API
@@ -44,7 +44,7 @@ class CdkRdsStack(core.Stack):
                                              cloudwatch_logs_exports=["audit", "error", "general", "slowquery"],
                                              deletion_protection=False,
                                              delete_automated_backups=False,
-                                             backup_retention=core.Duration.days(7),
+                                             backup_retention=Duration.days(7),
                                              parameter_group=rds.ParameterGroup.from_parameter_group_name(
                                                  self, "para-group-mysql",
                                                  parameter_group_name="default.mysql5.7"

@@ -68,7 +68,7 @@ $ cdk destroy
 | [lambda-layer](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/lambda-layer/) | Running a Lambda with a lambda layer |
 | [lambda-s3-trigger](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/lambda-s3-trigger/) | S3 trigger for Lambda |
 | [rds](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/rds/) | Creating a MySQL RDS database inside its dedicated VPC |
+| [s3-object-lambda](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/s3-object-lambda/) | Creating an S3 Object Lambda and access point |
 | [stepfunctions](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/stepfunctions/) | A simple StepFunctions workflow |
 | [url-shortner](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/url-shortener) | Demo from the [Infrastructure ***is*** Code with the AWS CDK](https://youtu.be/ZWCvNFUN-sU) AWS Online Tech Talk |
 | [ec2-instance](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ec2/instance/) | Create EC2 Instance in new VPC with Systems Manager enabled |
-

@@ -1,6 +1,7 @@
-import cfn = require('@aws-cdk/aws-cloudformation');
-import lambda = require('@aws-cdk/aws-lambda');
-import cdk = require('@aws-cdk/core');
+import cdk = require('aws-cdk-lib');
+import customResources = require('aws-cdk-lib/custom-resources');
+import lambda = require('aws-cdk-lib/aws-lambda');
+import { Construct } from 'constructs';
 
 import fs = require('fs');
 
@@ -11,21 +12,27 @@ export interface MyCustomResourceProps {
   message: string;
 }
 
-export class MyCustomResource extends cdk.Construct {
+export class MyCustomResource extends Construct {
   public readonly response: string;
 
-  constructor(scope: cdk.Construct, id: string, props: MyCustomResourceProps) {
+  constructor(scope: Construct, id: string, props: MyCustomResourceProps) {
     super(scope, id);
 
-    const resource = new cfn.CustomResource(this, 'Resource', {
-      provider: cfn.CustomResourceProvider.lambda(new lambda.SingletonFunction(this, 'Singleton', {
-        uuid: 'f7d4f730-4ee1-11e8-9c2d-fa7ae01bbebc',
-        code: new lambda.InlineCode(fs.readFileSync('custom-resource-handler.py', { encoding: 'utf-8' })),
-        handler: 'index.main',
-        timeout: cdk.Duration.seconds(300),
-        runtime: lambda.Runtime.PYTHON_3_6,
-      })),
-      properties: props
+    const fn = new lambda.SingletonFunction(this, 'Singleton', {
+      uuid: 'f7d4f730-4ee1-11e8-9c2d-fa7ae01bbebc',
+      code: new lambda.InlineCode(fs.readFileSync('custom-resource-handler.py', { encoding: 'utf-8' })),
+      handler: 'index.main',
+      timeout: cdk.Duration.seconds(300),
+      runtime: lambda.Runtime.PYTHON_3_6,
+    });
+
+    const provider = new customResources.Provider(this, 'Provider', {
+      onEventHandler: fn,
+    });
+
+    const resource = new cdk.CustomResource(this, 'Resource', {
+      serviceToken: provider.serviceToken,
+      properties: props,
     });
 
     this.response = resource.getAtt('Response').toString();

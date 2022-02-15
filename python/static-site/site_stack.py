@@ -1,8 +1,8 @@
-from aws_cdk import core as cdk
+from aws_cdk import CfnOutput, Stack
 from static_site import StaticSitePublicS3, StaticSitePrivateS3
 
 
-class StaticSiteStack(cdk.Stack):
+class StaticSiteStack(Stack):
     def __init__(self, scope, construct_id, props, **kwargs):
         super().__init__(scope, construct_id, **kwargs)
 
@@ -38,17 +38,17 @@ class StaticSiteStack(cdk.Stack):
             )
 
         # Add stack outputs
-        cdk.CfnOutput(
+        CfnOutput(
             self,
             "SiteBucketName",
             value=site.bucket.bucket_name,
         )
-        cdk.CfnOutput(
+        CfnOutput(
             self,
             "DistributionId",
             value=site.distribution.distribution_id,
         )
-        cdk.CfnOutput(
+        CfnOutput(
             self,
             "CertificateArn",
             value=site.certificate.certificate_arn,

@@ -1,14 +1,15 @@
 from aws_cdk import (
-    core,
     aws_s3 as s3,
     aws_s3_notifications as s3n,
     aws_lambda as _lambda,
     aws_dynamodb as ddb,
     aws_events as events,
     aws_events_targets as targets,
+    RemovalPolicy, Stack
 )
+from constructs import Construct
 
-class EtlPipelineCdkStack(core.Stack):
+class EtlPipelineCdkStack(Stack):
     """Define the custom CDK stack construct class that inherits from the cdk.Construct base class.
 
     Notes:
@@ -21,7 +22,7 @@ class EtlPipelineCdkStack(core.Stack):
         *Please consider char limits for inline code write.
     """
 
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         """Invoke the base class constructor via super with the received scope, id, and props
 
         Args:
@@ -43,7 +44,7 @@ class EtlPipelineCdkStack(core.Stack):
             self, "Bucket",
             bucket_name=f"asteroids-{self.stage}",
             versioned=False,
-            removal_policy=core.RemovalPolicy.DESTROY # NOT recommended for production code
+            removal_policy=RemovalPolicy.DESTROY # NOT recommended for production code
         )
 
         ddb_asteroids_table = ddb.Table(
@@ -53,7 +54,7 @@ class EtlPipelineCdkStack(core.Stack):
                 "name": "id",
                 "type": ddb.AttributeType.STRING
             },
-            removal_policy=core.RemovalPolicy.DESTROY # NOT recommended for production code
+            removal_policy=RemovalPolicy.DESTROY # NOT recommended for production code
         )
 
         # Lambdas and layers
@@ -84,7 +85,7 @@ class EtlPipelineCdkStack(core.Stack):
             runtime=_lambda.Runtime.PYTHON_3_7,
             handler="dbwrite.handler",
             layers=[pandas_layer, pymysql_layer],
-            code=_lambda.Code.asset('lambda'),
+            code=_lambda.Code.from_asset('lambda'),
             environment={
                 "ASTEROIDS_TABLE": ddb_asteroids_table.table_name,
                 "S3_BUCKET": s3_bucket.bucket_name,

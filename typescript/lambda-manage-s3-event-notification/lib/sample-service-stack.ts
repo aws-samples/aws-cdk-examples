@@ -1,18 +1,19 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-import * as cdk from '@aws-cdk/core';
-import * as sqs from '@aws-cdk/aws-sqs';
-import * as iam from '@aws-cdk/aws-iam';
-import * as sns from '@aws-cdk/aws-sns';
+import * as cdk from 'aws-cdk-lib';
+import * as sqs from 'aws-cdk-lib/aws-sqs';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as sns from 'aws-cdk-lib/aws-sns';
+import { Construct } from 'constructs';
 
 export interface AStackProps extends cdk.StackProps {
   readonly bucketName: string; // Bucket to enable SQS notifications
 }
 export class AStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props: AStackProps) {
+  constructor(scope: Construct, id: string, props: AStackProps) {
     super(scope, id, props);
-    
+
     const queue = new sqs.Queue(this, 'SampleQueue');
     queue.grant(new iam.ServicePrincipal('s3.amazonaws.com', {
       conditions: {
@@ -26,7 +27,7 @@ export class AStack extends cdk.Stack {
         }
       }
     }), 'sqs:SendMessage', 'sqs:GetQueueAttributes', 'sqs:GetQueueUrl');
-    
+
     const lambdaArn = cdk.Arn.format({
       service: 'lambda',
       resource: 'S3EventNotificationsManager'
@@ -63,7 +64,7 @@ export interface BStackProps extends cdk.StackProps {
   readonly bucketName: string; // Bucket to enable SNS notifications
 }
 export class BStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props: BStackProps) {
+  constructor(scope: Construct, id: string, props: BStackProps) {
     super(scope, id, props);
 
     const topic = new sns.Topic(this, 'SampleTopic');
