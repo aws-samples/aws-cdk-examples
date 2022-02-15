@@ -1,7 +1,7 @@
 
 # API Gateway + Lambda + EventBridge  + [Lambda , KinesisFirehose(S3)] 
 
-Creates an API Gateway API with a POST Method, a Lambda as data Producer, EventBridge that can route to different AWS srvices based on the Rule, two Lambda functions for consumption of data based on different Rules , and a Kinesis Firehose that takes data from eventbridge based on Rule to store data in to S bucket for every 60 sec.
+Creates an API Gateway API with a POST Method, a Lambda as data Producer, EventBridge that can route to different AWS services based on the Rule, two Lambda functions for consumption of data based on different Rules, and a Kinesis Firehose that takes data from eventbridge based on Rule to store data in to S bucket every 60 sec.
  Requests to the API are sent to eventbridge using the producer Lambda, which triggers the Consumer Lambda functions and KinesisFirehose based on the Rule.
 
 ![Architecture](architecture.png)
