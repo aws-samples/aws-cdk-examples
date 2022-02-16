@@ -63,11 +63,12 @@ export class StaticSite extends Construct {
     new CfnOutput(this, 'Bucket', { value: siteBucket.bucketName });
 
     // TLS certificate
-    const certificateArn = new acm.DnsValidatedCertificate(this, 'SiteCertificate', {
+    const certificate = new acm.DnsValidatedCertificate(this, 'SiteCertificate', {
       domainName: siteDomain,
       hostedZone: zone,
       region: 'us-east-1', // Cloudfront only checks this region for certificates.
-    }).certificateArn;
+    });
+    const certificateArn = certificate.certificateArn;
     new CfnOutput(this, 'Certificate', { value: certificateArn });
 
     // Specifies you want viewers to use HTTPS & TLS v1.1 to request your objects
@@ -84,6 +85,8 @@ export class StaticSite extends Construct {
           namespace: "TLS Viewer Certificate Validity",
           metricName: "TLS Viewer Certificate Expired",
         }),
+      applyRemovalPolicy: (policy: RemovalPolicy) =>
+        certificate.applyRemovalPolicy(policy)
     },
       {
         sslMethod: cloudfront.SSLMethod.SNI,
