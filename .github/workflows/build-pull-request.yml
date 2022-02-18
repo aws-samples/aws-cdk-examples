@@ -7,6 +7,7 @@ jobs:
     name: Check file changes
     outputs:
       has_csharp_changes: ${{ steps.check_files.outputs.has_csharp_changes }}
+      has_go_changes: ${{ steps.check_files.outputs.has_go_changes }}
       has_java_changes: ${{ steps.check_files.outputs.has_java_changes }}
       has_python_changes: ${{ steps.check_files.outputs.has_python_changes }}
       has_typescript_changes: ${{ steps.check_files.outputs.has_typescript_changes }}
@@ -21,34 +22,42 @@ jobs:
       - name: Check files
         id: check_files
         run: |
-          echo "=============== list modified files ==============="
-          git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }}
-
-          echo "========== check paths of modified files =========="
-          git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} > files.txt
-          while IFS= read -r file
+          echo "========== categorization of changed files =========="
+          for file in $(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }})
           do
-            if [[ $file == csharp/* ]]; then
+            echo -n "$file => "
+
+            case $file in
+            csharp/*)
+              echo "C#"
               echo "::set-output name=has_csharp_changes::true"
-            fi
+              ;;
 
-            if [[ $file == go/* ]]; then
+            go/*)
+              echo "Go"
               echo "::set-output name=has_go_changes::true"
-            fi
+              ;;
 
-            if [[ $file == java/* ]]; then
+            java/*)
+              echo "Java"
               echo "::set-output name=has_java_changes::true"
-            fi
+              ;;
 
-            if [[ $file == python/* ]]; then
+            python/*)
+              echo "Python"
               echo "::set-output name=has_python_changes::true"
-            fi
+              ;;
 
-            if [[ $file == typescript/* ]]; then
+            typescript/*)
+              echo "TypeScript"
               echo "::set-output name=has_typescript_changes::true"
-            fi
+              ;;
 
-          done < files.txt
+            *)
+              echo "<unmatched>"
+              ;;
+            esac
+          done
 
   build:
     needs: check_file_changes

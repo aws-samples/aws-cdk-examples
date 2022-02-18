@@ -44,6 +44,7 @@ $ cdk destroy
 | [lambda-layer](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/lambda-layer/) | Running a Lambda with a lambda layer |
 | [my-widget-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/my-widget-service/) | Use Lambda to serve up widgets |
 | [resource-overrides](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/resource-overrides/) | Shows how to override generated CloudFormation code |
+| [[s3-object-lambda](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/s3-object-lambda/) | Creating an S3 Object Lambda and access point |
 | [static-site](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/static-site/) | A static site using CloudFront |
 | [stepfunctions-job-poller](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/stepfunctions-job-poller/) | A simple StepFunctions workflow |
 | [ecs-service-with-logging](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/ecs-service-with-logging/) | Starting a container fronted by a load balancer on ECS |
