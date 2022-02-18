@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
 
-from aws_cdk import core as cdk
+import aws_cdk as cdk
 
 from s3_sns_sqs_lambda_chain.s3_sns_sqs_lambda_chain_stack import S3SnsSqsLambdaChainStack
 

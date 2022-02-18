@@ -1,18 +1,20 @@
 from aws_cdk import (
-    core as cdk,
-    aws_lambda as _lambda,
-    aws_lambda_event_sources as lambda_events,
-    aws_s3 as s3,
-    aws_s3_notifications as s3n,
-    aws_sns as sns,
-    aws_sns_subscriptions as sns_subs,
-    aws_sqs as sqs
+  Stack,
+  Duration,
+  aws_lambda as _lambda,
+  aws_lambda_event_sources as lambda_events,
+  aws_s3 as s3,
+  aws_s3_notifications as s3n,
+  aws_sns as sns,
+  aws_sns_subscriptions as sns_subs,
+  aws_sqs as sqs,
 )
+from constructs import Construct
 
 
-class S3SnsSqsLambdaChainStack(cdk.Stack):
+class S3SnsSqsLambdaChainStack(Stack):
 
-    def __init__(self, scope: cdk.Construct, construct_id: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id)
 
         lambda_dir = kwargs["lambda_dir"]
@@ -21,7 +23,7 @@ class S3SnsSqsLambdaChainStack(cdk.Stack):
         dlq = sqs.Queue(
             self,
             id="dead_letter_queue_id",
-            retention_period=cdk.Duration.days(7)
+            retention_period=Duration.days(7)
         )
         dead_letter_queue = sqs.DeadLetterQueue(
             max_receive_count=1,
@@ -31,7 +33,7 @@ class S3SnsSqsLambdaChainStack(cdk.Stack):
         upload_queue = sqs.Queue(
             self,
             id="sample_queue_id",
-            visibility_timeout=cdk.Duration.seconds(30),
+            visibility_timeout=Duration.seconds(30),
             dead_letter_queue=dead_letter_queue
         )
 
@@ -58,15 +60,15 @@ class S3SnsSqsLambdaChainStack(cdk.Stack):
             lifecycle_rules=[
                 s3.LifecycleRule(
                     enabled=True,
-                    expiration=cdk.Duration.days(365),
+                    expiration=Duration.days(365),
                     transitions=[
                         s3.Transition(
                             storage_class=s3.StorageClass.INFREQUENT_ACCESS,
-                            transition_after=cdk.Duration.days(30)
+                            transition_after=Duration.days(30)
                         ),
                         s3.Transition(
                             storage_class=s3.StorageClass.GLACIER,
-                            transition_after=cdk.Duration.days(90)
+                            transition_after=Duration.days(90)
                         ),
                     ]
                 )
@@ -85,7 +87,7 @@ class S3SnsSqsLambdaChainStack(cdk.Stack):
         function = _lambda.Function(self, "lambda_function",
                                     runtime=_lambda.Runtime.PYTHON_3_9,
                                     handler="lambda_function.handler",
-                                    code=_lambda.Code.asset(lambda_dir))
+                                    code=_lambda.Code.from_asset(path=lambda_dir))
 
         # This binds the lambda to the SQS Queue
         invoke_event_source = lambda_events.SqsEventSource(upload_queue)
