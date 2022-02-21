@@ -94,25 +94,26 @@ class S3SnsSqsLambdaChainStack(Stack):
     invoke_event_source = lambda_events.SqsEventSource(upload_queue)
     function.add_event_source(invoke_event_source)
 
+    # Examples of CloudFormation outputs
     CfnOutput(
       self,
-      "UploadFileToS3",
+      "UploadFileToS3Example",
       value="aws s3 cp <local-path-to-file> s3://{}/".format(s3_bucket.bucket_name),
       description="Upload a file to S3 (using AWS CLI) to trigger the SQS chain",
     )
     CfnOutput(
       self,
-      "UploadSqsQueue",
+      "UploadSqsQueueUrl",
       value=upload_queue.queue_url,
       description="Link to the SQS Queue triggered on S3 uploads",
     )
     CfnOutput(
       self,
-      "LambdaFunction",
+      "LambdaFunctionName",
       value=function.function_name,
     )
     CfnOutput(
       self,
-      "LambdaFunctionLogs",
+      "LambdaFunctionLogGroupName",
       value=function.log_group.log_group_name,
     )
