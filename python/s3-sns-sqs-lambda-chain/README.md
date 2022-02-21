@@ -107,6 +107,11 @@ $ cdk deploy
 ```
 
 ## Unit Tests
+Install testing tools
+```
+$ pip install -r requirements-dev.txt
+```
+
 CDK Unit Tests are designed to validate the following template components
   - outputs
   - mappings
