@@ -92,3 +92,18 @@ class S3SnsSqsLambdaChainStack(Stack):
         # This binds the lambda to the SQS Queue
         invoke_event_source = lambda_events.SqsEventSource(upload_queue)
         function.add_event_source(invoke_event_source)
+        
+         CfnOutput(self, "UploadFileToS3",
+                  value=f"aws s3 cp <local-path-to-file> s3://${s3_bucket.bucketName}/",
+                  description="Upload a file to S3 (using AWS CLI) to trigger the SQS chain",
+                  )
+        CfnOutput(self, "UploadSqsQueue",
+                  value=upload_queue.queue_url,
+                  description="Link to the SQS Queue triggered on S3 uploads",
+                  )
+        CfnOutput(self, "LambdaFunction",
+                  value=function.functionName,
+                  )
+        CfnOutput(self, "LambdaFunctionLogs",
+                  value=function.logGroup.logGroupName,
+                  )
