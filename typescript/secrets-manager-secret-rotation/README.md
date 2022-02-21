@@ -113,7 +113,7 @@ def test_secret(service_client, arn, token):
 
         AuthTokenUpdateStrategy='DELETE'
       )
-  logger.info("test: Successfully test secret for %s." % arn)
+  logger.info("test: Successfully tested secret for %s." % arn)
 ```
 
 

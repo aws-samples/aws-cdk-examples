@@ -1,7 +1,7 @@
 {
   "name": "secrets-manager-secret-rotation",
   "version": "1.0.0",
-  "description": "Shows how to use a custom resource",
+  "description": "Demonstrates how to rotate custom secrets (in this case Redis auth) with Secrets Manager.",
   "private": true,
   "scripts": {
     "build": "tsc",
@@ -25,14 +25,7 @@
     "typescript": "~3.9.7"
   },
   "dependencies": {
-    "@aws-cdk/aws-ec2": "*",
-    "@aws-cdk/aws-elasticache": "*",
-    "@aws-cdk/aws-iam": "*",
-    "@aws-cdk/aws-lambda": "*",
-    "@aws-cdk/aws-secretsmanager": "*",
-    "@aws-cdk/aws-sns": "*",
-    "@aws-cdk/aws-sns-subscriptions": "*",
-    "@aws-cdk/aws-sqs": "*",
-    "@aws-cdk/core": "*"
+    "aws-cdk-lib": "*",
+    "constructs": "*"
   }
 }

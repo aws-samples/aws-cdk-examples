@@ -1,29 +1,23 @@
-import cdk = require('@aws-cdk/core');
-import ec2 = require('@aws-cdk/aws-ec2');
-import iam = require('@aws-cdk/aws-iam');
-import elasticache = require('@aws-cdk/aws-elasticache');
-import lambda = require('@aws-cdk/aws-lambda');
-import secretsmanager = require('@aws-cdk/aws-secretsmanager')
+import { App, Stack, StackProps, Duration } from 'aws-cdk-lib';
+import { aws_ec2 as ec2 } from 'aws-cdk-lib'; 
+import { aws_iam as iam } from 'aws-cdk-lib'; 
+import { aws_elasticache as elasticache } from 'aws-cdk-lib'; 
+import { aws_lambda as lambda } from 'aws-cdk-lib'; 
+import { aws_secretsmanager as secretsmanager } from 'aws-cdk-lib'; 
 import path = require('path');
 
-
-export class SecretsManagerCustomRotationStack extends cdk.Stack {
-  constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
+export class SecretsManagerCustomRotationStack extends Stack {
+  constructor(scope: App, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const clusterId = 'redisDemoCluster'
+    const clusterId = 'redis-demo-cluster'
 
     const vpc = new ec2.Vpc(this, "Vpc", {
       subnetConfiguration: [
         {
           cidrMask: 24,
-          name: 'Isolated',
-          subnetType: ec2.SubnetType.ISOLATED,
-        },
-        {
-          cidrMask: 24,
           name: 'Private',
-          subnetType: ec2.SubnetType.PRIVATE,
+          subnetType: ec2.SubnetType.PRIVATE_WITH_NAT,
         },
         {
           cidrMask: 24,
@@ -32,17 +26,6 @@ export class SecretsManagerCustomRotationStack extends cdk.Stack {
         },
       ]
     });
-
-    const secretsManagerEndpoint = vpc.addInterfaceEndpoint('SecretsManagerEndpoint', {
-      service: ec2.InterfaceVpcEndpointAwsService.SECRETS_MANAGER,
-      subnets: {
-        subnetType: ec2.SubnetType.ISOLATED,
-
-      }
-    });
-
-    secretsManagerEndpoint.connections.allowDefaultPortFromAnyIpv4();
-
 
     const ecSecurityGroup = new ec2.SecurityGroup(this, 'ElastiCacheSG', {
       vpc: vpc,
@@ -58,19 +41,12 @@ export class SecretsManagerCustomRotationStack extends cdk.Stack {
 
     rotatorSecurityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.allTraffic(), 'All port inbound')
 
-    let isolatedSubnets: string[] = []
-
-    vpc.isolatedSubnets.forEach(function(value){
-      isolatedSubnets.push(value.subnetId)
-    });
+    const privateSubnets = vpc.privateSubnets.map((subnet) => subnet.subnetId);
 
     const ecSubnetGroup = new elasticache.CfnSubnetGroup(this, 'ElastiCacheSubnetGroup', {
       description: 'Elasticache Subnet Group',
-      subnetIds: isolatedSubnets
+      subnetIds: privateSubnets
     });
-
-
-
 
     const secret = new secretsmanager.Secret(this, 'RedisAuth', {
       generateSecretString: {
@@ -79,7 +55,6 @@ export class SecretsManagerCustomRotationStack extends cdk.Stack {
         excludeCharacters: '@%*()_+=`~{}|[]\\:";\'?,./'
       },
     });
-
 
     const ecClusterReplicationGroup = new elasticache.CfnReplicationGroup(this, 'RedisReplicationGroup', {
       replicationGroupDescription: 'RedisReplicationGroup-RBAC-Demo',
@@ -97,7 +72,6 @@ export class SecretsManagerCustomRotationStack extends cdk.Stack {
       authToken: secret.secretValueFromJson('authToken').toString()
     })
 
-    // ecClusterReplicationGroup.node.addDependency(redisAuthToken)
     const rotatorRole = new iam.Role(this, 'rotatorRole', {
       assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
       description: 'Role to be assumed by producer  lambda',
@@ -117,12 +91,14 @@ export class SecretsManagerCustomRotationStack extends cdk.Stack {
         ]
       })
     );
+
     rotatorRole.addToPolicy(
       new iam.PolicyStatement({
         effect: iam.Effect.ALLOW,
-        resources: ["arn:aws:elasticache:"+cdk.Stack.of(this).region+":"+cdk.Stack.of(this).account+":replicationgroup:"+clusterId],
+        resources: ["arn:aws:elasticache:"+Stack.of(this).region+":"+Stack.of(this).account+":replicationgroup:"+ecClusterReplicationGroup.replicationGroupId],
         actions: [
-          "elasticache:ModifyReplicationGroup"
+          "elasticache:ModifyReplicationGroup",
+          "elasticache:DescribeReplicationGroups"
         ]
       })
     );
@@ -150,32 +126,31 @@ export class SecretsManagerCustomRotationStack extends cdk.Stack {
       code: lambda.Code.fromAsset(path.join(__dirname, 'lambda')),
       layers: [redisPyLayer],
       role: rotatorRole,
-      timeout: cdk.Duration.seconds(30),
+      timeout: Duration.seconds(30),
       vpc: vpc,
-      vpcSubnets: {subnetType: ec2.SubnetType.PRIVATE},
+      vpcSubnets: {subnetType: ec2.SubnetType.PRIVATE_WITH_NAT},
       securityGroups: [ecSecurityGroup, rotatorSecurityGroup],
       environment: {
         replicationGroupId: ecClusterReplicationGroup.ref,
         redis_endpoint: ecClusterReplicationGroup.attrPrimaryEndPointAddress,
         redis_port: ecClusterReplicationGroup.attrPrimaryEndPointPort,
         EXCLUDE_CHARACTERS: '@%*()_+=`~{}|[]\\:";\'?,./',
-        SECRETS_MANAGER_ENDPOINT: "https://secretsmanager."+cdk.Stack.of(this).region+".amazonaws.com"
+        SECRETS_MANAGER_ENDPOINT: "https://secretsmanager."+Stack.of(this).region+".amazonaws.com"
       }
     });
 
     secret.addRotationSchedule('RotationSchedule', {
       rotationLambda: fn,
-      automaticallyAfter: cdk.Duration.days(15)
+      automaticallyAfter: Duration.days(15)
     });
 
     secret.grantRead(fn);
 
     fn.grantInvoke(new iam.ServicePrincipal('secretsmanager.amazonaws.com'))
 
-
   }
 }
 
-const app = new cdk.App();
+const app = new App();
 new SecretsManagerCustomRotationStack(app, 'SecretsManagerCustomRotationStack');
 app.synth();
