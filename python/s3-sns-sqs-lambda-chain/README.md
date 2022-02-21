@@ -105,3 +105,29 @@ With the bootstrap complete, we are ready to deploy the lambda function and lamb
 ```
 $ cdk deploy
 ```
+
+## Unit Tests
+CDK Unit Tests are designed to validate the following template components
+  - outputs
+  - mappings
+  - resources
+  - parameters
+  - conditions
+  - resource_properties
+
+To generate a template without generating the associated assets, run the following command
+```
+cdk synth --no-staging > template.yml
+```
+**DO NOT** check this file in as it is only to verify the correct template is being generated.
+
+### Running Unit Tests
+To invoke Unit Tests (from the root project folder)
+```
+pytest
+```
+
+If you want to invoke a specific unit test file, just pass the filename as a parameter. (wildcards also work, e.g. `pytest tests/unit/*_stack_*`).
+```
+pytest tests/unit/<test_filename>
+```
