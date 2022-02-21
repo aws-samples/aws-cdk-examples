@@ -14,7 +14,7 @@
 
 
 ## Overview
-A common pattern that I have used to create a resilient way to trigger a lambda when an event occurs on S3 is to chain the following services:
+Create a resilient way to trigger a lambda when an event occurs on S3. It chains the following services:
 
 - S3
 - SNS
