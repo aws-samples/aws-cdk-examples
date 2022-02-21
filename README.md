@@ -1,57 +1,171 @@
-# AWS CDK Examples
+# ElastiCache Redis Auth Rotation with Secrets Manager
 
-This repository contains a set of example projects for the [AWS Cloud Development
-Kit](https://github.com/awslabs/aws-cdk).
+The example will create an secret in AWS SecretsManager that will be used as the auth token in the ElastiCache Redis replication group. The secret will have a rotation policy defined and a custom Lambda function that will be called whenever the secret needs to be rotated.
 
-## Table of Contents
-1. [About this Repo](#About)
-2. [Examples](#Examples)
-3. [Learning Resources](#Learning)
-4. [Additional Examples](#AddEx)
-4. [License](#License)
+## Setup
 
-## About this Repo <a name="About"></a>
-This repo is our official list of CDK example code. The repo is subdivided into sections for each language (see ["Examples"](#Examples)). Each language has its own subsection of examples with the ultimate aim of complete language parity (same subset of examples exist in each language). These examples each provide a demonstration of a common service implementation, or infrastructure pattern that could be useful in your use of the CDK for building your own infrastructure.
+You'll need to create a credentials or config file and install the cdk tools.
 
-We welcome contributions to this repo in the form of fixes to existing examples or addition of new examples. For more information on contributing, please see the [CONTRIBUTING](https://github.com/aws-samples/aws-cdk-examples/blob/master/CONTRIBUTING.md) guide.
+### Create/Modify an AWS Config or Credentials file
 
-This is considered an intermediate learning resource and should typically be referenced after reading the Developer Guide or CDK Workshop (please see [Learning Resources](#Learning) for more information on these resources).
+Follow the [prerequisites](https://docs.aws.amazon.com/cdk/latest/guide/getting_started.html#getting_started_prerequisites) to setup your computer to connect to an AWS account.
 
-## Examples <a name="Examples"></a>
-This repo contains examples in each language supported by the CDK. Some languages are fully supported by [JSII](https://github.com/aws/jsii), but as additional languages are added, you will see those marked as `Developer Preview`. You can find the examples for each of those languages at the following links:
-
-| Language | JSII Language-Stability |
-|----------|-------------------------|
-| [Typescript Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript) | _Stable_ |
-| [Python Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/python) | _Stable_ |
-| [.NET Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/csharp) | _Stable_ |
-| [Java Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/java) | _Stable_ |
+You also may optionally install the AWS CLI by following the instructions [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html).
 
 
-## Learning Resources <a name="Learning"></a>
-While this is an excellent learning resource for the CDK, there are other resources that can be referenced to assist with your learning/development process.
+### Install CDK Tools
 
-### Official Resources
-- [Developer Guide](https://docs.aws.amazon.com/cdk/latest/guide/home.html)
-- [API Reference](https://docs.aws.amazon.com/cdk/api/latest/docs/aws-construct-library.html)
-- [CDK Workshop](https://cdkworkshop.com/)
-- [CDK Repository](https://github.com/aws/aws-cdk)
+You can install the CDK toolkit with the Node Package Manager by running the following command in your terminal:
 
-### Unofficial/Community Resources
-- [AwesomeCDK](https://github.com/kolomied/awesome-cdk)
+``` npm install -g aws-cdk ```
 
-> If you have created a CDK learning resource and would like it to be listed here, please read the related [CONTRIBUTING](https://github.com/aws-samples/aws-cdk-examples/blob/master/CONTRIBUTING.md#Resources) section for more info.
+# Architecture
 
-## Additional Examples <a name="AddEx"></a>
-
-The examples listed below are larger examples hosted in their own repositories that demonstrate more complex or complete CDK applications. 
->If you would like your repo to be listed here, please read the [CONTRIBUTING](https://github.com/aws-samples/aws-cdk-examples/blob/master/CONTRIBUTING.md#Resources) guide for more details.
-
-| Example | Description | Owner |
-|---------|-------------|-------|
-| [aws-cdk-changelogs-demo](https://github.com/aws-samples/aws-cdk-changelogs-demo) | A full serverless Node.js application stack deployed using CDK. It uses AWS Lambda, AWS Fargate, DynamoDB, Elasticache, S3, and CloudFront. | AWS |
+This example deploys:
+* A VPC with two subnets (public, private)
+* A NAT and IGW are setup to allow the Lambda to access both SecretsManager and the ElastiCache service endpoint (used to set and rotate the secret on the ElastiCache Redis replication group)
+* An AWS SecretsManager secret to be used as an auth token in Amazon ElastiCache Redis
+* An Amazon ElastiCache Redis replication group in the private subnet
+* A Lambda function in the private subnet used for secret rotation
 
 
-# License <a name="License"></a>
+![architecture](img/architecture_diagram.png)
 
-This library is licensed under the Apache 2.0 License.
+## Rotation Function
+
+The secret will be configured with a rotation schedule and a custom rotator function (implemented in Python) that will rotate the auth token on the ElastiCache repolication group via the Boto3 library. The rotator function will use the redispy Python library to connect to Redis to validate that the auth token is rotated.
+
+Details on how the rotation function works can be found [here](https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets-one-user-one-password.html).
+
+![flow](img/secret-flow.png)
+
+### Create Secret
+
+* Retrieve the AWSCURRENT version of the secret by using the GetSecretValue operation.
+
+* Extract the protected secret text from the SecretString field, and store it in a structure you can modify.
+
+* Generate a new password by using an algorithm to generate passwords with the maximum length and complexity requirements supported by the protected resource.
+
+* Overwrite the password field in the structure with the new one you generated in the previous step. Keep all other details, such as username and the connection details the same.
+
+* Store the modified copy of the secret structure by passing it as the SecretString parameter in a call to PutSecretValue. Secrets Manager labels the new version of the secret with AWSPENDING.
+
+
+### Set Secret
+
+* Retrieve the AWSPENDING version of the secret by using the GetSecretValue operation.
+
+* Issue commands to the secured resource authentication system to change the existing user password to the one stored in the new AWSPENDING version of the secret.
+
+```
+def is_cluster_available(service_client, clusterId):
+  response = service_client.describe_replication_groups(
+    ReplicationGroupId=os.environ['replicationGroupId']
+  )
+  status = response['ReplicationGroups'][0]['Status']
+
+def set_secret(service_client, arn, token):
+  ...
+  # Loop until cluster is available
+  while (not is_cluster_available(client, replicationGroupId)):
+    time.sleep(3)
+
+  service_client.get_secret_value(SecretId=arn, VersionStage="AWSCURRENT")
+
+  response = client.modify_replication_group(
+    ApplyImmediately=True,
+    ReplicationGroupId=replicationGroupId,
+    AuthToken=response['SecretString'],
+    AuthTokenUpdateStrategy='ROTATE'
+  )
+```
+
+### Test Secret
+
+* Retrieve the AWSPENDING version of the secret by using the GetSecretValue operation.
+
+* Issue commands to the secured resource to attempt to access it by using the credentials in the secret.
+
+```
+def test_secret(service_client, arn, token):
+  response = service_client.get_secret_value(SecretId=arn, VersionId=token, VersionStage="AWSPENDING")
+  replicationGroupId = os.environ['replicationGroupId']
+  try:
+      # Attempt to connect to the redis cluster
+      redis_server = redis.Redis(
+          host=os.environ['redis_endpoint'],
+          port=os.environ['redis_port'],
+          password=response['SecretString'],
+          ssl=True)
+
+      response = redis_server.client_list()
+      logger.info(response)
+  except:
+      logger.error("test: Unable to secret for %s." % arn)
+      client = boto3.client('elasticache')
+
+      # if we couldn't connect, then undo setting the ElastiCache auth from the previous step
+      response = client.modify_replication_group(
+        ApplyImmediately=True,
+        ReplicationGroupId=replicationGroupId,
+        AuthToken=response['SecretString'],
+
+        AuthTokenUpdateStrategy='DELETE'
+      )
+  logger.info("test: Successfully tested secret for %s." % arn)
+```
+
+
+### Finalize Secret
+
+* Move the label AWSCURRENT to the version labeled AWSPENDING. This automatically also moves the staging label AWSPREVIOUS to the secret you just removed AWSCURRENT from.
+
+* (Optional) Remove the label AWSPENDING from its version of the secret.
+
+```
+def finish_secret(service_client, arn, token):
+  ...
+  # Wait for the cluster to become available
+  while (not is_cluster_available(client, replicationGroupId)):
+    time.sleep(3)
+
+  # Finalize by setting the auth token
+  response = client.modify_replication_group(
+    ApplyImmediately=True,
+    ReplicationGroupId=replicationGroupId,
+    AuthToken=response['SecretString'],
+    AuthTokenUpdateStrategy='SET'
+  )
+
+  ...
+
+  # Finalize by staging the secret version current
+  service_client.update_secret_version_stage(SecretId=arn, VersionStage="AWSCURRENT", MoveToVersionId=token,  RemoveFromVersionId=current_version)
+
+```
+
+
+# Deployment
+
+Deploy the stack by calling ``` cdk synth ```. Optionally, you can also specify ```--profile <profile_name>``` if you created a config file or credentials file.
+
+
+# Testing
+
+You can test secret rotation by manually triggering rotation via the AWS Secrets Manager console.
+
+![rotate](img/rotate_immediately.png)
+
+You can view the logs in CloudWatch.
+
+![output](img/output.png)
+
+## Useful commands
+
+ * `npm run build`   compile typescript to js
+ * `npm run watch`   watch for changes and compile
+ * `npm run test`    perform the jest unit tests
+ * `cdk deploy`      deploy this stack to your default AWS account/region
+ * `cdk diff`        compare deployed stack with current state
+ * `cdk synth`       emits the synthesized CloudFormation template
