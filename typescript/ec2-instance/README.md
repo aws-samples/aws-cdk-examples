@@ -17,13 +17,14 @@ Ensure aws-cdk is installed and [bootstrapped](https://docs.aws.amazon.com/cdk/l
 
 ```bash
 $ npm install -g aws-cdk
+$ npm install
+$ npm run build
 $ cdk bootstrap
 ```
 
-Then build and deploy.
+Then deploy the stack.
 
 ```bash
-$ npm run build
 $ cdk deploy
 ```
 
