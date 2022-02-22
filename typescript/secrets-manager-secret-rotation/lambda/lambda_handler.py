@@ -42,8 +42,7 @@ def lambda_handler(event, context):
         "secretsmanager", endpoint_url=os.environ["SECRETS_MANAGER_ENDPOINT"]
     )
 
-    # ***
-
+    
     # Make sure the version is staged correctly
     metadata = service_client.describe_secret(SecretId=arn)
     if not metadata["RotationEnabled"]:
