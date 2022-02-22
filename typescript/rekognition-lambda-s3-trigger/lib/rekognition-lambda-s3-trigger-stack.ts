@@ -51,6 +51,19 @@ export class RekognitionLambdaS3TriggerStack extends cdk.Stack {
     // grant permissions for lambda to read/write to DynamoDB table and bucket
     table.grantReadWriteData(lambdaFunction);
     bucket.grantReadWrite(lambdaFunction);
-        
+	 new cdk.CfnOutput(this, "UploadImageToS3", {
+      value: `aws s3 cp <local-path-to-image> s3://${bucket.bucketName}/`,
+      description: "Upload an image to S3 (using AWS CLI) to trigger Rekognition",
+    });
+    new cdk.CfnOutput(this, "DynamoDBTable", {
+      value: table.tableName,
+      description: "This is where the image Rekognition results will be stored.",
+    });
+    new cdk.CfnOutput(this, "LambdaFunction", {
+      value: lambdaFunction.functionName,
+    });
+    new cdk.CfnOutput(this, "LambdaFunctionLogs", {
+      value: lambdaFunction.logGroup.logGroupName,
+    });
   }
 }
