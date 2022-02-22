@@ -1,15 +1,15 @@
 from aws_cdk import (
-    core,
     aws_lambda,
     aws_dynamodb,
     aws_events,
     aws_events_targets,
+    Duration, Stack
 )
+from constructs import Construct
 
+class DynamodbLambdaStack(Stack):
 
-class DynamodbLambdaStack(core.Stack):
-
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # create dynamo table
@@ -25,7 +25,7 @@ class DynamodbLambdaStack(core.Stack):
         producer_lambda = aws_lambda.Function(self, "producer_lambda_function",
                                               runtime=aws_lambda.Runtime.PYTHON_3_6,
                                               handler="lambda_function.lambda_handler",
-                                              code=aws_lambda.Code.asset("./lambda/producer"))
+                                              code=aws_lambda.Code.from_asset("./lambda/producer"))
 
         producer_lambda.add_environment("TABLE_NAME", demo_table.table_name)
 
@@ -36,7 +36,7 @@ class DynamodbLambdaStack(core.Stack):
         consumer_lambda = aws_lambda.Function(self, "consumer_lambda_function",
                                               runtime=aws_lambda.Runtime.PYTHON_3_6,
                                               handler="lambda_function.lambda_handler",
-                                              code=aws_lambda.Code.asset("./lambda/consumer"))
+                                              code=aws_lambda.Code.from_asset("./lambda/consumer"))
 
         consumer_lambda.add_environment("TABLE_NAME", demo_table.table_name)
 
@@ -46,7 +46,7 @@ class DynamodbLambdaStack(core.Stack):
         # create a Cloudwatch Event rule
         one_minute_rule = aws_events.Rule(
             self, "one_minute_rule",
-            schedule=aws_events.Schedule.rate(core.Duration.minutes(1)),
+            schedule=aws_events.Schedule.rate(Duration.minutes(1)),
         )
 
         # Add target to Cloudwatch Event

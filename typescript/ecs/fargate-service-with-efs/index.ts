@@ -1,9 +1,9 @@
-import * as cdk from '@aws-cdk/core';
-import * as ec2 from '@aws-cdk/aws-ec2';
-import * as ecs from '@aws-cdk/aws-ecs';
-import * as ecs_patterns from '@aws-cdk/aws-ecs-patterns';
-import * as efs from '@aws-cdk/aws-efs';
-import * as cr from '@aws-cdk/custom-resources';
+import * as cdk from 'aws-cdk-lib';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as ecs from 'aws-cdk-lib/aws-ecs';
+import * as ecs_patterns from 'aws-cdk-lib/aws-ecs-patterns';
+import * as efs from 'aws-cdk-lib/aws-efs';
+import * as cr from 'aws-cdk-lib/custom-resources';
 import {FargateEfsCustomResource} from "./efs-mount-fargate-cr";
 
 

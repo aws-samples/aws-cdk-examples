@@ -1,7 +1,7 @@
-import autoscaling = require('@aws-cdk/aws-autoscaling');
-import ec2 = require('@aws-cdk/aws-ec2');
-import s3 = require('@aws-cdk/aws-s3');
-import cdk = require('@aws-cdk/core');
+import autoscaling = require('aws-cdk-lib/aws-autoscaling');
+import ec2 = require('aws-cdk-lib/aws-ec2');
+import s3 = require('aws-cdk-lib/aws-s3');
+import cdk = require('aws-cdk-lib');
 import assert = require('assert');
 
 class ResourceOverridesExample extends cdk.Stack {

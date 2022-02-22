@@ -18,12 +18,6 @@ setuptools.setup(
     package_dir={"": "native_objects"},
     packages=setuptools.find_packages(where="native_objects"),
 
-    install_requires=[
-        "aws-cdk.core",
-        "aws-cdk.aws_apigateway",
-        "aws-cdk.aws_lambda"
-    ],
-
     python_requires=">=3.6",
 
     classifiers=[
