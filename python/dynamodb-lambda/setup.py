@@ -23,7 +23,7 @@ setuptools.setup(
         "aws-cdk.aws_lambda",
         "aws-cdk.aws_dynamodb",
         "boto3",
-        "botocore"
+        "botocore",
         "aws-cdk.aws_events",
         "aws-cdk.aws_lambda_event_sources",
         "aws-cdk.aws_events_targets"
