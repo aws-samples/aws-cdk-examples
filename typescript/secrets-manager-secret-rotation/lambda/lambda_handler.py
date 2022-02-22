@@ -116,36 +116,35 @@ def create_secret(service_client, arn, token):
         )
         logger.info("createSecret: Successfully retrieved secret for %s." % arn)
     except service_client.exceptions.ResourceNotFoundException:
-        # Get exclude characters from environment variable
-        exclude_characters = (
-            os.environ["EXCLUDE_CHARACTERS"]
-            if "EXCLUDE_CHARACTERS" in os.environ
-            else "/@\"'\\"
-        )
-        # Generate a random password
-        passwd = service_client.get_random_password(
-            ExcludeCharacters=exclude_characters
-        )
+        try:
+            # Get exclude characters from environment variable
+            exclude_characters = (
+                os.environ["EXCLUDE_CHARACTERS"]
+                if "EXCLUDE_CHARACTERS" in os.environ
+                else "/@\"'\\"
+            )
+            # Generate a random password
+            passwd = service_client.get_random_password(
+                ExcludeCharacters=exclude_characters
+            )
 
-        # Put the secret
-        service_client.put_secret_value(
-            SecretId=arn,
-            ClientRequestToken=token,
-            SecretString=passwd["RandomPassword"],
-            VersionStages=["AWSPENDING"],
-        )
-        logger.info(
-            "createSecret: Successfully put secret for ARN %s and version %s."
-            % (arn, token)
-        )
+            # Put the secret
+            service_client.put_secret_value(
+                SecretId=arn,
+                ClientRequestToken=token,
+                SecretString=passwd["RandomPassword"],
+                VersionStages=["AWSPENDING"],
+            )
+            logger.info(
+                "createSecret: Successfully put secret for ARN %s and version %s."
+                % (arn, token)
+            )
+        except Exception as e:
+            logger.error("Unable to put the secret via put_secret_value")
+            raise (e)
 
 
 def set_secret(service_client, arn, token):
-    #   {
-    #   "Step": "Set",
-    #   "SecretId": "arn:aws:secretsmanager:us-east-1:323144477050:secret:RedisAuthAF1E8ACD-ahzrCUonZBP7-PzbBrY",
-    #   "ClientRequestToken": "ca87e860-e419-4cce-9e62-b1d2c7e1cede"
-    # }
     """Set the secret
 
     This method should set the AWSPENDING secret in the service that the secret belongs to. For example, if the secret is a database
@@ -159,9 +158,6 @@ def set_secret(service_client, arn, token):
         token (string): The ClientRequestToken associated with the secret version
 
     """
-    # This is where the secret should be set in the service
-
-    # service_client = boto3.client("secretsmanager")
 
     response = service_client.get_secret_value(
         SecretId=arn, VersionId=token, VersionStage="AWSPENDING"
@@ -181,16 +177,25 @@ def set_secret(service_client, arn, token):
     while not is_cluster_available(client, replicationGroupId):
         time.sleep(3)
 
-    response = client.modify_replication_group(
-        ApplyImmediately=True,
-        ReplicationGroupId=replicationGroupId,
-        AuthToken=response["SecretString"],
-        AuthTokenUpdateStrategy="ROTATE",
-    )
+    try:
+        response = client.modify_replication_group(
+            ApplyImmediately=True,
+            ReplicationGroupId=replicationGroupId,
+            AuthToken=response["SecretString"],
+            AuthTokenUpdateStrategy="ROTATE",
+        )
 
-    logger.info(response)
+        logger.info(response)
 
-    logger.info("setSecret: Successfully set secret for %s." % arn)
+        logger.info("setSecret: Successfully set secret for %s." % arn)
+    except Exception as e:
+        service_client = boto3.client("secretsmanager")
+
+        logger.error(
+            "setSecret: Unable to set secret for replication group when calling modify_replication_group"
+        )
+
+        raise (e)
 
 
 def test_secret(service_client, arn, token):
@@ -200,6 +205,11 @@ def test_secret(service_client, arn, token):
     is a database credential, this method should validate that the user can login with the password in AWSPENDING and that the user has
     all of the expected permissions against the database.
 
+    In this case, the ElastiCache Redis cluster will have its auth token updated, then a client connection to Redis will be attempted.
+    If the connection fails, then the auth token will be reset as a rollback to the AWSCURRENT secret value.
+
+    An exception is raised if the validation fails, and the secret update process never gets to finalize_secret
+
     Args:
         service_client (client): The secrets manager service client
 
@@ -208,37 +218,52 @@ def test_secret(service_client, arn, token):
         token (string): The ClientRequestToken associated with the secret version
 
     """
+
     response = service_client.get_secret_value(
         SecretId=arn, VersionId=token, VersionStage="AWSPENDING"
     )
-    replicationGroupId = os.environ["replicationGroupId"]
+
+    pending_secret = response["SecretString"]
+
+    logger.info(json.dumps(print(response), indent=4))
+
     try:
+        client = boto3.client("elasticache")
+        replicationGroupId = os.environ["replicationGroupId"]
+
+        while not is_cluster_available(client, replicationGroupId):
+            time.sleep(5)
+
+        # Attempt to connect to the Redis cluster to validate with the secret
         redis_server = redis.Redis(
             host=os.environ["redis_endpoint"],
             port=os.environ["redis_port"],
-            password=response["SecretString"],
+            password=pending_secret,
             ssl=True,
         )
 
+        # Validate that the connection is made
         response = redis_server.client_list()
+
         logger.info(response)
-    except:
-        logger.error("test: Unabled to secret for %s." % arn)
-        client = boto3.client("elasticache")
-        response = client.modify_replication_group(
-            ApplyImmediately=True,
-            ReplicationGroupId=replicationGroupId,
-            AuthToken=response["SecretString"],
-            AuthTokenUpdateStrategy="DELETE",
+    except Exception as e:
+        # If we couldn't connect with the the new auth token, raise an error -- this will cause the whole update process
+        # to rollback
+        logger.error(
+            "test: Unable to set auth token for Redis cluster with secret %s." % arn
         )
+        logger.error(e)
+        raise (e)
+
     logger.info("test: Successfully tested secret for %s." % arn)
-    # This is where the secret should be tested against the service
 
 
 def finish_secret(service_client, arn, token):
     """Finish the secret
 
     This method finalizes the rotation process by marking the secret version passed in as the AWSCURRENT secret.
+
+    This method is reached only if the previous stages succeed.
 
     Args:
         service_client (client): The secrets manager service client
@@ -283,7 +308,7 @@ def finish_secret(service_client, arn, token):
             current_version = version
             break
 
-    # Finalize by staging the secret version current
+    # Finalize by setting the secret version stage to current
     service_client.update_secret_version_stage(
         SecretId=arn,
         VersionStage="AWSCURRENT",
