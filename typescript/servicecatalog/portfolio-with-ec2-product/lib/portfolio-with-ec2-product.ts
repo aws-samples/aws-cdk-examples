@@ -16,14 +16,6 @@ class Ec2CdkProductStack extends sc.ProductStack {
       }]
     });
 
-    // Allow SSH (TCP Port 22) access from anywhere
-    const securityGroup = new ec2.SecurityGroup(this, 'SecurityGroup', {
-      vpc,
-      description: 'Allow SSH (TCP port 22) in',
-      allowAllOutbound: true,
-    });
-    securityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(22), 'Allow SSH Access')
-
     const role = new iam.Role(this, 'ec2Role', {
       assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com'),
     });
@@ -47,9 +39,10 @@ class Ec2CdkProductStack extends sc.ProductStack {
       vpc,
       instanceType: new ec2.InstanceType(ec2InstanceType.valueAsString),
       machineImage: ami,
-      securityGroup: securityGroup,
+      allowAllOutbound: true,
       role: role,
     });
+    ec2Instance.connections.allowFromAnyIpv4(ec2.Port.tcp(22), 'Allow SSH (TCP port 22) in');
 
     new CfnOutput(this, 'IP Address', { value: ec2Instance.instancePublicIp });
     new CfnOutput(this, 'Download Key Command', { value: 'aws secretsmanager get-secret-value --secret-id ec2-ssh-key/cdk-keypair/private --query SecretString --output text > cdk-key.pem && chmod 400 cdk-key.pem' });

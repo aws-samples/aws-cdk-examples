@@ -26,14 +26,6 @@ class Ec2Product(sc.ProductStack):
             subnet_configuration=[ec2.SubnetConfiguration(name="public",subnet_type=ec2.SubnetType.PUBLIC,cidr_mask=24)],
         )
 
-        # Allow SSH (TCP Port 22) access from anywhere
-        security_group = ec2.SecurityGroup(self, "SecurityGroup", 
-            vpc=vpc,
-            description="Allow SSH (TCP port 22) in",
-            allow_all_outbound=True,
-        )
-        security_group.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(22), "Allow SSH Access")
-
         # Instance Role and SSM Managed Policy
         role = iam.Role(self, "ec2Role", assumed_by=iam.ServicePrincipal("ec2.amazonaws.com"))
 
@@ -55,10 +47,11 @@ class Ec2Product(sc.ProductStack):
         instance = ec2.Instance(self, "Instance",
             instance_type=ec2.InstanceType(ec2_instance_type.value_as_string),
             machine_image=amzn_linux,
-            security_group=security_group,
+            allow_all_outbound=True,
             vpc=vpc,
             role=role,
         )
+        instance.connections.allow_from_any_ipv4(ec2.Port.tcp(22), "Allow SSH Access")
 
         # Create outputs for connecting
         CfnOutput(self, "IP Address", value=instance.instance_public_ip)

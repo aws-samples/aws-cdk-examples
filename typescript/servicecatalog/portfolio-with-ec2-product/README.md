@@ -15,6 +15,11 @@
 ---
 <!--END STABILITY BANNER-->
 
+> The construct library for this service is in preview. Since it is not stable yet, it is distributed as a separate package so that 
+> you can pin its version independently of the rest of the CDK. See the package:
+>
+> @aws-cdk/aws-servicecatalog-alpha
+
 # Using Product Stacks with AWS Service Catalog (VPC with EC2 Instance)
 
 This is a CDK example of a [Product Stack](https://docs.aws.amazon.com/cdk/api/v1/docs/@aws-cdk_aws-servicecatalog.ProductStack.html).
