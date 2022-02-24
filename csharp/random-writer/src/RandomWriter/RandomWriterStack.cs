@@ -4,6 +4,7 @@ using Amazon.CDK.AWS.DynamoDB;
 using Amazon.CDK.AWS.Events;
 using Amazon.CDK.AWS.Events.Targets;
 using Amazon.CDK.AWS.Lambda;
+using Constructs;
 
 namespace RandomWriter
 {

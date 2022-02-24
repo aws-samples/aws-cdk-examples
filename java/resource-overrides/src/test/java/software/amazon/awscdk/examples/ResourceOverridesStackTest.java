@@ -6,10 +6,8 @@ import java.io.IOException;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
-import software.amazon.awscdk.core.App;
-import software.amazon.awscdk.core.ConstructNode;
-import software.amazon.awscdk.core.IConstruct;
-import software.amazon.awscdk.core.Stack;
+import software.amazon.awscdk.App;
+import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.cxapi.CloudFormationStackArtifact;
 
 public class ResourceOverridesStackTest {
@@ -20,7 +18,7 @@ public class ResourceOverridesStackTest {
     App app = new App();
     Stack stack = new ResourceOverridesStack(app, "resource-overrides");
 
-    String actual = getStackTemplateJson(stack).toString();
+    String actual = getStackTemplateJson(app, stack).toString();
     String expected = readJsonFromResource("testResourceOverrides.expected.json").toString();
 
     JSONAssert.assertEquals(expected, actual, JSONCompareMode.LENIENT);
@@ -30,10 +28,8 @@ public class ResourceOverridesStackTest {
     return JSON.readTree(ResourceOverridesStackTest.class.getResource(resourceName));
   }
 
-  private static JsonNode getStackTemplateJson(Stack stack) {
-    IConstruct root = stack.getNode().getRoot();
-    CloudFormationStackArtifact stackArtifact =
-        ConstructNode.synth(root.getNode()).getStackByName(stack.getStackName());
+  private static JsonNode getStackTemplateJson(App app, Stack stack) {
+    CloudFormationStackArtifact stackArtifact = app.synth().getStackByName(stack.getStackName());
 
     return JSON.valueToTree(stackArtifact.getTemplate());
   }

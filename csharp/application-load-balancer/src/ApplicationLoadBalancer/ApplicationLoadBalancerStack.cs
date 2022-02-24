@@ -2,6 +2,7 @@ using Amazon.CDK;
 using Amazon.CDK.AWS.EC2;
 using Amazon.CDK.AWS.ElasticLoadBalancingV2;
 using Amazon.CDK.AWS.AutoScaling;
+using Constructs;
 
 namespace ApplicationLoadBalancer
 {
@@ -34,7 +35,7 @@ namespace ApplicationLoadBalancer
             listener.Connections.AllowDefaultPortFromAnyIpv4("Open to the world");
 
             asg.ScaleOnRequestCount("AModestLoad", new RequestCountScalingProps{
-                TargetRequestsPerSecond = 1
+                TargetRequestsPerMinute = 60
             });
         }
     }

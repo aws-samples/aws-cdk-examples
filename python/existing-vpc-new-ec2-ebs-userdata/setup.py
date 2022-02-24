@@ -18,11 +18,6 @@ setuptools.setup(
     package_dir={"": "cdk_vpc_ec2"},
     packages=setuptools.find_packages(where="cdk_vpc_ec2"),
 
-    install_requires=[
-        "aws-cdk.core",
-        "aws-cdk.aws-ec2"
-    ],
-
     python_requires=">=3.6",
 
     classifiers=[

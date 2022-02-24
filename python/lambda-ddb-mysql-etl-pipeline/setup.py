@@ -18,16 +18,6 @@ setuptools.setup(
     package_dir={"": "etl_pipeline_cdk"},
     packages=setuptools.find_packages(where="etl_pipeline_cdk"),
 
-    install_requires=[
-        "aws-cdk.core",
-        "aws-cdk.aws-s3",
-        "aws-cdk.aws-s3-notifications",
-        "aws-cdk.aws-lambda",
-        "aws-cdk.aws-dynamodb",
-        "aws-cdk.aws-events",
-        "aws-cdk.aws-events-targets",
-    ],
-
     python_requires=">=3.6",
 
     classifiers=[

@@ -1,4 +1,4 @@
-import * as cdk from '@aws-cdk/core';
+import * as cdk from 'aws-cdk-lib';
 import { Ec2CdkStack } from '../lib/ec2-cdk-stack';
 
 const app = new cdk.App();

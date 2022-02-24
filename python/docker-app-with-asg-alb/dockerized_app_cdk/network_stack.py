@@ -1,10 +1,10 @@
-from aws_cdk import core
+from aws_cdk import CfnOutput, Stack
 from aws_cdk.aws_ec2 import Vpc, NatProvider, SubnetConfiguration, SubnetType
+from constructs import Construct
 
+class NetworkStack(Stack):
 
-class NetworkStack(core.Stack):
-
-    def __init__(self, scope: core.Construct, id: str, props, **kwargs) -> None:
+    def __init__(self, scope: Construct, id: str, props, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # Subnet configurations for a public and private tier
@@ -14,7 +14,7 @@ class NetworkStack(core.Stack):
                 cidr_mask=24)
         subnet2 = SubnetConfiguration(
                 name="Private",
-                subnet_type=SubnetType.PRIVATE,
+                subnet_type=SubnetType.PRIVATE_WITH_NAT,
                 cidr_mask=24)
 
         vpc = Vpc(self,
@@ -30,7 +30,7 @@ class NetworkStack(core.Stack):
 
         # This will export the VPC's ID in CloudFormation under the key
         # 'vpcid'
-        core.CfnOutput(self, "vpcid", value=vpc.vpc_id)
+        CfnOutput(self, "vpcid", value=vpc.vpc_id)
 
         # Prepares output attributes to be passed into other stacks
         # In this case, it is our VPC and subnets.

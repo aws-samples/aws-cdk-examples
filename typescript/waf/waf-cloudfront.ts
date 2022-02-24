@@ -1,6 +1,7 @@
 
-import * as cdk from '@aws-cdk/core';
-import * as wafv2 from '@aws-cdk/aws-wafv2';
+import * as cdk from 'aws-cdk-lib';
+import * as wafv2 from 'aws-cdk-lib/aws-wafv2';
+import { Construct } from 'constructs';
 
 type listOfRules = {
   name: string;
@@ -118,7 +119,7 @@ export class WafCloudFrontStack extends cdk.Stack {
   } // function makeRules
 
 
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
     /**

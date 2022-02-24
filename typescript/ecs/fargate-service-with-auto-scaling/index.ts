@@ -1,7 +1,7 @@
-import ecs = require('@aws-cdk/aws-ecs');
-import ecs_patterns = require('@aws-cdk/aws-ecs-patterns');
-import ec2 = require('@aws-cdk/aws-ec2');
-import cdk = require('@aws-cdk/core');
+import ecs = require('aws-cdk-lib/aws-ecs');
+import ecs_patterns = require('aws-cdk-lib/aws-ecs-patterns');
+import ec2 = require('aws-cdk-lib/aws-ec2');
+import cdk = require('aws-cdk-lib');
 
 class AutoScalingFargateService extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {

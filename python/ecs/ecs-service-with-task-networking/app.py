@@ -1,14 +1,14 @@
 from aws_cdk import (
+    aws_autoscaling as autoscaling,
     aws_ec2 as ec2,
     aws_ecs as ecs,
-    aws_elasticloadbalancingv2 as elbv2,
-    core,
+    App, Stack
 )
 
 # Based on https://aws.amazon.com/blogs/compute/introducing-cloud-native-networking-for-ecs-containers/
 
-app = core.App()
-stack = core.Stack(app, "ec2-service-with-task-networking")
+app = App()
+stack = Stack(app, "ec2-service-with-task-networking")
 
 # Create a cluster
 vpc = ec2.Vpc(
@@ -20,8 +20,17 @@ cluster = ecs.Cluster(
     stack, "awsvpc-ecs-demo-cluster",
     vpc=vpc
 )
-cluster.add_capacity("DefaultAutoScalingGroup",
-                     instance_type=ec2.InstanceType("t2.micro"))
+
+asg = autoscaling.AutoScalingGroup(
+    stack, "DefaultAutoScalingGroup",
+    instance_type=ec2.InstanceType("t2.micro"),
+    machine_image=ecs.EcsOptimizedImage.amazon_linux2(),
+    vpc=vpc,
+)
+capacity_provider = ecs.AsgCapacityProvider(stack, "AsgCapacityProvider",
+    auto_scaling_group=asg
+)
+cluster.add_asg_capacity_provider(capacity_provider)
 
 # Create a task definition with its own elastic network interface
 task_definition = ecs.Ec2TaskDefinition(
@@ -59,7 +68,7 @@ service = ecs.Ec2Service(
     stack, "awsvpc-ecs-demo-service",
     cluster=cluster,
     task_definition=task_definition,
-    security_group=security_group
+    security_groups=[security_group]
 )
 
 app.synth()
