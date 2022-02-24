@@ -1,5 +1,5 @@
 import json
-import boto3
+import boto3  # type: ignore
 import datetime
 import logging
 
