@@ -1,15 +1,17 @@
+from constructs import Construct
 from aws_cdk import (
-    aws_autoscaling as autoscaling,
-    aws_ec2 as ec2,
-    aws_eks as eks,
-    aws_iam as iam,
-    core,
-    custom_resources as cr,
+	App, 
+	Stack,
+	Tags,
+	aws_autoscaling as autoscaling,
+	aws_ec2 as ec2,
+	aws_eks as eks,
+	aws_iam as iam,
+	custom_resources as cr,
 )
 
-class Stack(core.Stack):
-
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+class Stack(Stack):
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         vpc = ec2.Vpc(
