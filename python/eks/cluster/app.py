@@ -119,7 +119,7 @@ class Stack(Stack):
             "ASGCpuScaling", target_utilization_percent=70
         )
 
-app = core.App()
+app = App()
 Stack(app, "eks-cluster")
 
 app.synth()
