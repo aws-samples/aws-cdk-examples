@@ -1,30 +1,28 @@
-
-import * as cdk from '@aws-cdk/core';
-import * as sqs from '@aws-cdk/aws-sqs';
-import * as sns from '@aws-cdk/aws-sns';
-import * as s3 from '@aws-cdk/aws-s3';
-import * as lambdaNodejs from '@aws-cdk/aws-lambda-nodejs';
-import * as lambdaEvents from '@aws-cdk/aws-lambda-event-sources';
-import * as snsSubscriptions from '@aws-cdk/aws-sns-subscriptions';
-import * as s3Notifications from '@aws-cdk/aws-s3-notifications';
+import { App, Stack, StackProps, Duration } from 'aws-cdk-lib';
+import * as sqs from 'aws-cdk-lib/aws-sqs';
+import * as sns from 'aws-cdk-lib/aws-sns';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as lambdaNodejs from 'aws-cdk-lib/aws-lambda-nodejs';
+import * as lambdaEvents from 'aws-cdk-lib/aws-lambda-event-sources';
+import * as snsSubscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
+import * as s3Notifications from 'aws-cdk-lib/aws-s3-notifications';
 import { join } from 'path'
-
-export class S3SnsSqsLambdaChainStack extends cdk.Stack {
-  constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
+export class S3SnsSqsLambdaChainStack extends Stack {
+  constructor(scope: App, id: string, props?: StackProps) {
     super(scope, id, props);
 
     // Note: A dead-letter queue is optional but it helps capture any failed messages
     const deadLetterQueue = new sqs.Queue(
         this,
         'deadLetterQueueId', {
-          retentionPeriod: cdk.Duration.days(7)
+          retentionPeriod: Duration.days(7)
         }
     );
 
     const uploadQueue = new sqs.Queue(
       this,
       'sampleQueueId', {
-        visibilityTimeout: cdk.Duration.seconds(30),
+        visibilityTimeout: Duration.seconds(30),
         deadLetterQueue: {
           maxReceiveCount: 1,
           queue: deadLetterQueue
@@ -56,15 +54,15 @@ export class S3SnsSqsLambdaChainStack extends cdk.Stack {
         lifecycleRules: [
           {
             enabled: true,
-            expiration: cdk.Duration.days(365),
+            expiration: Duration.days(365),
             transitions: [
               {
                 storageClass: s3.StorageClass.INFREQUENT_ACCESS,
-                transitionAfter: cdk.Duration.days(30)
+                transitionAfter: Duration.days(30)
               },
               {
                 storageClass: s3.StorageClass.GLACIER,
-                transitionAfter: cdk.Duration.days(90)
+                transitionAfter: Duration.days(90)
               }
             ]
           }

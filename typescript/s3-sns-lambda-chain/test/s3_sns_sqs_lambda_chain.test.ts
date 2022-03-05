@@ -1,5 +1,6 @@
-import { Template, Match } from '@aws-cdk/assertions';
-import * as cdk from '@aws-cdk/core';
+import { Template } from 'aws-cdk-lib/assertions';
+import { App } from 'aws-cdk-lib';
+
 import * as S3SnsSqsLambdaChain from '../lib/s3_sns_sqs_lambda_chain-stack';
 
 test('SNS Topic Created', () => {
@@ -7,7 +8,7 @@ test('SNS Topic Created', () => {
   Test for SNS Topic and Subscription: S3 Upload Event Notification
   */
 
-  const app = new cdk.App();
+  const app = new App();
   const stack = new S3SnsSqsLambdaChain.S3SnsSqsLambdaChainStack(app, 'MyTestStack');
   const template = Template.fromStack(stack);
   
@@ -23,7 +24,7 @@ test('SQS Queue Created', () => {
     - Dead-letter Queue
   */
  
-  const app = new cdk.App();
+  const app = new App();
   const stack = new S3SnsSqsLambdaChain.S3SnsSqsLambdaChainStack(app, 'MyTestStack');
   const template = Template.fromStack(stack);
   
@@ -37,7 +38,7 @@ test('S3 Bucket Created', () => {
     - Upload Bucket
   */
  
-  const app = new cdk.App();
+  const app = new App();
   const stack = new S3SnsSqsLambdaChain.S3SnsSqsLambdaChainStack(app, 'MyTestStack');
   const template = Template.fromStack(stack);
   
@@ -52,7 +53,7 @@ test('Lambda Function Created', () => {
     - Bucket Notification Handler (automatically provisioned)
   */
  
-  const app = new cdk.App();
+  const app = new App();
   const stack = new S3SnsSqsLambdaChain.S3SnsSqsLambdaChainStack(app, 'MyTestStack');
   const template = Template.fromStack(stack);
   
