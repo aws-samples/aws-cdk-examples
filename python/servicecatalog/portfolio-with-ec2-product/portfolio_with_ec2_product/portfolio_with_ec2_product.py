@@ -14,7 +14,6 @@ from aws_cdk import (
 )
 from aws_cdk import aws_servicecatalog_alpha as sc
 
-dirname = os.path.dirname(__file__)
 
 class Ec2Product(sc.ProductStack):
     def __init__(self, scope: Construct, id: str):
