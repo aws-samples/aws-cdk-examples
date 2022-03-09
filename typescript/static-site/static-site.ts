@@ -5,9 +5,8 @@ import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
-import * as cloudwatch from "aws-cdk-lib/aws-cloudwatch";
 import * as iam from 'aws-cdk-lib/aws-iam';
-import { Aws, CfnOutput, RemovalPolicy, Stack } from 'aws-cdk-lib';
+import { CfnOutput, RemovalPolicy, Stack } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 
 export interface StaticSiteProps {
@@ -63,28 +62,16 @@ export class StaticSite extends Construct {
     new CfnOutput(this, 'Bucket', { value: siteBucket.bucketName });
 
     // TLS certificate
-    const certificateArn = new acm.DnsValidatedCertificate(this, 'SiteCertificate', {
+    const certificate = new acm.DnsValidatedCertificate(this, 'SiteCertificate', {
       domainName: siteDomain,
       hostedZone: zone,
       region: 'us-east-1', // Cloudfront only checks this region for certificates.
-    }).certificateArn;
-    new CfnOutput(this, 'Certificate', { value: certificateArn });
+    });
+    new CfnOutput(this, 'Certificate', { value: certificate.certificateArn });
 
     // Specifies you want viewers to use HTTPS & TLS v1.1 to request your objects
-    const viewerCertificate = cloudfront.ViewerCertificate.fromAcmCertificate({
-      certificateArn: certificateArn,
-      env: {
-        region: Aws.REGION,
-        account: Aws.ACCOUNT_ID
-      },
-      node: this.node,
-      stack: parent,
-      metricDaysToExpiry: () =>
-        new cloudwatch.Metric({
-          namespace: "TLS Viewer Certificate Validity",
-          metricName: "TLS Viewer Certificate Expired",
-        }),
-    },
+    const viewerCertificate = cloudfront.ViewerCertificate.fromAcmCertificate(
+      certificate,
       {
         sslMethod: cloudfront.SSLMethod.SNI,
         securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_1_2016,
