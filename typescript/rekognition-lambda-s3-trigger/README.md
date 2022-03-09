@@ -52,15 +52,16 @@ $ cdk synth
 
 If you haven't already you'll need to deploy the [CDK Bootstrap stack](https://docs.aws.amazon.com/cdk/latest/guide/bootstrapping.html).
 _This only needs to be ran once per account/region_
-	  ```sh
-	  $ cdk bootstrap
-	  ```
+
+```sh
+$ cdk bootstrap
+```
 
 If everything looks good, go ahead and deploy! 
 
-	  ```sh
-	  $ cdk deploy
-	  ```
+```sh
+$ cdk deploy
+```
 
 ## Testing the app
 Upload an image fie to the S3 bucket that was created by CloudFormation.
