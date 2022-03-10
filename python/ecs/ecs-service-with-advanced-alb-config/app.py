@@ -1,4 +1,3 @@
-from os import name
 from aws_cdk import (
     aws_autoscaling as autoscaling,
     aws_ec2 as ec2,
