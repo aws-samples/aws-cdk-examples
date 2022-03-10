@@ -1,3 +1,4 @@
+from os import name
 from aws_cdk import (
     aws_autoscaling as autoscaling,
     aws_ec2 as ec2,
@@ -23,13 +24,14 @@ cluster = ecs.Cluster(
 asg = autoscaling.AutoScalingGroup(
     stack, "DefaultAutoScalingGroup",
     instance_type=ec2.InstanceType.of(
-                         ec2.InstanceClass.STANDARD5,
+                         ec2.InstanceClass.BURSTABLE3,
                          ec2.InstanceSize.MICRO),
     machine_image=ecs.EcsOptimizedImage.amazon_linux2(),
     vpc=vpc,
 )
 capacity_provider = ecs.AsgCapacityProvider(stack, "AsgCapacityProvider",
-    auto_scaling_group=asg
+    auto_scaling_group=asg,
+    capacity_provider_name='AsgCapacityProvider'
 )
 cluster.add_asg_capacity_provider(capacity_provider)
 
