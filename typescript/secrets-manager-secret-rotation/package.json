@@ -15,7 +15,6 @@
   },
   "license": "Apache-2.0",
   "devDependencies": {
-    "@aws-cdk/assert": "*",
     "@types/jest": "^26.0.10",
     "@types/node": "10.17.27",
     "aws-cdk": "*",
@@ -26,6 +25,7 @@
   },
   "dependencies": {
     "aws-cdk-lib": "*",
+    "@aws-cdk/aws-lambda-python-alpha": "*",
     "constructs": "*"
   }
 }
