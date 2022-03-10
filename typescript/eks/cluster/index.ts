@@ -1,8 +1,8 @@
-import autoscaling = require('@aws-cdk/aws-autoscaling');
-import iam = require('@aws-cdk/aws-iam');
-import ec2 = require('@aws-cdk/aws-ec2');
-import eks = require('@aws-cdk/aws-eks');
-import cdk = require('@aws-cdk/core');
+import autoscaling = require('aws-cdk-lib/aws-autoscaling');
+import iam = require('aws-cdk-lib/aws-iam');
+import ec2 = require('aws-cdk-lib/aws-ec2');
+import eks = require('aws-cdk-lib/aws-eks');
+import cdk = require('aws-cdk-lib');
 
 class EKSCluster extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {

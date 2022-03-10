@@ -21,9 +21,15 @@
     "typescript": "~3.9.7"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@aws-cdk/core": "*",
     "source-map-support": "^0.5.16",
     "@aws-cdk/aws-logs": "*",
     "@aws-cdk/custom-resources": "*"
+=======
+    "aws-cdk-lib": "^2.0.0",
+    "constructs": "^10.0.0",
+    "source-map-support": "^0.5.16"
+>>>>>>> 752df6302e534a7df22a809536c588deaf444c4d
   }
 }

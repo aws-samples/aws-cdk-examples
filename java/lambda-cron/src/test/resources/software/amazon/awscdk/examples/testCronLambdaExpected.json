@@ -53,7 +53,7 @@
         "Role" : {
           "Fn::GetAtt" : [ "SingletonLambda0dc9f04c622c4059b399834a2c1ac15fServiceRoleD59355BD", "Arn" ]
         },
-        "Runtime" : "python2.7",
+        "Runtime" : "python3.9",
         "Description" : "Lambda which prints \"I'm running\"",
         "Timeout" : 300,
         "Handler" : "index.main",

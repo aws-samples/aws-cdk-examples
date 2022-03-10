@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import cdk = require('@aws-cdk/core');
+=======
+import cdk = require('aws-cdk-lib');
+>>>>>>> 752df6302e534a7df22a809536c588deaf444c4d
 import { MyCustomResource } from './my-custom-resource';
 
 /**
@@ -22,4 +26,8 @@ class MyStack extends cdk.Stack {
 
 const app = new cdk.App();
 new MyStack(app, 'CustomResourceDemoStack');
+<<<<<<< HEAD
 app.synth();
+=======
+app.synth();
+>>>>>>> 752df6302e534a7df22a809536c588deaf444c4d

@@ -1,18 +1,18 @@
 package software.amazon.awscdk.examples;
 
-import software.amazon.awscdk.core.Construct;
-import software.amazon.awscdk.core.Duration;
-import software.amazon.awscdk.core.Stack;
+import software.constructs.Construct;
+import software.amazon.awscdk.Duration;
+import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.services.stepfunctions.Activity;
 import software.amazon.awscdk.services.stepfunctions.Chain;
 import software.amazon.awscdk.services.stepfunctions.Choice;
 import software.amazon.awscdk.services.stepfunctions.Condition;
 import software.amazon.awscdk.services.stepfunctions.Fail;
+import software.amazon.awscdk.services.stepfunctions.IChainable;
 import software.amazon.awscdk.services.stepfunctions.StateMachine;
-import software.amazon.awscdk.services.stepfunctions.Task;
 import software.amazon.awscdk.services.stepfunctions.Wait;
 import software.amazon.awscdk.services.stepfunctions.WaitTime;
-import software.amazon.awscdk.services.stepfunctions.tasks.InvokeActivity;
+import software.amazon.awscdk.services.stepfunctions.tasks.StepFunctionsInvokeActivity;
 
 public class StepFunctionsJobPollerStack extends Stack {
 
@@ -24,9 +24,8 @@ public class StepFunctionsJobPollerStack extends Stack {
       Activity submitJobActivity = Activity.Builder.create(this, "SubmitJob").build();
       Activity checkJobActivity = Activity.Builder.create(this, "CheckJob").build();
 
-      Task submitJob =
-          Task.Builder.create(this, "Submit Job")
-              .task(InvokeActivity.Builder.create(submitJobActivity).build())
+      IChainable submitJob = StepFunctionsInvokeActivity.Builder.create(this, "Submit Job")
+              .activity(submitJobActivity)
               .resultPath("$.guid")
               .build();
 
@@ -35,9 +34,8 @@ public class StepFunctionsJobPollerStack extends Stack {
               .time(WaitTime.secondsPath("$.wait_time"))
               .build();
 
-      Task getStatus =
-          Task.Builder.create(this, "Get Job Status")
-              .task(InvokeActivity.Builder.create(checkJobActivity).build())
+      IChainable getStatus = StepFunctionsInvokeActivity.Builder.create(this, "Get Job Status")
+              .activity(checkJobActivity)
               .inputPath("$.guid")
               .resultPath("$.status")
               .build();
@@ -49,9 +47,8 @@ public class StepFunctionsJobPollerStack extends Stack {
               .error("DescribeJob returned FAILED")
               .build();
 
-      Task finalStatus =
-          Task.Builder.create(this, "Get Final Job Status")
-              .task(InvokeActivity.Builder.create(checkJobActivity).build())
+      IChainable finalStatus = StepFunctionsInvokeActivity.Builder.create(this, "Get Final Job Status")
+              .activity(checkJobActivity)
               .inputPath("$.guid")
               .build();
 

@@ -2,12 +2,12 @@ from aws_cdk import (
     aws_events as events,
     aws_lambda as lambda_,
     aws_events_targets as targets,
-    core,
+    App, Duration, Stack
 )
 
 
-class LambdaCronStack(core.Stack):
-    def __init__(self, app: core.App, id: str) -> None:
+class LambdaCronStack(Stack):
+    def __init__(self, app: App, id: str) -> None:
         super().__init__(app, id)
 
         with open("lambda-handler.py", encoding="utf8") as fp:
@@ -17,7 +17,7 @@ class LambdaCronStack(core.Stack):
             self, "Singleton",
             code=lambda_.InlineCode(handler_code),
             handler="index.main",
-            timeout=core.Duration.seconds(300),
+            timeout=Duration.seconds(300),
             runtime=lambda_.Runtime.PYTHON_3_7,
         )
 
@@ -35,6 +35,6 @@ class LambdaCronStack(core.Stack):
         rule.add_target(targets.LambdaFunction(lambdaFn))
 
 
-app = core.App()
+app = App()
 LambdaCronStack(app, "LambdaCronExample")
 app.synth()

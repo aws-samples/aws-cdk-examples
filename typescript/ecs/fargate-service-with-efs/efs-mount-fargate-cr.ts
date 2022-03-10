@@ -1,9 +1,9 @@
-import * as lambda from '@aws-cdk/aws-lambda';
-import * as cdk from '@aws-cdk/core';
-import * as iam from '@aws-cdk/aws-iam';
-import * as cr from '@aws-cdk/custom-resources';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as cdk from 'aws-cdk-lib';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as cr from 'aws-cdk-lib/custom-resources';
 import fs = require('fs');
-
+import { Construct } from 'constructs';
 
 export interface FargateEfsCustomResourceProps {
   /**
@@ -17,10 +17,10 @@ export interface FargateEfsCustomResourceProps {
 }
 
 
-export class FargateEfsCustomResource extends cdk.Construct {
+export class FargateEfsCustomResource extends Construct {
   public readonly response: string;
 
-  constructor(scope: cdk.Construct, id: string, props: FargateEfsCustomResourceProps) {
+  constructor(scope: Construct, id: string, props: FargateEfsCustomResourceProps) {
     super(scope, id);
 
     const onEvent = new lambda.SingletonFunction(this, 'Singleton', {
