@@ -10,6 +10,7 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import { CfnOutput, RemovalPolicy, Stack } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 
+
 export interface StaticSiteProps {
   domainName: string;
   siteSubDomain: string;
