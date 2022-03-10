@@ -5,6 +5,7 @@ import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
+import * as cloudfront_origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { CfnOutput, RemovalPolicy, Stack } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
@@ -69,32 +70,21 @@ export class StaticSite extends Construct {
     });
     new CfnOutput(this, 'Certificate', { value: certificate.certificateArn });
 
-    // Specifies you want viewers to use HTTPS & TLS v1.1 to request your objects
-    const viewerCertificate = cloudfront.ViewerCertificate.fromAcmCertificate(
-      certificate,
-      {
-        sslMethod: cloudfront.SSLMethod.SNI,
-        securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_1_2016,
-        aliases: [siteDomain]
-      })
-
     // CloudFront distribution
-    const distribution = new cloudfront.CloudFrontWebDistribution(this, 'SiteDistribution', {
-      viewerCertificate,
-      originConfigs: [
-        {
-          s3OriginSource: {
-            s3BucketSource: siteBucket,
-            originAccessIdentity: cloudfrontOAI
-          },
-          behaviors: [{
-            isDefaultBehavior: true,
-            compress: true,
-            allowedMethods: cloudfront.CloudFrontAllowedMethods.GET_HEAD_OPTIONS,
-          }],
-        }
-      ]
-    });
+    const distribution = new cloudfront.Distribution(this, 'SiteDistribution', {
+      certificate: certificate,
+      domainNames: [siteDomain],
+      defaultBehavior: {
+        origin: new cloudfront_origins.S3Origin(siteBucket, {originAccessIdentity: cloudfrontOAI}),
+        compress: true,
+        allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+      }
+    })
+
+    const cfnDistribution = distribution.node.defaultChild as cloudfront.CfnDistribution
+    cfnDistribution.addPropertyOverride('MinimumProtocolVersion', 'TLS_V1_1_2016')
+    cfnDistribution.addPropertyOverride('ViewerCertificate.SslSupportMethod', 'sni-only')
+
     new CfnOutput(this, 'DistributionId', { value: distribution.distributionId });
 
     // Route53 alias record for the CloudFront distribution
