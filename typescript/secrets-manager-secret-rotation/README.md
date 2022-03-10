@@ -1,6 +1,34 @@
 # ElastiCache Redis Auth Rotation with Secrets Manager
 
+<!--BEGIN STABILITY BANNER-->
+---
+
+![Stability: Developer Preview](https://img.shields.io/badge/stability-Developer--Preview-important.svg?style=for-the-badge)
+
+> **This is an experimental example. It may not build out of the box**
+>
+> This example is built on Construct Libraries marked "Developer Preview" and may not be updated for latest breaking changes.
+>
+> It may additionally requires infrastructure prerequisites that must be created before successful build.
+>
+> Non-core construct in preview used in this example: [`@aws-cdk/aws-lambda-python-alpha`](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-lambda-python-alpha-readme.html)
+>
+> If build is unsuccessful, please create an [issue](https://github.com/aws-samples/aws-cdk-examples/issues/new) so that we may debug the problem
+---
+<!--END STABILITY BANNER-->
+
 The example will create an secret in AWS SecretsManager that will be used as the auth token in the ElastiCache Redis replication group. The secret will have a rotation policy defined and a custom Lambda function that will be called whenever the secret needs to be rotated.
+
+## Architecture
+
+This example deploys:
+* A VPC with two subnets (public, private)
+* A NAT and IGW are setup to allow the Lambda to access both SecretsManager and the ElastiCache service endpoint (used to set and rotate the secret on the ElastiCache Redis replication group)
+* An AWS SecretsManager secret to be used as an auth token in Amazon ElastiCache Redis
+* An Amazon ElastiCache Redis replication group in the private subnet
+* A Lambda function in the private subnet used for secret rotation. [_Learn more about how to use the Rotation Function._](#Rotation-Function)
+
+![architecture](img/architecture_diagram.png)
 
 ## Setup
 
@@ -12,24 +40,51 @@ Follow the [prerequisites](https://docs.aws.amazon.com/cdk/latest/guide/getting_
 
 You also may optionally install the AWS CLI by following the instructions [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html).
 
-
 ### Install CDK Tools
 
 You can install the CDK toolkit with the Node Package Manager by running the following command in your terminal:
 
-``` npm install -g aws-cdk ```
+```sh
+npm install -g aws-cdk
+```
 
-# Architecture
+## Build
 
-This example deploys:
-* A VPC with two subnets (public, private)
-* A NAT and IGW are setup to allow the Lambda to access both SecretsManager and the ElastiCache service endpoint (used to set and rotate the secret on the ElastiCache Redis replication group)
-* An AWS SecretsManager secret to be used as an auth token in Amazon ElastiCache Redis
-* An Amazon ElastiCache Redis replication group in the private subnet
-* A Lambda function in the private subnet used for secret rotation
+Before getting ready to deploy, ensure the dependencies are installed by executing the following:
 
+```sh
+npm install
+npm run build
+```
 
-![architecture](img/architecture_diagram.png)
+## Deployment
+
+Deploy the stack by calling
+
+```sh
+cdk deploy
+```
+
+_Optionally, you can also specify ```--profile <profile_name>``` if you created a config file or credentials file._
+
+## Testing
+
+You can test secret rotation by manually triggering rotation via the AWS Secrets Manager console.
+
+![rotate](img/rotate_immediately.png)
+
+You can view the logs in CloudWatch.
+
+![output](img/output.png)
+
+## Useful commands
+
+ * `npm run build`   compile typescript to js
+ * `npm run watch`   watch for changes and compile
+ * `npm run test`    perform the jest unit tests
+ * `cdk deploy`      deploy this stack to your default AWS account/region
+ * `cdk diff`        compare deployed stack with current state
+ * `cdk synth`       emits the synthesized CloudFormation template
 
 ## Rotation Function
 
@@ -58,7 +113,7 @@ Details on how the rotation function works can be found [here](https://docs.aws.
 
 * Issue commands to the secured resource authentication system to change the existing user password to the one stored in the new AWSPENDING version of the secret.
 
-```
+```python
 def is_cluster_available(service_client, clusterId):
   response = service_client.describe_replication_groups(
     ReplicationGroupId=os.environ['replicationGroupId']
@@ -87,7 +142,7 @@ def set_secret(service_client, arn, token):
 
 * Issue commands to the secured resource to attempt to access it by using the credentials in the secret.
 
-```
+```python
 def test_secret(service_client, arn, token):
   response = service_client.get_secret_value(SecretId=arn, VersionId=token, VersionStage="AWSPENDING")
   replicationGroupId = os.environ['replicationGroupId']
@@ -123,7 +178,7 @@ def test_secret(service_client, arn, token):
 
 * (Optional) Remove the label AWSPENDING from its version of the secret.
 
-```
+```python
 def finish_secret(service_client, arn, token):
   ...
   # Wait for the cluster to become available
@@ -144,28 +199,3 @@ def finish_secret(service_client, arn, token):
   service_client.update_secret_version_stage(SecretId=arn, VersionStage="AWSCURRENT", MoveToVersionId=token,  RemoveFromVersionId=current_version)
 
 ```
-
-
-# Deployment
-
-Deploy the stack by calling ``` cdk synth ```. Optionally, you can also specify ```--profile <profile_name>``` if you created a config file or credentials file.
-
-
-# Testing
-
-You can test secret rotation by manually triggering rotation via the AWS Secrets Manager console.
-
-![rotate](img/rotate_immediately.png)
-
-You can view the logs in CloudWatch.
-
-![output](img/output.png)
-
-## Useful commands
-
- * `npm run build`   compile typescript to js
- * `npm run watch`   watch for changes and compile
- * `npm run test`    perform the jest unit tests
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk synth`       emits the synthesized CloudFormation template
