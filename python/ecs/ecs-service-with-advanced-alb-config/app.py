@@ -7,7 +7,7 @@ from aws_cdk import (
 )
 
 app = App()
-stack = Stack(app, "aws-ec2-integ-ecs")
+stack = Stack(app, "sample-aws-ec2-integ-ecs")
 
 # Create a cluster
 vpc = ec2.Vpc(
@@ -30,7 +30,6 @@ asg = autoscaling.AutoScalingGroup(
 )
 capacity_provider = ecs.AsgCapacityProvider(stack, "AsgCapacityProvider",
     auto_scaling_group=asg,
-    capacity_provider_name='AsgCapacityProvider'
 )
 cluster.add_asg_capacity_provider(capacity_provider)
 
