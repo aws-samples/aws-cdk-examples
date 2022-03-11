@@ -29,7 +29,7 @@ asg = autoscaling.AutoScalingGroup(
     vpc=vpc,
 )
 capacity_provider = ecs.AsgCapacityProvider(stack, "AsgCapacityProvider",
-    auto_scaling_group=asg,
+    auto_scaling_group=asg
 )
 cluster.add_asg_capacity_provider(capacity_provider)
 
