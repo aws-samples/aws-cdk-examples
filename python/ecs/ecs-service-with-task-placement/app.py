@@ -6,7 +6,7 @@ from aws_cdk import (
 )
 
 app = App()
-stack = Stack(app, "sample-aws-ecs-integ-ecs")
+stack = Stack(app, "sample-ecs-task-placement")
 
 # Create a cluster
 vpc = ec2.Vpc(
