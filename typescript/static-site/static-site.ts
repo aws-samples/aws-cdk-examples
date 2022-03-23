@@ -82,8 +82,8 @@ export class StaticSite extends Construct {
     })
 
     const cfnDistribution = distribution.node.defaultChild as cloudfront.CfnDistribution
-    cfnDistribution.addPropertyOverride('MinimumProtocolVersion', 'TLS_V1_1_2016')
-    cfnDistribution.addPropertyOverride('ViewerCertificate.SslSupportMethod', 'sni-only')
+    cfnDistribution.addPropertyOverride('DistributionConfig.ViewerCertificate.MinimumProtocolVersion', 'TLSv1.1_2016')
+    cfnDistribution.addPropertyOverride('DistributionConfig.ViewerCertificate.SslSupportMethod', 'sni-only')
 
     new CfnOutput(this, 'DistributionId', { value: distribution.distributionId });
 
