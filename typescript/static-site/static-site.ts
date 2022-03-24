@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as s3 from 'aws-cdk-lib/aws-s3';
-import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
-import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
+import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
+import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import * as cloudfront_origins from 'aws-cdk-lib/aws-cloudfront-origins';
-import * as iam from 'aws-cdk-lib/aws-iam';
 import { CfnOutput, RemovalPolicy, Stack } from 'aws-cdk-lib';
+import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 
 export interface StaticSiteProps {
@@ -54,6 +54,7 @@ export class StaticSite extends Construct {
        */
       autoDeleteObjects: true, // NOT recommended for production code
     });
+
     // Grant access to cloudfront
     siteBucket.addToResourcePolicy(new iam.PolicyStatement({
       actions: ['s3:GetObject'],
@@ -70,20 +71,22 @@ export class StaticSite extends Construct {
     });
     new CfnOutput(this, 'Certificate', { value: certificate.certificateArn });
 
+    
     // CloudFront distribution
     const distribution = new cloudfront.Distribution(this, 'SiteDistribution', {
       certificate: certificate,
+      defaultRootObject: "index.html",
       domainNames: [siteDomain],
+      minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
       defaultBehavior: {
         origin: new cloudfront_origins.S3Origin(siteBucket, {originAccessIdentity: cloudfrontOAI}),
         compress: true,
         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       }
     })
 
-    const cfnDistribution = distribution.node.defaultChild as cloudfront.CfnDistribution
-    cfnDistribution.addPropertyOverride('DistributionConfig.ViewerCertificate.MinimumProtocolVersion', 'TLSv1.1_2016')
-    cfnDistribution.addPropertyOverride('DistributionConfig.ViewerCertificate.SslSupportMethod', 'sni-only')
+    
 
     new CfnOutput(this, 'DistributionId', { value: distribution.distributionId });
 
