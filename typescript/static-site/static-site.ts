@@ -86,12 +86,7 @@ export class StaticSite extends Construct {
       }
     })
 
-    // This is a workaround for https://github.com/aws/aws-cdk/issues/19539
-    // const cfnDistribution = distribution.node.defaultChild as cloudfront.CfnDistribution
-    // cfnDistribution.addDeletionOverride('DistributionConfig.Origins.0.CustomOriginConfig')
-    // cfnDistribution.addPropertyOverride('DistributionConfig.Origins.0.DomainName', siteDomain+".s3.us-east-1.amazonaws.com")
-    // cfnDistribution.addPropertyOverride('DistributionConfig.Origins.0.S3OriginConfig.OriginAccessIdentity', cloudfrontOAI.cloudFrontOriginAccessIdentityS3CanonicalUserId)
-
+    
 
     new CfnOutput(this, 'DistributionId', { value: distribution.distributionId });
 
