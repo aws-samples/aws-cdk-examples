@@ -6,7 +6,7 @@ import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
 import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import * as cloudfront_origins from 'aws-cdk-lib/aws-cloudfront-origins';
-import { CfnOutput, RemovalPolicy, Stack } from 'aws-cdk-lib';
+import { CfnOutput, Duration, RemovalPolicy, Stack } from 'aws-cdk-lib';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 
@@ -36,8 +36,6 @@ export class StaticSite extends Construct {
     // Content bucket
     const siteBucket = new s3.Bucket(this, 'SiteBucket', {
       bucketName: siteDomain,
-      // websiteIndexDocument: 'index.html',
-      // websiteErrorDocument: 'error.html',
       publicReadAccess: false,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
 
@@ -78,6 +76,14 @@ export class StaticSite extends Construct {
       defaultRootObject: "index.html",
       domainNames: [siteDomain],
       minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
+      errorResponses:[
+        {
+          httpStatus: 403,
+          responseHttpStatus: 403,
+          responsePagePath: '/error.html',
+          ttl: Duration.minutes(30),
+        }
+      ],
       defaultBehavior: {
         origin: new cloudfront_origins.S3Origin(siteBucket, {originAccessIdentity: cloudfrontOAI}),
         compress: true,
@@ -85,8 +91,6 @@ export class StaticSite extends Construct {
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       }
     })
-
-    
 
     new CfnOutput(this, 'DistributionId', { value: distribution.distributionId });
 
