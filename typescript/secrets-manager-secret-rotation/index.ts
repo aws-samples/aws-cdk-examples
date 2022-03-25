@@ -27,6 +27,8 @@ export class SecretsManagerCustomRotationStack extends Stack {
       ],
     });
 
+    const privateSubnets = vpc.privateSubnets.map((subnet) => subnet.subnetId);
+
     const ecSecurityGroup = new ec2.SecurityGroup(this, "ElastiCacheSG", {
       vpc: vpc,
       description:
@@ -49,8 +51,6 @@ export class SecretsManagerCustomRotationStack extends Stack {
       ec2.Port.allTraffic(),
       "All port inbound"
     );
-
-    const privateSubnets = vpc.privateSubnets.map((subnet) => subnet.subnetId);
 
     const ecSubnetGroup = new elasticache.CfnSubnetGroup(
       this,
@@ -143,9 +143,11 @@ export class SecretsManagerCustomRotationStack extends Stack {
       })
     );
 
+
     const redisPyLayer = new pyLambda.PythonLayerVersion(this, "RedisPyLayer", {
       entry: path.join(__dirname, "lambda", "layer", "redis-py"),
       compatibleRuntimes: [
+        lambda.Runtime.PYTHON_3_9,
         lambda.Runtime.PYTHON_3_8,
         lambda.Runtime.PYTHON_3_7,
         lambda.Runtime.PYTHON_3_6,
@@ -155,9 +157,10 @@ export class SecretsManagerCustomRotationStack extends Stack {
     });
 
     const fn = new pyLambda.PythonFunction(this, "SecretRotationFunction", {
-      runtime: lambda.Runtime.PYTHON_3_7,
+      runtime: lambda.Runtime.PYTHON_3_9,
       entry: path.join(__dirname, "lambda"),
-      handler: "lambda_handler.lambda_handler",
+      handler: "lambda_handler",
+      index: "index.py",
       layers: [redisPyLayer],
       role: rotatorRole,
       timeout: Duration.seconds(30),
