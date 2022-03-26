@@ -7,7 +7,7 @@ from aws_cdk import (
 )
 
 app = App()
-stack = Stack(app, "aws-ec2-integ-ecs")
+stack = Stack(app, "sample-aws-ec2-integ-ecs")
 
 # Create a cluster
 vpc = ec2.Vpc(
@@ -23,7 +23,7 @@ cluster = ecs.Cluster(
 asg = autoscaling.AutoScalingGroup(
     stack, "DefaultAutoScalingGroup",
     instance_type=ec2.InstanceType.of(
-                         ec2.InstanceClass.STANDARD5,
+                         ec2.InstanceClass.BURSTABLE3,
                          ec2.InstanceSize.MICRO),
     machine_image=ecs.EcsOptimizedImage.amazon_linux2(),
     vpc=vpc,
