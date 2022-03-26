@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as s3 from 'aws-cdk-lib/aws-s3';
-import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
-import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
+import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
+import * as targets from 'aws-cdk-lib/aws-route53-targets';
+import * as cloudfront_origins from 'aws-cdk-lib/aws-cloudfront-origins';
+import { CfnOutput, Duration, RemovalPolicy, Stack } from 'aws-cdk-lib';
 import * as iam from 'aws-cdk-lib/aws-iam';
-import { CfnOutput, RemovalPolicy, Stack } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 
 export interface StaticSiteProps {
@@ -35,8 +36,6 @@ export class StaticSite extends Construct {
     // Content bucket
     const siteBucket = new s3.Bucket(this, 'SiteBucket', {
       bucketName: siteDomain,
-      websiteIndexDocument: 'index.html',
-      websiteErrorDocument: 'error.html',
       publicReadAccess: false,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
 
@@ -53,6 +52,7 @@ export class StaticSite extends Construct {
        */
       autoDeleteObjects: true, // NOT recommended for production code
     });
+
     // Grant access to cloudfront
     siteBucket.addToResourcePolicy(new iam.PolicyStatement({
       actions: ['s3:GetObject'],
@@ -69,32 +69,29 @@ export class StaticSite extends Construct {
     });
     new CfnOutput(this, 'Certificate', { value: certificate.certificateArn });
 
-    // Specifies you want viewers to use HTTPS & TLS v1.1 to request your objects
-    const viewerCertificate = cloudfront.ViewerCertificate.fromAcmCertificate(
-      certificate,
-      {
-        sslMethod: cloudfront.SSLMethod.SNI,
-        securityPolicy: cloudfront.SecurityPolicyProtocol.TLS_V1_1_2016,
-        aliases: [siteDomain]
-      })
-
+    
     // CloudFront distribution
-    const distribution = new cloudfront.CloudFrontWebDistribution(this, 'SiteDistribution', {
-      viewerCertificate,
-      originConfigs: [
+    const distribution = new cloudfront.Distribution(this, 'SiteDistribution', {
+      certificate: certificate,
+      defaultRootObject: "index.html",
+      domainNames: [siteDomain],
+      minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
+      errorResponses:[
         {
-          s3OriginSource: {
-            s3BucketSource: siteBucket,
-            originAccessIdentity: cloudfrontOAI
-          },
-          behaviors: [{
-            isDefaultBehavior: true,
-            compress: true,
-            allowedMethods: cloudfront.CloudFrontAllowedMethods.GET_HEAD_OPTIONS,
-          }],
+          httpStatus: 403,
+          responseHttpStatus: 403,
+          responsePagePath: '/error.html',
+          ttl: Duration.minutes(30),
         }
-      ]
-    });
+      ],
+      defaultBehavior: {
+        origin: new cloudfront_origins.S3Origin(siteBucket, {originAccessIdentity: cloudfrontOAI}),
+        compress: true,
+        allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+      }
+    })
+
     new CfnOutput(this, 'DistributionId', { value: distribution.distributionId });
 
     // Route53 alias record for the CloudFront distribution
