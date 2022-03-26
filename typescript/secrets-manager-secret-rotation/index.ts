@@ -1,7 +1,7 @@
 import * as pyLambda from '@aws-cdk/aws-lambda-python-alpha';
 import {
     App, aws_ec2 as ec2, aws_elasticache as elasticache, aws_iam as iam, aws_lambda as lambda,
-    aws_secretsmanager as secretsmanager, Duration, Stack, StackProps
+    aws_secretsmanager as secretsmanager, Duration, Stack, StackProps, Tags
 } from 'aws-cdk-lib';
 
 import path = require("path");
@@ -17,17 +17,12 @@ export class SecretsManagerCustomRotationStack extends Stack {
         {
           cidrMask: 24,
           name: "Private",
-          subnetType: ec2.SubnetType.PRIVATE_WITH_NAT,
-        },
-        {
-          cidrMask: 24,
-          name: "Public",
-          subnetType: ec2.SubnetType.PUBLIC,
-        },
-      ],
+          subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
+        }
+      ]
     });
 
-    const privateSubnets = vpc.privateSubnets.map((subnet) => subnet.subnetId);
+    const privateSubnets = vpc.isolatedSubnets.map((subnet) => subnet.subnetId);
 
     const ecSecurityGroup = new ec2.SecurityGroup(this, "ElastiCacheSG", {
       vpc: vpc,
@@ -52,6 +47,23 @@ export class SecretsManagerCustomRotationStack extends Stack {
       "All port inbound"
     );
 
+    const elasticacheVpcEndpoint = new ec2.InterfaceVpcEndpoint(this, 'ElastiCache VPC Endpoint', {
+      vpc,
+      service: new ec2.InterfaceVpcEndpointService('com.amazonaws.'+Stack.of(this).region+'.elasticache', 443),
+      privateDnsEnabled: true,
+      open: true,
+      subnets: {
+        subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
+      },
+      securityGroups:[rotatorSecurityGroup]
+    });
+
+    const secretsManagerVpcEndpoint = vpc.addInterfaceEndpoint('SecretsManagerEndpoint', {
+      service: ec2.InterfaceVpcEndpointAwsService.SECRETS_MANAGER
+    });
+
+    Tags.of(elasticacheVpcEndpoint).add('Name', 'elasticache')
+    
     const ecSubnetGroup = new elasticache.CfnSubnetGroup(
       this,
       "ElastiCacheSubnetGroup",
@@ -143,7 +155,6 @@ export class SecretsManagerCustomRotationStack extends Stack {
       })
     );
 
-
     const redisPyLayer = new pyLambda.PythonLayerVersion(this, "RedisPyLayer", {
       entry: path.join(__dirname, "lambda", "layer", "redis-py"),
       compatibleRuntimes: [
@@ -165,7 +176,7 @@ export class SecretsManagerCustomRotationStack extends Stack {
       role: rotatorRole,
       timeout: Duration.seconds(30),
       vpc: vpc,
-      vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_NAT },
+      vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_ISOLATED },
       securityGroups: [ecSecurityGroup, rotatorSecurityGroup],
       environment: {
         replicationGroupId: ecClusterReplicationGroup.ref,
@@ -185,6 +196,49 @@ export class SecretsManagerCustomRotationStack extends Stack {
     secret.grantRead(fn);
 
     fn.grantInvoke(new iam.ServicePrincipal("secretsmanager.amazonaws.com"));
+
+    secretsManagerVpcEndpoint.addToPolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        resources: ["*"],
+        actions: ["secretsmanager:GetRandomPassword"],
+        principals: [rotatorRole]
+      })
+    )
+
+    secretsManagerVpcEndpoint.addToPolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        resources: [secret.secretArn],
+        actions: [
+          "secretsmanager:DescribeSecret",
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:PutSecretValue",
+          "secretsmanager:UpdateSecretVersionStage",
+        ],
+        principals: [rotatorRole]
+      })
+    )
+
+    elasticacheVpcEndpoint.addToPolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        resources: [
+          "arn:aws:elasticache:" +
+            Stack.of(this).region +
+            ":" +
+            Stack.of(this).account +
+            ":replicationgroup:" +
+            ecClusterReplicationGroup.replicationGroupId,
+        ],
+        actions: [
+          "elasticache:ModifyReplicationGroup",
+          "elasticache:DescribeReplicationGroups",
+        ],
+        principals: [rotatorRole]
+      })
+    )
+
   }
 }
 
