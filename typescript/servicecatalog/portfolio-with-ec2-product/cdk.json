@@ -1,0 +1,3 @@
+{
+  "app": "npx ts-node --prefer-ts-exts bin/portfolio-with-ec2-product.ts"
+}
