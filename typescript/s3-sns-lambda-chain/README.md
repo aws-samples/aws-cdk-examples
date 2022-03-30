@@ -43,7 +43,20 @@ This example illustrates the following concepts:
 
 ## Build and Deploy
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+Ensure aws-cdk is installed and your AWS account/region is [bootstrapped](https://docs.aws.amazon.com/cdk/latest/guide/bootstrapping.html).
+
+	  ```bash
+	  $ npm install -g aws-cdk
+	  $ cdk bootstrap
+	  ```
+
+Then build and deploy.
+_You will need to have [Docker](https://docs.docker.com/get-docker/) installed and running._
+
+	  ```bash
+	  $ npm run build
+	  $ cdk deploy
+	  ```
 
 
 ## Tutorial  
