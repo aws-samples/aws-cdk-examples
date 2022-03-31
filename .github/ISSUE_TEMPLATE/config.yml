@@ -2,5 +2,5 @@
 blank_issues_enabled: false
 contact_links:
   - name: 💬 General Question
-    url: https://github.com/kellertk/discussions-playground/discussions/categories/q-a
+    url: https://github.com/aws-samples/aws-cdk-examples/discussions/categories/q-a
     about: Please ask and answer questions as a discussion thread
