@@ -4,7 +4,7 @@ import decimal
 import mimetypes
 import boto3  # type: ignore
 import logging
-import pymysql
+import pymysql # type: ignore
 import pandas  # type: ignore
 
 logger = logging.getLogger()

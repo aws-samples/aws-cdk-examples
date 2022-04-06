@@ -18,13 +18,14 @@ class LambdaCloudwatchDashboardStack(Stack):
                                     runtime=aws_lambda.Runtime.PYTHON_3_7,
                                     handler="lambda-handler.main",
                                     code=aws_lambda.Code.from_asset("./lambda"))
-        lambda_function.role.add_managed_policy(
-            aws_iam.ManagedPolicy.from_aws_managed_policy_name("service-role/AWSLambdaBasicExecutionRole"))
+        if lambda_function.role is not None:
+            lambda_function.role.add_managed_policy(
+                aws_iam.ManagedPolicy.from_aws_managed_policy_name("service-role/AWSLambdaBasicExecutionRole"))
 
-        # Create CloudWatch Dashboard to view Lambda Function Metrics
-        cw_dashboard = aws_cloudwatch.Dashboard(self, "Lambda Dashboard",
-          dashboard_name=example_dashboard_name
-        )
+            # Create CloudWatch Dashboard to view Lambda Function Metrics
+            cw_dashboard = aws_cloudwatch.Dashboard(self, "Lambda Dashboard",
+            dashboard_name=example_dashboard_name
+            )
         # CloudWatch Dashboard Title
         title_widget = aws_cloudwatch.TextWidget(
             markdown="# Dashboard: {}".format(lambda_function.function_name),
