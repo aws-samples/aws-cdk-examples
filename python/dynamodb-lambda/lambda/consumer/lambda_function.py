@@ -3,8 +3,8 @@ from __future__ import print_function
 import json
 import decimal
 import os
-import boto3  # type: ignore
-from botocore.exceptions import ClientError  # type: ignore
+import boto3
+from botocore.exceptions import ClientError
 
 
 # Helper class to convert a DynamoDB item to JSON.

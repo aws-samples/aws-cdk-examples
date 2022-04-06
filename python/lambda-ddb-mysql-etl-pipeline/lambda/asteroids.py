@@ -1,11 +1,11 @@
-import requests # type: ignore
+import requests
 import json
-from requests.exceptions import Timeout # type: ignore
+from requests.exceptions import Timeout
 from requests.exceptions import HTTPError
 from datetime import date
 import csv
 import os
-import boto3  # type: ignore
+import boto3
 import logging
 
 logger = logging.getLogger()

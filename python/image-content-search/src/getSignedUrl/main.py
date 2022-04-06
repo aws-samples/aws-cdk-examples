@@ -1,11 +1,11 @@
 import json
-import boto3  # type: ignore
+import boto3
 import logging
 import os
 import time
 import hashlib
 
-from botocore.exceptions import ClientError  # type: ignore
+from botocore.exceptions import ClientError
 images_bucket = os.environ['ICS_IMAGES_BUCKET']
 default_signedurl_expiry_seconds = os.environ['DEFAULT_SIGNEDURL_EXPIRY_SECONDS']
 

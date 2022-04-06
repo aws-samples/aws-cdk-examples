@@ -332,7 +332,6 @@ class ImageContentSearchStack(Stack):
         ### event bridge
         event_bus = _events.EventBus(self, "ICS_IMAGE_CONTENT_BUS", event_bus_name="ImageContentBus")
 
-
         event_rule = _events.Rule(self, "ICS_IMAGE_CONTENT_RULE",
             rule_name="ICS_IMAGE_CONTENT_RULE",
             description="The event from image analyzer to store the data",

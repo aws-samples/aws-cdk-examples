@@ -1,9 +1,9 @@
-import boto3  # type: ignore
+import boto3
 import os
 import logging
 import hashlib
 import json
-import botocore  # type: ignore
+import botocore
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)

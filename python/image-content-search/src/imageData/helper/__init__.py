@@ -1,5 +1,5 @@
-import boto3  # type: ignore
-import botocore.config  # type: ignore
+import boto3
+import botocore.config
 import logging
 import os
 

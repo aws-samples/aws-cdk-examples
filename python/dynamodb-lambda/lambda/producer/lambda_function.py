@@ -4,7 +4,7 @@ import json
 import uuid
 import decimal
 import os
-import boto3  # type: ignore
+import boto3
 
 
 # Helper class to convert a DynamoDB item to JSON.

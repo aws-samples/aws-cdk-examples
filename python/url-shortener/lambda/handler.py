@@ -3,7 +3,7 @@ import os
 import uuid
 import logging
 
-import boto3  # type: ignore
+import boto3
 
 LOG = logging.getLogger()
 LOG.setLevel(logging.INFO)

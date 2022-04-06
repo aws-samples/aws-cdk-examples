@@ -3,7 +3,7 @@
 # Author: Katreena Mullican
 # Contact: mullicak@amazon.com
 #
-import boto3  # type: ignore
+import boto3
 import os
 import json
 

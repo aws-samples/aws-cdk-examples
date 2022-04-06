@@ -2,9 +2,9 @@ import json
 import os
 import decimal
 import mimetypes
-import boto3  # type: ignore
+import boto3
 import logging
-import pymysql # type: ignore
+import pymysql
 import pandas  # type: ignore
 
 logger = logging.getLogger()

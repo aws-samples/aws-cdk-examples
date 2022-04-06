@@ -4,7 +4,7 @@ import urllib
 from dataclasses import dataclass
 from email.message import Message
 
-import boto3 # type: ignore
+import boto3
 
 client = boto3.client('s3')
 
