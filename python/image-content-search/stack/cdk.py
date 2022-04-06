@@ -14,7 +14,11 @@ from aws_cdk import (
     aws_secretsmanager as _secrets_manager,
     custom_resources as _custom_resources,
     aws_cloudformation,
-    core
+    Stack,
+    Aws,
+    Duration,
+    CustomResource,
+    CfnOutput
 )
 
 from aws_cdk.aws_apigateway import (
@@ -268,7 +272,7 @@ class ImageContentSearchStack(Stack):
                 "DEFAULT_MAX_CALL_ATTEMPTS": configs["Functions"]["DefaultMaxApiCallAttempts"],
                 "CLUSTER_ARN": database_cluster_arn,
                 "CREDENTIALS_ARN": database_secret.secret_arn,
-                "DB_NAME": database.database_name,
+                "DB_NAME": database.database_name or "",
                 "REGION": Aws.REGION
                 },
             handler="main.handler",
@@ -343,7 +347,7 @@ class ImageContentSearchStack(Stack):
 
         ### outputs
         CfnOutput(self, 'CognitoHostedUILogin',
-            value='https://{}.auth.{}.amazoncognito.com/login?client_id={}&response_type=token&scope={}&redirect_uri={}'.format(user_pool_domain.domain_name or "", core.Aws.REGION, user_pool_app_client.ref, '+'.join(user_pool_app_client.allowed_o_auth_scopes or []), api_gateway_landing_page_resource.url),
+            value='https://{}.auth.{}.amazoncognito.com/login?client_id={}&response_type=token&scope={}&redirect_uri={}'.format(user_pool_domain.domain_name or "", Aws.REGION, user_pool_app_client.ref, '+'.join(user_pool_app_client.allowed_o_auth_scopes or []), api_gateway.url_for_path(api_gateway_landing_page_resource.path)),
             description='The Cognito Hosted UI Login Page'
         )
 

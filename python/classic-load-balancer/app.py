@@ -25,7 +25,7 @@ class LoadBalancerStack(Stack):
             self, "LB",
             vpc=vpc,
             internet_facing=True,
-            health_check={"port": 80}
+            health_check=elb.HealthCheck(port=80)
         )
         lb.add_target(asg)
 

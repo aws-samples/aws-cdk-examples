@@ -1,4 +1,4 @@
-import setuptools
+import setuptools  # type: ignore
 
 
 with open("README.md") as fp:

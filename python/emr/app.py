@@ -44,7 +44,9 @@ class EMRClusterStack(Stack):
                     "service-role/AmazonElasticMapReduceRole"
                 )
             ],
-            inline_policies=[read_scripts_document],
+            inline_policies={
+                "read_scripts_document": read_scripts_document
+            },
         )
 
         # emr job flow role
@@ -82,7 +84,7 @@ class EMRClusterStack(Stack):
                 ),
             ),
             # note job_flow_role is an instance profile (not an iam role)
-            job_flow_role=emr_job_flow_profile.instance_profile_name,
+            job_flow_role=emr_job_flow_profile.instance_profile_name or "",
             name="cluster_name",
             applications=[emr.CfnCluster.ApplicationProperty(name="Spark")],
             service_role=emr_service_role.role_name,
