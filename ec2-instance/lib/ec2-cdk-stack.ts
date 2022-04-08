@@ -35,7 +35,7 @@ export class Ec2CdkStack extends cdk.Stack {
       description: 'Allow SSH (TCP port 22) in',
       allowAllOutbound: true
     });
-    securityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(22), 'Allow SSH Access')
+    securityGroup.addIngressRule(ec2.Peer.anyIpv4(), ec2.Port.tcp(3389), 'Allow SSH Access')
 
     const role = new iam.Role(this, 'ec2Role', {
       assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com')
