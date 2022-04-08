@@ -1,0 +1,3 @@
+{
+  "app": "npx ts-node --prefer-ts-exts bin/ec2-cdk.ts"
+}

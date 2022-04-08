@@ -1,7 +1,0 @@
-target
-.classpath
-.project
-.settings
-.metadata
-node_modules
-package-lock.json

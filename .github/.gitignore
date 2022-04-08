@@ -1,0 +1,7 @@
+### CDK-specific ignores ###
+*.swp
+cdk.context.json
+yarn.lock
+.cdk.staging
+cdk.out
+node_modules/

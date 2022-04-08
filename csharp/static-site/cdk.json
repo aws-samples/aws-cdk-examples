@@ -1,7 +1,0 @@
-{
-  "context": {
-     "domain": "mystaticsite.com",
-     "subdomain": "www"
-  },
-  "app": "dotnet run -p src/StaticSite/StaticSite.csproj"
-}

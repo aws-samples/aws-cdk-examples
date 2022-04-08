@@ -1,3 +1,0 @@
-{
-  "app": "mvn exec:java -Dexec.mainClass=software.amazon.awscdk.examples.HelloJavaApp"
-}

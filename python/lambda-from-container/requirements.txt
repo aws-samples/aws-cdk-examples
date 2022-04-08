@@ -1,7 +1,0 @@
-aws-cdk-lib>=2.0.0
-constructs>=10.0.0
-##
-## jsii must be 1.14.1 or better on Python 3.7
-##
-jsii>=1.14.1
-cattrs>=1.1.1

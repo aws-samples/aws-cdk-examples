@@ -1,3 +1,0 @@
-{
-  "app": "mvn exec:java -pl cdk -Dexec.mainClass=software.amazon.awscdk.examples.S3LambdaApp"
-}
