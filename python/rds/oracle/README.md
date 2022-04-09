@@ -33,12 +33,12 @@ instance_type = ec2.InstanceType.of(
 ### Independent resource from `app.py` as a parent-level stack.
 
 ```python
-from aurora import Aurora
+from oracle import Oracle
 
 vpc_id    = "vpc-aaaaaaaa"
 subnet_ids=["subnet-xxxxxxxx", "subnet-yyyyyyyy", "subnet-zzzzzzzz"]
 
-Aurora(app, "Aurora",
+Oracle(app, "Oracle",
   db_name="ExampleDb",
   ingress_sources=[ec2.Peer.ipv4("10.10.10.10/32")],
   vpc_id=vpc_id,
@@ -47,14 +47,14 @@ Aurora(app, "Aurora",
   instance_type = ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE4_GRAVITON, ec2.InstanceSize.LARGE)
   backup_window="22:00-00:00",
   preferred_maintenance_window="Sun:23:45-Mon:00:15",
-  description="Aurora Example")
+  description="Oracle Example")
 
 ```
 
 ### As part of a child stack
 
 ```python
-from aurora import Aurora
+from oracle import Oracle
 
 class IcePlainsOfHoth(Stack):
 
@@ -96,7 +96,7 @@ class IcePlainsOfHoth(Stack):
 
     vpc_id = vpc.vpc_id
 
-    Aurora(self, "EchoBaseDb",
+    Oracle(self, "EchoBaseDb",
       db_name="EchoBase",
       ingress_sources=[ec2.Peer.ipv4("10.10.10.10/32")],
       vpc_id=vpc_id,
@@ -127,7 +127,7 @@ class IcePlainsOfHoth(Stack):
 
 ```bash
 aws secretsmanager get-secret-value \
-  --secret-id arn:aws:secretsmanager:us-east-1:xxxxxxxxxxxx:secret:ExampleDbAuroraClusterCredentials-xxxxxx  \
+  --secret-id arn:aws:secretsmanager:us-east-1:xxxxxxxxxxxx:secret:ExampleDbOracleClusterCredentials-xxxxxx  \
   --query SecretString \
   --output text | jq -r '.'
 ```
@@ -135,11 +135,11 @@ aws secretsmanager get-secret-value \
 * After pulling the secret from **Secrets Manager** it will be a `json` string that contains all the details for the client to connect to the database.
 ```javascript
 {
-  "dbClusterIdentifier": "aurora-auroradatabasexxxxxxxx-xxxxxxxxxxxx",
+  "dbClusterIdentifier": "oracle-oracledatabasexxxxxxxx-xxxxxxxxxxxx",
   "password": ";?Rq}V_?mlxl7Vbk-|O,ej|}3XR|C,",
   "engine": "postgres",
   "port": 5432,
-  "host": "aurora-auroradatabasexxxxxxxx-xxxxxxxxxxxx.cluster-xxxxxxxxxxxx.us-east-1.rds.amazonaws.com",
+  "host": "oracle-oracledatabasexxxxxxxx-xxxxxxxxxxxx.cluster-xxxxxxxxxxxx.us-east-1.rds.amazonaws.com",
   "username": "clusteradmin"
 }
 ```
@@ -148,7 +148,7 @@ aws secretsmanager get-secret-value \
 
 ```bash
 aws secretsmanager get-secret-value \
-  --secret-id arn:aws:secretsmanager:us-east-1:xxxxxxxxxxxx:secret:ExampleDbAuroraClusterCredentials-xxxxxx  \
+  --secret-id arn:aws:secretsmanager:us-east-1:xxxxxxxxxxxx:secret:ExampleDbOracleClusterCredentials-xxxxxx  \
   --query SecretString \
   --output text | jq -r '.password'
 ```
