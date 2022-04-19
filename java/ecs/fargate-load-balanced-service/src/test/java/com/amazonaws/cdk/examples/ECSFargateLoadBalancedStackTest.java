@@ -1,6 +1,7 @@
 package com.amazonaws.cdk.examples;
 
-import software.amazon.awscdk.core.App;
+import software.amazon.awscdk.App;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

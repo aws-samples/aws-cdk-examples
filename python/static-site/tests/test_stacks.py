@@ -1,13 +1,13 @@
 import pytest
 
-from aws_cdk import core as cdk
+from aws_cdk import App
 from site_stack import StaticSiteStack
 
 
 @pytest.fixture(scope="session")
 def synth():
 
-    app = cdk.App(
+    app = App(
         context={
             "namespace": "static-site",
             "domain_name": "example.com",

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import * as cdk from '@aws-cdk/core';
+import * as cdk from 'aws-cdk-lib';
 import { StaticSite } from './static-site';
 
 /**
@@ -10,7 +10,7 @@ import { StaticSite } from './static-site';
  *   "context": {
  *     "domain": "mystaticsite.com",
  *     "subdomain": "www",
- *     "accountId": 1234567890,
+ *     "accountId": "1234567890",
  *   }
  * }
 **/

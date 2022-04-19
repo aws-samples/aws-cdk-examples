@@ -1,9 +1,9 @@
-from aws_cdk import core
+from aws_cdk import App
 
 from waf_regional   import WafRegionalStack
 from waf_cloudfront import WafCloudFrontStack
 
-app = core.App()
+app = App()
 env = {'region': 'us-east-1'}
 
 WafRegionalStack(app,   "WafRegionalStack",   env=env)
