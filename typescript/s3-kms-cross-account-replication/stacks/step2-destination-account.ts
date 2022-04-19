@@ -8,7 +8,7 @@ import { Effect, PolicyDocument, PolicyStatement, ArnPrincipal } from 'aws-cdk-l
 export class Step2DestinationAccount extends Stack {
   public destinationS3Bucket: Bucket;
   public destinationKmsKey: Key;
-  constructor(scope: Construct, id: string, props: StackProps) {
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     const replicationRoleArn = new CfnParameter(this, 'replicationRoleArn', {

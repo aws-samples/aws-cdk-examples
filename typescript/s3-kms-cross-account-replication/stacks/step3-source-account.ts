@@ -6,7 +6,7 @@ import { Key } from 'aws-cdk-lib/aws-kms';
 import { Effect, PolicyDocument, PolicyStatement, ArnPrincipal } from 'aws-cdk-lib/aws-iam';
 
 export class Step3SourceAccount extends Stack {
-  constructor(scope: Construct, id: string, props: StackProps) {
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     const replicationRoleArn = new CfnParameter(this, 'replicationRoleArn', {

@@ -37,10 +37,6 @@ This will install the necessary CDK, then this example's dependencies, and then 
 * AWS CDK SDK installed
 
 ---
-## Diagram
-![](/diagram/S3-Cross-Account-Replication.png)
-
----
 ## How to setup this project?
 You'll need to bootstrap this CDK project into both source and destination accounts.
 You can use the following command to add your source account to the destination account as a trusted resource.
