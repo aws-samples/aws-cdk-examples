@@ -1,6 +1,5 @@
 from aws_cdk import (
     aws_logs as logs,
-    core
 )
 
 from aws_cdk.custom_resources import (
@@ -10,9 +9,11 @@ from aws_cdk.custom_resources import (
     AwsSdkCall
 )
 
-class MyCustomResource(core.Construct):
+from constructs import Construct
 
-    def __init__(self, scope: core.Construct, id: str, bucket_name):
+class MyCustomResource(Construct):
+
+    def __init__(self, scope: Construct, id: str, bucket_name):
         super().__init__(scope, id)
 
         res = AwsCustomResource(

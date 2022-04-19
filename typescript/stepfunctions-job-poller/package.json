@@ -16,14 +16,11 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/node": "*",
-    "typescript": "^3.8"
+    "aws-cdk": "*",
+    "typescript": "~3.9.7"
   },
   "dependencies": {
-    "@aws-cdk/aws-events": "*",
-    "@aws-cdk/aws-events-targets": "*",
-    "@aws-cdk/aws-lambda": "*",
-    "@aws-cdk/aws-stepfunctions": "*",
-    "@aws-cdk/aws-stepfunctions-tasks": "*",
-    "@aws-cdk/core": "*"
+    "aws-cdk-lib": "^2.0.0",
+    "constructs": "^10.0.0"
   }
 }

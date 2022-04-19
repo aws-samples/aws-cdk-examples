@@ -1,11 +1,11 @@
 from aws_cdk import (
     aws_lambda as _lambda,
-    core as cdk,
+    App, RemovalPolicy, Stack
 )
 
 
-class LambdaLayerStack(cdk.Stack):
-    def __init__(self, app: cdk.App, id: str) -> None:
+class LambdaLayerStack(Stack):
+    def __init__(self, app: App, id: str) -> None:
         super().__init__(app, id)
 
         # create layer
@@ -17,16 +17,16 @@ class LambdaLayerStack(cdk.Stack):
                                          _lambda.Runtime.PYTHON_3_7,
                                          _lambda.Runtime.PYTHON_3_8
                                      ],
-                                     removal_policy=cdk.RemovalPolicy.DESTROY
+                                     removal_policy=RemovalPolicy.DESTROY
                                      )
         # create lambda function
         function = _lambda.Function(self, "lambda_function",
                                     runtime=_lambda.Runtime.PYTHON_3_8,
                                     handler="index.handler",
-                                    code=_lambda.Code.asset("lambda"),
+                                    code=_lambda.Code.from_asset("lambda"),
                                     layers=[layer])
 
 
-app = cdk.App()
+app = App()
 LambdaLayerStack(app, "LambdaLayerExample")
 app.synth()

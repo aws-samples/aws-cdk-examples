@@ -1,6 +1,6 @@
-import { Capture, Match, Template } from '@aws-cdk/assertions';
+import { Capture, Match, Template } from 'aws-cdk-lib/assertions';
 import { LambdaCronStack } from './index';
-import * as cdk from '@aws-cdk/core';
+import * as cdk from 'aws-cdk-lib';
 
 const app = new cdk.App();
 const stack = new LambdaCronStack(app, 'testStack');
@@ -53,7 +53,7 @@ describe('lambda tests', () => {
 
   test('lambda not running in vpc', () => {
     assert.hasResource('AWS::Lambda::Function', {
-      Vpc: Match.absentProperty(),
+      Vpc: Match.absent(),
     });
   });
 });
