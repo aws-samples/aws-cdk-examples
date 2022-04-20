@@ -18,17 +18,6 @@ The process to setup this CDK is in three steps.
 2) Create a KMS encryption key and S3 bucket encrypted with KMS in the destination account with appropriate policies.
 3) Create a KMS encryption key and S3 bucket encrypted with KMS in the source account with the appropriate policies and with a replication configuration.
 
-
----
-## Build
-To build this app, you need to be in this example's root folder. Then run the following:
-```bash
-npm install -g aws-cdk
-npm install
-npm run build
-```
-This will install the necessary CDK, then this example's dependencies, and then build your TypeScript files and your CloudFormation template.
-
 ---
 ## Prerequisites
 * Source AWS Account
@@ -66,13 +55,21 @@ Setup your variables in the `config/config.json` file.
 ```
 
 ---
+## Build
+To build this app, you need to be in this example's root folder. Then run the following:
+```bash
+npm install -g aws-cdk
+npm install
+npm run build
+```
+This will install the necessary CDK, then this example's dependencies, and then build your TypeScript files and your CloudFormation template.
+
+---
 ## Deploy
-1. Clone the repository and move terminal inside it.
-1. Run `npm install`
 1. Populate the config.json file with the proper source and destination account ids.
 1. Modify any of the existing values for your preferences for naming / conventions.
 1. Assume a role within the source account.
-1. Update the values with curley braces and run command
+1. Update the values with curly braces and run command
   ```bash
   cdk bootstrap --trust {sourceAccountId} --cloudformation - execution - policies arn:aws:iam::aws:policy/AdministratorAccess aws://{destinationAccountId}}/{destinationRegion}
   ```
