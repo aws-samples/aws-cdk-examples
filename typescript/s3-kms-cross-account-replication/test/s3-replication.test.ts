@@ -19,7 +19,7 @@ test('Replication Role Created', () => {
 
 test('Destination S3 Bucket and KMS Key are created', () => {
   /*
-  Test for Creating the Replication IAM Role
+  Test for Creating the KMS Key and S3 bucket in the destination account
   */
 
   const app = new App();
@@ -32,7 +32,7 @@ test('Destination S3 Bucket and KMS Key are created', () => {
 
 test('Source S3 Bucket and KMS Key are created', () => {
   /*
-  Test for Creating the Replication IAM Role
+  Test for Creating the KMS Key and S3 bucket in the source account
   */
 
   const app = new App();
