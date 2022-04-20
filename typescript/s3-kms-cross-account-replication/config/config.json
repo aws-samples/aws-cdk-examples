@@ -3,10 +3,10 @@
   "replicationRolePolicyName": "s3-cross-account-replication-role-policy",
   "sourceAccountId": "replaceMeWithSourceAccountId",
   "sourceRegion": "us-west-2",
-  "sourceBucketName": "source-bucket-to-replicate-from1",
+  "sourceBucketName": "source-bucket-to-replicate-from",
   "sourceKmsKeyAlias": "s3-cross-account-replication-source-key",
   "destinationAccountId": "replaceMeWithDestinationAccountId",
   "destinationRegion": "us-west-2",
-  "destinationBucketName": "destination-bucket-to-replicate-to1",
+  "destinationBucketName": "destination-bucket-to-replicate-to",
   "destinationKmsKeyAlias": "s3-cross-account-replication-destination-key"
 }
