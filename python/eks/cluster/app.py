@@ -23,10 +23,10 @@ class Stack(Stack):
 
         # it's good to add these tags in case you may want to deploy a Ingress Controller
         for public_subnet in vpc.public_subnets:
-            core.Tags.of(public_subnet).add("kubernetes.io/role/elb", "1")
+            Tags.of(public_subnet).add("kubernetes.io/role/elb", "1")
 
         for private_subnet in vpc.public_subnets:
-            core.Tags.of(private_subnet).add("kubernetes.io/role/internal-elb", "1")
+            Tags.of(private_subnet).add("kubernetes.io/role/internal-elb", "1")
 
         cluster_role = iam.Role(
             self,
