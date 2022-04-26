@@ -24,7 +24,7 @@ export class Step2DestinationAccount extends Stack {
           new PolicyStatement({
             sid: 'Enable IAM User Permissions',
             effect: Effect.ALLOW,
-            principals: [new ArnPrincipal("arn:aws:iam::" + Config.destinationAccountId + ":root")],
+            principals: [new ArnPrincipal(`arn:aws:iam::${Config.destinationAccountId}:root`)],
             actions: [
               "kms:*",
             ],
@@ -66,7 +66,7 @@ export class Step2DestinationAccount extends Stack {
       new PolicyStatement({
         sid: 'Set Admin Access',
         effect: Effect.ALLOW,
-        principals: [new ArnPrincipal("arn:aws:iam::" + Config.destinationAccountId + ":root")],
+        principals: [new ArnPrincipal(`arn:aws:iam::${Config.destinationAccountId}:root`)],
         actions: [
           "s3:*"
         ],

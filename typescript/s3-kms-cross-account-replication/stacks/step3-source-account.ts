@@ -32,7 +32,7 @@ export class Step3SourceAccount extends Stack {
           new PolicyStatement({
             sid: 'Enable IAM User Permissions',
             effect: Effect.ALLOW,
-            principals: [new ArnPrincipal("arn:aws:iam::" + Config?.sourceAccountId + ":root")],
+            principals: [new ArnPrincipal(`arn:aws:iam::${Config?.sourceAccountId}:root`)],
             actions: [
               "kms:*",
             ],
@@ -71,7 +71,7 @@ export class Step3SourceAccount extends Stack {
       new PolicyStatement({
         sid: 'Set Admin Access',
         effect: Effect.ALLOW,
-        principals: [new ArnPrincipal("arn:aws:iam::" + Config.sourceAccountId + ":root")],
+        principals: [new ArnPrincipal(`arn:aws:iam::${Config.sourceAccountId}:root`)],
         actions: [
           "s3:*"
         ],
