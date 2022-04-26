@@ -26,16 +26,6 @@ The process to setup this CDK is in three steps.
 * AWS CDK SDK installed
 
 ---
-## How to setup this project?
-You'll need to bootstrap this CDK project into both source and destination accounts.
-You can use the following command to add your source account to the destination account as a trusted resource.
-Please replace the values in the curly braces with your values.
-
-```bash
-cdk bootstrap --trust {sourceAccountId} --cloudformation - execution - policies arn:aws:iam::aws:policy/AdministratorAccess aws://{destinationAccountId}}/{destinationRegion}
-```
-
----
 ## What can I configure?
 Setup your variables in the `config/config.json` file.
 
@@ -55,36 +45,43 @@ Setup your variables in the `config/config.json` file.
 ```
 
 ---
-## Build
-To build this app, you need to be in this example's root folder. Then run the following:
+## How to setup this project?
+Since you are going to deploy resources in two AWS accounts, you'll need to bootstrap this CDK project into both source and destination accounts. Before starting the bootstrap process, you need to configure your aws cli credentials file with two profiles: `source` and `destination`. More information can be found in ![AWS CLI configuration files](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html).
+
+We are going to use the source account to deploy all the three stacks, so in the destination account we need to create a trust relationship with the source account.
+To do this, run the following command:
+
 ```bash
-npm install -g aws-cdk
-npm install
-npm run build
+cdk bootstrap --trust {sourceAccountId} --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess aws://{destinationAccountId}}/{destinationRegion} --profile destination
 ```
-This will install the necessary CDK, then this example's dependencies, and then build your TypeScript files and your CloudFormation template.
+> Please replace the values in the curly braces with your values.
+
+After bootstrap CDK in the destination account, you can bootstrap CDK in the source account by running the following command:
+
+```bash
+cdk bootstrap --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess aws://{sourceAccountId}}/{sourceRegion} --profile source
+```
+> Please replace the values in the curly braces with your values.<br/>
+> You need to setup your variables in the config.json before running the above commands.
 
 ---
-## Deploy
-1. Populate the config.json file with the proper source and destination account ids.
-1. Modify any of the existing values for your preferences for naming / conventions.
-1. Assume a role within the source account.
-1. Update the values with curly braces and run command
-  ```bash
-  cdk bootstrap --trust {sourceAccountId} --cloudformation - execution - policies arn:aws:iam::aws:policy/AdministratorAccess aws://{destinationAccountId}}/{destinationRegion}
-  ```
-1. Run command
-  ```bash
-  cdk deploy Step1SourceAccount
-  ```
-1. Update the values in curly braces from `Outputs` in previous step, run command
-  ```bash
-  cdk deploy Step2DestinationAccount --parameters replicationRoleArn=arn:aws:iam::{sourceAccountId}:role/s3-cross-account-replication-role
-  ```
-1. Update the values in curly braces from `Outputs` in previous step, run command
-  ```bash
-  cdk deploy Step3SourceAccount --parameters replicationRoleArn=arn:aws:iam::{sourceAccountId}:role/s3-cross-account-replication-role --parameters destinationKmsKeyArn=arn:aws:kms:us-west-2:{destinationAccountId}:key/{kmsKeyInDestination} --parameters destinationS3BucketArn=arn:aws:s3:::destination-bucket-to-replicate-to
-  ```
+## Steps to Deploy
+* Clone the repository and move terminal inside it.
+* Run `npm install`
+* Populate the config.json file with the proper source and destination account ids.
+* Modify any of the existing values for your preferences for naming / conventions.
+* Configure your aws cli credentials file with two profiles: `source` and `destination`.
+* Bootstrap destination account: `cdk bootstrap --trust {sourceAccountId} --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess aws://{destinationAccountId}}/{destinationRegion} --profile destination`
+  * Update the values in curly braces.
+* Bootstrap source account: `cdk bootstrap --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess aws://{sourceAccountId}}/{sourceRegion} --profile source`
+  * Update the values in curly braces.
+* Run `cdk deploy Step1SourceAccount --profile source`
+  * Note the output parameters to use in the next step
+* Run `cdk deploy Step2DestinationAccount --parameters replicationRoleArn=arn:aws:iam::{sourceAccountId}:role/s3-cross-account-replication-role --profile source`
+  * Update the values in curly braces.
+  * Note the output parameters to use in the next step
+* Run `cdk deploy Step3SourceAccount --parameters replicationRoleArn=arn:aws:iam::{sourceAccountId}:role/s3-cross-account-replication-role --parameters destinationKmsKeyArn=arn:aws:kms:us-west-2:{destinationAccountId}:key/{kmsKeyInDestination} --parameters destinationS3BucketArn=arn:aws:s3:::destination-bucket-to-replicate-to  --profile source`
+  * Update the values in curly braces.
 
 ---
 ## Testing
@@ -94,10 +91,10 @@ This will install the necessary CDK, then this example's dependencies, and then 
 
 ---
 ## Cleanup
+* Delete all files in the source and destination S3 buckets
 * Run `cdk destroy Step3SourceAccount`
 * Run `cdk destroy Step2DestinationAccount`
 * Run `cdk destroy Step1SourceAccount`
-
 
 ---
 ## Useful commands
