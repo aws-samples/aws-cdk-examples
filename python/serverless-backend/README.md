@@ -67,10 +67,6 @@ There are no manual steps involved in deploying this stack, however, in this exa
                     "photo": "image details"
                 }
 
-our uploaded image to be encoded as a base64 format.
-
-1. Mount points needs to be created in each of the two availability zones
-2. After the creation of the RDS instance, the password and connection string needs to be added to the userdata script [here](userdata.sh).
 
 
 ## Useful commands
