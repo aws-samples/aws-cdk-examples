@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "app", "app", "{A7C9F872-9F6C-4189-9B47-AE7305F99AC8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infra", "infra", "{218590C3-836A-4C66-BF21-C45E42A47950}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SampleDynamoBlogApi", "SampleDynamoBlogApi", "{7E9CDFD5-5842-4037-A308-E3FFC436BE41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleDynamoBlogApi", "app\SampleDynamoBlogApi\src\SampleDynamoBlogApi\SampleDynamoBlogApi.csproj", "{4445826D-4587-43F2-BCFA-E92491587887}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleDynamoBlogApi.Tests", "app\SampleDynamoBlogApi\test\SampleDynamoBlogApi.Tests\SampleDynamoBlogApi.Tests.csproj", "{EBED5F64-A89D-48B9-A08B-8A1498CAED7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiCorsCSharpLambdaCrudDynamodb", "infra\src\ApiCorsCSharpLambdaCrudDynamodb\ApiCorsCSharpLambdaCrudDynamodb.csproj", "{7AC3A287-D590-489F-9874-232CC0C40B6C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4445826D-4587-43F2-BCFA-E92491587887}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4445826D-4587-43F2-BCFA-E92491587887}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4445826D-4587-43F2-BCFA-E92491587887}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4445826D-4587-43F2-BCFA-E92491587887}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBED5F64-A89D-48B9-A08B-8A1498CAED7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBED5F64-A89D-48B9-A08B-8A1498CAED7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBED5F64-A89D-48B9-A08B-8A1498CAED7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBED5F64-A89D-48B9-A08B-8A1498CAED7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AC3A287-D590-489F-9874-232CC0C40B6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AC3A287-D590-489F-9874-232CC0C40B6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AC3A287-D590-489F-9874-232CC0C40B6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AC3A287-D590-489F-9874-232CC0C40B6C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7E9CDFD5-5842-4037-A308-E3FFC436BE41} = {A7C9F872-9F6C-4189-9B47-AE7305F99AC8}
+		{4445826D-4587-43F2-BCFA-E92491587887} = {7E9CDFD5-5842-4037-A308-E3FFC436BE41}
+		{EBED5F64-A89D-48B9-A08B-8A1498CAED7D} = {7E9CDFD5-5842-4037-A308-E3FFC436BE41}
+		{7AC3A287-D590-489F-9874-232CC0C40B6C} = {218590C3-836A-4C66-BF21-C45E42A47950}
+	EndGlobalSection
+EndGlobal
