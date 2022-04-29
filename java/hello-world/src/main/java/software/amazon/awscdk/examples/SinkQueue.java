@@ -1,8 +1,11 @@
 package software.amazon.awscdk.examples;
 
+import software.constructs.Construct;
+import software.constructs.IValidation;
+
 import java.util.Arrays;
 import java.util.List;
-import software.amazon.awscdk.core.Construct;
+
 import software.amazon.awscdk.services.sns.Topic;
 import software.amazon.awscdk.services.sns.subscriptions.SqsSubscription;
 import software.amazon.awscdk.services.sqs.Queue;
@@ -30,8 +33,7 @@ public class SinkQueue extends Construct {
 
     // defaults
     QueueProps queueProps = props.getQueueProps();
-    this.expectedTopicCount =
-        props.getRequiredTopicCount() != null ? props.getRequiredTopicCount().intValue() : 0;
+    this.expectedTopicCount = props.getRequiredTopicCount() != null ? props.getRequiredTopicCount().intValue() : 0;
 
     // WORKAROUND: https://github.com/awslabs/aws-cdk/issues/157
     if (queueProps == null) {
@@ -39,6 +41,8 @@ public class SinkQueue extends Construct {
     }
 
     this.queue = new Queue(this, "Resource", queueProps);
+
+    this.getNode().addValidation(new SinkQueueValidator());
   }
 
   /**
@@ -60,24 +64,21 @@ public class SinkQueue extends Construct {
     for (Topic topic : topics) {
       if (expectedTopicCount != 0 && actualTopicCount >= expectedTopicCount) {
         throw new RuntimeException(
-            "Cannot add more topics to the sink. Maximum topics is configured to "
-                + this.expectedTopicCount);
+            "Cannot add more topics to the sink. Maximum topics is configured to " + this.expectedTopicCount);
       }
       topic.addSubscription(new SqsSubscription(this.queue));
       actualTopicCount++;
     }
   }
 
-  @Override
-  public List<String> validate() {
-    if (actualTopicCount < expectedTopicCount) {
-      return Arrays.asList(
-          "There are not enough subscribers to the sink. Expecting "
-              + this.expectedTopicCount
-              + ", actual is "
-              + this.actualTopicCount);
+  private class SinkQueueValidator implements IValidation {
+    public List<String> validate() {
+      if (actualTopicCount < expectedTopicCount) {
+        return Arrays.asList("There are not enough subscribers to the sink. Expecting " + expectedTopicCount
+            + ", actual is " + actualTopicCount);
+      }
+      return Arrays.asList();
     }
-
-    return super.validate();
   }
+
 }

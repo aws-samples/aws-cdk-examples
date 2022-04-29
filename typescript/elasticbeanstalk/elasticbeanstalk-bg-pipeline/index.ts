@@ -1,9 +1,9 @@
-import cdk = require('@aws-cdk/core');
-import cpactions = require('@aws-cdk/aws-codepipeline-actions');
-import cp = require('@aws-cdk/aws-codepipeline');
-import cc = require('@aws-cdk/aws-codecommit');
-import lambda = require('@aws-cdk/aws-lambda');
-import s3 = require('@aws-cdk/aws-s3');
+import cdk = require('aws-cdk-lib');
+import cpactions = require('aws-cdk-lib/aws-codepipeline-actions');
+import cp = require('aws-cdk-lib/aws-codepipeline');
+import cc = require('aws-cdk-lib/aws-codecommit');
+import lambda = require('aws-cdk-lib/aws-lambda');
+import s3 = require('aws-cdk-lib/aws-s3');
 
 export class CdkStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
@@ -18,14 +18,14 @@ export class CdkStack extends cdk.Stack {
 
     const bucket = new s3.Bucket(this, 'BlueGreenBucket', {
       // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
-      // the new bucket, and it will remain in your account until manually deleted. By setting the policy to 
+      // the new bucket, and it will remain in your account until manually deleted. By setting the policy to
       // DESTROY, cdk destroy will attempt to delete the bucket, but will error if the bucket is not empty.
       removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
     });
 
     const handler = new lambda.Function(this, 'BlueGreenLambda', {
       runtime: lambda.Runtime.PYTHON_3_6,
-      code: lambda.Code.asset('resources'),
+      code: lambda.Code.fromAsset('resources'),
       handler: 'blue_green.lambda_handler',
       environment: {
         BUCKET: bucket.bucketName

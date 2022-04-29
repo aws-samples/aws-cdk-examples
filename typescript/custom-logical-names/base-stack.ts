@@ -1,4 +1,4 @@
-import { Stack, CfnElement } from '@aws-cdk/core';
+import { Stack, CfnElement } from 'aws-cdk-lib';
 
 /**
  * A base stack class that implements custom logical name
