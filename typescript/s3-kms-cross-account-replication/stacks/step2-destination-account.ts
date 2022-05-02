@@ -44,7 +44,8 @@ export class Step2DestinationAccount extends Stack {
             resources: ['*']
           })
         ]
-      })
+      }),
+      enableKeyRotation: true
     });
 
     // Create the destination S3 bucket
@@ -58,7 +59,9 @@ export class Step2DestinationAccount extends Stack {
       blockPublicAccess: new BlockPublicAccess(BlockPublicAccess.BLOCK_ALL),
       bucketKeyEnabled: true,
       encryption: BucketEncryption.KMS,
-      encryptionKey: destinationKmsKey
+      encryptionKey: destinationKmsKey,
+      serverAccessLogsPrefix: "_logs",
+      enforceSSL: true
     });
 
     // allow the principal to have all admin access to bucket

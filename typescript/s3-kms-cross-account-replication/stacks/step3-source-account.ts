@@ -49,7 +49,8 @@ export class Step3SourceAccount extends Stack {
             resources: ['*']
           })
         ]
-      })
+      }),
+      enableKeyRotation: true
     });
 
     // Create the source S3 bucket
@@ -64,6 +65,8 @@ export class Step3SourceAccount extends Stack {
       bucketKeyEnabled: true,
       encryption: BucketEncryption.KMS,
       encryptionKey: sourceKmsKey,
+      serverAccessLogsPrefix: "_logs",
+      enforceSSL: true
     });
 
     // allow the principal to have all admin access to bucket

@@ -2,6 +2,7 @@ import { Stack, StackProps, CfnOutput, Aws, CfnParameter, Fn } from 'aws-cdk-lib
 import { Construct } from 'constructs';
 import { Config } from '../config/configClass';
 import { Effect, Role, ServicePrincipal, PolicyDocument, PolicyStatement, Policy } from 'aws-cdk-lib/aws-iam';
+import { NagSuppressions } from 'cdk-nag';
 
 export class Step1SourceAccount extends Stack {
 
@@ -80,5 +81,18 @@ export class Step1SourceAccount extends Stack {
     new CfnOutput(this, 'crossAccountReplicationRoleArn', {
       value: crossAccountReplicationRole.roleArn
     });
+
+    NagSuppressions.addResourceSuppressions(
+      crossAccountReplicationRole,
+      [
+        {
+          id: 'AwsSolutions-IAM5',
+          reason:
+            "Suppressing replication to wildcard",
+          appliesTo: ['Action::s3:*'],
+        },
+      ],
+      true
+    );
   }
 }

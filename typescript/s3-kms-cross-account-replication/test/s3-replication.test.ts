@@ -1,5 +1,6 @@
 import { Template } from 'aws-cdk-lib/assertions';
-import { App } from 'aws-cdk-lib';
+import { App, Aspects } from 'aws-cdk-lib';
+import { AwsSolutionsChecks } from 'cdk-nag';
 
 import { Step1SourceAccount } from '../stacks/step1-source-account';
 import { Step2DestinationAccount } from '../stacks/step2-destination-account';
@@ -41,4 +42,14 @@ test('Source S3 Bucket and KMS Key are created', () => {
 
   template.resourceCountIs('AWS::S3::Bucket', 1);
   template.resourceCountIs('AWS::KMS::Key', 1);
+});
+
+test('cdk-nag check for project', () => {
+  /*
+  Test for cdk-nag messages
+  */
+
+  const app = new App();
+  new Step3SourceAccount(app, 'Step3Stack');
+  Aspects.of(app).add(new AwsSolutionsChecks());
 });
