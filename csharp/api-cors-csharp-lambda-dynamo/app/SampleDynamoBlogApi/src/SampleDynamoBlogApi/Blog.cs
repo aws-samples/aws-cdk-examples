@@ -6,7 +6,8 @@ using Amazon.DynamoDBv2.DataModel;
 
 namespace SampleDynamoBlogApi
 {
-    public class Blog
+  [DynamoDBTable("blogs")]
+  public class Blog
     {
         [DynamoDBHashKey]
         public string Id { get; set; }

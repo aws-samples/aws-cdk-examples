@@ -89,14 +89,6 @@ namespace ApiCorsCSharpLambdaCrudDynamodb
         Environment = environmentVariables
       });
 
-      // Add Environment Variable to Reference Table
-      var lambdas = new Function[] {getOneLambda, getAllLambda, createOneLambda, updateOneLambda, deleteOneLambda};
-      foreach (var lambda in lambdas)
-      {
-        lambda.AddEnvironment("PRIMARY_KEY", primaryKey);
-        lambda.AddEnvironment("TABLE_NAME", dynamoTable.TableName);
-      }
-
       dynamoTable.GrantReadData(getOneLambda);
       dynamoTable.GrantReadData(getAllLambda);
       dynamoTable.GrantReadWriteData(createOneLambda);
