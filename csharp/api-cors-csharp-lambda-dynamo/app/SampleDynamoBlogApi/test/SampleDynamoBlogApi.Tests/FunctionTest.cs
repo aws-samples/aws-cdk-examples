@@ -19,13 +19,15 @@ using Xunit;
 namespace SampleDynamoBlogApi.Tests
 {
     public class FunctionTest : IDisposable
-    { 
+    {
         string TableName { get; }
+        string PrimaryKey { get; }
         IAmazonDynamoDB DDBClient { get; }
-        
+
         public FunctionTest()
         {
             this.TableName = "BlueprintBaseName-Blogs-" + DateTime.Now.Ticks;
+            this.PrimaryKey = "blogId";
             this.DDBClient = new AmazonDynamoDBClient(RegionEndpoint.USWest2);
 
             SetupTableAsync().Wait();
@@ -59,7 +61,7 @@ namespace SampleDynamoBlogApi.Tests
             // Confirm we can get the blog post back out
             request = new APIGatewayProxyRequest
             {
-                PathParameters = new Dictionary<string, string> { { Functions.ID_QUERY_STRING_NAME, blogId } }
+                PathParameters = new Dictionary<string, string> { { PrimaryKey, blogId } }
             };
             context = new TestLambdaContext();
             response = await functions.GetBlogAsync(request, context);
@@ -86,7 +88,7 @@ namespace SampleDynamoBlogApi.Tests
             // Delete the blog post
             request = new APIGatewayProxyRequest
             {
-                PathParameters = new Dictionary<string, string> { { Functions.ID_QUERY_STRING_NAME, blogId } }
+                PathParameters = new Dictionary<string, string> { { PrimaryKey, blogId } }
             };
             context = new TestLambdaContext();
             response = await functions.RemoveBlogAsync(request, context);
@@ -95,7 +97,7 @@ namespace SampleDynamoBlogApi.Tests
             // Make sure the post was deleted.
             request = new APIGatewayProxyRequest
             {
-                PathParameters = new Dictionary<string, string> { { Functions.ID_QUERY_STRING_NAME, blogId } }
+                PathParameters = new Dictionary<string, string> { { PrimaryKey, blogId } }
             };
             context = new TestLambdaContext();
             response = await functions.GetBlogAsync(request, context);
@@ -110,7 +112,7 @@ namespace SampleDynamoBlogApi.Tests
         /// <returns></returns>
         private async Task SetupTableAsync()
         {
-            
+
             CreateTableRequest request = new CreateTableRequest
             {
                 TableName = this.TableName,
@@ -124,14 +126,14 @@ namespace SampleDynamoBlogApi.Tests
                     new KeySchemaElement
                     {
                         KeyType = KeyType.HASH,
-                        AttributeName = Functions.ID_QUERY_STRING_NAME
+                        AttributeName = PrimaryKey
                     }
                 },
                 AttributeDefinitions = new List<AttributeDefinition>
                 {
                     new AttributeDefinition
                     {
-                        AttributeName = Functions.ID_QUERY_STRING_NAME,
+                        AttributeName = PrimaryKey,
                         AttributeType = ScalarAttributeType.S
                     }
                 }

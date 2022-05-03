@@ -10,7 +10,7 @@ using Amazon.Lambda.APIGatewayEvents;
 using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
-
+using Amazon.DynamoDBv2.DocumentModel;
 using Newtonsoft.Json;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
@@ -22,9 +22,10 @@ namespace SampleDynamoBlogApi
   {
     // This const is the name of the environment variable that the serverless.template will use to set
     // the name of the DynamoDB table used to store blog posts.
-    const string TABLENAME_ENVIRONMENT_VARIABLE_LOOKUP = "BlogTable";
+    private const string TABLENAME_ENVIRONMENT_VARIABLE_LOOKUP = "TABLE_NAME";
+    private const string PRIMARYKEY_ENVIRONMENT_VARIABLE_LOOKUP = "PRIMARY_KEY";
     private readonly string _tableName;
-    public const string ID_QUERY_STRING_NAME = "Id";
+    private readonly string _primaryKey;
     IDynamoDBContext DDBContext { get; set; }
 
     /// <summary>
@@ -32,9 +33,12 @@ namespace SampleDynamoBlogApi
     /// </summary>
     public Functions()
     {
-      // Check to see if a table name was passed in through environment variables and if so 
+      // Check to see if a table name was passed in through environment variables and if so
       // add the table mapping.
       _tableName = System.Environment.GetEnvironmentVariable(TABLENAME_ENVIRONMENT_VARIABLE_LOOKUP);
+      _primaryKey = System.Environment.GetEnvironmentVariable(PRIMARYKEY_ENVIRONMENT_VARIABLE_LOOKUP);
+      Console.WriteLine($"_tableName: {_tableName}");
+      Console.WriteLine($"_primaryKey: {_primaryKey}");
       if (!string.IsNullOrEmpty(_tableName))
       {
         AWSConfigsDynamoDB.Context.TypeMappings[typeof(Blog)] = new Amazon.Util.TypeMapping(typeof(Blog), _tableName);
@@ -53,6 +57,7 @@ namespace SampleDynamoBlogApi
     {
       if (!string.IsNullOrEmpty(tableName))
       {
+        Console.WriteLine($"tableName: {tableName}");
         AWSConfigsDynamoDB.Context.TypeMappings[typeof(Blog)] = new Amazon.Util.TypeMapping(typeof(Blog), tableName);
       }
 
@@ -70,7 +75,11 @@ namespace SampleDynamoBlogApi
       try
       {
         context.Logger.LogLine($"Getting blogs from {this._tableName}");
-        var blogs = await this.DDBContext.ScanAsync<Blog>(new List<ScanCondition>()).GetRemainingAsync();
+        //var blogs = new List<Blog>() {new Blog(){Id = "1", Name = "1", Content = "1", CreatedTimestamp = DateTime.Now}};
+        var scanConditions = new List<ScanCondition>();
+        scanConditions.Add(new ScanCondition("Id", ScanOperator.IsNotNull));
+        var blogs = await this.DDBContext.ScanAsync<Blog>(scanConditions).GetRemainingAsync();
+
         context.Logger.LogLine($"Found {blogs.Count} blogs");
 
         var response = new APIGatewayProxyResponse
@@ -88,7 +97,7 @@ namespace SampleDynamoBlogApi
         return new APIGatewayProxyResponse
         {
           StatusCode = (int)HttpStatusCode.InternalServerError,
-          Body = ex.Message,
+          Body = ex.Message + " " + ex.StackTrace,
           Headers = new Dictionary<string, string> { { "Content-Type", "text/plain" } }
         };
       }
@@ -102,17 +111,17 @@ namespace SampleDynamoBlogApi
     public async Task<APIGatewayProxyResponse> GetBlogAsync(APIGatewayProxyRequest request, ILambdaContext context)
     {
       string blogId = null;
-      if (request.PathParameters != null && request.PathParameters.ContainsKey(ID_QUERY_STRING_NAME))
-        blogId = request.PathParameters[ID_QUERY_STRING_NAME];
-      else if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey(ID_QUERY_STRING_NAME))
-        blogId = request.QueryStringParameters[ID_QUERY_STRING_NAME];
+      if (request.PathParameters != null && request.PathParameters.ContainsKey(_primaryKey))
+        blogId = request.PathParameters[_primaryKey];
+      else if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey(_primaryKey))
+        blogId = request.QueryStringParameters[_primaryKey];
 
       if (string.IsNullOrEmpty(blogId))
       {
         return new APIGatewayProxyResponse
         {
           StatusCode = (int)HttpStatusCode.BadRequest,
-          Body = $"Missing required parameter {ID_QUERY_STRING_NAME}"
+          Body = $"Missing required parameter {_primaryKey}"
         };
       }
 
@@ -145,17 +154,17 @@ namespace SampleDynamoBlogApi
     public async Task<APIGatewayProxyResponse> UpdateBlogAsync(APIGatewayProxyRequest request, ILambdaContext context)
     {
       string blogId = null;
-      if (request.PathParameters != null && request.PathParameters.ContainsKey(ID_QUERY_STRING_NAME))
-        blogId = request.PathParameters[ID_QUERY_STRING_NAME];
-      else if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey(ID_QUERY_STRING_NAME))
-        blogId = request.QueryStringParameters[ID_QUERY_STRING_NAME];
+      if (request.PathParameters != null && request.PathParameters.ContainsKey(_primaryKey))
+        blogId = request.PathParameters[_primaryKey];
+      else if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey(_primaryKey))
+        blogId = request.QueryStringParameters[_primaryKey];
 
       if (string.IsNullOrEmpty(blogId))
       {
         return new APIGatewayProxyResponse
         {
           StatusCode = (int)HttpStatusCode.BadRequest,
-          Body = $"Missing required parameter {ID_QUERY_STRING_NAME}"
+          Body = $"Missing required parameter {_primaryKey}"
         };
       }
 
@@ -203,6 +212,7 @@ namespace SampleDynamoBlogApi
     /// <returns></returns>
     public async Task<APIGatewayProxyResponse> AddBlogAsync(APIGatewayProxyRequest request, ILambdaContext context)
     {
+      context.Logger.LogLine($"Saving blog body: {request?.Body}");
       var blog = JsonConvert.DeserializeObject<Blog>(request?.Body);
 
 
@@ -228,17 +238,17 @@ namespace SampleDynamoBlogApi
     public async Task<APIGatewayProxyResponse> RemoveBlogAsync(APIGatewayProxyRequest request, ILambdaContext context)
     {
       string blogId = null;
-      if (request.PathParameters != null && request.PathParameters.ContainsKey(ID_QUERY_STRING_NAME))
-        blogId = request.PathParameters[ID_QUERY_STRING_NAME];
-      else if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey(ID_QUERY_STRING_NAME))
-        blogId = request.QueryStringParameters[ID_QUERY_STRING_NAME];
+      if (request.PathParameters != null && request.PathParameters.ContainsKey(_primaryKey))
+        blogId = request.PathParameters[_primaryKey];
+      else if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey(_primaryKey))
+        blogId = request.QueryStringParameters[_primaryKey];
 
       if (string.IsNullOrEmpty(blogId))
       {
         return new APIGatewayProxyResponse
         {
           StatusCode = (int)HttpStatusCode.BadRequest,
-          Body = $"Missing required parameter {ID_QUERY_STRING_NAME}"
+          Body = $"Missing required parameter {_primaryKey}"
         };
       }
 

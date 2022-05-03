@@ -16,7 +16,7 @@ namespace ApiCorsCSharpLambdaCrudDynamodb
     internal ApiCorsCSharpLambdaCrudDynamodbStack(Construct scope, string id, IStackProps props = null) : base(scope, id, props)
     {
       string tableName = "blogs";
-      string primaryKey = "blogId";
+      string primaryKey = "Id";
       string restApiName = "Blogs Service";
       string apiName = "blogsApi";
       string gatewayResourcePath = "blogs";
@@ -44,28 +44,22 @@ namespace ApiCorsCSharpLambdaCrudDynamodb
          {"TABLE_NAME", dynamoTable.TableName },
       };
 
-      string[] externalModules = { "aws-sdk" };
-      var bundlingOptions = new Amazon.CDK.AWS.Lambda.Nodejs.BundlingOptions()
-      {
-        // Use the 'aws-sdk' available in the Lambda runtime
-        ExternalModules = externalModules
-      };
-
-
       // Create a Lambda function for each of the CRUD operations
       var getOneLambda = new Function(this, "getBlogFunction", new FunctionProps
       {
         Runtime = Runtime.DOTNET_CORE_3_1,
         Code = Code.FromAsset("../app/SampleDynamoBlogApi/src/SampleDynamoBlogApi/bin/Release/netcoreapp3.1/publish/"),
         Handler = "SampleDynamoBlogApi::SampleDynamoBlogApi.Functions::GetBlogAsync",
-        Tracing = Tracing.ACTIVE // enable X-Ray
+        Tracing = Tracing.ACTIVE, // enable X-Ray
+        Environment = environmentVariables
       });
       var getAllLambda = new Function(this, "getAllBlogsFunction", new FunctionProps
       {
         Runtime = Runtime.DOTNET_CORE_3_1,
         Code = Code.FromAsset("../app/SampleDynamoBlogApi/src/SampleDynamoBlogApi/bin/Release/netcoreapp3.1/publish/"),
         Handler = "SampleDynamoBlogApi::SampleDynamoBlogApi.Functions::GetBlogsAsync",
-        Tracing = Tracing.ACTIVE // enable X-Ray
+        Tracing = Tracing.ACTIVE, // enable X-Ray
+        Environment = environmentVariables
       });
 
       var createOneLambda = new Function(this, "createBlogFunction", new FunctionProps
@@ -73,7 +67,8 @@ namespace ApiCorsCSharpLambdaCrudDynamodb
         Runtime = Runtime.DOTNET_CORE_3_1,
         Code = Code.FromAsset("../app/SampleDynamoBlogApi/src/SampleDynamoBlogApi/bin/Release/netcoreapp3.1/publish/"),
         Handler = "SampleDynamoBlogApi::SampleDynamoBlogApi.Functions::AddBlogAsync",
-        Tracing = Tracing.ACTIVE // enable X-Ray
+        Tracing = Tracing.ACTIVE, // enable X-Ray
+        Environment = environmentVariables
       });
 
       var updateOneLambda = new Function(this, "updateBlogFunction", new FunctionProps
@@ -81,7 +76,8 @@ namespace ApiCorsCSharpLambdaCrudDynamodb
         Runtime = Runtime.DOTNET_CORE_3_1,
         Code = Code.FromAsset("../app/SampleDynamoBlogApi/src/SampleDynamoBlogApi/bin/Release/netcoreapp3.1/publish/"),
         Handler = "SampleDynamoBlogApi::SampleDynamoBlogApi.Functions::UpdateBlogAsync",
-        Tracing = Tracing.ACTIVE // enable X-Ray
+        Tracing = Tracing.ACTIVE, // enable X-Ray
+        Environment = environmentVariables
       });
 
       var deleteOneLambda = new Function(this, "deleteBlogFunction", new FunctionProps
@@ -89,7 +85,8 @@ namespace ApiCorsCSharpLambdaCrudDynamodb
         Runtime = Runtime.DOTNET_CORE_3_1,
         Code = Code.FromAsset("../app/SampleDynamoBlogApi/src/SampleDynamoBlogApi/bin/Release/netcoreapp3.1/publish/"),
         Handler = "SampleDynamoBlogApi::SampleDynamoBlogApi.Functions::RemoveBlogAsync",
-        Tracing = Tracing.ACTIVE // enable X-Ray
+        Tracing = Tracing.ACTIVE, // enable X-Ray
+        Environment = environmentVariables
       });
 
       // Add Environment Variable to Reference Table
