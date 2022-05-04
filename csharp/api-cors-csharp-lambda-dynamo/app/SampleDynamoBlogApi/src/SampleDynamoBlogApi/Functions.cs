@@ -75,11 +75,7 @@ namespace SampleDynamoBlogApi
       try
       {
         context.Logger.LogLine($"Getting blogs from {this._tableName}");
-        //var blogs = new List<Blog>() {new Blog(){Id = "1", Name = "1", Content = "1", CreatedTimestamp = DateTime.Now}};
-        var scanConditions = new List<ScanCondition>();
-        scanConditions.Add(new ScanCondition("Id", ScanOperator.IsNotNull));
-        var blogs = await this.DDBContext.ScanAsync<Blog>(scanConditions).GetRemainingAsync();
-
+        var blogs = await this.DDBContext.ScanAsync<Blog>(new List<ScanCondition>()).GetRemainingAsync();
         context.Logger.LogLine($"Found {blogs.Count} blogs");
 
         var response = new APIGatewayProxyResponse
