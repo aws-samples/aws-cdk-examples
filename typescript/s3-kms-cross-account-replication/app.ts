@@ -5,12 +5,12 @@ import { Config } from './config/configClass';
 import { Step1SourceAccount } from './stacks/step1-source-account';
 import { Step2DestinationAccount } from './stacks/step2-destination-account';
 import { Step3SourceAccount } from './stacks/step3-source-account';
-import { AwsSolutionsChecks } from 'cdk-nag';
+import { AwsSolutionsChecks, NagSuppressions } from 'cdk-nag';
 
 const app = new cdk.App();
 
 // Step 1: Create the replication role in the source account
-new Step1SourceAccount(app, "Step1SourceAccount", {
+const step1 = new Step1SourceAccount(app, "Step1SourceAccount", {
   env: {
     account: Config.sourceAccountId,
     region: Config.sourceRegion,
@@ -37,3 +37,34 @@ new Step3SourceAccount(app, "Step3SourceAccount",
   });
 
 cdk.Aspects.of(app).add(new AwsSolutionsChecks());
+
+NagSuppressions.addResourceSuppressions(
+  step1,
+  [
+    {
+      id: 'AwsSolutions-IAM5',
+      reason: 'Suppress to grant permissions to replicate everything in this bucket',
+      appliesTo: [
+        'Resource::arn:aws:s3:::destination-bucket-to-replicate-to/*',
+        'Resource::arn:aws:s3:::source-bucket-to-replicate-from/*'
+      ],
+    },
+  ],
+  true
+);
+
+NagSuppressions.addResourceSuppressions(
+  step1,
+  [
+    {
+      id: 'AwsSolutions-IAM5',
+      reason: 'This warning could be heeded, in this example it grants permissions to all keys in the account rather than one specific one',
+      appliesTo: [
+        'Resource::arn:aws:kms:us-west-2:replaceMeWithDestinationAccountId:key/*',
+        'Resource::arn:aws:kms:us-west-2:replaceMeWithSourceAccountId:key/*'
+      ],
+    },
+  ],
+  true
+);
+
