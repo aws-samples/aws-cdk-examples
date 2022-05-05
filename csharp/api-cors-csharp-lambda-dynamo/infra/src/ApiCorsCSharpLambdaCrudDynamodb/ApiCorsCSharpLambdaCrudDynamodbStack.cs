@@ -16,7 +16,7 @@ namespace ApiCorsCSharpLambdaCrudDynamodb
     internal ApiCorsCSharpLambdaCrudDynamodbStack(Construct scope, string id, IStackProps props = null) : base(scope, id, props)
     {
       string tableName = "blogs";
-      string primaryKey = "Id";
+      string primaryKey = "id";
       string restApiName = "Blogs Service";
       string apiName = "blogsApi";
       string gatewayResourcePath = "blogs";
@@ -103,7 +103,7 @@ namespace ApiCorsCSharpLambdaCrudDynamodb
       // Integrate the Lambda functions with the API Gateway resource
       var getAllIntegration = new LambdaIntegration(getAllLambda);
       var createOneIntegration = new LambdaIntegration(createOneLambda);
-      var getOneIntegration = new LambdaIntegration(getOneLambda);
+      var getOneIntegration = new LambdaIntegration(getOneLambda, new LambdaIntegrationOptions(){ });
       var updateOneIntegration = new LambdaIntegration(updateOneLambda);
       var deleteOneIntegration = new LambdaIntegration(deleteOneLambda);
 
@@ -118,6 +118,8 @@ namespace ApiCorsCSharpLambdaCrudDynamodb
       items.AddMethod("POST", createOneIntegration);
       AddCorsOptions(items);
 
+      // adding a path parameter to the gateway for these requests
+      // ensure lambda code and gateway have same casing for path parameters
       var singleItem = items.AddResource("{id}");
       singleItem.AddMethod("GET", getOneIntegration);
       singleItem.AddMethod("PATCH", updateOneIntegration);

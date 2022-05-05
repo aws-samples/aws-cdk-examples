@@ -37,8 +37,6 @@ namespace SampleDynamoBlogApi
       // add the table mapping.
       _tableName = System.Environment.GetEnvironmentVariable(TABLENAME_ENVIRONMENT_VARIABLE_LOOKUP);
       _primaryKey = System.Environment.GetEnvironmentVariable(PRIMARYKEY_ENVIRONMENT_VARIABLE_LOOKUP);
-      Console.WriteLine($"_tableName: {_tableName}");
-      Console.WriteLine($"_primaryKey: {_primaryKey}");
       if (!string.IsNullOrEmpty(_tableName))
       {
         AWSConfigsDynamoDB.Context.TypeMappings[typeof(Blog)] = new Amazon.Util.TypeMapping(typeof(Blog), _tableName);
@@ -107,7 +105,7 @@ namespace SampleDynamoBlogApi
     public async Task<APIGatewayProxyResponse> GetBlogAsync(APIGatewayProxyRequest request, ILambdaContext context)
     {
       string blogId = null;
-      if (request.PathParameters != null && request.PathParameters.ContainsKey(_primaryKey))
+      if (request.PathParameters != null && request.PathParameters.ContainsKey(_primaryKey.ToLower()))
         blogId = request.PathParameters[_primaryKey];
       else if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey(_primaryKey))
         blogId = request.QueryStringParameters[_primaryKey];
