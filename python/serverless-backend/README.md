@@ -49,7 +49,7 @@ There are no manual steps involved in deploying this stack, however, in this exa
                 --password passwordExample \
                 --permanent
                 Next, the IdToken of the account needs to be retrieved. To do so, run the following command (Change the value of client-id to the deployed Cognito User Pool Client ID. Change the username and password to your created values):
-                aws cognito-idp initiate-auth —region us-east-1Example —-auth-flow USER_PASSWORD_AUTH —client-id XXXXXXXXXXXXXXXXXX -—auth-parameters USERNAME=usernameExample,PASSWORD=passwordExample
+                aws cognito-idp initiate-auth -—region us-east-1Example —-auth-flow USER_PASSWORD_AUTH -—client-id XXXXXXXXXXXXXXXXXX -—auth-parameters USERNAME=usernameExample,PASSWORD=passwordExample
 
                 Note: Ensure the region name matches where the stack was deployed in. For example, if you have deployed your stack in us-east-1, then your region would be "us-east-1"   
                 This command will return multiple keys. Save the IdToken for later use
