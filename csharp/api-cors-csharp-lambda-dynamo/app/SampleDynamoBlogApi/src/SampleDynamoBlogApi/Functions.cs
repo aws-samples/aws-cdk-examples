@@ -105,7 +105,7 @@ namespace SampleDynamoBlogApi
     public async Task<APIGatewayProxyResponse> GetBlogAsync(APIGatewayProxyRequest request, ILambdaContext context)
     {
       string blogId = null;
-      if (request.PathParameters != null && request.PathParameters.ContainsKey(_primaryKey.ToLower()))
+      if (request.PathParameters != null && request.PathParameters.ContainsKey(_primaryKey))
         blogId = request.PathParameters[_primaryKey];
       else if (request.QueryStringParameters != null && request.QueryStringParameters.ContainsKey(_primaryKey))
         blogId = request.QueryStringParameters[_primaryKey];

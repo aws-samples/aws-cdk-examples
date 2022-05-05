@@ -16,7 +16,8 @@ namespace ApiCorsCSharpLambdaCrudDynamodb
     internal ApiCorsCSharpLambdaCrudDynamodbStack(Construct scope, string id, IStackProps props = null) : base(scope, id, props)
     {
       string tableName = "blogs";
-      string primaryKey = "id";
+      // must match case of primary key on Blog model
+      string primaryKey = "Id";
       string restApiName = "Blogs Service";
       string apiName = "blogsApi";
       string gatewayResourcePath = "blogs";
@@ -120,7 +121,7 @@ namespace ApiCorsCSharpLambdaCrudDynamodb
 
       // adding a path parameter to the gateway for these requests
       // ensure lambda code and gateway have same casing for path parameters
-      var singleItem = items.AddResource("{id}");
+      var singleItem = items.AddResource("{Id}");
       singleItem.AddMethod("GET", getOneIntegration);
       singleItem.AddMethod("PATCH", updateOneIntegration);
       singleItem.AddMethod("DELETE", deleteOneIntegration);
