@@ -27,7 +27,7 @@ namespace SampleDynamoBlogApi.Tests
         public FunctionTest()
         {
             this.TableName = "BlueprintBaseName-Blogs-" + DateTime.Now.Ticks;
-            this.PrimaryKey = "blogId";
+            this.PrimaryKey = "Id";
             this.DDBClient = new AmazonDynamoDBClient(RegionEndpoint.USWest2);
 
             SetupTableAsync().Wait();

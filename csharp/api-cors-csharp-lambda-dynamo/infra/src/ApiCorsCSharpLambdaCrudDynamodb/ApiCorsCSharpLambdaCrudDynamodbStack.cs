@@ -51,7 +51,8 @@ namespace ApiCorsCSharpLambdaCrudDynamodb
         Code = Code.FromAsset("../app/SampleDynamoBlogApi/src/SampleDynamoBlogApi/bin/Release/netcoreapp3.1/publish/"),
         Handler = "SampleDynamoBlogApi::SampleDynamoBlogApi.Functions::GetBlogAsync",
         Tracing = Tracing.ACTIVE, // enable X-Ray
-        Environment = environmentVariables
+        Environment = environmentVariables,
+        Timeout = Duration.Seconds(30)
       });
       var getAllLambda = new Function(this, "getAllBlogsFunction", new FunctionProps
       {
@@ -59,7 +60,8 @@ namespace ApiCorsCSharpLambdaCrudDynamodb
         Code = Code.FromAsset("../app/SampleDynamoBlogApi/src/SampleDynamoBlogApi/bin/Release/netcoreapp3.1/publish/"),
         Handler = "SampleDynamoBlogApi::SampleDynamoBlogApi.Functions::GetBlogsAsync",
         Tracing = Tracing.ACTIVE, // enable X-Ray
-        Environment = environmentVariables
+        Environment = environmentVariables,
+        Timeout = Duration.Seconds(30)
       });
 
       var createOneLambda = new Function(this, "createBlogFunction", new FunctionProps
@@ -68,7 +70,8 @@ namespace ApiCorsCSharpLambdaCrudDynamodb
         Code = Code.FromAsset("../app/SampleDynamoBlogApi/src/SampleDynamoBlogApi/bin/Release/netcoreapp3.1/publish/"),
         Handler = "SampleDynamoBlogApi::SampleDynamoBlogApi.Functions::AddBlogAsync",
         Tracing = Tracing.ACTIVE, // enable X-Ray
-        Environment = environmentVariables
+        Environment = environmentVariables,
+        Timeout = Duration.Seconds(30)
       });
 
       var updateOneLambda = new Function(this, "updateBlogFunction", new FunctionProps
@@ -77,7 +80,8 @@ namespace ApiCorsCSharpLambdaCrudDynamodb
         Code = Code.FromAsset("../app/SampleDynamoBlogApi/src/SampleDynamoBlogApi/bin/Release/netcoreapp3.1/publish/"),
         Handler = "SampleDynamoBlogApi::SampleDynamoBlogApi.Functions::UpdateBlogAsync",
         Tracing = Tracing.ACTIVE, // enable X-Ray
-        Environment = environmentVariables
+        Environment = environmentVariables,
+        Timeout = Duration.Seconds(30)
       });
 
       var deleteOneLambda = new Function(this, "deleteBlogFunction", new FunctionProps
@@ -86,7 +90,8 @@ namespace ApiCorsCSharpLambdaCrudDynamodb
         Code = Code.FromAsset("../app/SampleDynamoBlogApi/src/SampleDynamoBlogApi/bin/Release/netcoreapp3.1/publish/"),
         Handler = "SampleDynamoBlogApi::SampleDynamoBlogApi.Functions::RemoveBlogAsync",
         Tracing = Tracing.ACTIVE, // enable X-Ray
-        Environment = environmentVariables
+        Environment = environmentVariables,
+        Timeout = Duration.Seconds(30)
       });
 
       dynamoTable.GrantReadData(getOneLambda);
