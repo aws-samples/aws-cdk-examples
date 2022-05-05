@@ -103,7 +103,7 @@ namespace ApiCorsCSharpLambdaCrudDynamodb
       // Integrate the Lambda functions with the API Gateway resource
       var getAllIntegration = new LambdaIntegration(getAllLambda);
       var createOneIntegration = new LambdaIntegration(createOneLambda);
-      var getOneIntegration = new LambdaIntegration(getOneLambda, new LambdaIntegrationOptions(){ });
+      var getOneIntegration = new LambdaIntegration(getOneLambda);
       var updateOneIntegration = new LambdaIntegration(updateOneLambda);
       var deleteOneIntegration = new LambdaIntegration(deleteOneLambda);
 
