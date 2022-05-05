@@ -4,7 +4,7 @@ This is a project to deploy a serverless backend for your current project on AWS
 
 
 
-In this example, you can quickly build a serverless backend application with a few lines of python code. Depending on the use case, we can send our application's point of entry to make a request and be able to store different types of data (i.g., images or metadata). The stack will deploy: 1) an API Gateway endpoint, to allow the user to send request(s). 2) AWS Lambda to process the request(s). 3) Amazon S3 bucket to store images or files uploaded. 4) DynamoDB table to store your metadata. 5) Congito User Pool to authenticate your users and secure your API Gateway endpoint. 6) AWS IAM roles with permissions to access different services.
+In this example, you can quickly build a serverless backend application with a few lines of python code via Cloud Development Kit (CDK). Depending on the use case, we can send our application's point of entry to make a request and be able to store different types of data (i.g., images or metadata). The stack will deploy: 1) an API Gateway endpoint, to allow the user to send request(s). 2) AWS Lambda to process the request(s). 3) Amazon S3 bucket to store images or files uploaded. 4) DynamoDB table to store your metadata. 5) Congito User Pool to authenticate your users and secure your API Gateway endpoint. 6) AWS IAM roles with permissions to access different services.
 
 
 # Stack will delpoy the following services: 
