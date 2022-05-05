@@ -8,17 +8,21 @@ import imghdr
 
 s3 = boto3.client('s3')
 dynamodb = boto3.client('dynamodb')
+
+
 def upload_metadata(key, userid):
-    table=os.environ['table']
-    bucket= os.environ['bucket']
-    url = f'https://{bucket}.s3.amazonaws.com/{key}'
+    table = os.environ['table']
+    bucket = os.environ['bucket']
+    reference = {'Bucket': {'S': bucket}, 'Key': {'S': key}}
     response = dynamodb.put_item(
         TableName=table,
-        Item={"userid":{
-            'S': userid}, "url":{ 'S': url }})
+        Item={"userid": {
+            'S': userid}, "photo_reference": {'M': reference}})
     print(response)
+
+
 def upload_image(image_id, img, userid):
-    bucket= os.environ['bucket']
+    bucket = os.environ['bucket']
     extension = imghdr.what(None, h=img)
     key = f"{image_id}.{extension}"
     try:
@@ -28,6 +32,8 @@ def upload_image(image_id, img, userid):
         print(e)
         return False
     return True
+
+
 def handler(event, context):
     print(event)
     # Generate random image id
@@ -36,7 +42,7 @@ def handler(event, context):
     data = json.loads(event['body'])
     userid = data['userid']
     img = base64.b64decode(data['photo'])
-    
+
     if upload_image(image_id, img, userid):
         return {
             'statusCode': 200,

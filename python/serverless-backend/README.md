@@ -4,7 +4,8 @@ This is a project to deploy a serverless backend for your current project on AWS
 
 
 
-This project also demonstrates how to build a serverless backend application that will allow users to make authenticated API calls with API Gateway and Cognito and have the request be processed by a Lambda. Will use S3 to store images/files and DynamoDB to store any metadata needed. 
+In this example, you can quickly build a serverless backend application with a few lines of python code. Depending on the use case, we can send our application's point of entry to make a request and be able to store different types of data (i.g., images or metadata). The stack will deploy: 1) an API Gateway endpoint, to allow the user to send request(s). 2) AWS Lambda to process the request(s). 3) Amazon S3 bucket to store images or files uploaded. 4) DynamoDB table to store your metadata. 5) Congito User Pool to authenticate your users and secure your API Gateway endpoint. 6) AWS IAM roles with permissions to access different services.
+
 
 # Stack will delpoy the following services: 
 - Amazon API Gateway - Entry point for your backend
@@ -48,8 +49,11 @@ There are no manual steps involved in deploying this stack, however, in this exa
                 --password passwordExample \
                 --permanent
                 Next, the IdToken of the account needs to be retrieved. To do so, run the following command (Change the value of client-id to the deployed Cognito User Pool Client ID. Change the username and password to your created values):
-                aws cognito-idp initiate-auth —region us-east-1 —auth-flow USER_PASSWORD_AUTH —client-id XXXXXXXXXXXXXXXXXX —auth-parameters USERNAME=usernameExample,PASSWORD=passwordExample
+                aws cognito-idp initiate-auth —region us-east-1Example —-auth-flow USER_PASSWORD_AUTH —client-id XXXXXXXXXXXXXXXXXX -—auth-parameters USERNAME=usernameExample,PASSWORD=passwordExample
+
+                Note: Ensure the region name matches where the stack was deployed in. For example, if you have deployed your stack in us-east-1, then your region would be "us-east-1"   
                 This command will return multiple keys. Save the IdToken for later use
+
             - Use Postman to test your API endpoint
 
                 1. Navigate to the Resources section of the CloudFormation in the console
