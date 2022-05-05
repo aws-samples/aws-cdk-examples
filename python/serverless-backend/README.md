@@ -23,6 +23,12 @@ In this example, you can quickly build a serverless backend application with a f
 * AWS CDK Toolkit, (Install and configure)
 * Postman account or similar tool
 
+# Limitations 
+
+* This example assumes the uploaded image/file has a maximum size of 2MB without compression. (Lambda has a maximum 6MB payload limit.)
+* This example assumes the uploaded image/file is in a base64 format. 
+* No UI to authenticate user or upload image/file. 
+
 
 There are no manual steps involved in deploying this stack, however, in this example, Lambda code expects:
 1. JSON POST request must have the following keys: 

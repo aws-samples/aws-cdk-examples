@@ -43,7 +43,7 @@ class ServerlessBackendStack(Stack):
                                      }
                                      )
         my_bucket.grant_read_write(my_lambda)
-        my_table.grant_full_access(my_lambda)
+        my_table.grant_read_write_data(my_lambda)
         my_api = _apigateway.LambdaRestApi(
             self, id='lambdaapi', rest_api_name='formapi', handler=my_lambda, proxy=True)
         postData = my_api.root.add_resource("form")
