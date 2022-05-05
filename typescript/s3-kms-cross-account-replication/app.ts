@@ -45,8 +45,8 @@ NagSuppressions.addResourceSuppressions(
       id: 'AwsSolutions-IAM5',
       reason: 'Suppress to grant permissions to replicate everything in this bucket',
       appliesTo: [
-        'Resource::arn:aws:s3:::destination-bucket-to-replicate-to/*',
-        'Resource::arn:aws:s3:::source-bucket-to-replicate-from/*'
+        `Resource::arn:aws:s3:::${Config.destinationBucketName}/*`,
+        `Resource::arn:aws:s3:::${Config.sourceBucketName}/*`
       ],
     },
   ],
@@ -60,8 +60,8 @@ NagSuppressions.addResourceSuppressions(
       id: 'AwsSolutions-IAM5',
       reason: 'This warning could be heeded, in this example it grants permissions to all keys in the account rather than one specific one',
       appliesTo: [
-        'Resource::arn:aws:kms:us-west-2:replaceMeWithDestinationAccountId:key/*',
-        'Resource::arn:aws:kms:us-west-2:replaceMeWithSourceAccountId:key/*'
+        `Resource::arn:aws:kms:${Config.destinationRegion}:${Config.destinationAccountId}:key/*`,
+        `Resource::arn:aws:kms:${Config.sourceRegion}:${Config.sourceAccountId}:key/*`
       ],
     },
   ],
