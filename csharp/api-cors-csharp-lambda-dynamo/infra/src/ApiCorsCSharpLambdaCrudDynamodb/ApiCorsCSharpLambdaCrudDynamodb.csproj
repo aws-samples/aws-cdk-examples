@@ -17,4 +17,8 @@
     -->
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\app\SampleDynamoBlogApi\src\SampleDynamoBlogApi\SampleDynamoBlogApi.csproj" />
+  </ItemGroup>
+
 </Project>
