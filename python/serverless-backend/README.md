@@ -4,14 +4,14 @@ This is a project to deploy a serverless backend for your current project on AWS
 
 
 
-In this example, you can quickly build a serverless backend application with a few lines of python code via Cloud Development Kit (CDK). Depending on the use case, we can send our application's point of entry to make a request and be able to store different types of data (i.g., images or metadata). The stack will deploy: 1) an API Gateway endpoint, to allow the user to send request(s). 2) AWS Lambda to process the request(s). 3) Amazon S3 bucket to store images or files uploaded. 4) DynamoDB table to store your metadata. 5) Congito User Pool to authenticate your users and secure your API Gateway endpoint. 6) AWS IAM roles with permissions to access different services.
+In this example, you can quickly build a serverless backend application with a few lines of python code via Cloud Development Kit (CDK). Depending on the use case, we can send our application's point of entry to make a request and be able to store different types of data (i.g., images or metadata). The stack will deploy: 1) an API Gateway endpoint, to allow the user to send request(s). 2) AWS Lambda to process the request(s). 3) Amazon S3 bucket to store images or files uploaded. 4) DynamoDB table to store your metadata. 5) Cognito User Pool to authenticate your users and secure your API Gateway endpoint. 6) AWS IAM roles with permissions to access different services.
 
 
-# Stack will delpoy the following services: 
+# Stack will deploy the following services: 
 - Amazon API Gateway - Entry point for your backend
 - AWS Lambda - Process JSON POST request
 - Amazon S3 - Bucket to store images or files 
-- Amazon DynamoDB _ Table for to store metadata
+- Amazon DynamoDB - Table for to store metadata
 - Amazon Cognito - Secure your backend with User Pool 
 - AWS IAM - Creates permissions 
 
@@ -48,19 +48,29 @@ There are no manual steps involved in deploying this stack, however, in this exa
             6. Complete creating the user and save the username and password for later use
             7. Go to your terminal to run some AWS CLI commands. 
 
-                The password for the new user needs to be permanent. To do so, run the following command (Change the value of user-pool-id to the deployed Cognito User Pool ID. Change the username and password to your created values):
+                The password for the new user needs to be permanent. To do so, run the following command (Change the value 
+                of user-pool-id to the deployed Cognito User Pool ID. Change the username and password to your created values):
+
                 aws cognito-idp admin-set-user-password \
                 --user-pool-id us-east-1_xxxxxx\
                 --username usernameExample \
                 --password passwordExample \
                 --permanent
-                Next, the IdToken of the account needs to be retrieved. To do so, run the following command (Change the value of client-id to the deployed Cognito User Pool Client ID. Change the username and password to your created values):
+
+                Next, the IdToken of the account needs to be retrieved. To do so, run the following command (Change the value 
+                of client-id to the deployed Cognito User Pool Client ID. Change the username and password to your created values):
                 aws cognito-idp initiate-auth -—region us-east-1Example —-auth-flow USER_PASSWORD_AUTH -—client-id XXXXXXXXXXXXXXXXXX -—auth-parameters USERNAME=usernameExample,PASSWORD=passwordExample
 
-                Note: Ensure the region name matches where the stack was deployed in. For example, if you have deployed your stack in us-east-1, then your region would be "us-east-1"   
+                Note: Ensure the region name matches where the stack was deployed in. 
+                For example, if you have deployed your stack in us-east-1, then your region would be "us-east-1"   
                 This command will return multiple keys. Save the IdToken for later use
 
             - Use Postman to test your API endpoint
+               
+                Note: Postman is developed by a third-party company. It isn't developed or supported by Amazon Web Services (AWS). 
+                To learn more about using Postman, or for assistance with issues related to Postman, 
+                see the [Support center](https://www.postman.com/support/) on the Postman website.
+
 
                 1. Navigate to the Resources section of the CloudFormation in the console
                 2. Find the created API Gateway by searching AWS::ApiGateway::RestApi and click on Physical ID
