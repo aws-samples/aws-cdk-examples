@@ -1,0 +1,28 @@
+{
+  "name": "backup-plan",
+  "version": "0.1.0",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "eslint": "npx eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern lib test"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.10",
+    "@types/node": "10.17.27",
+    "@typescript-eslint/eslint-plugin": "^5.22.0",
+    "@typescript-eslint/parser": "^5.22.0",
+    "aws-cdk-lib": "2.17.0",
+    "constructs": "^10.0.0",
+    "eslint": "^8.14.0",
+    "jest": "^26.4.2",
+    "ts-jest": "^26.2.0",
+    "typescript": "~3.9.7"
+  },
+  "peerDependencies": {
+    "aws-cdk-lib": "2.17.0",
+    "constructs": "^10.0.0"
+  }
+}
