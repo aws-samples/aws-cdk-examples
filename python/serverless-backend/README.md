@@ -33,10 +33,14 @@ In this example, you can quickly build a serverless backend application with a f
 There are no manual steps involved in deploying this stack, however, in this example, Lambda code expects:
 1. JSON POST request must have the following keys: 
 
-{   userid : "string"
-    photo: "string - base64 format"
-    }
-2. Requires authenticated API calls. This solution assumes you have a frontend with a login UI, which allows you to configure the deployed Cognito with. If you do not have a UI and would like to test the API invoke URL via the CLI, you can follow the following instructions: 
+   { userid : "string"
+     photo: "string - base64 format"
+   }
+
+
+2. Requires authenticated API calls. This solution assumes you have a frontend with a login UI, 
+   which allows you to configure the deployed Cognito with. If you do not have a UI and would like 
+   to test the API invoke URL via the CLI, you can follow the following instructions: 
 
             - Create Cognito User 
 
@@ -79,13 +83,16 @@ There are no manual steps involved in deploying this stack, however, in this exa
                 6. Create a HTTPS Post Request
                 7. Select the POST command and paste the API Gateway URL. 
                 8. Append “/form” at the end of the URL
-                9.Go to Headers and add a key “Authorization” with the value being the saved value IdToken
+                9. Go to Headers and add a key “Authorization” with the value being the saved value IdToken
                 10. Go to Body and select raw. Change the blue “Text” setting to “JSON”
                 11. In the test area create a request in JSON. Image details must be in base64 format
                 {
                     "userid": "myUserID",
                     "photo": "image details"
                 }
+                12. Click “Send” on the top right. This should return a “Success!” message in the response
+
+                You should see the uploaded object in your deployed S3 bucket, and its metadata in DynamoDB table!
 
 
 
