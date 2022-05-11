@@ -11,18 +11,18 @@
     "cdk": "cdk"
   },
   "devDependencies": {
-    "@aws-cdk/assert": "*",
+    "@aws-cdk/assert": "^1.154.0",
     "@types/node": "10.17.27",
-    "aws-cdk": "*",
+    "aws-cdk": "^1.154.0",
     "ts-node": "^9.0.0",
     "typescript": "~3.9.7"
   },
   "dependencies": {
-    "@aws-cdk/aws-iam": "*",
-    "@aws-cdk/aws-lambda": "*",
-    "@aws-cdk/aws-s3": "*",
-    "@aws-cdk/aws-s3objectlambda": "*",
-    "@aws-cdk/core": "*",
+    "@aws-cdk/aws-iam": "^1.154.0",
+    "@aws-cdk/aws-lambda": "^1.154.0",
+    "@aws-cdk/aws-s3": "^1.154.0",
+    "@aws-cdk/aws-s3objectlambda": "^1.154.0",
+    "@aws-cdk/core": "^1.154.0",
     "aws-sdk": "^2.1004.0",
     "source-map-support": "^0.5.16"
   }
