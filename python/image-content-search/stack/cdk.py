@@ -158,7 +158,8 @@ class ImageContentSearchStack(Stack):
                     'method.response.header.Access-Control-Allow-Origin': True,
                 }
             )])
-        typing.cast("aws_cloudformation.CfnCustomResource", get_signedurl_method.node.find_child('Resource')).add_property_override('AuthorizerId', api_gateway_get_signedurl_authorizer.ref)
+        signedurl_custom_resource = typing.cast("aws_cloudformation.CfnCustomResource", get_signedurl_method.node.find_child('Resource'))
+        signedurl_custom_resource.add_property_override('AuthorizerId', api_gateway_get_signedurl_authorizer.ref)
 
         images_S3_bucket.grant_put(get_signedurl_function, objects_key_pattern="new/*")
 
@@ -263,6 +264,8 @@ class ImageContentSearchStack(Stack):
             ]
         )
 
+        assert database.database_name is not None
+
         image_data_function = Function(self, "ICS_IMAGE_DATA",
             function_name="ICS_IMAGE_DATA",
             runtime=Runtime.PYTHON_3_7,
@@ -272,7 +275,7 @@ class ImageContentSearchStack(Stack):
                 "DEFAULT_MAX_CALL_ATTEMPTS": configs["Functions"]["DefaultMaxApiCallAttempts"],
                 "CLUSTER_ARN": database_cluster_arn,
                 "CREDENTIALS_ARN": database_secret.secret_arn,
-                "DB_NAME": database.database_name or "",
+                "DB_NAME": database.database_name,
                 "REGION": Aws.REGION
                 },
             handler="main.handler",
@@ -304,8 +307,8 @@ class ImageContentSearchStack(Stack):
                     'method.response.header.Access-Control-Allow-Origin': True,
                 }
             )])
-        typing.cast("aws_cloudformation.CfnCustomResource", search_integration_method.node.find_child('Resource')).add_property_override('AuthorizerId', api_gateway_image_search_authorizer.ref)
-
+        search_integration_custom_resource = typing.cast("aws_cloudformation.CfnCustomResource", search_integration_method.node.find_child('Resource'))
+        search_integration_custom_resource.add_property_override('AuthorizerId', api_gateway_image_search_authorizer.ref)
 
         lambda_access_search = _iam.PolicyStatement(
             effect=_iam.Effect.ALLOW,
@@ -344,9 +347,18 @@ class ImageContentSearchStack(Stack):
         event_bus.grant_all_put_events(image_analyzer_function)
         image_analyzer_function.add_environment("EVENT_BUS", event_bus.event_bus_name)
 
+        assert user_pool_domain.domain_name is not None
+        assert user_pool_app_client.allowed_o_auth_scopes is not None
+
         ### outputs
         CfnOutput(self, 'CognitoHostedUILogin',
-            value='https://{}.auth.{}.amazoncognito.com/login?client_id={}&response_type=token&scope={}&redirect_uri={}'.format(user_pool_domain.domain_name or "", Aws.REGION, user_pool_app_client.ref, '+'.join(user_pool_app_client.allowed_o_auth_scopes or []), api_gateway.url_for_path(api_gateway_landing_page_resource.path)),
+            value='https://{domain}.auth.{region}.amazoncognito.com/login?client_id={client_id}&response_type=token&scope={scope}&redirect_uri={redirect_uri}'.format(
+                domain=user_pool_domain.domain_name,
+                region=Aws.REGION,
+                client_id=user_pool_app_client.ref,
+                scope='+'.join(user_pool_app_client.allowed_o_auth_scopes),
+                redirect_uri=api_gateway.url_for_path('/web')
+            ),
             description='The Cognito Hosted UI Login Page'
         )
 

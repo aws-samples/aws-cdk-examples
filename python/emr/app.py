@@ -68,6 +68,8 @@ class EMRClusterStack(Stack):
             instance_profile_name="emrJobFlowProfile_",
         )
 
+        assert emr_job_flow_profile.instance_profile_name is not None
+
         # create emr cluster
         emr.CfnCluster(
             self,
@@ -84,7 +86,7 @@ class EMRClusterStack(Stack):
                 ),
             ),
             # note job_flow_role is an instance profile (not an iam role)
-            job_flow_role=emr_job_flow_profile.instance_profile_name or "",
+            job_flow_role=emr_job_flow_profile.instance_profile_name,
             name="cluster_name",
             applications=[emr.CfnCluster.ApplicationProperty(name="Spark")],
             service_role=emr_service_role.role_name,
