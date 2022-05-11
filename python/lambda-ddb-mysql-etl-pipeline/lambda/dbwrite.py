@@ -4,8 +4,8 @@ import decimal
 import mimetypes
 import boto3
 import logging
-import pymysql 
-import pandas
+import pymysql
+import pandas  # type: ignore
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -105,7 +105,7 @@ def get_mysql_attrs(t_suffix):
                 Message=f"""A new t_suffix has been detected. A new staging table has been created with
                         relevant tuples loaded to : {SCHEMA}.table_{t_suffix}"""
             )
-        
+
             create_table = f"""
             CREATE TABLE IF NOT EXISTS {SCHEMA}.table_{t_suffix} (
             id VARCHAR(7),
@@ -115,7 +115,7 @@ def get_mysql_attrs(t_suffix):
             UNIQUE KEY comp_idx_id_name (id,`name`)
             )"""
             cursor_obj.execute(create_table)
-        
+
             get_attrs = f"""
             SELECT
             COLUMN_NAME
@@ -123,9 +123,9 @@ def get_mysql_attrs(t_suffix):
             WHERE TABLE_SCHEMA = '{SCHEMA}' AND TABLE_NAME = 'table_{t_suffix}'
             """
             cursor_obj.execute(get_attrs)
-        
+
             return [column[0] for column in dwr_cursor.fetchall()]
-        
+
         else:
             get_attrs = f"""
             SELECT
@@ -156,40 +156,40 @@ def dynamic_mysql_crud_ops(ast_list, t_suffix, mysql_attrs):
         }
     else:
         # Setting header to None to trick Pandas as it ignores them otherwise
-        df_attrs = pandas.read_csv(ast_list.read()), sep='|', header=None, index_col=False, dtype=str, keep_default_na=False, nrows=1)
+        df_attrs = pandas.read_csv(ast_list.read(), sep='|', header=None, index_col=False, dtype=str, keep_default_na=False, nrows=1)
         # Creates final tuple of attributes from dataframe attributes
         final_attrs = [tuple(x) for x in df_attrs.values]
         final_attrs = final_attrs[0]
         # Extract rows from file and create tuples
-        df_tuples = pandas.read_csv(ast_list.read()), sep='|', na_values=None, keep_default_na=False, dtype=str)
+        df_tuples = pandas.read_csv(ast_list.read(), sep='|', na_values=None, keep_default_na=False, dtype=str)
         df_tuples = df_tuples.apply(tuple, axis=1)
-        
+
         # Compare dwr attrs against s3 attrs to determine ALTER statement requirement and run, if necessary
         for attr in final_attrs:
             if attr in mysql_attrs:
-            logger.info('No new attribute to record')
+                logger.info('No new attribute to record')
             else:
                 logger.info(attr)
                 alter_attr_statement = f"""
                     ALTER TABLE {SCHEMA}.table_{t_suffix} ADD `{attr}` VARCHAR(50)"""
                 cursor_obj.execute(alter_attr_statement)
-        
+
         # Strip empty quotes in df_tuples, transform to 'None' and build final tuples array for INSERT
         tuples_nullified = []
         for tup in df_tuples:
             tuples_nullified.append((tuple(None if elem == '' else elem for elem in tup)))
-        
+
         # Build dynamic attribute strings for INSERT
         attr_str_insert = ""
         attr_var_insert = ""
         for attr in final_attrs:
             if attr != final_attrs[len(final_attrs) -1]:
-        attr_str_insert += "`"+attr+"`, "
-        attr_var_insert += "%s,"
+                attr_str_insert += "`"+attr+"`, "
+            attr_var_insert += "%s,"
         else:
-        attr_str_insert += "`"+attr+"`"
-        attr_var_insert += "%s"
-        
+            attr_str_insert += "`"+attr+"`"
+            attr_var_insert += "%s"
+
         # Dynamic Insert
         replace_statement = f"""
             REPLACE INTO {SCHEMA}.table_{t_suffix}

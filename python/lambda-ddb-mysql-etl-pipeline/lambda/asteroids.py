@@ -2,7 +2,6 @@ import requests
 import json
 from requests.exceptions import Timeout
 from requests.exceptions import HTTPError
-from botocore.exceptions import ClientError
 from datetime import date
 import csv
 import os
@@ -17,7 +16,7 @@ class Asteroids:
 
     Notes:
         This class doesn't look like a normal class. It is a simple example of how one might
-        workaround AWS Lambda's limitations of class use in handlers. It also allows for 
+        workaround AWS Lambda's limitations of class use in handlers. It also allows for
         better organization of code to simplify this example. If one planned to add
         other NASA endpoints or process larger amounts of Asteroid data for both .csv and .json formats,
         asteroids_json and asteroids_csv should be modularized and divided into separate lambdas
@@ -147,9 +146,8 @@ def handler(event, context):
     Args:
         event (dict): Lists a custom dict that determines interface control flow--i.e. `csv` or `json`.
         context (obj): Provides methods and properties that contain invocation, function and
-            execution environment information. 
+            execution environment information.
             *Not used herein.
     """
     asteroids = Asteroids()
     asteroids.execute(event)
-    

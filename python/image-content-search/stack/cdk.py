@@ -1,4 +1,5 @@
 import yaml
+import typing
 
 from aws_cdk import (
     aws_s3_notifications as _s3notification,
@@ -11,7 +12,13 @@ from aws_cdk import (
     aws_events_targets as _event_targets,
     aws_rds as _rds,
     aws_secretsmanager as _secrets_manager,
-    Aws, CfnOutput, CustomResource, Duration, Stack
+    custom_resources as _custom_resources,
+    aws_cloudformation,
+    Stack,
+    Aws,
+    Duration,
+    CustomResource,
+    CfnOutput
 )
 
 from aws_cdk.aws_apigateway import (
@@ -20,7 +27,9 @@ from aws_cdk.aws_apigateway import (
     CfnAuthorizer,
     AuthorizationType,
     MockIntegration,
-    PassthroughBehavior
+    PassthroughBehavior,
+    IntegrationResponse,
+    MethodResponse
 )
 
 from aws_cdk.aws_lambda import (
@@ -54,10 +63,11 @@ class ImageContentSearchStack(Stack):
         ### SQS core
         image_deadletter_queue = _sqs.Queue(self, "ICS_IMAGES_DEADLETTER_QUEUE")
         image_queue = _sqs.Queue(self, "ICS_IMAGES_QUEUE",
-            dead_letter_queue={
-                "max_receive_count": configs["DeadLetterQueue"]["MaxReceiveCount"],
-                "queue": image_deadletter_queue
-            })
+            dead_letter_queue=_sqs.DeadLetterQueue(
+                max_receive_count=configs["DeadLetterQueue"]["MaxReceiveCount"],
+                queue=image_deadletter_queue
+            )
+        )
 
         ### api gateway core
         api_gateway = RestApi(self, 'ICS_API_GATEWAY', rest_api_name='ImageContentSearchApiGateway')
@@ -76,20 +86,20 @@ class ImageContentSearchStack(Stack):
         get_landing_page_integration = LambdaIntegration(
             get_landing_page_function,
             proxy=True,
-            integration_responses=[{
-                'statusCode': '200',
-               'responseParameters': {
-                   'method.response.header.Access-Control-Allow-Origin': "'*'",
+            integration_responses=[IntegrationResponse(
+                status_code='200',
+                response_parameters={
+                    'method.response.header.Access-Control-Allow-Origin': "'*'"
                 }
-            }])
+            )])
 
         api_gateway_landing_page_resource.add_method('GET', get_landing_page_integration,
-            method_responses=[{
-                'statusCode': '200',
-                'responseParameters': {
-                    'method.response.header.Access-Control-Allow-Origin': True,
+            method_responses=[MethodResponse(
+                status_code='200',
+                response_parameters={
+                    'method.response.header.Access-Control-Allow-Origin': True
                 }
-            }])
+            )])
 
         ### cognito
         required_attribute = _cognito.StandardAttribute(required=True)
@@ -126,12 +136,12 @@ class ImageContentSearchStack(Stack):
         get_signedurl_integration = LambdaIntegration(
             get_signedurl_function,
             proxy=True,
-            integration_responses=[{
-                'statusCode': '200',
-               'responseParameters': {
+            integration_responses=[IntegrationResponse(
+                status_code='200',
+                response_parameters={
                    'method.response.header.Access-Control-Allow-Origin': "'*'",
                 }
-            }])
+            )])
 
         api_gateway_get_signedurl_authorizer = CfnAuthorizer(self, "ICS_API_GATEWAY_GET_SIGNED_URL_AUTHORIZER",
             rest_api_id=api_gateway_get_signedurl_resource.api.rest_api_id,
@@ -140,15 +150,16 @@ class ImageContentSearchStack(Stack):
             identity_source="method.request.header.Authorization",
             provider_arns=[users_pool.user_pool_arn])
 
-        api_gateway_get_signedurl_resource.add_method('GET', get_signedurl_integration,
+        get_signedurl_method = api_gateway_get_signedurl_resource.add_method('GET', get_signedurl_integration,
             authorization_type=AuthorizationType.COGNITO,
-            method_responses=[{
-                'statusCode': '200',
-                'responseParameters': {
+            method_responses=[MethodResponse(
+                status_code='200',
+                response_parameters={
                     'method.response.header.Access-Control-Allow-Origin': True,
                 }
-            }]
-            ).node.find_child('Resource').add_property_override('AuthorizerId', api_gateway_get_signedurl_authorizer.ref)
+            )])
+        signedurl_custom_resource = typing.cast("aws_cloudformation.CfnCustomResource", get_signedurl_method.node.find_child('Resource'))
+        signedurl_custom_resource.add_property_override('AuthorizerId', api_gateway_get_signedurl_authorizer.ref)
 
         images_S3_bucket.grant_put(get_signedurl_function, objects_key_pattern="new/*")
 
@@ -253,6 +264,8 @@ class ImageContentSearchStack(Stack):
             ]
         )
 
+        assert database.database_name is not None
+
         image_data_function = Function(self, "ICS_IMAGE_DATA",
             function_name="ICS_IMAGE_DATA",
             runtime=Runtime.PYTHON_3_7,
@@ -272,12 +285,12 @@ class ImageContentSearchStack(Stack):
         image_search_integration = LambdaIntegration(
             image_data_function,
             proxy=True,
-            integration_responses=[{
-                'statusCode': '200',
-               'responseParameters': {
+            integration_responses=[IntegrationResponse(
+                status_code='200',
+                response_parameters={
                    'method.response.header.Access-Control-Allow-Origin': "'*'",
                 }
-            }])
+            )])
 
         api_gateway_image_search_authorizer = CfnAuthorizer(self, "ICS_API_GATEWAY_IMAGE_SEARCH_AUTHORIZER",
             rest_api_id=api_gateway_image_search_resource.api.rest_api_id,
@@ -286,16 +299,16 @@ class ImageContentSearchStack(Stack):
             identity_source="method.request.header.Authorization",
             provider_arns=[users_pool.user_pool_arn])
 
-        api_gateway_image_search_resource.add_method('POST', image_search_integration,
+        search_integration_method = api_gateway_image_search_resource.add_method('POST', image_search_integration,
             authorization_type=AuthorizationType.COGNITO,
-            method_responses=[{
-                'statusCode': '200',
-                'responseParameters': {
+            method_responses=[MethodResponse(
+                status_code='200',
+                response_parameters={
                     'method.response.header.Access-Control-Allow-Origin': True,
                 }
-            }]
-            ).node.find_child('Resource').add_property_override('AuthorizerId', api_gateway_image_search_authorizer.ref)
-
+            )])
+        search_integration_custom_resource = typing.cast("aws_cloudformation.CfnCustomResource", search_integration_method.node.find_child('Resource'))
+        search_integration_custom_resource.add_property_override('AuthorizerId', api_gateway_image_search_authorizer.ref)
 
         lambda_access_search = _iam.PolicyStatement(
             effect=_iam.Effect.ALLOW,
@@ -334,9 +347,18 @@ class ImageContentSearchStack(Stack):
         event_bus.grant_all_put_events(image_analyzer_function)
         image_analyzer_function.add_environment("EVENT_BUS", event_bus.event_bus_name)
 
+        assert user_pool_domain.domain_name is not None
+        assert user_pool_app_client.allowed_o_auth_scopes is not None
+
         ### outputs
         CfnOutput(self, 'CognitoHostedUILogin',
-            value='https://{}.auth.{}.amazoncognito.com/login?client_id={}&response_type=token&scope={}&redirect_uri={}'.format(user_pool_domain.domain_name, Aws.REGION, user_pool_app_client.ref, '+'.join(user_pool_app_client.allowed_o_auth_scopes), api_gateway.url_for_path('/web')),
+            value='https://{domain}.auth.{region}.amazoncognito.com/login?client_id={client_id}&response_type=token&scope={scope}&redirect_uri={redirect_uri}'.format(
+                domain=user_pool_domain.domain_name,
+                region=Aws.REGION,
+                client_id=user_pool_app_client.ref,
+                scope='+'.join(user_pool_app_client.allowed_o_auth_scopes),
+                redirect_uri=api_gateway.url_for_path('/web')
+            ),
             description='The Cognito Hosted UI Login Page'
         )
 

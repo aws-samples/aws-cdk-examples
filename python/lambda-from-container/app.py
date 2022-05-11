@@ -1,4 +1,5 @@
 import os
+import typing
 from aws_cdk import (
     aws_lambda,
     aws_ecr,
@@ -42,9 +43,10 @@ class LambdaContainerFunctionStack(Stack):
             ## Container Image.
             ## Pulled from the ECR repository.
             ##
-            ecr_image = aws_lambda.EcrImageCode(
+            # ecr_image is expecting a `Code` type, so casting `EcrImageCode` to `Code` resolves mypy error
+            ecr_image = typing.cast("aws_lambda.Code", aws_lambda.EcrImageCode(
                 repository = ecr_repository
-            ) ## aws_lambda.EcrImageCode
+            )) ## aws_lambda.EcrImageCode
 
         else:
             ##
