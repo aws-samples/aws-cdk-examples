@@ -1,25 +1,45 @@
-## Overview
+
+# CI/CD Pipeline for SPA Frontend
+<!--BEGIN STABILITY BANNER-->
+---
+
+![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
+
+> **This is a stable example. It should successfully build out of the box**
+>
+> This examples only on the core CDK library, and does not have any infrastructure prerequisites to build.
+
+---
+<!--END STABILITY BANNER-->
 
 ![Frontend-Pipeline](https://d1zrwss8zuawdm.cloudfront.net/frontend-cicd.png)
 
-This sample constructs above architecture with CDK.
+This example constructs above architecture with CDK.
 You can start simple frontend CI/CD pipeline for ReactJS with this CDK.
 
-## Prerequisites
+## Build
 
-If you are first to use CDK, you need to run CDK BootStrap.
+To build this app, you need to be in this example's root folder. Then run the following:
 
-How to install CDK?
- : [AWS Doc](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html)
+```bash
+npm install -g aws-cdk
+npm install
+npm run build
+```
 
-## Build and Deploy
+This will install the necessary CDK, then this example's dependencies, and then build your TypeScript files and your CloudFormation template.
+
+## Deploy
+
+Run `cdk deploy`. This will deploy / redeploy your Stack to your AWS Account.
+
+After the deployment you will see the API's URL, which represents the url you can then use.
+
 
 ### Important
 
 Before building the cdk stack, you must set bucket name that is unique globally.
 Please see frontend-cicd-stack.ts file.
-
-### CDK Deploy
 
 1. cdk synth
 2. cdk deploy
