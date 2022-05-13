@@ -4,13 +4,13 @@ import os
 import logging
 import json
 
-from helper import execute_statement, logger
+from helper import execute_statement, logger  # type: ignore
 
 aws_config = botocore.config.Config(
     region_name = os.getenv('REGION'),
     signature_version = 'v4',
     retries = {
-        'max_attempts': int(os.getenv('DEFAULT_MAX_CALL_ATTEMPTS')),
+        'max_attempts': int(os.getenv('DEFAULT_MAX_CALL_ATTEMPTS', '1')),
         'mode': 'standard'
     }
 )
@@ -35,7 +35,7 @@ def search_label(label, country = None, language = None):
     logger.info(result)
 
     response = []
-    
+
     for record in result["records"]:
         for item in record:
             response.append({
@@ -59,10 +59,9 @@ def translate(language, word):
 
 def get_http_params(body):
     params = {}
-    
+
     for param in body.split('&'):
         key, value = param.split('=')
         params[key] = value
 
     return params
-        

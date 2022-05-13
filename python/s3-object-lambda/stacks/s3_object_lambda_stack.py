@@ -62,16 +62,17 @@ class S3ObjectLambdaStack(Stack):
                                                           source_account=Aws.ACCOUNT_ID)
 
         # Associate Bucket's access point with lambda get access
-        policy_doc = iam.PolicyDocument()
-        policy_statement = iam.PolicyStatement(
-            effect=iam.Effect.ALLOW,
-            actions=["s3:GetObject"],
-            principals=[
-                iam.ArnPrincipal(retrieve_transformed_object_lambda.role.role_arn)
-            ],
-            resources=[
-                f"{self.access_point}/object/*"
-            ])
+        if retrieve_transformed_object_lambda.role is not None:
+            policy_doc = iam.PolicyDocument()
+            policy_statement = iam.PolicyStatement(
+                effect=iam.Effect.ALLOW,
+                actions=["s3:GetObject"],
+                principals=[
+                    iam.ArnPrincipal(retrieve_transformed_object_lambda.role.role_arn)
+                ],
+                resources=[
+                    f"{self.access_point}/object/*"
+                ])
         policy_statement.sid = "AllowLambdaToUseAccessPoint"
         policy_doc.add_statements(policy_statement)
 
