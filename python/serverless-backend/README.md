@@ -66,7 +66,7 @@ There are no manual steps involved in deploying this stack, however, in this exa
         The password for the new user needs to be permanent. To do so, run the following command (Change the value 
         of user-pool-id to the deployed Cognito User Pool ID. Change the username and password to your created values):
 
-        ```aws cognito-idp admin-set-user-password --user-pool-id us-east-1_xxxxxx --username usernameExample --password passwordExample --permanent``
+        ```aws cognito-idp admin-set-user-password --user-pool-id us-east-1_xxxxxx --username usernameExample --password passwordExample --permanent```
 
         Next, the IdToken of the account needs to be retrieved. To do so, run the following command (Change the value 
         of client-id to the deployed Cognito User Pool Client ID. Change the username and password to your created values):
