@@ -38,9 +38,9 @@ class BonjourECS(Stack):
             self, "Ec2Service",
             cluster=cluster,
             memory_limit_mib=512,
-            task_image_options={
-                'image': ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
-            }
+            task_image_options=ecs_patterns.NetworkLoadBalancedTaskImageOptions(
+                image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
+            )
         )
 
         CfnOutput(
