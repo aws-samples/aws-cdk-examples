@@ -1,20 +1,37 @@
-import { Stack, StackProps, CfnOutput, Aws, CfnParameter, Fn } from 'aws-cdk-lib';
-import { Construct } from 'constructs';
-import { Config } from '../config/Config';
-import { Effect, Role, ServicePrincipal, PolicyDocument, PolicyStatement, Policy } from 'aws-cdk-lib/aws-iam';
+import {
+  Stack,
+  StackProps,
+  CfnOutput,
+  Aws,
+  CfnParameter,
+  Fn,
+} from "aws-cdk-lib";
+import { Construct } from "constructs";
+import { Config } from "../config/Config";
+import {
+  Effect,
+  Role,
+  ServicePrincipal,
+  PolicyDocument,
+  PolicyStatement,
+  Policy,
+} from "aws-cdk-lib/aws-iam";
 
 export class Step1SourceAccount extends Stack {
-
   public replicationRole: Role;
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const crossAccountReplicationRole = new Role(this, 's3-cross-account-replication-role', {
-      assumedBy: new ServicePrincipal('s3.amazonaws.com'),
-      roleName: Config.replicationRoleName,
-      description: "Role used to replicate across accounts for S3 buckets",
-      path: "/"
-    });
+    const crossAccountReplicationRole = new Role(
+      this,
+      "s3-cross-account-replication-role",
+      {
+        assumedBy: new ServicePrincipal("s3.amazonaws.com"),
+        roleName: Config.replicationRoleName,
+        description: "Role used to replicate across accounts for S3 buckets",
+        path: "/",
+      }
+    );
 
     const crossAccountReplicationRolePolicy = new PolicyDocument({
       statements: [
@@ -52,9 +69,7 @@ export class Step1SourceAccount extends Stack {
         new PolicyStatement({
           sid: "AllowPermissionsToDoEncryption",
           effect: Effect.ALLOW,
-          actions: [
-            "kms:Encrypt",
-          ],
+          actions: ["kms:Encrypt"],
           resources: [
             `arn:aws:kms:${Config.destinationRegion}:${Config.destinationAccountId}:key/*`,
           ],
@@ -62,23 +77,23 @@ export class Step1SourceAccount extends Stack {
         new PolicyStatement({
           sid: "AllowPermissionsToDoDecryption",
           effect: Effect.ALLOW,
-          actions: [
-            "kms:Decrypt",
-          ],
+          actions: ["kms:Decrypt"],
           resources: [
             `arn:aws:kms:${Config.sourceRegion}:${Config.sourceAccountId}:key/*`,
           ],
         }),
       ],
     });
-    crossAccountReplicationRole.attachInlinePolicy(new Policy(this, Config.replicationRolePolicyName, {
-      policyName: Config.replicationRolePolicyName,
-      document: crossAccountReplicationRolePolicy
-    }));
+    crossAccountReplicationRole.attachInlinePolicy(
+      new Policy(this, Config.replicationRolePolicyName, {
+        policyName: Config.replicationRolePolicyName,
+        document: crossAccountReplicationRolePolicy,
+      })
+    );
 
     this.replicationRole = crossAccountReplicationRole;
-    new CfnOutput(this, 'crossAccountReplicationRoleArn', {
-      value: crossAccountReplicationRole.roleArn
+    new CfnOutput(this, "crossAccountReplicationRoleArn", {
+      value: crossAccountReplicationRole.roleArn,
     });
   }
 }

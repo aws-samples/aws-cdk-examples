@@ -14,11 +14,12 @@
     "@types/jest": "^26.0.10",
     "@types/node": "10.17.27",
     "aws-cdk": "2.19.0",
+    "cdk-nag": "^2.0.0",
     "jest": "^26.4.2",
+    "prettier": "2.6.2",
     "ts-jest": "^26.2.0",
     "ts-node": "^9.0.0",
-    "typescript": "~3.9.7",
-    "cdk-nag": "^2.0.0"
+    "typescript": "~3.9.7"
   },
   "dependencies": {
     "aws-cdk-lib": "2.19.0",
