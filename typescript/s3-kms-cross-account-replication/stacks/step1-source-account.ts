@@ -1,6 +1,6 @@
 import { Stack, StackProps, CfnOutput, Aws, CfnParameter, Fn } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { Config } from '../config/configClass';
+import { Config } from '../config/Config';
 import { Effect, Role, ServicePrincipal, PolicyDocument, PolicyStatement, Policy } from 'aws-cdk-lib/aws-iam';
 
 export class Step1SourceAccount extends Stack {

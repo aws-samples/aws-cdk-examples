@@ -1,6 +1,6 @@
 import { Stack, StackProps, RemovalPolicy, Fn, CfnOutput, CfnParameter, Arn } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { Config } from '../config/configClass';
+import { Config } from '../config/Config';
 import { Bucket, BucketEncryption, BlockPublicAccess, BucketAccessControl, CfnBucket, } from 'aws-cdk-lib/aws-s3'
 import { Key } from 'aws-cdk-lib/aws-kms';
 import { Effect, PolicyDocument, PolicyStatement, ArnPrincipal } from 'aws-cdk-lib/aws-iam';
