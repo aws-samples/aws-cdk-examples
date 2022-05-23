@@ -32,7 +32,12 @@ const handler = async function (event: any, context: any) {
             body: "We only accept GET /",
         }
     } catch (error) {
-        const body = error.stack || JSON.stringify(error, null, 2)
+        let body
+        if (error instanceof Error) {
+            body = error.stack
+        } else {
+            body = JSON.stringify(error, null, 2)
+        }
         return {
             statusCode: 400,
             headers: {},

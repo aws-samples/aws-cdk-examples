@@ -1,4 +1,4 @@
-from helper import execute_statement, logger
+from helper import execute_statement, logger  # type: ignore
 
 # this module
 # creates schema for the database
@@ -7,8 +7,8 @@ def create_schema():
 
     # do migration
     create_table_and_index = """
-        CREATE TABLE IF NOT EXISTS tags 
-        (image_id VARCHAR(40) NOT NULL, label VARCHAR(64) NOT NULL, 
+        CREATE TABLE IF NOT EXISTS tags
+        (image_id VARCHAR(40) NOT NULL, label VARCHAR(64) NOT NULL,
         PRIMARY KEY (image_id, label),
         INDEX (image_id, label));
     """
@@ -20,5 +20,5 @@ def create_schema():
     except Exception as e:
         logger.error(f'Something went wrong while creating table: {e}')
         raise e
- 
+
     return True

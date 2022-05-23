@@ -3,7 +3,7 @@ import pathlib
 import aws_cdk as cdk
 import pytest
 
-from s3_sns_sqs_lambda_chain_stack import S3SnsSqsLambdaChainStack
+from s3_sns_sqs_lambda_chain_stack import S3SnsSqsLambdaChainStack # type: ignore
 
 
 @pytest.fixture
