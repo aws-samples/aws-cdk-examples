@@ -1,7 +1,7 @@
 package software.amazon.awscdk.examples;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.junit.Assert.assertThat;
 import static software.amazon.awscdk.examples.TestUtils.toCloudFormationJson;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
-import software.amazon.awscdk.core.App;
-import software.amazon.awscdk.core.Stack;
+import software.amazon.awscdk.App;
+import software.amazon.awscdk.Stack;
 
 public class MyWidgetServiceTest {
   private JsonNode actualStack;
@@ -21,7 +21,7 @@ public class MyWidgetServiceTest {
   public void setUp() throws IOException {
     App app = new App();
     Stack stack = new MyWidgetServiceStack(app, "MyWidgetServiceStack");
-    actualStack = toCloudFormationJson(stack).path("Resources");
+    actualStack = toCloudFormationJson(app, stack).path("Resources");
     expectedStack =
         TestUtils.fromFileResource(getClass().getResource("testMyWidgetServiceExpected.json"))
             .path("Resources");

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-from aws_cdk import core as cdk
+from aws_cdk import App
 from lambda_cloudwatch_dashboard.lambda_cloudwatch_dashboard_stack import LambdaCloudwatchDashboardStack
 
 
-app = cdk.App()
+app = App()
 LambdaCloudwatchDashboardStack(app, "LambdaCloudwatchDashboardStack")
 app.synth()

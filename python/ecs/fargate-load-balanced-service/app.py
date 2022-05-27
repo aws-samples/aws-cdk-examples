@@ -1,14 +1,16 @@
 from aws_cdk import (
+    aws_autoscaling as autoscaling,
     aws_ec2 as ec2,
     aws_ecs as ecs,
     aws_ecs_patterns as ecs_patterns,
-    core,
+    App, CfnOutput, Stack
 )
+from constructs import Construct
 
 
-class BonjourFargate(core.Stack):
+class BonjourFargate(Stack):
 
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # Create VPC and Fargate Cluster
@@ -26,9 +28,9 @@ class BonjourFargate(core.Stack):
         fargate_service = ecs_patterns.NetworkLoadBalancedFargateService(
             self, "FargateService",
             cluster=cluster,
-            task_image_options={
-                'image': ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
-            }
+            task_image_options=ecs_patterns.NetworkLoadBalancedTaskImageOptions(
+                image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
+            )
         )
 
         fargate_service.service.connections.security_groups[0].add_ingress_rule(
@@ -37,11 +39,11 @@ class BonjourFargate(core.Stack):
             description="Allow http inbound from VPC"
         )
 
-        core.CfnOutput(
+        CfnOutput(
             self, "LoadBalancerDNS",
             value=fargate_service.load_balancer.load_balancer_dns_name
         )
 
-app = core.App()
+app = App()
 BonjourFargate(app, "Bonjour")
 app.synth()

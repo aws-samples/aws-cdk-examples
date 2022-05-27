@@ -1,13 +1,14 @@
 from aws_cdk import (
     aws_rds as rds,
     aws_ec2 as ec2,
-    core
+    RemovalPolicy, Stack
     )
+from constructs import Construct
 
 
-class RDSStack(core.Stack):
+class RDSStack(Stack):
 
-    def __init__(self, scope: core.Construct, id: str, props, **kwargs) -> None:
+    def __init__(self, scope: Construct, id: str, props, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # Creates a security group for AWS RDS
@@ -38,6 +39,6 @@ class RDSStack(core.Stack):
                     ec2.InstanceClass.MEMORY4,
                     ec2.InstanceSize.LARGE,
                     ),
-                removal_policy=core.RemovalPolicy.DESTROY,
+                removal_policy=RemovalPolicy.DESTROY,
                 security_groups=[sg_rds]
                 )

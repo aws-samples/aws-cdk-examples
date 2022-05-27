@@ -1,10 +1,6 @@
-import json
-import os
-
-from helper import logger
-from helper.insert import insert_new_image
-from helper.migration import create_schema
-from helper.search import search_label, get_http_params
+from helper.insert import insert_new_image  # type: ignore
+from helper.migration import create_schema  # type: ignore
+from helper.search import search_label, get_http_params  # type: ignore
 
 # this function
 # based on the source:
@@ -33,7 +29,7 @@ def handler(event, context):
         labels = event["detail"]["labels"]
         response = insert_new_image(image_id, labels)
         return response
-    elif source == "API": #API Gateway => search 
+    elif source == "API": #API Gateway => search
         if "language" in event:
             response = search_label(event["label"], event["country"], event["language"])
         else:
