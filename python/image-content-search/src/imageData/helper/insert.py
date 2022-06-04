@@ -1,5 +1,5 @@
 
-from helper import batch_execute_statement, logger
+from helper import batch_execute_statement, logger  # type: ignore
 
 # this module
 # adds a new image data to the database

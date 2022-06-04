@@ -44,7 +44,9 @@ class EMRClusterStack(Stack):
                     "service-role/AmazonElasticMapReduceRole"
                 )
             ],
-            inline_policies=[read_scripts_document],
+            inline_policies={
+                "read_scripts_document": read_scripts_document
+            },
         )
 
         # emr job flow role
@@ -65,6 +67,8 @@ class EMRClusterStack(Stack):
             roles=[emr_job_flow_role.role_name],
             instance_profile_name="emrJobFlowProfile_",
         )
+
+        assert emr_job_flow_profile.instance_profile_name is not None
 
         # create emr cluster
         emr.CfnCluster(
