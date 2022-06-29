@@ -24,7 +24,7 @@ export interface AuroraProps extends StackProps {
    * @type {string}
    * @memberof AuroraProps
    */
-  readonly vpcId?: string;
+  readonly vpcId: string;
 
 
   /**
@@ -141,7 +141,7 @@ export class Aurora extends Stack {
 
     let subnetIds = props.subnetIds;
     let instanceType = props.instanceType;
-    let replicaInstances = props.replicaInstances;
+    let replicaInstances = props.replicaInstances ?? 1;
     let backupRetentionDays = props.backupRetentionDays ?? 14;
 
     var ingressSources = [];
@@ -157,7 +157,7 @@ export class Aurora extends Stack {
     if (backupRetentionDays < 14) {
       backupRetentionDays = 14;
     }
-    if (replicaInstances! < 1) {
+    if (replicaInstances < 1) {
       replicaInstances = 1;
     }
 
@@ -165,7 +165,7 @@ export class Aurora extends Stack {
 
     // vpc
     const vpc = ec2.Vpc.fromVpcAttributes(this, 'ExistingVPC', {
-      vpcId: props.vpcId!,
+      vpcId: props.vpcId,
       availabilityZones: azs,
     });
 
@@ -298,7 +298,7 @@ export class Aurora extends Stack {
         retention: Duration.days(backupRetentionDays),
       },
       parameterGroup: auroraParameterGroup,
-      instances: props.replicaInstances,
+      instances: replicaInstances,
       iamAuthentication: true,
       storageEncrypted: true,
       storageEncryptionKey: kmsKey,
