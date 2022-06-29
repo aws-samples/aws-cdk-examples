@@ -142,7 +142,7 @@ export class Aurora extends Stack {
     let subnetIds = props.subnetIds;
     let instanceType = props.instanceType;
     let replicaInstances = props.replicaInstances;
-    let backupRetentionDays = props.backupRetentionDays;
+    let backupRetentionDays = props.backupRetentionDays ?? 14;
 
     var ingressSources = [];
     if (typeof props.ingressSources !== 'undefined') {
@@ -154,7 +154,7 @@ export class Aurora extends Stack {
       throw new Error('Unknown Engine Please Use mysql or postgresql');
       process.exit(1);
     }
-    if (backupRetentionDays! < 14) {
+    if (backupRetentionDays < 14) {
       backupRetentionDays = 14;
     }
     if (replicaInstances! < 1) {
@@ -295,7 +295,7 @@ export class Aurora extends Stack {
       credentials: auroraClusterCrendentials,
       backup: {
         preferredWindow: props.backupWindow,
-        retention: Duration.days(props.backupRetentionDays!),
+        retention: Duration.days(backupRetentionDays),
       },
       parameterGroup: auroraParameterGroup,
       instances: props.replicaInstances,
