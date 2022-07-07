@@ -20,50 +20,13 @@ cluster = ecs.Cluster(
     vpc=vpc
 )
 
-provider_security_group = ec2.SecurityGroup(
-    stack,
-    "ProviderASG-SG",
-    vpc=vpc,
-    allow_all_outbound=True
-)
-
-load_balancer_security_group = ec2.SecurityGroup(
-    stack,
-    "LoadBalancer-SG",
-    vpc=vpc,
-    allow_all_outbound=True,
-)
-
-load_balancer_security_group.add_ingress_rule(
-    description="inbound on port 80",
-    peer=ec2.Peer.any_ipv4(),
-    connection=ec2.Port(
-        string_representation='all inbound on 80',
-        protocol=ec2.Protocol.TCP,
-        from_port=80,
-        to_port=80
-    )
-)
-
-provider_security_group.add_ingress_rule(
-    description="connectivity from LB to ASG", 
-    peer=load_balancer_security_group,
-    connection=ec2.Port(
-        string_representation='lb-connectivity',
-        protocol=ec2.Protocol.TCP,
-        from_port=32768,
-        to_port=65535
-    )
-)
-
 asg = autoscaling.AutoScalingGroup(
     stack, "DefaultAutoScalingGroup",
     instance_type=ec2.InstanceType.of(
                          ec2.InstanceClass.BURSTABLE3,
                          ec2.InstanceSize.MICRO),
     machine_image=ecs.EcsOptimizedImage.amazon_linux2(),
-    vpc=vpc,
-    security_group=provider_security_group
+    vpc=vpc
 )
 
 capacity_provider = ecs.AsgCapacityProvider(stack, "AsgCapacityProvider",
@@ -97,6 +60,7 @@ service = ecs.Ec2Service(
     task_definition=task_definition
 )
 
+
 # Create ALB
 lb = elbv2.ApplicationLoadBalancer(
     stack, "LB",
@@ -104,13 +68,13 @@ lb = elbv2.ApplicationLoadBalancer(
     internet_facing=True
 )
 
-lb.add_security_group(load_balancer_security_group)
-
 listener = lb.add_listener(
     "PublicListener",
     port=80,
     open=True
 )
+
+asg.connections.allow_from(lb, port_range=ec2.Port.tcp_range(32768, 65535), description="allow incoming traffic from ALB")
 
 health_check = elbv2.HealthCheck(
     interval=Duration.seconds(60),
