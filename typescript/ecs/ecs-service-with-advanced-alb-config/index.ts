@@ -42,7 +42,7 @@ const listener = lb.addListener('PublicListener', { port: 80, open: true });
 
 // Attach ALB to ECS Service
 listener.addTargets('ECS', {
-  port: 80,
+  port: 8080,
   targets: [service.loadBalancerTarget({
     containerName: 'web',
     containerPort: 80
