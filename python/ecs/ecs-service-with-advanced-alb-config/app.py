@@ -20,6 +20,42 @@ cluster = ecs.Cluster(
     vpc=vpc
 )
 
+provider_security_group = ec2.SecurityGroup(
+    stack,
+    "ProviderASG-SG",
+    vpc=vpc,
+    allow_all_outbound=True
+)
+
+load_balancer_security_group = ec2.SecurityGroup(
+    stack,
+    "LoadBalancer-SG",
+    vpc=vpc,
+    allow_all_outbound=True,
+)
+
+load_balancer_security_group.add_ingress_rule(
+    description="inbound on port 80",
+    peer=ec2.Peer.any_ipv4(),
+    connection=ec2.Port(
+        string_representation='all inbound on 80',
+        protocol=ec2.Protocol.TCP,
+        from_port=80,
+        to_port=80
+    )
+)
+
+provider_security_group.add_ingress_rule(
+    description="connectivity from LB to ASG", 
+    peer=load_balancer_security_group,
+    connection=ec2.Port(
+        string_representation='lb-connectivity',
+        protocol=ec2.Protocol.TCP,
+        from_port=32768,
+        to_port=65535
+    )
+)
+
 asg = autoscaling.AutoScalingGroup(
     stack, "DefaultAutoScalingGroup",
     instance_type=ec2.InstanceType.of(
@@ -27,25 +63,31 @@ asg = autoscaling.AutoScalingGroup(
                          ec2.InstanceSize.MICRO),
     machine_image=ecs.EcsOptimizedImage.amazon_linux2(),
     vpc=vpc,
+    security_group=provider_security_group
 )
+
 capacity_provider = ecs.AsgCapacityProvider(stack, "AsgCapacityProvider",
     auto_scaling_group=asg
 )
+
 cluster.add_asg_capacity_provider(capacity_provider)
 
 # Create Task Definition
 task_definition = ecs.Ec2TaskDefinition(
     stack, "TaskDef")
+
 container = task_definition.add_container(
     "web",
     image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
     memory_limit_mib=256
 )
+
 port_mapping = ecs.PortMapping(
     container_port=80,
-    host_port=8080,
+    host_port=0,
     protocol=ecs.Protocol.TCP
 )
+
 container.add_port_mappings(port_mapping)
 
 # Create Service
@@ -61,6 +103,9 @@ lb = elbv2.ApplicationLoadBalancer(
     vpc=vpc,
     internet_facing=True
 )
+
+lb.add_security_group(load_balancer_security_group)
+
 listener = lb.add_listener(
     "PublicListener",
     port=80,
@@ -83,7 +128,7 @@ listener.add_targets(
 
 CfnOutput(
     stack, "LoadBalancerDNS",
-    value=lb.load_balancer_dns_name
+    value="http://"+lb.load_balancer_dns_name
 )
 
 app.synth()
