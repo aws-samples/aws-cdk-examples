@@ -2,7 +2,6 @@ import ec2 = require('aws-cdk-lib/aws-ec2');
 import ecs = require('aws-cdk-lib/aws-ecs');
 import ecs_patterns = require('aws-cdk-lib/aws-ecs-patterns');
 import cdk = require('aws-cdk-lib');
-import { CfnOutput } from 'aws-cdk-lib';
 
 /**
  * The port range to open up for dynamic port mapping
