@@ -2,6 +2,7 @@ import ec2 = require('aws-cdk-lib/aws-ec2');
 import ecs = require('aws-cdk-lib/aws-ecs');
 import ecs_patterns = require('aws-cdk-lib/aws-ecs-patterns');
 import cdk = require('aws-cdk-lib');
+import { CfnOutput } from 'aws-cdk-lib';
 
 /**
  * The port range to open up for dynamic port mapping
@@ -34,6 +35,11 @@ class BonjourECS extends cdk.Stack {
     // Need target security group to allow all inbound traffic for
     // ephemeral port range (when host port is 0).
     ecsService.service.connections.allowFromAnyIpv4(EPHEMERAL_PORT_RANGE);
+
+    new cdk.CfnOutput(this, "networkLoadBalancerURL", {
+      value: "https://"+ecsService.loadBalancer.loadBalancerDnsName,
+      description: "Network LoadBalancer URL"
+    });
   }
 }
 
