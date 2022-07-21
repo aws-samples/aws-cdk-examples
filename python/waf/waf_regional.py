@@ -150,7 +150,7 @@ class WafRegionalStack(Stack):
     #############################################################
 
     wafacl = wafv2.CfnWebACL(self, id="WAF",
-      default_action=wafv2.CfnWebACL.DefaultActionProperty(allow={}, block=None),
+      default_action=wafv2.CfnWebACL.DefaultActionProperty(allow=wafv2.CfnWebACL.AllowActionProperty(), block=None),
       ##
       ## The scope of this Web ACL.
       ## Valid options: CLOUDFRONT, REGIONAL.

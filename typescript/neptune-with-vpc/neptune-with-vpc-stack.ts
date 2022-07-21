@@ -25,7 +25,7 @@ export class NeptuneWithVpcStack extends cdk.Stack {
       subnetConfiguration: [{
         cidrMask: 24,
         name: 'db',
-        subnetType: ec2.SubnetType.ISOLATED,
+        subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
       }, {
         cidrMask: 24,
         name: 'dmz',
