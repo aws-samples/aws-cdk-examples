@@ -3,7 +3,7 @@ import ec2 = require('aws-cdk-lib/aws-ec2');
 import cdk = require('aws-cdk-lib');
 
 const app = new cdk.App();
-const stack = new cdk.Stack(app, 'aws-ecs-integ-ecs');
+const stack = new cdk.Stack(app, 'sample-aws-ecs-integ-ecs');
 
 // Create a cluster
 const vpc = new ec2.Vpc(stack, 'Vpc', { maxAzs: 2 });
@@ -14,9 +14,7 @@ cluster.addCapacity('DefaultAutoScalingGroup', {
 });
 
 // Create Task Definition with placement constraint
-const taskDefinition = new ecs.Ec2TaskDefinition(stack, 'TaskDef', {
-  placementConstraints: [ecs.PlacementConstraint.distinctInstances()],
-});
+const taskDefinition = new ecs.Ec2TaskDefinition(stack, 'TaskDef');
 
 const container = taskDefinition.addContainer('web', {
   image: ecs.ContainerImage.fromRegistry('amazon/amazon-ecs-sample'),
@@ -33,6 +31,9 @@ container.addPortMappings({
 const service = new ecs.Ec2Service(stack, 'Service', {
   cluster,
   taskDefinition,
+  placementConstraints: [
+        ecs.PlacementConstraint.distinctInstances()
+    ]
 });
 
 // Specify binpack by memory and spread across availability zone as placement strategies.
