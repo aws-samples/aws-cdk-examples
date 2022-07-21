@@ -4,7 +4,7 @@ import elbv2 = require('aws-cdk-lib/aws-elasticloadbalancingv2');
 import cdk = require('aws-cdk-lib');
 
 const app = new cdk.App();
-const stack = new cdk.Stack(app, 'aws-ecs-integ-ecs');
+const stack = new cdk.Stack(app, 'sample-aws-ecs-integ-ecs');
 
 // Create a cluster
 const vpc = new ec2.Vpc(stack, 'Vpc', { maxAzs: 2 });
