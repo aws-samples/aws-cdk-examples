@@ -2,12 +2,10 @@ import {
   aws_backup,
   aws_iam,
   aws_s3,
-  Duration,
   Stack,
   StackProps,
   Tags,
 } from "aws-cdk-lib";
-import { Schedule } from "aws-cdk-lib/aws-events";
 import { Construct } from "constructs";
 
 export class AwsBackupS3Stack extends Stack {
