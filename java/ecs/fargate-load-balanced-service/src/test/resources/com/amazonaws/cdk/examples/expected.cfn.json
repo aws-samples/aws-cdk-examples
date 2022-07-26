@@ -620,6 +620,20 @@
                         "IpProtocol": "-1"
                     }
                 ],
+                "SecurityGroupIngress": [
+                    {
+                     "CidrIp": {
+                      "Fn::GetAtt": [
+                       "MyVpcF9F0CA6F",
+                       "CidrBlock"
+                      ]
+                     },
+                     "Description": "allow http inbound from vpc",
+                     "FromPort": 80,
+                     "IpProtocol": "tcp",
+                     "ToPort": 80
+                    }
+                ],
                 "VpcId": {
                     "Ref": "MyVpcF9F0CA6F"
                 }
