@@ -12,7 +12,7 @@ namespace CloudFrontS3WafStack
     /*
     CDK Code For -
     1. Create S3 bucket Static Website - index.html with H1 html tag
-    2. Create CloudFront with limited region deployment (to reduce cost) to server static website
+    2. Create CloudFront with limited region deployment (to reduce cost) to serve static website
     3. Secure CloudFront through WAF IP range rule
     */
     public class CdkStack : Stack
