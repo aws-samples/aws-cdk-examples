@@ -2,10 +2,10 @@ from aws_cdk import (
     core,
 )
 
-from servicediscovery.service_discovery import HttpApiServiceDiscovery
-from servicediscovery.service_discovery import PrivateDnsServiceDiscovery
-from ec2.ec2 import Vpc
-from ec2.ec2 import Ec2
+from stack.sd import HttpApiServiceDiscovery
+from stack.sd import PrivateDnsServiceDiscovery
+from stack.ec2 import Vpc
+from stack.ec2 import Ec2
 
 props = {'namespace': 'yyo'}
 
