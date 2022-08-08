@@ -21,9 +21,19 @@ IPAM_stack = IpamStack(app, "IPAM-iac",
     region=os.environ["CDK_DEFAULT_REGION"]))
 
 # VPC stack
-vpc_stack = VpcStack(app, "VPC-iac",
+vpc_stack_1 = VpcStack(app, "VPC-iac-1",
     env=cdk.Environment(
     account=os.environ["CDK_DEFAULT_ACCOUNT"],
     region=os.environ["CDK_DEFAULT_REGION"]))
+
+# VPC stack
+vpc_stack_2 = VpcStack(app, "VPC-iac-2",
+    env=cdk.Environment(
+    account=os.environ["CDK_DEFAULT_ACCOUNT"],
+    region=os.environ["CDK_DEFAULT_REGION"]))
+
+
+vpc_stack_1.add_dependency(IPAM_stack)
+vpc_stack_2.add_dependency(IPAM_stack)
 
 app.synth()
