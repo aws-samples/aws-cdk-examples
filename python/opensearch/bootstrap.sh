@@ -7,6 +7,9 @@ source .env/bin/activate
 # download requirements
 .env/bin/python -m pip install -r requirements.txt --upgrade pip
 
+# Bootstrap the environment
+cdk bootstrap
+
 # Set region to deploy the stack
 region_default="us-east-1"
 echo -e

@@ -25,23 +25,18 @@ Once deployed, it will setup and configure Index template, Index State Managemen
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
 
-### Python setup
+### Bootstrap the environment
 
 This project is set up like a standard Python project. The initialization process also creates a virtualenv within this
 project, stored under the `.env` directory. To create the virtualenv it assumes that there is a `python3` (or `python`
 for Windows) executable in your path with access to the `venv` package.
-
-Run bash bootstrap.sh to create a virtualenv on MacOS and Linux. If for any reason the automatic creation of the
-virtualenv fails, you can create the virtualenv manually.
-
-To manually create a virtualenv on MacOS and Linux:
+Run below command to create a virtualenv on MacOS and Linux.
 
 ```
-$ python3 -m venv .env
+$ bash bootstrap.sh
 ```
 
-After the init process completes and the virtualenv is created, you can use the following
-step to activate your virtualenv.
+After the bootstrap process completes and the virtualenv is created, you can use the following step to activate your virtualenv.
 
 ```
 $ source .env/bin/activate
