@@ -1,0 +1,37 @@
+{
+  "app": "go mod download && go run cdk-main.go",
+  "watch": {
+    "include": [
+      "**"
+    ],
+    "exclude": [
+      "README.md",
+      "cdk*.json",
+      "go.mod",
+      "go.sum",
+      "**/*test.go"
+    ]
+  },
+  "context": {
+    "@aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId": true,
+    "@aws-cdk/core:stackRelativeExports": true,
+    "@aws-cdk/aws-rds:lowercaseDbIdentifier": true,
+    "@aws-cdk/aws-lambda:recognizeVersionProps": true,
+    "@aws-cdk/aws-cloudfront:defaultSecurityPolicyTLSv1.2_2021": true,
+    "@aws-cdk-containers/ecs-service-extensions:enableDefaultLogDriver": true,
+    "@aws-cdk/core:target-partitions": [
+      "aws",
+      "aws-cn"
+    ],
+    "stackName": "CDKGoExample-EKSCluster",
+    "deploymentRegion": "",
+    "targetArch": "amd64",
+    "clusterName": "CDKGoExample-EKSCluster",
+    "keyPairName": "",
+    "masterUsers": [
+      "Cow",
+      "Admin"
+    ],
+    "externalDnsRole": "arn:aws:iam::123456789012:role/AWSAccount-EKSExternalDNSRole"
+  }
+}
