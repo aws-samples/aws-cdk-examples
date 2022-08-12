@@ -35,7 +35,7 @@ class LambdaContainerFunctionStack(Stack):
             ##
             ecr_repository = aws_ecr.Repository.from_repository_attributes(self,
                 id              = "ECR",
-                repository_arn  ='arn:aws:ecr:{0}:{1}'.format(Aws.REGION, Aws.ACCOUNT_ID),
+                repository_arn  ='arn:aws:ecr:{0}:{1}:repository'.format(Aws.REGION, Aws.ACCOUNT_ID),
                 repository_name = image_name
             ) ## aws_ecr.Repository.from_repository_attributes
 
