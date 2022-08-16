@@ -1,5 +1,17 @@
 # Create Thing And Certificate
 
+## <!--BEGIN STABILITY BANNER-->
+
+![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
+
+> **This is a stable example. It should successfully build out of the box**
+>
+> This examples is built only on the CDK core library, and does not have any infrastructure prerequisites to build.
+
+---
+
+<!--END STABILITY BANNER-->
+
 This example creates and deploys some kind of certificates following
 [this documentation](https://docs.aws.amazon.com/iot/latest/developerguide/x509-client-certs.html).
 And this example also confirm to work the certificates with getting and updating device shadow.
