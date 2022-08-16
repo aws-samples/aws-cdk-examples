@@ -2,9 +2,7 @@
   "name": "thing-and-certificate",
   "version": "0.1.0",
   "scripts": {
-    "synth": "cdk synth",
-    "diff": "cdk diff",
-    "deploy": "cdk deploy"
+    "build": "tsc"
   },
   "devDependencies": {
     "@types/node": "*",
