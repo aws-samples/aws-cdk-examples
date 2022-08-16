@@ -1,0 +1,8 @@
+src/functions/*/bin
+src/functions/*/obj
+cdk.out
+src/SftpDataImportCdk/obj
+src/SftpDataImportCdk/bin
+.DS_Store
+src/resources/keys/sftpdataimport
+src/resources/keys/sftpdataimport.pub

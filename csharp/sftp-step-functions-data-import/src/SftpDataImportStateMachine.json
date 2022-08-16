@@ -1,0 +1,146 @@
+{
+  "Comment": "SFTP Data Import Example State Machine",
+  "StartAt": "Transform Data",
+  "States": {
+    "Transform Data": {
+      "Type": "Pass",
+      "Next": "Lambda - Validate",
+      "Parameters": {
+        "Bucket.$": "$.detail.bucket.name",
+        "Key.$": "$.detail.object.key",
+        "Region.$": "$.region",
+        "DateTime.$": "$.time"
+      }
+    },
+    "Lambda - Validate": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "${ValidationFunctionARN}:$LATEST"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 6,
+          "BackoffRate": 2
+        }
+      ],
+      "Next": "IsValid"
+    },
+    "IsValid": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Not": {
+            "Variable": "$.IsValid",
+            "BooleanEquals": true
+          },
+          "Next": "SNS Publish"
+        }
+      ],
+      "Default": "Lambda - Process Data"
+    },
+    "SNS Publish": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "Message.$": "$",
+        "TopicArn": "${SNSTopicARN}"
+      },
+      "End": true
+    },
+    "Lambda - Process Data": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "${PocessDataFunctionARN}:$LATEST"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 6,
+          "BackoffRate": 2
+        }
+      ],
+      "Next": "UseStateAction"
+    },
+    "UseStateAction": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.UseStateAction",
+          "NumericEquals": 1,
+          "Next": "DynamoDB PutItem"
+        },
+        {
+          "Variable": "$.UseStateAction",
+          "NumericEquals": 2,
+          "Next": "SQS SendMessage"
+        }
+      ],
+      "Default": "Data Processed in Lambda",
+      "OutputPath": "$.PayLoad"
+    },
+    "DynamoDB PutItem": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::dynamodb:putItem",
+      "Parameters": {
+        "TableName.$": "$.TableName",
+        "Item": {
+          "DateTime": {
+            "S.$": "$.Item.DateTime.S"
+          },
+          "Customer": {
+            "N.$": "$.Item.Customer.N"
+          },
+          "Bucket": {
+            "S.$": "$.Item.Bucket.S"
+          },
+          "Key": {
+            "S.$": "$.Item.Key.S"
+          },
+          "Region": {
+            "S.$": "$.Item.Region.S"
+          }
+        }
+      },
+      "End": true
+    },
+    "Data Processed in Lambda": {
+      "Type": "Pass",
+      "Next": "DeleteObject"
+    },
+    "DeleteObject": {
+      "Type": "Task",
+      "End": true,
+      "Parameters": {
+        "Bucket.$": "$.Bucket",
+        "Key.$": "$.Key"
+      },
+      "Resource": "arn:aws:states:::aws-sdk:s3:deleteObject"
+    },
+    "SQS SendMessage": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sqs:sendMessage",
+      "Parameters": {
+        "MessageBody.$": "$",
+        "QueueUrl": "${SQSQueueURL}"
+      },
+      "End": true
+    }
+  }
+}
