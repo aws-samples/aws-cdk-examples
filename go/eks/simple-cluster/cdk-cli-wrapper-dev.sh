@@ -26,6 +26,8 @@ fi
 # Destroy pre-process.
 if [ "$CDK_CMD" == "destroy" ]; then
     # Remove PVRE hook auto-added policy before executing destroy.
+    # Feel free to remove this code block if you are not an AWS employee.
+    # ${StackName}-${ArchName}-${RegionName}-ClusterNodeRole
     node_role_name="$(jq -r .context.stackName ./cdk.json)-$(jq -r .context.targetArch ./cdk.json)-${CDK_REGION}-ClusterNodeRole"
     policy_arn="$(aws iam list-attached-role-policies --role-name ${node_role_name} --query 'AttachedPolicies[?PolicyName==`AmazonSSMManagedInstanceCore`].PolicyArn' --output text)"
 

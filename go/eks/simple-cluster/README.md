@@ -35,13 +35,16 @@ This example will automatically install the following K8s addons:
    [Download and Install] - Download and install Go quickly with the steps described here.
 6. Install Docker:<br />
    [Install Docker Engine] - The installation section shows you how to install Docker on a variety of platforms.
-7. Make sure you also have GNU Make, jq installed.
+7. Install Kubectl:<br />
+   [Install Kubectl] - This topic helps you to download and install, or update, the kubectl binary on your device.
+8. Make sure you also have GNU Make, jq installed.
 
 [Installation]: <https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html>
 [Configuration]: <https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html>
 [Install NVM]: <https://github.com/nvm-sh/nvm#install--update-script>
 [Download and Install]: <https://go.dev/doc/install>
 [Install Docker Engine]: <https://docs.docker.com/engine/install/>
+[Install Kubectl]: <https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html>
 
 ## Configuration
 
