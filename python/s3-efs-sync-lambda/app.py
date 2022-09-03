@@ -1,4 +1,4 @@
-from aws_cdk import App, Stack
+from aws_cdk import App
 
 from stack.lambda_data_sync_efs_s3 import LambdaDataSyncStack
 

@@ -1,3 +1,4 @@
+from constructs import Construct
 from aws_cdk import (
     aws_ec2,
     aws_efs,
@@ -5,13 +6,12 @@ from aws_cdk import (
     aws_lambda,
     aws_s3,
     aws_s3_notifications,
-    Duration, RemovalPolicy,
-    App, Stack
+    Duration, RemovalPolicy, Stack
 )
 
 class LambdaDataSyncStack(Stack):
-    def __init__(self, app: App, id: str, **kwargs) -> None:
-        super().__init__(app, id, **kwargs)
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
+        super().__init__(scope, id, **kwargs)
 
         vpc = aws_ec2.Vpc(self, "vpc", max_azs = 2)
         vpc.add_gateway_endpoint("s3-vpce", service = aws_ec2.GatewayVpcEndpointAwsService.S3)
