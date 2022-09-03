@@ -118,6 +118,6 @@ func main() {
 
 func env() *awscdk.Environment {
 	return &awscdk.Environment{
-		Region: jsii.String(os.Getenv("AWS_REGION")),
+		Region: jsii.String(os.Getenv("AWS_DEFAULT_REGION")),
 	}
 }
