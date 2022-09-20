@@ -1,4 +1,5 @@
 using Amazon.CDK;
+using Constructs;
 using Amazon.CDK.AWS.IAM;
 using Amazon.CDK.AWS.S3;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace ResourceOverrides
     public class ResourceOverridesConstruct : Construct
     {
         private readonly IEnumerable<Bucket> _buckets;
-        
+
         // A simple construct that contains a collection of AWS S3 buckets.
         public ResourceOverridesConstruct(Construct parent, string id, ResourceOverridesConstructProps props) : base(parent, id)
         {
