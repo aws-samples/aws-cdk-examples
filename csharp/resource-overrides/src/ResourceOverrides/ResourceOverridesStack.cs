@@ -81,7 +81,7 @@ namespace ResourceOverrides
 
             //
             // It is also possible to request a deletion of a value by either assigning
-            // `undefined` (in supported languages) or use the `addDeletionOverride` method
+            // `undefined` (in supported languages) or use the `AddDeletionOverride` method
             //
             bucketResource.AddDeletionOverride("Metadata");
             bucketResource.AddPropertyDeletionOverride("CorsConfiguration.Bar");
