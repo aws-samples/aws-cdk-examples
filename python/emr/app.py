@@ -1,10 +1,10 @@
-from aws_cdk import aws_ec2 as ec2, aws_iam as iam, core, aws_emr as emr
+from aws_cdk import aws_ec2 as ec2, aws_iam as iam, App, Aws, Stack, aws_emr as emr
+from constructs import Construct
 
-
-class EMRClusterStack(core.Stack):
+class EMRClusterStack(Stack):
     def __init__(
         self,
-        scope: core.Construct,
+        scope: Construct,
         id: str,
         s3_log_bucket: str,
         s3_script_bucket: str,
@@ -44,7 +44,9 @@ class EMRClusterStack(core.Stack):
                     "service-role/AmazonElasticMapReduceRole"
                 )
             ],
-            inline_policies=[read_scripts_document],
+            inline_policies={
+                "read_scripts_document": read_scripts_document
+            },
         )
 
         # emr job flow role
@@ -65,6 +67,8 @@ class EMRClusterStack(core.Stack):
             roles=[emr_job_flow_role.role_name],
             instance_profile_name="emrJobFlowProfile_",
         )
+
+        assert emr_job_flow_profile.instance_profile_name is not None
 
         # create emr cluster
         emr.CfnCluster(
@@ -113,7 +117,7 @@ class EMRClusterStack(core.Stack):
                     configuration_properties={"maximizeResourceAllocation": "true"},
                 ),
             ],
-            log_uri=f"s3://{s3_log_bucket}/{core.Aws.REGION}/elasticmapreduce/",
+            log_uri=f"s3://{s3_log_bucket}/{Aws.REGION}/elasticmapreduce/",
             release_label="emr-6.0.0",
             visible_to_all_users=False,
             # the job to be done
@@ -135,7 +139,7 @@ class EMRClusterStack(core.Stack):
         )
 
 
-app = core.App()
+app = App()
 EMRClusterStack(
     app,
     "emr-cluster",

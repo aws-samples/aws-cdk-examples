@@ -1,0 +1,29 @@
+{
+  "name": "s3-object-lambda",
+  "version": "1.0.0",
+  "bin": {
+    "s3-object-lambda": "bin/s3-object-lambda.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@aws-cdk/assert": "^1.154.0",
+    "@types/node": "10.17.27",
+    "aws-cdk": "^1.154.0",
+    "ts-node": "^9.0.0",
+    "typescript": "~4.6.0"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-iam": "^1.154.0",
+    "@aws-cdk/aws-lambda": "^1.154.0",
+    "@aws-cdk/aws-s3": "^1.154.0",
+    "@aws-cdk/aws-s3objectlambda": "^1.154.0",
+    "@aws-cdk/core": "^1.154.0",
+    "aws-sdk": "^2.1004.0",
+    "source-map-support": "^0.5.16"
+  }
+}

@@ -18,15 +18,6 @@ setuptools.setup(
     package_dir={"": "rekognition_lambda_s3_trigger"},
     packages=setuptools.find_packages(where="rekognition_lambda_s3_trigger"),
 
-    install_requires=[
-        "aws-cdk.core",
-        "aws-cdk.aws_iam",
-        "aws-cdk.aws_s3",
-        "aws-cdk.aws_s3_notifications",
-        "aws-cdk.aws_lambda",
-        "aws-cdk.aws_dynamodb",
-    ],
-
     python_requires=">=3.7",
 
     classifiers=[

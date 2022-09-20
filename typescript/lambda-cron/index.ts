@@ -1,7 +1,7 @@
-import events = require('@aws-cdk/aws-events');
-import targets = require('@aws-cdk/aws-events-targets');
-import lambda = require('@aws-cdk/aws-lambda');
-import cdk = require('@aws-cdk/core');
+import events = require('aws-cdk-lib/aws-events');
+import targets = require('aws-cdk-lib/aws-events-targets');
+import lambda = require('aws-cdk-lib/aws-lambda');
+import cdk = require('aws-cdk-lib');
 
 import fs = require('fs');
 
@@ -13,7 +13,7 @@ export class LambdaCronStack extends cdk.Stack {
       code: new lambda.InlineCode(fs.readFileSync('lambda-handler.py', { encoding: 'utf-8' })),
       handler: 'index.main',
       timeout: cdk.Duration.seconds(300),
-      runtime: lambda.Runtime.PYTHON_3_6,
+      runtime: lambda.Runtime.PYTHON_3_9,
     });
 
     // Run 6:00 PM UTC every Monday through Friday

@@ -3,18 +3,20 @@ package software.amazon.awscdk.examples;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import software.amazon.awscdk.core.CfnOutput;
-import software.amazon.awscdk.core.Construct;
-import software.amazon.awscdk.core.RemovalPolicy;
-import software.amazon.awscdk.core.Stack;
+import software.amazon.awscdk.CfnOutput;
+import software.constructs.Construct;
+import software.amazon.awscdk.RemovalPolicy;
+import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.services.certificatemanager.DnsValidatedCertificate;
-import software.amazon.awscdk.services.cloudfront.AliasConfiguration;
+import software.amazon.awscdk.services.certificatemanager.ICertificate;
 import software.amazon.awscdk.services.cloudfront.Behavior;
 import software.amazon.awscdk.services.cloudfront.CloudFrontWebDistribution;
 import software.amazon.awscdk.services.cloudfront.S3OriginConfig;
 import software.amazon.awscdk.services.cloudfront.SSLMethod;
 import software.amazon.awscdk.services.cloudfront.SecurityPolicyProtocol;
 import software.amazon.awscdk.services.cloudfront.SourceConfiguration;
+import software.amazon.awscdk.services.cloudfront.ViewerCertificate;
+import software.amazon.awscdk.services.cloudfront.ViewerCertificateOptions;
 import software.amazon.awscdk.services.route53.ARecord;
 import software.amazon.awscdk.services.route53.HostedZone;
 import software.amazon.awscdk.services.route53.HostedZoneProviderProps;
@@ -80,16 +82,15 @@ public class StaticSiteStack extends Stack {
           .build();
 
       // TLS certificate
-      final String certificateArn =
+      final ICertificate certificate =
           DnsValidatedCertificate.Builder.create(this, "SiteCertificate")
               .domainName(siteDomain)
               .hostedZone(zone)
-              .build()
-              .getCertificateArn();
+              .build();
 
       CfnOutput.Builder.create(this, "Certificate")
           .description("Certificate ARN")
-          .value(certificateArn)
+          .value(certificate.getCertificateArn())
           .build();
 
       // CloudFront distribution that provides HTTPS
@@ -104,16 +105,15 @@ public class StaticSiteStack extends Stack {
               .behaviors(behavioursList)
               .build());
 
-      @SuppressWarnings({"deprecation"})
       CloudFrontWebDistribution distribution =
-          CloudFrontWebDistribution.Builder.create(this, "SiteDistribution")
-              .aliasConfiguration(
-                  AliasConfiguration.builder()
-                      .acmCertRef(certificateArn)
-                      .sslMethod(SSLMethod.SNI)
-                      .securityPolicy(SecurityPolicyProtocol.TLS_V1_1_2016)
-                      .names(siteDomainList)
-                      .build())
+              CloudFrontWebDistribution.Builder.create(this, "SiteDistribution")
+                      .viewerCertificate(ViewerCertificate.fromAcmCertificate(certificate, ViewerCertificateOptions
+                              .builder()
+                              .aliases(siteDomainList)
+                              .sslMethod(SSLMethod.SNI)
+                              .securityPolicy(SecurityPolicyProtocol.TLS_V1_1_2016)
+                              .build()
+              ))
               .originConfigs(sourceConfigurationsList)
               .build();
 

@@ -1,4 +1,4 @@
-from aws_cdk.core import Construct
+from constructs import Construct
 from aws_cdk import aws_ecs, aws_ec2
 
 

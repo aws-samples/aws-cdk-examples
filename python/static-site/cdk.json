@@ -1,0 +1,11 @@
+{
+  "app": "python3 app.py",
+  "context": {
+    "namespace": "static-site",
+    "domain_name": "example.com",
+    "enable_s3_website_endpoint": true,
+    "origin_custom_header_parameter_name": "/prod/static-site/origin-custom-header/referer",
+    "hosted_zone_id": "ZABCDE12345",
+    "hosted_zone_name": "example.com."
+  }
+}

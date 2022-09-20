@@ -1,8 +1,9 @@
-import ecs = require('@aws-cdk/aws-ecs');
-import ec2 = require('@aws-cdk/aws-ec2');
-import { Stack, Construct, StackProps, App } from '@aws-cdk/core';
+import ecs = require('aws-cdk-lib/aws-ecs');
+import ec2 = require('aws-cdk-lib/aws-ec2');
+import { Stack, StackProps, App } from 'aws-cdk-lib';
 import { SplitAtListener_LoadBalancerStack, SplitAtListener_ServiceStack } from './split-at-listener';
 import { SplitAtTargetGroup_LoadBalancerStack, SplitAtTargetGroup_ServiceStack } from './split-at-targetgroup';
+import { Construct } from 'constructs';
 
 /**
  * Shared infrastructure -- VPC and Cluster

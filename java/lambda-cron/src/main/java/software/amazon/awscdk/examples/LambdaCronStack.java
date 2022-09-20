@@ -1,9 +1,9 @@
 package software.amazon.awscdk.examples;
 
 import java.util.UUID;
-import software.amazon.awscdk.core.Construct;
-import software.amazon.awscdk.core.Duration;
-import software.amazon.awscdk.core.Stack;
+import software.constructs.Construct;
+import software.amazon.awscdk.Duration;
+import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.services.events.Rule;
 import software.amazon.awscdk.services.events.Schedule;
 import software.amazon.awscdk.services.events.targets.LambdaFunction;
@@ -22,7 +22,7 @@ class LambdaCronStack extends Stack {
             .code(Code.fromInline("def main(event, context):\n" + "    print(\"I'm running!\")\n"))
             .handler("index.main")
             .timeout(Duration.seconds(300))
-            .runtime(Runtime.PYTHON_2_7)
+            .runtime(Runtime.PYTHON_3_9)
             .uuid(UUID.randomUUID().toString())
             .build();
 

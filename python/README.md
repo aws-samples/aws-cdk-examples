@@ -65,9 +65,11 @@ $ cdk destroy
 | [fargate-load-balanced-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/fargate-load-balanced-service/) | Starting a container fronted by a load balancer on Fargate |
 | [fargate-service-with-autoscaling](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ecs/fargate-service-with-autoscaling/) | Starting an ECS service of FARGATE launch type that auto scales based on average CPU Utilization |
 | [lambda-cron](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/lambda-cron/) | Running a Lambda on a schedule |
+| [lambda-layer](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/lambda-layer/) | Running a Lambda with a lambda layer |
 | [lambda-s3-trigger](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/lambda-s3-trigger/) | S3 trigger for Lambda |
 | [rds](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/rds/) | Creating a MySQL RDS database inside its dedicated VPC |
+| [s3-object-lambda](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/s3-object-lambda/) | Creating an S3 Object Lambda and access point |
 | [stepfunctions](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/stepfunctions/) | A simple StepFunctions workflow |
-| [url-shortner](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/url-shortener) | Demo from the [Infrastructure ***is*** Code with the AWS CDK](https://youtu.be/ZWCvNFUN-sU) AWS Online Tech Talk |
+| [url-shortener](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/url-shortener) | Demo from the [Infrastructure ***is*** Code with the AWS CDK](https://youtu.be/ZWCvNFUN-sU) AWS Online Tech Talk |
 | [ec2-instance](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ec2/instance/) | Create EC2 Instance in new VPC with Systems Manager enabled |
-
+| [serverless-backend](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/serverless-backend/) | Create a serverless backend with API Gateway, Lambda, S3, DynamoDB, and Cognito |

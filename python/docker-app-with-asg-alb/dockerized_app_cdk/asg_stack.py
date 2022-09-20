@@ -3,13 +3,13 @@ from aws_cdk import (
     aws_ec2 as ec2,
     aws_autoscaling as autoscaling,
     aws_elasticloadbalancingv2 as elbv2,
-    core
+    Stack
     )
+from constructs import Construct
 
+class ASGStack(Stack):
 
-class ASGStack(core.Stack):
-
-    def __init__(self, scope: core.Construct, id: str, props, **kwargs) -> None:
+    def __init__(self, scope: Construct, id: str, props, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         userdata_file = open("./userdata.sh", "rb").read()
@@ -31,7 +31,7 @@ class ASGStack(core.Stack):
                 generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2
                 ),
             key_name="evan",
-            vpc_subnets=ec2.SubnetSelection(subnet_type=SubnetType.PRIVATE),
+            vpc_subnets=ec2.SubnetSelection(subnet_type=SubnetType.PRIVATE_WITH_NAT),
             user_data=userdata,
         )
 
