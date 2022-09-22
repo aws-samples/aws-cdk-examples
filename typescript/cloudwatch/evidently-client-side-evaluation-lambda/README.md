@@ -11,13 +11,30 @@
 ---
 <!--END STABILITY BANNER-->
 
-This example creates a new lambda function that can call the Evidently EvaluateFeature API with minimal latency overhead
-by using the AppConfig Lambda layer extension.
+[Amazon CloudWatch Evidently](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Evidently.html)
+is an AWS service that enables you to safely validate new features by serving them to a specified percentage of your users while you roll out the feature.
+To do this, we create an Evidently [feature](https://docs.aws.amazon.com/cloudwatchevidently/latest/APIReference/API_CreateFeature.html),
+which defines *what* we're rolling out. We also define a [launch](https://docs.aws.amazon.com/cloudwatchevidently/latest/APIReference/API_CreateLaunch.html),
+which defines *how* we're rolling out the feature.
+
+Your application can then call the [EvaluateFeature API](https://docs.aws.amazon.com/cloudwatchevidently/latest/APIReference/API_EvaluateFeature.html)
+to determine which version (or variation) of the feature to show to an individual user.
+Normally, we must call the Evidently server for this, but many applications cannot afford the latency of a network call for this API,
+so [Client-side evaluation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Evidently-client-side-evaluation.html)
+removes this dependency by evaluating the feature locally using the [AWS AppConfig Lambda extension](https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-integration-lambda-extensions.html).
+
+For this to work, we set up three things:
+
+- An Evidently launch
+- An AppConfig environment for Evidently to use
+- A Lambda function which calls the Lambda extension locally to evaluate a Feature
 
 
 ## Build
 
-To build this app, you need to be in this example's root folder. Then run the following:
+To build this app, you need to be in this example's root folder.
+You can configure the `AWS_REGION` environment variable if you want to deploy your lambda in a different region;
+by default it is `us-east-1`. Then run the following:
 
 ```bash
 npm install -g aws-cdk
@@ -31,7 +48,17 @@ This will install the necessary CDK, then this example's dependencies, and then 
 
 Run `cdk deploy`. This will deploy / redeploy your Stack to your AWS Account.
 
-After the deployment you will see the API's URL, which represents the url you can then use.
+After deploying, visit the Lambda function and perform a Test call with any input. You should see this response:
+```json
+{
+  "details": "{\"group\":\"hideFeature\",\"launch\":\"ExampleFeatureLaunch\"}",
+  "reason": "LAUNCH_RULE_MATCH",
+  "value": {
+    "boolValue": false
+  },
+  "variation": "hideFeature"
+}
+```
 
 ## Synthesize Cloudformation Template
 
