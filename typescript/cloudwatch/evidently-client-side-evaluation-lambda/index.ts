@@ -7,7 +7,9 @@ import * as fs from'fs'
 
 const HIDE_FEATURE = 'hideFeature'
 const SHOW_FEATURE = 'showFeature'
-const AWS_REGION: string = process.env.AWS_REGION || 'us-east-1'
+const AWS_REGION: string = process.env.CDK_DEFAULT_REGION || ''
+const AWS_ACCOUNT: string = process.env.CDK_DEFAULT_ACCOUNT || ''
+
 // We must choose the Lambda Layer ARN that corresponds with the AWS Region where you create your Lambda:
 // https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-integration-lambda-extensions-versions.html#appconfig-integration-lambda-extensions-enabling-x86-64
 const APP_CONFIG_EXTENSION_ARNS: Record<string, string> = {
@@ -131,9 +133,16 @@ export class EvidentlyClientSideEvaluationLambdaStack extends cdk.Stack {
     });
     lambdaFunction.role?.addToPrincipalPolicy(
       new iam.PolicyStatement({
-        actions: ['evidently:PutProjectEvents', 'appconfig:StartConfigurationSession', 'appconfig:GetLatestConfiguration'],
+        actions: ['appconfig:StartConfigurationSession', 'appconfig:GetLatestConfiguration'],
         effect: iam.Effect.ALLOW,
-        resources: ["*"]
+        resources: [`arn:aws:appconfig:${AWS_REGION}:${AWS_ACCOUNT}:application/${application.ref}/environment/${environment.ref}/configuration/*`]
+      })
+    )
+    lambdaFunction.role?.addToPrincipalPolicy(
+      new iam.PolicyStatement({
+        actions: ['evidently:PutProjectEvents'],
+        effect: iam.Effect.ALLOW,
+        resources: [`arn:aws:evidently:${AWS_REGION}:${AWS_ACCOUNT}:project/${project.name}`]
       })
     )
 

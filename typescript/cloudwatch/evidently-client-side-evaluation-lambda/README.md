@@ -32,9 +32,7 @@ For this to work, we set up three things:
 
 ## Build
 
-To build this app, you need to be in this example's root folder.
-You can configure the `AWS_REGION` environment variable if you want to deploy your lambda in a different region;
-by default it is `us-east-1`. Then run the following:
+To build this app, you need to be in this example's root folder. Then run the following:
 
 ```bash
 npm install -g aws-cdk
