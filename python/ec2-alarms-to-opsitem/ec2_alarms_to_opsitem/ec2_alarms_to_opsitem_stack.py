@@ -1,8 +1,10 @@
 import os.path
 import json
+import re
 
 from aws_cdk import (
-    # Duration,
+    Aws,
+    Duration,
     Stack,
     aws_iam as iam_,
     aws_ssm as ssm_,
@@ -10,16 +12,22 @@ from aws_cdk import (
     aws_sns_subscriptions as Subscriptions,
     aws_ec2 as ec2,
     CfnParameter,
-    aws_lambda as lambda_
+    aws_lambda as lambda_,
+    aws_events as events,
+    aws_events_targets as targets,
+    aws_s3_assets as asset
     # aws_sqs as sqs,
 )
 from constructs import Construct
+
+dirname = os.path.dirname(__file__)
+account_id = Aws.ACCOUNT_ID
+region = Aws.REGION
 
 class Ec2AlarmsToOpsitemStack(Stack):
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
-
 
         f = open('./ec2_alarms_to_opsitem/ssm_content.json')
         data = json.load(f)
@@ -64,11 +72,11 @@ class Ec2AlarmsToOpsitemStack(Stack):
             #code= lambda.Code.asset('lambda',),
             code = lambda_.Code.from_asset('lambda', exclude=['opsitem.py']),
             handler= 'alarm.handler',
-            timeout=cdk.Duration.seconds(60),
+            timeout=Duration.seconds(60),
             role = y_lambda_role,
             environment={
-                'acct':self.node.try_get_context("acct_context"),
-                'region':self.node.try_get_context("region_context"),
+                'acct': account_id,
+                'region': region,
                 'topic':koitopic.topic_name
             }
         )
@@ -92,11 +100,11 @@ class Ec2AlarmsToOpsitemStack(Stack):
             runtime= lambda_.Runtime.PYTHON_3_7,
             code= lambda_.Code.from_asset('lambda',exclude=['alarm.py']),
             handler= 'opsitem.handler',
-            timeout=cdk.Duration.seconds(60),
+            timeout=Duration.seconds(60),
             role = y_lambda_role,
             environment={
-                'acct':self.node.try_get_context("acct_context"),
-                'region':self.node.try_get_context("region_context"),
+                'acct': account_id,
+                'region':region,
                 'topic':koitopic.topic_name
             }
         )
@@ -127,8 +135,8 @@ class Ec2AlarmsToOpsitemStack(Stack):
         )
         
         # Instance Role and SSM Managed Policy
-        role = iam_.Role(self, "InstanceSSM", assumed_by=iam.ServicePrincipal("ec2.amazonaws.com"))
-        role.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name("AmazonSSMManagedInstanceCore"))
+        role = iam_.Role(self, "InstanceSSM", assumed_by=iam_.ServicePrincipal("ec2.amazonaws.com"))
+        role.add_managed_policy(iam_.ManagedPolicy.from_aws_managed_policy_name("AmazonSSMManagedInstanceCore"))
         role.add_to_policy(
             iam_.PolicyStatement(
                 effect = iam_.Effect.ALLOW,
@@ -137,9 +145,16 @@ class Ec2AlarmsToOpsitemStack(Stack):
                 )    
         )
 
-        vpc = ec2.Vpc.from_lookup(
-            self, "VPC",
-            is_default=True,)
+        #vpc = ec2.Vpc.from_lookup(
+        #    self, "VPC",
+        #    is_default=True,
+        #    region=region)
+        
+        vpc = ec2.Vpc(
+            self,"LabVpc",
+            cidr="10.10.0.0/24"
+        )
+
         #Instance
         instance = ec2.Instance(self,
             "Instance", 
@@ -151,8 +166,12 @@ class Ec2AlarmsToOpsitemStack(Stack):
                 subnet_type=ec2.SubnetType.PUBLIC),
         )
             
-        s3asset = Asset(self, "Asset", path=os.path.join(dirname, "configure.sh"))
-        
+        #s3asset = asset(self, "Asset", path=os.path.join(dirname, "configure.sh"))
+        s3asset = asset.Asset(
+            self, "Asset",
+            path=os.path.join(dirname, "configure.sh")
+        )
+
         local_path = instance.user_data.add_s3_download_command(
             bucket=s3asset.bucket,
             bucket_key=s3asset.s3_object_key
