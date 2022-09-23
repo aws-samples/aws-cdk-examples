@@ -52,7 +52,7 @@ class ResourceOverridesExample extends cdk.Stack {
 
         // addPropertyOverride simply allows you to omit the "Properties." prefix
         bucketResource.addPropertyOverride('VersioningConfiguration.Status', 'NewStatus');
-        // bucketResource.addPropertyOverride('Foo', null); // FIXME causes filterUndefined to error
+        bucketResource.addPropertyOverride('Foo', null); // FIXME causes filterUndefined to error
         bucketResource.addPropertyOverride('Token', otherBucket.bucketArn); // use tokens
         bucketResource.addPropertyOverride('LoggingConfiguration.DestinationBucketName', otherBucket.bucketName);
 
