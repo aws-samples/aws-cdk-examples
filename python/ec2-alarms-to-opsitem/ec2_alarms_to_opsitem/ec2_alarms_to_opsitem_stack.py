@@ -4,6 +4,7 @@ import re
 
 from aws_cdk import (
     Aws,
+    Tags,
     Duration,
     Stack,
     aws_iam as iam_,
@@ -165,7 +166,9 @@ class Ec2AlarmsToOpsitemStack(Stack):
             vpc_subnets=ec2.SubnetSelection(
                 subnet_type=ec2.SubnetType.PUBLIC),
         )
-            
+
+        Tags.of(instance).add("OpsItemAlarm","false")
+
         #s3asset = asset(self, "Asset", path=os.path.join(dirname, "configure.sh"))
         s3asset = asset.Asset(
             self, "Asset",

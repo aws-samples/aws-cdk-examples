@@ -2,22 +2,33 @@ import json
 import boto3
 import time
 import os
+import logging
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 def handler(event, context): 
-    time.sleep(15)
+    logger.info(event)
     alarm_action_str = 'arn:aws:sns:' + os.environ['region'] + ':' + os.environ['acct'] + ':' + os.environ['topic']
     instanceid = event['detail']['instance-id']
+    
     ec2 = boto3.client('ec2')
-    response = ec2.describe_instances(
-        Filters=[
-        {
-            'Name': 'tag:OpsItemAlarm',
-            'Values': ['false',]
-        },
-        ],
-        InstanceIds=[instanceid],
-        DryRun=False
-    )
+    
+    try:
+        response = ec2.describe_instances(
+            Filters=[
+            {
+                'Name': 'tag:OpsItemAlarm',
+                'Values': ['false',]
+            },
+            ],
+            InstanceIds=[instanceid],
+            DryRun=False
+        )
+    except:
+        logger.info("Exception")
+    
+    logger.info(response)    
 
     contflag = len(response['Reservations'])
     if contflag == 0:
