@@ -1,6 +1,6 @@
 {
     "context": {
-        "platform": "arn:aws:elasticbeanstalk:us-east-1::platform/Tomcat 8 with Java 8 running on 64bit Amazon Linux"
+        "solutionStack": "64bit Amazon Linux 2 v4.2.18 running Tomcat 8.5 Corretto 11"
     },
-    "app": "node index"
+    "app": "npx ts-node --prefer-ts-exts index.ts"
 }
