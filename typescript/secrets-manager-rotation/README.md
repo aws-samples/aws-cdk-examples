@@ -22,8 +22,9 @@ The example will create an secret in AWS SecretsManager that will be used as the
 ## Architecture
 
 This example deploys:
-* A VPC with two subnets (public, private)
-* A NAT and IGW are setup to allow the Lambda to access both SecretsManager and the ElastiCache service endpoint (used to set and rotate the secret on the ElastiCache Redis replication group)
+* A VPC with one, private isolated subnet (without internet access)
+* A SecretsManager VPC interface endpoint is deployed to allow the rotator function to make API calls to Secrets Manager tor rotate secrets without traversing the internet
+* An ElastiCache VPC interface endpoint is deployed to allow the rotator function to make API calls to set the Auth password without traversing the internet
 * An AWS SecretsManager secret to be used as an auth token in Amazon ElastiCache Redis
 * An Amazon ElastiCache Redis replication group in the private subnet
 * A Lambda function in the private subnet used for secret rotation. [_Learn more about how to use the Rotation Function._](#Rotation-Function)
@@ -49,7 +50,7 @@ npm install -g aws-cdk
 ```
 ### Install Docker Desktop or Docker Engine
 
-This example uses the [aws-lambda-python-alpha](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-lambda-python-alpha-readme.html) library to build a Lambda layer with redisPy installed. In order for aws-lambda-python-alpha to work however, you must have Docker Desktop or Docker Engine installed and running in your development environment when synthing or deploying this code. Installation instructions for Docker Desktop (preferable for Mac and Windows) can be found [here](https://docs.docker.com/desktop/), while instructions to install Docker Engine can be found [here](https://docs.docker.com/engine/)
+This example uses the [aws-lambda-python-alpha](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-lambda-python-alpha-readme.html) library to build a Lambda layer with redisPy installed. In order for aws-lambda-python-alpha to work however, you must have Docker Desktop or Docker Engine installed and running in your development environment when synthing or deploying this code. Installation instructions for Docker Desktop (preferable for Mac and Windows) can be found [here](https://docs.docker.com/desktop/), while instructions to install Docker Engine can be found [here](https://docs.docker.com/engine/).
 
 ## Build
 
