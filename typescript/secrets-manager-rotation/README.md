@@ -47,6 +47,9 @@ You can install the CDK toolkit with the Node Package Manager by running the fol
 ```sh
 npm install -g aws-cdk
 ```
+### Install Docker Desktop or Docker Engine
+
+This example uses the [aws-lambda-python-alpha](https://docs.aws.amazon.com/cdk/api/v2/docs/aws-lambda-python-alpha-readme.html) library to build a Lambda layer with redisPy installed. In order for aws-lambda-python-alpha to work however, you must have Docker Desktop or Docker Engine installed and running in your development environment when synthing or deploying this code. Installation instructions for Docker Desktop (preferable for Mac and Windows) can be found [here](https://docs.docker.com/desktop/), while instructions to install Docker Engine can be found [here](https://docs.docker.com/engine/)
 
 ## Build
 
