@@ -53,11 +53,18 @@ When user send message to EventBridge bus, message will get routed to EventBridg
 
 ## Testing
 
-1. Send message to EventBridge by using command at project root level - aws events put-events --entries file://SampleEvent.json
+1. Send message to EventBridge by using command at eventbridge-firehose-s3-cdk folder level -
+
+   ```
+   aws events put-events --entries file://SampleEvent.json
+   ```
+
 2. Navigate to S3 bucket created by CDK and confirm message has saved at path {department}/{event message file}
 3. Please note: Firehose delivery stream buffer is configured for 60secs (default time), so please wait for 1-2 mins after event send command to get the message in S3 bucket
 
 ## Cleanup
+
+Run the following commands at eventbridge-firehose-s3-cdk folder level
 
 1. Delete the stack
    ```bash
