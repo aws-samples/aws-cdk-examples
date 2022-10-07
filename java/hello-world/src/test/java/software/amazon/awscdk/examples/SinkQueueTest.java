@@ -4,9 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.AbstractMap;
-import java.util.List;
 import java.util.Map;
-import static java.util.Map.entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,6 +17,10 @@ import software.amazon.awscdk.cxapi.CloudFormationStackArtifact;
 import software.amazon.awscdk.services.sns.Topic;
 import software.amazon.awscdk.services.sqs.QueueProps;
 import software.amazon.jsii.JsiiException;
+
+import static software.amazon.awscdk.examples.JDK9.entry;
+import static software.amazon.awscdk.examples.JDK9.listOf;
+import static software.amazon.awscdk.examples.JDK9.mapOf;
 
 public class SinkQueueTest {
 
@@ -70,11 +72,11 @@ public class SinkQueueTest {
     sink.subscribe(new Topic(stack, "Topic3"));
 
     Template template = Template.fromStack(stack);
-    template.hasResourceProperties("AWS::SNS::Subscription", Map.ofEntries(
+    template.hasResourceProperties("AWS::SNS::Subscription", mapOf(
       entry("Protocol", "sqs"),
-      entry("Endpoint", Map.ofEntries(
-        entry("Fn::GetAtt", List.of("MySinkQueueEFCD79C2", "Arn")))),
-      entry("TopicArn", Map.ofEntries(
+      entry("Endpoint", mapOf(
+        entry("Fn::GetAtt", listOf("MySinkQueueEFCD79C2", "Arn")))),
+      entry("TopicArn", mapOf(
         entry("Ref", "Topic198E71B3E")))));
   }
 
