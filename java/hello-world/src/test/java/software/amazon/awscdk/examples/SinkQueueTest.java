@@ -1,14 +1,12 @@
 package software.amazon.awscdk.examples;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.net.URL;
 import java.util.AbstractMap;
+import java.util.List;
 import java.util.Map;
+import static java.util.Map.entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,8 +21,6 @@ import software.amazon.awscdk.services.sqs.QueueProps;
 import software.amazon.jsii.JsiiException;
 
 public class SinkQueueTest {
-
-  private static ObjectMapper JSON = new ObjectMapper();
 
   /** Defines a queue sink with default props */
   @Test
@@ -73,7 +69,13 @@ public class SinkQueueTest {
     sink.subscribe(new Topic(stack, "Topic1"), new Topic(stack, "Topic2"));
     sink.subscribe(new Topic(stack, "Topic3"));
 
-    assertTemplate(app, stack, getClass().getResource("testSubscribeTopics.expected.json"));
+    Template template = Template.fromStack(stack);
+    template.hasResourceProperties("AWS::SNS::Subscription", Map.ofEntries(
+      entry("Protocol", "sqs"),
+      entry("Endpoint", Map.ofEntries(
+        entry("Fn::GetAtt", List.of("MySinkQueueEFCD79C2", "Arn")))),
+      entry("TopicArn", Map.ofEntries(
+        entry("Ref", "Topic198E71B3E")))));
   }
 
   /** Verifies that if we exceed the number of allows topics, an exception is thrown */
@@ -114,24 +116,6 @@ public class SinkQueueTest {
     }
 
     getTemplate(app, stack);
-  }
-
-  private static void assertTemplate(final App app, final Stack stack, final URL expectedResource)
-      throws IOException {
-    assertTemplate(app, stack, JSON.readTree(expectedResource));
-  }
-
-  private static void assertTemplate(final App app, final Stack stack, final JsonNode expected)
-      throws IOException {
-    JsonNode actual = JSON.valueToTree(getTemplate(app, stack));
-
-    // print to stderr if non-equal, so it will be easy to grab
-    if (expected == null || !expected.equals(actual)) {
-      String prettyActual = JSON.writerWithDefaultPrettyPrinter().writeValueAsString(actual);
-      System.err.println(prettyActual);
-    }
-
-    assertEquals(expected, actual);
   }
 
   private static Object getTemplate(App app, Stack stack) {
