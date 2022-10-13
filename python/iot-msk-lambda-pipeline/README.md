@@ -1,5 +1,5 @@
 
-# AWS Iot Core, Lambda, Amazon Managed Streaming for Apache Kafka (Amazon MSK) 
+# AWS Iot Core and Amazon Managed Streaming for Apache Kafka (Amazon MSK) 
 
 <!--BEGIN STABILITY BANNER-->
 ---
@@ -17,7 +17,7 @@
 <!--END STABILITY BANNER-->
 
 ## Overview
-Creates an AWS Lambda function, an Iot Core topic rule destination and an MSK cluster with the Python language bindings for CDK. The Iot Core message gets routed to an MSK topic. The Lambda function is triggered when an MSK topic message is created.
+Creates an Iot Core topic rule destination and an MSK cluster with the Python language bindings for CDK. The Iot Core message gets routed to an MSK topic. 
 
 ![alt text](./architecture.png "Resources created with CDK")
 
@@ -77,18 +77,6 @@ To deploy the ressources, you need to run cdk deploy on both stacks defined in t
 
 ```
 $ cdk deploy msk-demo
-```
-
-
-This will deploy everything excluding the Lambda function. To deploy the rest of the template, complete the following steps:
-
-1. In the Secret Manager console, you will find a secret named `AmazonMSK_iotCluster_demo`. In that secret's values, change the `password` field to `demo-secret`. 
-
-2. Grab the complete arn, including the 6-digit suffix, of the secret named `AmazonMSK_iotCluster_demo` that was created by the previous command and paste it into the follow command like this:
-
-
-```
-$ cdk deploy msk-demo/LambdaConsumer -c SecretFullArn="<secret-full-arn>"
 ```
 
 To add additional dependencies, for example other CDK libraries, just add to
