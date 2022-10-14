@@ -213,55 +213,20 @@ class MskDemoStack(Stack):
         # Create MSK cluster secret and encryption key
         msk_cluster.add_user('demo')
 
-        # Policies that will be applied to Iot Core components
+        # Policies needed for Iot to send messages to MSK
         iot_task_policy = iam.PolicyStatement(
             actions=[
-                "kafka:DescribeCluster",
-                "kafka:GetBootstrapBrokers",
-                "kafka:ListScramSecrets",
                 "ec2:CreateNetworkInterface",
-                "ec2:CreateNetworkInterfacePermission",
                 "ec2:DescribeNetworkInterfaces",
-                "ec2:DescribeVpcs",
+                "ec2:CreateNetworkInterfacePermission",
                 "ec2:DeleteNetworkInterface",
                 "ec2:DescribeSubnets",
+                "ec2:DescribeVpcs",
                 "ec2:DescribeVpcAttribute",
                 "ec2:DescribeSecurityGroups",
-                "ec2:DescribeSecurityGroupRules",
-                "ec2:DescribeSecurityGroupReferences",
-                "logs:CreateLogGroup",
-                "logs:CreateLogStream",
-                "logs:PutLogEvents",
-                "logs:CreateLogStream",
-                "logs:PutLogEvents",
-                "logs:CreateLogGroup",
-                "secretsmanager:GetRandomPassword",
-                "kms:Decrypt",
-                "kms:GenerateDataKey",
-                "kms:GenerateDataKeyWithoutPlaintext",
-                "kms:GenerateDataKeyPairWithoutPlaintext",
-                "kms:GenerateDataKeyPair"],
-            resources=["*"]
-        )
-
-        sm_policy = iam.PolicyStatement(
-            actions=[
                 "secretsmanager:DescribeSecret",
-                "secretsmanager:PutSecretValue",
-                "secretsmanager:CreateSecret",
-                "secretsmanager:DeleteSecret",
-                "secretsmanager:CancelRotateSecret",
-                "secretsmanager:ListSecretVersionIds",
-                "secretsmanager:UpdateSecret",
-                "secretsmanager:GetResourcePolicy",
-                "secretsmanager:GetSecretValue",
-                "secretsmanager:StopReplicationToReplica",
-                "secretsmanager:ReplicateSecretToRegions",
-                "secretsmanager:RestoreSecret",
-                "secretsmanager:RotateSecret",
-                "secretsmanager:UpdateSecretVersionStage",
-                "secretsmanager:RemoveRegionsFromReplication"],
-            resources=[f"arn:aws:secretsmanager:{self.region}:{self.account}:secret:AmazonMSK_iotCluster_demo*"]
+                "secretsmanager:GetSecretValue"],
+            resources=["*"]
         )
 
         # Role passed to the Iot destination
@@ -270,7 +235,6 @@ class MskDemoStack(Stack):
 
         # Add the IAM policies above to the task role
         iot_task_role.add_to_policy(iot_task_policy)
-        iot_task_role.add_to_policy(sm_policy)
         
         # Create the Iot Messaging destination and rule
         iot_producer = IotProducer(self, 'IotProducer', 

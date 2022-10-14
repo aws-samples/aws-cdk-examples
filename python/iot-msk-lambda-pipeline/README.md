@@ -79,6 +79,8 @@ To deploy the ressources, you need to run cdk deploy on both stacks defined in t
 $ cdk deploy msk-demo
 ```
 
+Following the deployment, ssh into the MSK client and follow [this documentation](https://docs.aws.amazon.com/msk/latest/developerguide/msk-password.html) to consume from the cluster.
+
 To add additional dependencies, for example other CDK libraries, just add to
 your requirements.txt file and rerun the `pip install -r requirements.txt`
 command.
