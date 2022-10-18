@@ -1,0 +1,162 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: yelb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: yelb
+  name: redis-server
+  labels:
+    app: redis-server
+    tier: cache
+spec:
+  type: ClusterIP
+  ports:
+    - port: 6379
+  selector:
+    app: redis-server
+    tier: cache
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: yelb
+  name: yelb-db
+  labels:
+    app: yelb-db
+    tier: backenddb
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+  selector:
+    app: yelb-db
+    tier: backenddb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: yelb
+  name: yelb-appserver
+  labels:
+    app: yelb-appserver
+    tier: middletier
+spec:
+  type: ClusterIP
+  ports:
+    - port: 4567
+  selector:
+    app: yelb-appserver
+    tier: middletier
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: yelb
+  name: yelb-ui
+  labels:
+    app: yelb-ui
+    tier: frontend
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: yelb-ui
+    tier: frontend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: yelb
+  name: yelb-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yelb-ui
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: yelb-ui
+        tier: frontend
+    spec:
+      containers:
+        - name: yelb-ui
+          image: mreferre/yelb-ui:0.7
+          ports:
+            - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: yelb
+  name: redis-server
+spec:
+  selector:
+    matchLabels:
+      app: redis-server
+      tier: cache
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: redis-server
+        tier: cache
+    spec:
+      containers:
+        - name: redis-server
+          image: redis:4.0.2
+          ports:
+            - containerPort: 6379
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: yelb
+  name: yelb-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yelb-db
+      tier: backenddb
+  template:
+    metadata:
+      labels:
+        app: yelb-db
+        tier: backenddb
+    spec:
+      containers:
+        - name: yelb-db
+          image: mreferre/yelb-db:0.5
+          ports:
+            - containerPort: 5432
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: yelb
+  name: yelb-appserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yelb-appserver
+      tier: middletier
+  template:
+    metadata:
+      labels:
+        app: yelb-appserver
+        tier: middletier
+    spec:
+      containers:
+        - name: yelb-appserver
+          image: mreferre/yelb-appserver:0.5
+          ports:
+            - containerPort: 4567
