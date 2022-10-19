@@ -49,17 +49,7 @@ export class YelbNonHelmAddOn implements blueprints.ClusterAddOn {
                                     {
                                         "containerPort": 5432
                                     }
-                                ],
-                                // "resources": {
-                                //     "limits": {
-                                //         "cpu": "200m",
-                                //         "memory": "128Mi"
-                                //     },
-                                //     "requests": {
-                                //         "cpu": "150",
-                                //         "memory": "100Mi"
-                                //     }
-                                // }
+                                ]
                             }
                         ]
                     }
@@ -186,17 +176,7 @@ export class YelbNonHelmAddOn implements blueprints.ClusterAddOn {
                                     {
                                         "containerPort": 4567
                                     }
-                                ],
-                                // "resources": {
-                                //     "limits": {
-                                //         "cpu": "50m",
-                                //         "memory": "32Mi"
-                                //     },
-                                //     "requests": {
-                                //         "cpu": "40",
-                                //         "memory": "20Mi"
-                                //     }
-                                // }
+                                ]
                             }
                         ]
                     }
@@ -260,16 +240,16 @@ export class YelbNonHelmAddOn implements blueprints.ClusterAddOn {
                                         "containerPort": 80
                                     }
                                 ],
-                                // "resources": {
-                                //     "limits": {
-                                //         "cpu": "50m",
-                                //         "memory": "32Mi"
-                                //     },
-                                //     "requests": {
-                                //         "cpu": "40m",
-                                //         "memory": "30Mi"
-                                //     }
-                                // }
+                                "resources": {
+                                    "limits": {
+                                        "cpu": "50m",
+                                        "memory": "32Mi"
+                                    },
+                                    "requests": {
+                                        "cpu": "25m",
+                                        "memory": "16Mi"
+                                    }
+                                }
                             }
                         ]
                     }
@@ -330,33 +310,36 @@ export class YelbNonHelmAddOn implements blueprints.ClusterAddOn {
             }
         }
         
-        const ui_pods_failure = {
-            "kind": "PodChaos",
-            "apiVersion": "chaos-mesh.org/v1alpha1",
-            "metadata": {
-                "name": "ui-pods-failure"
+        const ui_burn_cpu = {
+          "apiVersion": "chaos-mesh.org/v1alpha1",
+          "kind": "StressChaos",
+          "metadata": {
+            "name": "ui-burn-cpu"
+          },
+          "spec": {
+            "mode": "all",
+            "selector": {
+              "namespaces": [
+                "yelb"
+              ],
+              "labelSelectors": {
+                "tier": "frontend"
+              }
             },
-            "spec": {
-                "selector": {
-                    "namespaces": [
-                        "yelb"
-                    ],
-                    "labelSelectors": {
-                        "tier": "frontend"
-                    }
-                },
-                "mode": "all",
-                "action": "pod-kill",
-                "duration": "1h",
-                "gracePeriod": 0
-            }
+            "stressors": {
+              "cpu": {
+                "workers": 2,
+                "load": 100,
+                "options": [
+                  "--cpu 2",
+                  "--hdd 1"
+                ]
+              }
+            },
+            "duration": "6h"
+          }
         }
         
-        // Apply manifest
-                // const docArray = doc.replace(/{{cluster_name}}/g, cluster.clusterName).replace(/{{region_name}}/g, cluster.stack.region);
-        // const doc = readYamlDocument(__dirname + '/manifests/apps/yelb_initial_deployment.yaml');
-        // ... apply any substitutions for dynamic values 
-        // const manifest = doc.split("---").map(e => loadYaml(e));
         new KubernetesManifest(cluster.stack, "yelb-manifest", {
             cluster,
             manifest: [
@@ -370,17 +353,12 @@ export class YelbNonHelmAddOn implements blueprints.ClusterAddOn {
                 ui_deployment, 
                 ui_service,
                 
+                // ChaosMesh fault injections
                 db_latency,
-                ui_pods_failure,
+                ui_burn_cpu
                 ],
             overwrite: true
         });
-        // new KubernetesPatch(cluster.stack, "yelb-manifest-patch", {
-        //     cluster,
-        //     resourceName: "deployment/yelb-ui",
-        //     resourceNamespace: "yelb",
-        //     applyPatch: { spec: { replicas: 5 } },
-        //     restorePatch: { spec: { replicas: 2 } },
-        // });
+        
     }
 }
