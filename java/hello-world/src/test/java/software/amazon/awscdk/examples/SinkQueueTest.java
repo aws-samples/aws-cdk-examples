@@ -3,6 +3,7 @@ package software.amazon.awscdk.examples;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.lang.RuntimeException;
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -16,7 +17,6 @@ import software.amazon.awscdk.assertions.Template;
 import software.amazon.awscdk.cxapi.CloudFormationStackArtifact;
 import software.amazon.awscdk.services.sns.Topic;
 import software.amazon.awscdk.services.sqs.QueueProps;
-import software.amazon.jsii.JsiiException;
 
 import static software.amazon.awscdk.examples.JDK9.entry;
 import static software.amazon.awscdk.examples.JDK9.listOf;
@@ -104,7 +104,7 @@ public class SinkQueueTest {
   }
 
   /** Verifies that the sink queue validates that the exact number of subscribers was added */
-  @Test(expected = JsiiException.class)
+  @Test(expected = RuntimeException.class)
   public void failsIfNotEnoughTopics() {
     App app = new App();
     Stack stack = new Stack(app, "test");
