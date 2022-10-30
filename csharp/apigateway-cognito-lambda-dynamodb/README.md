@@ -59,14 +59,45 @@ User need to pass bearer token in API GW request header. User can get the JWT to
 
 ## Testing
 
-1. Send message to EventBridge by using command at eventbridge-firehose-s3-cdk folder level -
+1. Login to AWS console and navigate to Cognito service
 
-   ```
-   aws events put-events --entries file://SampleEvent.json
-   ```
+2. Select User pool - "CognitoUserPool" and create an user
+   ![CreateUser](CognitoUserCreate.png)
 
-2. Navigate to S3 bucket created by CDK and confirm message has saved at path {department}/{event message file}
-3. Please note: Firehose delivery stream buffer is configured for 60secs (default time), so please wait for 1-2 mins after event send command to get the message in S3 bucket
+3. Add newly created user to user group - "read-only"
+   ![AssignUserToUserGroup](AssignUserToGroup.png)
+
+4. Create one more user and add it to user group - "read-update-add"
+
+5. Access Cognito app client hosted UI. You can find link to Hosted UI on App client setting page -
+   ![HostedUILink](HostedUILink.png)
+
+6. Login to Hosted UI with first user which is assigned to "read-only" user group. After succesful login, UI will navigate user to localhost URL with access_token query string param.
+
+7. Get the access_token from the localhost url
+
+8. Use Postman or curl command to invoke the API GW GET endpoint. Pass access_token as "Authorization" in request header. Make sure "Bearer " present at start of the token. You can get the endpoint URL by navigating to API Gateway service through AWS console.
+   ![PostmanCall](PostmanCall.png)
+
+9. Confirm API GW returned 200 Success response
+
+10. Now invoke POST endpoint with access_token of first user which is assigned to "read-only" user group.
+
+11. Confirm API GW retuned 403 Forbidden response
+
+12. Login to Hosted UI with second user which is assigned to "read-update-add" user group and get the access_token.
+
+13. Invoke GET endpoint with access token of second user
+
+14. Confirm API GW returned 200 Success response
+
+15. Invoke POST endpoint with access token of second user
+
+16. Confirm API GW returned 200 Success response
+
+17. Invoke GET or POST endpoint with invalid token
+
+18. Confirm API GW returned 401 Unauthorized response
 
 ## Cleanup
 
@@ -74,11 +105,11 @@ Run the following commands at eventbridge-firehose-s3-cdk folder level
 
 1. Delete the stack
    ```bash
-   cdk destroy EventBridgeFirehoseS3Stack
+   cdk destroy ApiGatewayAuthStack
    ```
 1. Confirm the stack has been deleted
    ```bash
-   aws cloudformation list-stacks --query "StackSummaries[?contains(StackName,'EventBridgeFirehoseS3Stack')].StackStatus"
+   aws cloudformation list-stacks --query "StackSummaries[?contains(StackName,'ApiGatewayAuthStack')].StackStatus"
    ```
 
 at aws-cdk-examples\csharp\apigateway-cognito-lambda-dynamodb -
