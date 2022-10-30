@@ -158,20 +158,27 @@ public class Function
     if (jwtSecurityToken == null)
       return String.Empty;
     //Note: Token expiration already verified in ValidateJwtSignature method.  
+    try
+    {
+      var clientId = jwtSecurityToken.Claims.First(x => x.Type == "client_id").Value;
+      if (clientId != _clientId)
+        return String.Empty;
 
-    var clientId = jwtSecurityToken.Claims.First(x => x.Type == "client_id").Value;
-    if (clientId != _clientId)
+      var iss = jwtSecurityToken.Claims.First(x => x.Type == "iss").Value;
+      if (iss != _userPool)
+        return String.Empty;
+
+      var tokenUse = jwtSecurityToken.Claims.First(x => x.Type == "token_use").Value;
+      if (tokenUse != "access")
+        return String.Empty;
+
+      return jwtSecurityToken.Claims.First(x => x.Type == "cognito:groups").Value;
+    }
+    catch (Exception)
+    {
+      //Exception when claim is missing
       return String.Empty;
-
-    var iss = jwtSecurityToken.Claims.First(x => x.Type == "iss").Value;
-    if (iss != _userPool)
-      return String.Empty;
-
-    var tokenUse = jwtSecurityToken.Claims.First(x => x.Type == "token_use").Value;
-    if (tokenUse != "access")
-      return String.Empty;
-
-    return jwtSecurityToken.Claims.First(x => x.Type == "cognito:groups").Value;
+    }
   }
 
   /// <summary>
