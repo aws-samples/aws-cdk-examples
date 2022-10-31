@@ -7,6 +7,7 @@ using Amazon.CDK.AWS.DynamoDB;
 using System.Web;
 using System.Collections.Generic;
 using System;
+using AssetOptions = Amazon.CDK.AWS.S3.Assets.AssetOptions;
 
 namespace ApiGatewayAuthStack
 {
@@ -106,12 +107,29 @@ namespace ApiGatewayAuthStack
         {"TABLE_NAME", userPoolGroupApiPolicyTable.TableName},
       };
 
+      var buildCommands = new[] {
+        "cd /asset-input",
+        "export DOTNET_CLI_HOME=\"/tmp/DOTNET_CLI_HOME\"",
+        "export PATH=\"$PATH:/tmp/DOTNET_CLI_HOME/.dotnet/tools\"",
+        "export XDG_DATA_HOME=\"/tmp/DOTNET_CLI_HOME\"",
+        "dotnet tool install -g Amazon.Lambda.Tools",
+        "dotnet lambda package -o output.zip",
+        "unzip -o -d /asset-output output.zip"
+      };
+
       // Auth Lambda function
       var authLambdaFun = new Function(this, "AuthLambdaFunc", new FunctionProps
       {
         Runtime = Runtime.DOTNET_6,
         Handler = "AuthFunction::Lambda.AuthFunction.Function::FunctionHandler",
-        Code = Code.FromAsset("./dist/AuthFunction"),
+        Code = Code.FromAsset("src/Lambda/AuthFunction", new AssetOptions()
+        {
+          Bundling = new BundlingOptions
+          {
+            Image = Runtime.DOTNET_CORE_3_1.BundlingImage,
+            Command = new[] { "bash", "-c", string.Join(" && ", buildCommands) }
+          }
+        }),
         Environment = authLambdaEnvVariables,
         Timeout = Duration.Minutes(1)
       });
@@ -125,7 +143,14 @@ namespace ApiGatewayAuthStack
       {
         Runtime = Runtime.DOTNET_6,
         Handler = "BackendFunction::Lambda.BackendFunction.Function::FunctionHandler",
-        Code = Code.FromAsset("./dist/BackendFunction"),
+        Code = Code.FromAsset("src/Lambda/BackendFunction", new AssetOptions()
+        {
+          Bundling = new BundlingOptions
+          {
+            Image = Runtime.DOTNET_CORE_3_1.BundlingImage,
+            Command = new[] { "bash", "-c", string.Join(" && ", buildCommands) }
+          }
+        }),
       });
 
       var tokenAuthorizer = new TokenAuthorizer(this, "LambdaTokenAuthorizer", new TokenAuthorizerProps

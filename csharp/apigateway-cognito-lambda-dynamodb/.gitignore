@@ -337,6 +337,6 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
-
+**/*.zip
 
 # End of https://www.gitignore.io/api/csharp
