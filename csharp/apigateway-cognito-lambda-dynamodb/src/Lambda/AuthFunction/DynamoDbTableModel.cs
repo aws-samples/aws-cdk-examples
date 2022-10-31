@@ -1,4 +1,5 @@
 using Amazon.DynamoDBv2.DataModel;
+using System;
 
 [DynamoDBTable("UserGroupApiGwAccessPolicy")]
 public class DynamoDbTableModel
