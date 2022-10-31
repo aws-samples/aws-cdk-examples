@@ -39,17 +39,17 @@ Important: this application uses various AWS services and there are costs associ
    ```
 3. Build the application:
    ```
-   dotnet build
+   dotnet build src
    ```
 4. Run Dotnet Publish command for backend Lambda function:
 
    ```
-   dotnet publish Lambda\BackendFunction\BackendFunction.csproj -c Release -o dist/BackendFunction
+   dotnet publish src\Lambda\BackendFunction\BackendFunction.csproj -c Release -o dist/BackendFunction
    ```
 
 5. Run Dotnet Publish command for auth Lambda function:
    ```
-   dotnet publish Lambda\AuthFunction\AuthFunction.csproj -c Release -o dist/AuthFunction
+   dotnet publish src\Lambda\AuthFunction\AuthFunction.csproj -c Release -o dist/AuthFunction
    ```
 6. From the command line, use AWS CDK to deploy the AWS resources for the pattern as specified in CdkStack.cs file:
    ```
@@ -62,7 +62,7 @@ Important: this application uses various AWS services and there are costs associ
    Run following AWS CLI command at 'apigateway-cognito-lambda-dynamodb' directory level
 
    ```
-   aws dynamodb batch-write-item --request-items file://DynamoDBData.json
+   aws dynamodb batch-write-item --request-items file://src\DynamoDBData.json
    ```
 
 ## How it works
