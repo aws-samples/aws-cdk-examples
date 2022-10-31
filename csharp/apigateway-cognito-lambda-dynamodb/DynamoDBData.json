@@ -5,7 +5,7 @@
         "Item": {
           "UserPoolGroup": { "S": "read-only" },
           "ApiGwAccessPolicy": {
-            "S": "{\"Version\": \"2012-10-17\",\"Statement\": [{\"Effect\": \"Allow\",\"Principal\": \"*\", \"Action\": [\"execute-api:Invoke\"], \"Resource\": [\"arn:aws:execute-api:*:*:*/*/GET/\"]}]}"
+            "S": "{\"Version\": \"2012-10-17\",\"Statement\": [{\"Effect\": \"Allow\",\"Action\": [\"execute-api:Invoke\"], \"Resource\": [\"arn:aws:execute-api:*:*:*/*/GET/\"]}]}"
           }
         }
       }
@@ -15,7 +15,7 @@
         "Item": {
           "UserPoolGroup": { "S": "read-update-add" },
           "ApiGwAccessPolicy": {
-            "S": "{\"Version\": \"2012-10-17\",\"Statement\": [{\"Effect\": \"Allow\",\"Principal\": \"*\", \"Action\": [\"execute-api:Invoke\"], \"Resource\": [\"arn:aws:execute-api:*:*:*/*/*/\"]}]}"
+            "S": "{\"Version\": \"2012-10-17\",\"Statement\": [{\"Effect\": \"Allow\",\"Action\": [\"execute-api:Invoke\"], \"Resource\": [\"arn:aws:execute-api:*:*:*/*/*/\"]}]}"
           }
         }
       }

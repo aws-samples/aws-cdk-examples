@@ -4,6 +4,7 @@ using Constructs;
 using Amazon.CDK.AWS.Cognito;
 using Amazon.CDK.AWS.APIGateway;
 using Amazon.CDK.AWS.DynamoDB;
+using System.Web;
 
 namespace ApiGatewayAuthStack
 {
@@ -25,6 +26,7 @@ namespace ApiGatewayAuthStack
       var userPool = new UserPool(this, "CognitoUserPool", new UserPoolProps
       {
         UserPoolName = "CognitoUserPool",
+        RemovalPolicy = RemovalPolicy.DESTROY, //Delete Cognito User pool on CDK destroy
         SignInAliases = new SignInAliases
         {
           Email = true
@@ -49,6 +51,7 @@ namespace ApiGatewayAuthStack
       });
 
       // Create Cognito App Client
+      string CallbackUrl = "http://localhost";
       var cognitoAppClient = new UserPoolClient(this, "CognitoAppClient", new UserPoolClientProps
       {
         UserPoolClientName = "CognitoAppClient",
@@ -63,7 +66,7 @@ namespace ApiGatewayAuthStack
         },
         OAuth = new OAuthSettings
         {
-          CallbackUrls = new string[] { "http://localhost" },
+          CallbackUrls = new string[] { CallbackUrl },
           Flows = new OAuthFlows
           {
             ImplicitCodeGrant = true
@@ -89,6 +92,7 @@ namespace ApiGatewayAuthStack
       var userPoolGroupApiPolicyTable = new Table(this, "UserPoolGroupApiPolicy", new TableProps
       {
         TableName = "UserGroupApiGwAccessPolicy",
+        RemovalPolicy = RemovalPolicy.DESTROY, //Delete DynamoDB table on CDK destroy
         PartitionKey = new Amazon.CDK.AWS.DynamoDB.Attribute { Name = "UserPoolGroup", Type = AttributeType.STRING }
       });
 
@@ -151,18 +155,30 @@ namespace ApiGatewayAuthStack
       });
 
       // APIGateway - GET endpoint
-      apiGateway.Root.AddMethod("GET", new LambdaIntegration(backendLambdaFun, new LambdaIntegrationOptions
+      var getEndpoint = apiGateway.Root.AddMethod("GET", new LambdaIntegration(backendLambdaFun, new LambdaIntegrationOptions
       {
         Proxy = true,
       }));
 
       // APIGateway - POST endpoint
-      apiGateway.Root.AddMethod("POST", new LambdaIntegration(backendLambdaFun, new LambdaIntegrationOptions
+      var postEndpoint = apiGateway.Root.AddMethod("POST", new LambdaIntegration(backendLambdaFun, new LambdaIntegrationOptions
       {
         Proxy = true
       }));
       #endregion
 
+      #region "CloudFormation Output"
+      new CfnOutput(this, "CognitoHostedUIUrl", new CfnOutputProps
+      {
+        Value = String.Format("{0}/login?response_type=token&client_id={1}&redirect_uri={2}", cognitoDomainName.BaseUrl(), cognitoAppClient.UserPoolClientId, HttpUtility.UrlEncode(CallbackUrl))
+      });
+
+      new CfnOutput(this, "APIGWEndpoint", new CfnOutputProps
+      {
+        Value = apiGateway.Url
+      });
+
+      #endregion
     }
   }
 }
