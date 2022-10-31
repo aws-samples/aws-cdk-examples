@@ -1,5 +1,5 @@
 {
-  "app": "dotnet run --project src/CDK/cdk.csproj",
+  "app": "dotnet publish src/Lambda/BackendFunction/BackendFunction.csproj -c Release -o ./dist/BackendFunction; dotnet publish src/Lambda/AuthFunction/AuthFunction.csproj -c Release -o ./dist/AuthFunction; dotnet run --project src/CDK/cdk.csproj",
   "watch": {
     "include": ["**"],
     "exclude": [

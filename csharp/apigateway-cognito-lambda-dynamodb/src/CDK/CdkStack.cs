@@ -120,16 +120,17 @@ namespace ApiGatewayAuthStack
       // Auth Lambda function
       var authLambdaFun = new Function(this, "AuthLambdaFunc", new FunctionProps
       {
-        Runtime = Runtime.DOTNET_6,
+        Runtime = Runtime.DOTNET_CORE_3_1,
         Handler = "AuthFunction::Lambda.AuthFunction.Function::FunctionHandler",
-        Code = Code.FromAsset("src/Lambda/AuthFunction", new AssetOptions()
-        {
-          Bundling = new BundlingOptions
-          {
-            Image = Runtime.DOTNET_CORE_3_1.BundlingImage,
-            Command = new[] { "bash", "-c", string.Join(" && ", buildCommands) }
-          }
-        }),
+        Code = Code.FromAsset("./dist/AuthFunction"),
+        // Code = Code.FromAsset("src/Lambda/AuthFunction", new AssetOptions()
+        // {
+        //   Bundling = new BundlingOptions
+        //   {
+        //     Image = Runtime.DOTNET_CORE_3_1.BundlingImage,
+        //     Command = new[] { "bash", "-c", string.Join(" && ", buildCommands) }
+        //   }
+        // }),
         Environment = authLambdaEnvVariables,
         Timeout = Duration.Minutes(1)
       });
@@ -141,16 +142,17 @@ namespace ApiGatewayAuthStack
       // Lambda function
       var backendLambdaFun = new Function(this, "BackendLambdaFunc", new FunctionProps
       {
-        Runtime = Runtime.DOTNET_6,
+        Runtime = Runtime.DOTNET_CORE_3_1,
         Handler = "BackendFunction::Lambda.BackendFunction.Function::FunctionHandler",
-        Code = Code.FromAsset("src/Lambda/BackendFunction", new AssetOptions()
-        {
-          Bundling = new BundlingOptions
-          {
-            Image = Runtime.DOTNET_CORE_3_1.BundlingImage,
-            Command = new[] { "bash", "-c", string.Join(" && ", buildCommands) }
-          }
-        }),
+        Code = Code.FromAsset("./dist/BackendFunction"),
+        // Code = Code.FromAsset("src/Lambda/BackendFunction", new AssetOptions()
+        // {
+        //   Bundling = new BundlingOptions
+        //   {
+        //     Image = Runtime.DOTNET_CORE_3_1.BundlingImage,
+        //     Command = new[] { "bash", "-c", string.Join(" && ", buildCommands) }
+        //   }
+        // }),
       });
 
       var tokenAuthorizer = new TokenAuthorizer(this, "LambdaTokenAuthorizer", new TokenAuthorizerProps
