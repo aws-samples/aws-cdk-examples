@@ -5,6 +5,8 @@ using Amazon.CDK.AWS.Cognito;
 using Amazon.CDK.AWS.APIGateway;
 using Amazon.CDK.AWS.DynamoDB;
 using System.Web;
+using System.Collections.Generic;
+using System;
 
 namespace ApiGatewayAuthStack
 {

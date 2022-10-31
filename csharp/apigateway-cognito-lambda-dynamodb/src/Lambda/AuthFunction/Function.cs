@@ -6,6 +6,8 @@ using Microsoft.IdentityModel.Tokens;
 using Amazon.DynamoDBv2;
 using Newtonsoft.Json;
 using Amazon.DynamoDBv2.DataModel;
+using System.Threading.Tasks;
+using System;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
