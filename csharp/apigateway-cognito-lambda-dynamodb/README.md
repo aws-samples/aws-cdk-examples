@@ -41,13 +41,23 @@ Important: this application uses various AWS services and there are costs associ
    ```
    dotnet build src
    ```
-4. From the command line, use AWS CDK to deploy the AWS resources for the pattern as specified in CdkStack.cs file:
+4. Run Dotnet Publish command for backend Lambda function:
+
+   ```
+   dotnet publish src\Lambda\BackendFunction\BackendFunction.csproj -c Release -o dist/BackendFunction
+   ```
+
+5. Run Dotnet Publish command for auth Lambda function:
+   ```
+   dotnet publish src\Lambda\AuthFunction\AuthFunction.csproj -c Release -o dist/AuthFunction
+   ```
+6. From the command line, use AWS CDK to deploy the AWS resources for the pattern as specified in CdkStack.cs file:
    ```
    cdk deploy ApiGatewayAuthStack
    ```
-5. Note down CognitoHostedUIUrl, and APIGWEndpoint from CloudFormation output. This will be used for testing
+7. Note down CognitoHostedUIUrl, and APIGWEndpoint from CloudFormation output. This will be used for testing
 
-6. Populate data in DynamoDB table:
+8. Populate data in DynamoDB table:
 
    Run following AWS CLI command at 'apigateway-cognito-lambda-dynamodb' directory level
 
