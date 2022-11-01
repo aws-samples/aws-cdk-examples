@@ -71,21 +71,23 @@ User need to pass JWT token in API GW request header. User can get the JWT token
 
 At Auth Lambda function, token signture gets verified by using JWKs provided by Cognito User pool. Auth Lambda function calls Cognito key url to get the JWKs.
 
-Once token signature gets verified and confirmed token has not expired, code verifies token claims and fetch user group associated with the token. Based on user group, Auth Lambda function pulls API GW access policy document from DynamoDB table. If user group not present in DynamoDB table then function returns deny policy and based on this deny policy API GW will return 403 Forbidden response to user. If user group present in DynamoDB table then associated API GW access policy document will get return to API GW.
+Once token signature gets verified and confirmed token is not expired, code verifies token claims and fetch user group associated with the token. Based on user group, Auth Lambda function pulls API GW access policy document from DynamoDB table. If user group not present in DynamoDB table then function returns deny policy and based on this deny policy API GW will return 403 Forbidden response to user. If user group present in DynamoDB table then associated API GW access policy document will get return to API GW.
 
-Based on return policy by Auth Lambda function, APi GW decides either to forward the request to backend Lambda or return 403 Forbidden response. If JWT token is invalid, in terms of JWT structure or signature, Auth Lambda function raise "Unauthorized" exception which in turns into 401 Unauthorized response back to user.
+Based on return policy by Auth Lambda function, API GW decides either to forward the request to backend Lambda or return 403 Forbidden response. If JWT token is invalid, in terms of JWT structure or signature, Auth Lambda function raise "Unauthorized" exception which in turns into 401 Unauthorized response back to user.
+
+As per sample data populated in DynamoDB as part of deployment steps, this pattern will allow only GET endpoint invoke for users from user group - "read-only". If user belongs to user group - "read-update-add" then they can invoke GET and POST endpoint.
 
 ## Testing
 
 1. Login to AWS console and navigate to Cognito service
 
-2. Select User pool - "CognitoUserPool" and create an user. Remember user email id and password, need it use for testing
+2. Select User pool - "CognitoUserPool" and create an user. Remember user email id and password, need it for testing
    ![CreateUser](CognitoUserCreate.png)
 
 3. Add newly created user to user group - "read-only"
    ![AssignUserToUserGroup](AssignUserToGroup.png)
 
-4. Create one more user and add it to user group - "read-update-add". Remember user email id and password, need it use for testing
+4. Create one more user and add it to user group - "read-update-add". Remember user email id and password, need it for testing
 
 5. Access Cognito app client hosted UI. You can find Hosted UI url in CloudFormation output
 
@@ -98,7 +100,7 @@ Based on return policy by Auth Lambda function, APi GW decides either to forward
 
 9. Confirm API GW returned 200 Success response
 
-10. Now invoke POST endpoint with access_token of first user which is assigned to "read-only" user group.
+10. Now invoke POST endpoint (same API GW endpoint URL with POST Http verb) with access_token of first user which is assigned to "read-only" user group.
 
 11. Confirm API GW retuned 403 Forbidden response
 

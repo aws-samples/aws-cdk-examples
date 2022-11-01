@@ -84,7 +84,7 @@ namespace ApiGatewayAuthStack
         UserPool = userPool,
         CognitoDomain = new CognitoDomainOptions
         {
-          DomainPrefix = "sign-in-apigatewayauthstack"
+          DomainPrefix = "sign-in-" + cognitoAppClient.UserPoolClientId
         }
       });
 
