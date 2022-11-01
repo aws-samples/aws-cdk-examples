@@ -53,7 +53,7 @@ Important: this application uses various AWS services and there are costs associ
    ```
 6. From the command line, use AWS CDK to deploy the AWS resources for the pattern as specified in CdkStack.cs file:
    ```
-   cdk deploy ApiGatewayAuthStack
+   cdk deploy ApiGatewayAuthStack --app 'dotnet run --project src/CDK/cdk.csproj'
    ```
 7. Note down CognitoHostedUIUrl, and APIGWEndpoint from CloudFormation output. This will be used for testing
 
@@ -122,7 +122,7 @@ Run the following commands at eventbridge-firehose-s3-cdk folder level
 
 1. Delete the stack
    ```bash
-   cdk destroy ApiGatewayAuthStack
+   cdk destroy ApiGatewayAuthStack ---app 'dotnet run --project src/CDK/cdk.csproj'
    ```
 1. Confirm the stack has been deleted
    ```bash
