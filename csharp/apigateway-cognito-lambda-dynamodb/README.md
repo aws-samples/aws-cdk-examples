@@ -112,7 +112,7 @@ As per sample data populated in DynamoDB as part of deployment steps, this patte
 
 15. Invoke POST endpoint with access token of second user
 
-16. Confirm API GW returned 200 Success response
+16. Confirm API GW returned 201 Success response
 
 17. Invoke GET or POST endpoint with invalid token
 
