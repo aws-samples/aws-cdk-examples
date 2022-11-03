@@ -114,7 +114,8 @@ namespace ApiGatewayAuthStack
         Handler = "AuthFunction::Lambda.AuthFunction.Function::FunctionHandler",
         Code = Code.FromAsset("./dist/AuthFunction"),
         Environment = authLambdaEnvVariables,
-        Timeout = Duration.Minutes(1)
+        Timeout = Duration.Minutes(1),
+        MemorySize = 256
       });
       userPoolGroupApiPolicyTable.GrantReadData(authLambdaFun);
 

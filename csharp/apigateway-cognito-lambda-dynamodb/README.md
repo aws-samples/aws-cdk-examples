@@ -13,7 +13,7 @@
 
 <!--END STABILITY BANNER-->
 
-This C# CDK pattern creates Amazon Cognito user pool, Amazon API Gateway, AWS Lambda auth function, Amazon DynamoDB table, and AWS Lambda backend function. Auth Lambda function verify JWT token received in request header returns access policy associated with token user group. Based on access policy, API GW decides to forward the request to backend Lambda function or return 401/403 http status.
+This C# CDK example creates an Amazon Cognito user pool, Amazon API Gateway API, AWS Lambda function for authentication, Amazon DynamoDB table, and AWS Lambda function to act as a backend. The authentication function verifies a JWT token received in the request headers, then (if the token is valid) returns the access policy associated with the token's user group. Based on this access policy, API Gateway will to forward the request to the backend Lambda function or return a 401/403 http status.
 
 ![Architecture](ArchitectureDiagram.png)
 
@@ -33,7 +33,7 @@ Important: this application uses various AWS services and there are costs associ
    ```
    git clone https://github.com/aws-samples/aws-cdk-examples.git
    ```
-2. Change directory to the pattern directory:
+2. Change directory to this example's directory:
    ```
    cd csharp/apigateway-cognito-lambda-dynamodb
    ```
@@ -41,82 +41,77 @@ Important: this application uses various AWS services and there are costs associ
    ```
    dotnet build src
    ```
-4. Run Dotnet Publish command for backend Lambda function:
-
+4. Create the necessary files for the backend function using `dotnet publish`:
    ```
    dotnet publish src/Lambda/BackendFunction/BackendFunction.csproj -c Release -o dist/BackendFunction
    ```
-
-5. Run Dotnet Publish command for auth Lambda function:
+5. Repeat for the authentication function:
    ```
    dotnet publish src/Lambda/AuthFunction/AuthFunction.csproj -c Release -o dist/AuthFunction
    ```
-6. From the command line, use AWS CDK to deploy the AWS resources for the pattern as specified in CdkStack.cs file:
+6. Deploy the application using the AWS CDK:
    ```
    cdk deploy ApiGatewayAuthStack --app 'dotnet run --project src/CDK/cdk.csproj'
    ```
-7. Note down CognitoHostedUIUrl, and APIGWEndpoint from CloudFormation output. This will be used for testing
+7. Note down the `CognitoHostedUIUrl` and `APIGWEndpoint` outputs from CloudFormation. You'll use them to test your function.
 
-8. Populate data in DynamoDB table:
-
-   Run following AWS CLI command at 'apigateway-cognito-lambda-dynamodb' directory level
-
+8. Populate the DynamoDB table used for authenticating requests. From the `apigateway-cognito-lambda-dynamodb` directory, run
    ```
    aws dynamodb batch-write-item --request-items file://src/DynamoDBData.json
    ```
 
 ## How it works
 
-User need to pass JWT token in API GW request header. User can get the JWT token by using Cognito hosted UI (CDK code creates Cognito user pool and enable hosted UI). If token not present in request header then API GW returns 401 Unauthorized response. If token present in the request header then it gets pass to Auth Lambda function.
+Users must present a JWT token from Cognito in the request to API Gateway. The AWS Cognito hosted UI, set up via the CDK, is the simplest way to interact with Cognito. If the header is not present in the request, API Gateway will return an HTTP401 Unauthorized status code. If a token is present in the request header then the request is passed on to the authentication lambda function for validation.
 
-At Auth Lambda function, token signture gets verified by using JWKs provided by Cognito User pool. Auth Lambda function calls Cognito key url to get the JWKs.
+The token signature gets verified by the Auth lambda using JSON Web Keys (JWKs) provided by a Cognito User pool.
 
-Once token signature gets verified and confirmed token is not expired, code verifies token claims and fetch user group associated with the token. Based on user group, Auth Lambda function pulls API GW access policy document from DynamoDB table. If user group not present in DynamoDB table then function returns deny policy and based on this deny policy API GW will return 403 Forbidden response to user. If user group present in DynamoDB table then associated API GW access policy document will get return to API GW.
+Once the token signature is verified (both in structure and expiry), code verifies the token's claims and retrieves the user group associated with the token. Based on that user group, the Lambda function reads the API Gateway access policy document from the DynamoDB table. If user group not present in DynamoDB table then the function returns a deny policy which will make API Gateway return an HTTP 403 Forbidden response to user. If user group is present in the DynamoDB table, the associated policy document will be return to API Gateway.
 
-Based on return policy by Auth Lambda function, API GW decides either to forward the request to backend Lambda or return 403 Forbidden response. If JWT token is invalid, in terms of JWT structure or signature, Auth Lambda function raise "Unauthorized" exception which in turns into 401 Unauthorized response back to user.
+Based on the policy returned by Auth Lambda function, API Gateway decides either to forward the request to backend Lambda or return an HTTP 403 Forbidden response. If JWT token is invalid, in terms of JWT structure or signature, the authentication function raises an "Unauthorized" exception which in turns into 401 Unauthorized response back to the user.
 
-As per sample data populated in DynamoDB as part of deployment steps, this pattern will allow only GET endpoint invoke for users from user group - "read-only". If user belongs to user group - "read-update-add" then they can invoke GET and POST endpoint.
+As populated in DynamoDB as part of deployment steps, this configuration creates two user groups: `read-only` and `read-update-add`. `read-only` may only call GET on the backend, while `read-update-add` may make GET and POST operations against the backend.
 
 ## Testing
 
-1. Login to AWS console and navigate to Cognito service
+1. Login to the AWS console and navigate to Cognito service
 
-2. Select User pool - "CognitoUserPool" and create an user. Remember user email id and password, need it for testing
+2. Select User pool - `CognitoUserPool` and create a user. Remember the users email id and password -- you'll need it for testing
    ![CreateUser](CognitoUserCreate.png)
 
-3. Add newly created user to user group - "read-only"
+3. Add the newly created user to user group - "read-only"
    ![AssignUserToUserGroup](AssignUserToGroup.png)
 
-4. Create one more user and add it to user group - "read-update-add". Remember user email id and password, need it for testing
+4. Create another user and add it to user group `read-update-add`. Again, remember these credentials for testing.
 
-5. Access Cognito app client hosted UI. You can find Hosted UI url in CloudFormation output
+5. Access the Cognito app client hosted UI - It's the `CognitoHostedUIUrl` from earlier.
 
-6. Login to Hosted UI with first user which is assigned to "read-only" user group. Cognito Hosted UI may ask to enter new password if its first login attempt, please set new password if asked. After succesful login, UI will navigate user to localhost URL with access_token in the url
+6. Login to the Hosted UI with first user which is assigned to "read-only" user group. You may be asked to enter new password if this is the first login attempt. After a successful login, the UI will navigate user to a localhost URL with `access_token` in the url
 
-7. Get the access_token (not id_token) from the localhost url
+7. Get the `access_token` (not id_token) from the localhost url
 
-8. Use Postman or curl command to invoke the API GW GET endpoint. Pass access_token as "Authorization" in request header. Make sure "Bearer " present at start of the token. You can get the API GW endpoint URL in CloudFormation output
+8. Use Postman or `curl` or REST client like `Yet Another Rest Client` chrome extension to invoke the GET endpoint in your API Gateway API (the `APIGWEndpoint` URL from CloudFormation), making sure to pass the value from access_token as the `Authorization` header. Make sure to include "Bearer " at the start of the token.
    ![PostmanCall](PostmanCall.png)
 
-9. Confirm API GW returned 200 Success response
+9. Confirm that you are returned an 200 Success response
 
-10. Now invoke POST endpoint (same API GW endpoint URL with POST Http verb) with access_token of first user which is assigned to "read-only" user group.
+10. Now invoke the same request with the POST verb and the same `access_token`.
 
-11. Confirm API GW retuned 403 Forbidden response
+11. Confirm that you are returned an HTTP 403 Unauthorized response.
 
-12. Login to Hosted UI with second user which is assigned to "read-update-add" user group and get the access_token (not id_token). Cognito Hosted UI may ask to enter new password if its first login attempt, please set new password if asked.
+12. Log into the Hosted UI as the second user you created following the steps previously described.
 
-13. Invoke GET endpoint with access token of second user
+13. Make a GET request to the API Gateway HTTP Endpoint as you did previously, this time using the second user's `access_token` for the bearer token.
 
-14. Confirm API GW returned 200 Success response
+14. Confirm that you are returned a 200 Success response
 
-15. Invoke POST endpoint with access token of second user
+15. Make a POST request to the API HTTP Endpoint
 
-16. Confirm API GW returned 201 Success response
+16. Confirm you are returned an HTTP 201 Created response
 
-17. Invoke GET or POST endpoint with invalid token
+17. Try making a GET or POST request to the endpoint with invalid token
 
-18. Confirm API GW returned 401 Unauthorized response
+18. Observe that you're returned an HTTP 401 Unauthorized response
 
 ## Cleanup
 
