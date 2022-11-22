@@ -8,11 +8,40 @@ This is a project that demonstrates how to deploy resources in a AWS Local Zone.
 ![alt text](./architecture.png "AWS Local Zone with CDK")
 
 The generated stack creates a new Amazon VPC with a public and a private subnet associated with the specified Local Zone. 
-To allow resources in the private subnet to initiate traffic towards the Internet, it deploys an EC2 instance of type T3 Medium that acts as a NAT instance. The reason why a self managed NAT instance is used is because currently NAT Gateway is not supported in Local Zone. 
+To allow resources in the private subnet to initiate traffic towards the Internet, it deploys an EC2 instance that acts as a NAT instance. The reason why a self managed NAT instance is used is because currently NAT Gateway is not supported in Local Zone. 
 
-The NAT instance is configured following the best practices described in https://docs.aws.amazon.com/vpc/latest/userguide/VPC_NAT_Instance.html#basics . The route table of the private instance is automatically configured to have a default route pointing to the NAT instance in the public subnet.
+The NAT instance is configured following the best practices described in [the public documentation](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_NAT_Instance.html#basics). The route table of the private instance is automatically configured to have a default route pointing to the NAT instance in the public subnet.
 
 In addition, the script deploys a simple WordPress installation with the front-end installed in the public subnet while the back-end, a MySQL database, installed in a EC2 in the private subnet. 
+
+## Local Zone 
+
+For this sample it is used Los Angeles Local Zone. 
+To use a different Local Zone, please change *LZ_NAME* variable in *vpc_ec2_local_zones/vpc_ec2_local_zones_stack.py*
+
+## Instance types
+
+In this sample the Instance Type used for the EC2 instances is **T3 Medium**. 
+You can check the supported instance types in a specific Local Zone with [DescribeInstanceTypeOfferings](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstanceTypeOfferings.html) API (please note that the Local Zone must be enabled to use the API).
+
+CLI command: 
+```
+aws ec2 describe-instance-type-offerings --location-type "availability-zone" --filters Name=location,Values=<LZ Name> --region <Region>
+```
+
+or using Boto3: 
+```
+ec2 = boto3.client('ec2', config=Config(region_name=<region>))
+response = ec2.describe_instance_type_offerings(
+      LocationType='availability-zone',
+      Filters=[
+                {
+                 'Name': 'location',
+                 'Values': [<LZ Name>]
+                },
+              ]
+      )
+```
 
 ## Usage
 
