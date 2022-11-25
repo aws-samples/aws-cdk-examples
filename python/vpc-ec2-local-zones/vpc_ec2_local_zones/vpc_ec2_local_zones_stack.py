@@ -1,6 +1,7 @@
 from aws_cdk import (
     Stack,
     aws_ec2 as ec2,
+    aws_elasticloadbalancingv2 as elbv2,
     aws_autoscaling as autoscaling,
 )
 from constructs import Construct
@@ -100,6 +101,23 @@ class VpcEc2LocalZonesStack(Stack):
         )   
         return sg
 
+    def create_ALB_in_lz(self,vpc,wp_as):
+        alb = elbv2.ApplicationLoadBalancer(self, "ALB_in_LZ", 
+                 vpc=vpc,
+                 internet_facing=True,
+                 vpc_subnets=ec2.SubnetSelection(availability_zones=[LZ_NAME],subnet_type=ec2.SubnetType.PUBLIC),
+                )
+        http_listener = alb.add_listener("ListenerHTTP",port=80)
+        tg = http_listener.add_targets("AppFleet",port=8080,targets=[wp_as])
+        #WP will reply to ALB health-checks with a 301 HTTP code. we need to asdjust tg configuration accordingly
+        tg.configure_health_check(
+            healthy_http_codes = "200,301"
+        )
+        #allow traffic from ALB on target instance
+        wp_as.connections.allow_from(alb, ec2.Port.tcp(8080), "ALB access on target instance")
+        return alb
+
+
     # method to create a new EC2 instance with MySQL installed through User Data script
     # see user_data/db_mysql txt file to see the User Data script 
     def create_db_mysql(self, vpc):
@@ -107,7 +125,6 @@ class VpcEc2LocalZonesStack(Stack):
         user_data = self.get_user_data("db_mysql")
         db = ec2.Instance(self, "DBInLZ",
                  vpc=vpc,
-                 security_group=self.create_db_SG(vpc),
                  instance_type=ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.MEDIUM),
                  machine_image=amzn_linux,
                  user_data=ec2.UserData.custom(user_data),
@@ -115,54 +132,25 @@ class VpcEc2LocalZonesStack(Stack):
                 )
         return db
 
-    def create_db_SG(self, vpc):
-        sg = ec2.SecurityGroup(
-            self,
-            id="DBSG",
-            vpc=vpc,
-            allow_all_outbound=True,
-            description="DB Instance Security Group"
-        )
-        sg.add_ingress_rule(
-            peer=ec2.Peer.ipv4(VPC_CIDR),
-            connection=ec2.Port.tcp(3306),
-            description="HTTP ingress",
-        )   
-        return sg
-
-    # method to create a new EC2 instance with WorkPress installed through User Data script.
+    # method to create a new AutoScaling group for managing WordPress instances.
     # see user_data/wp_webserver txt file to see the User Data script 
-    def create_wp_webserver(self, vpc, db_dns):
+    def create_wp_webserver(self, vpc, db):
         amzn_linux = ec2.MachineImage.latest_amazon_linux()
         user_data = self.get_user_data("wp_webserver")
         # we need to modify the user data script to provide the dns name of the
         # mysql database installed in the private subnet. 
-        user_data = re.sub('dbhost', db_dns, user_data)
+        user_data = re.sub('dbhost', db.instance_private_dns_name, user_data)
 
-        wp = ec2.Instance(self, "WPInLZ",
-                 vpc=vpc,
-                 security_group=self.create_wp_SG(vpc),
-                 instance_type=ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.MEDIUM),
-                 machine_image=amzn_linux,
-                 user_data=ec2.UserData.custom(user_data),
-                 vpc_subnets=ec2.SubnetSelection(availability_zones=[LZ_NAME],subnet_type=ec2.SubnetType.PUBLIC),
+        wp_as = autoscaling.AutoScalingGroup(self, "WordPressAS", 
+                vpc=vpc,
+                instance_type=ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.MEDIUM),
+                machine_image=amzn_linux,
+                user_data=ec2.UserData.custom(user_data),
+                vpc_subnets=ec2.SubnetSelection(availability_zones=[LZ_NAME],subnet_type=ec2.SubnetType.PRIVATE_ISOLATED),
                 )
-        return wp
-
-    def create_wp_SG(self, vpc):
-        sg = ec2.SecurityGroup(
-            self,
-            id="WPSG",
-            vpc=vpc,
-            allow_all_outbound=True,
-            description="WP Instance Security Group"
-        )
-        sg.add_ingress_rule(
-            peer=ec2.Peer.ipv4("0.0.0.0/0"),
-            connection=ec2.Port.tcp(8080),
-            description="HTTP ingress",
-        )   
-        return sg
+        #allow connections from wp_instance to db
+        db.connections.allow_from(wp_as, ec2.Port.tcp(3306), "WP access on db port")
+        return wp_as
 
     def get_user_data(self, filename):
         with open('./user_data/' + filename) as f:
@@ -181,5 +169,7 @@ class VpcEc2LocalZonesStack(Stack):
 
         #create db mysql
         db = self.create_db_mysql(vpc)
-        # create a web server with WorkPress installed
-        wp = self.create_wp_webserver(vpc, db.instance_private_dns_name)
+        # create an AutoScaling groups to manage web server with WordPress
+        wp_as = self.create_wp_webserver(vpc, db)
+        #create ALB
+        alb = self.create_ALB_in_lz(vpc, wp_as)

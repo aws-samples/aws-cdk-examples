@@ -12,12 +12,25 @@ To allow resources in the private subnet to initiate traffic towards the Interne
 
 The NAT instance is configured following the best practices described in [the public documentation](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_NAT_Instance.html#basics). The route table of the private instance is automatically configured to have a default route pointing to the NAT instance in the public subnet.
 
-In addition, the script deploys a simple WordPress installation with the front-end installed in the public subnet while the back-end, a MySQL database, installed in a EC2 in the private subnet. 
+In addition, to demonstrate how to use other services in the Local Zone, the script will deploy:
+
+1. an EC2 in private subnet with WordPress installed through the User Data script. This EC2 is part of an AutoScaling Group with desired and maximum capacity at 1. The role of the AS Group will be to maintain the EC2 with Wordpress always healthy; 
+2. a MySQL database installed in a EC2 through User Data script in the private subnet;
+3. an Application Load Balancer deployed in the public subnet that can be used as a single point of access to the WordPress application.
 
 ## Local Zone 
 
 For this sample it is used Los Angeles Local Zone. 
 To use a different Local Zone, please change *LZ_NAME* variable in *vpc_ec2_local_zones/vpc_ec2_local_zones_stack.py*
+
+```
+# Local Zone to be used
+LZ_NAME="us-east-1-atl-1a"
+# VPC CIDR that will be used to create a new VPC
+VPC_CIDR="172.31.100.0/24"
+# Subnet size of the subnets in the Local Zone
+SUBNET_SIZE=26
+```
 
 ## Instance types
 
@@ -42,6 +55,19 @@ response = ec2.describe_instance_type_offerings(
               ]
       )
 ```
+
+## Application Load Balancer
+
+Please be aware that currently Application Load Balancer is not supported in the Local Zones outside of US. If you plan to use a Local Zone where ALB is not available, you will need to replace it with a self managed EC2 instance. 
+
+## Security Groups
+
+The Security Groups rules are tailored to allow only the traffic needed to access the application. That means:
+
+1. The SG attached to the ALB allow only HTTP traffic on port 80 in Ingress and TCP traffic on port 8080 (the port used by WordPress to accept requests) in Egress;
+2. The SGs attached to the EC2 with WordPress allows only TCP traffic on the service port (i.e. 8080) in Ingress from the ALB;
+3. The SGs attached to the EC2 with MySQL database allows only TCP traffic on the service port (i.e. 3306) in Ingress from the WordPress instance;
+4. The SG attached to the NAT instance allows only HTTP and HTTPS traffic from the VPC CIDR in Ingress and same type of traffic to everywhere in Egress. 
 
 ## Usage
 
