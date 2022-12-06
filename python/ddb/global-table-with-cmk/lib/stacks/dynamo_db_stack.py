@@ -1,7 +1,8 @@
 import aws_cdk as cdk
 from aws_cdk import aws_dynamodb as ddb
 from constructs import Construct
-from typing import List, TypedDict
+from typing import List
+from typing_extensions import TypedDict
 
 
 class ReplicaConfig(TypedDict):
