@@ -1,5 +1,6 @@
 from aws_cdk import (
     Stack,
+    CfnOutput,
     aws_ec2 as ec2,
     aws_elasticloadbalancingv2 as elbv2,
     aws_autoscaling as autoscaling,
@@ -173,3 +174,4 @@ class VpcEc2LocalZonesStack(Stack):
         wp_as = self.create_wp_webserver(vpc, db)
         #create ALB
         alb = self.create_ALB_in_lz(vpc, wp_as)
+        CfnOutput(self, "ALB DNS name: ", value=alb.load_balancer_dns_name)
