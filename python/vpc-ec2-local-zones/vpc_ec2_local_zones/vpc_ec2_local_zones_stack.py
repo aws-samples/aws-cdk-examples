@@ -180,3 +180,4 @@ class VpcEc2LocalZonesStack(Stack):
         # create ALB
         alb = self.create_ALB_in_lz(vpc, wp_as)
         CfnOutput(self, "ALB DNS name: ", value=alb.load_balancer_dns_name)
+        CfnOutput(self, "URL: ", value='http://'+alb.load_balancer_dns_name)
