@@ -29,7 +29,7 @@ class VpcEc2LocalZonesStack(Stack):
         vpc = ec2.Vpc(
             self,
             "Vpc",
-            cidr = VPC_CIDR,
+            ip_addresses = ec2.IpAddresses.cidr(VPC_CIDR),
             subnet_configuration = [
                 ec2.SubnetConfiguration(
                     name = 'Public-Subent',
