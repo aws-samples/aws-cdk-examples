@@ -19,8 +19,10 @@ In addition, to demonstrate how to use other services in the Local Zone, the scr
 
 ## Local Zone
 
-For this sample it is used Atlanta Local Zone.
-To use a different Local Zone, please change *LZ_NAME* variable in *vpc_ec2_local_zones/vpc_ec2_local_zones_stack.py*
+For this sample it is used Atlanta Local Zone in us-east-1 region. 
+To use a different Local Zone, please change *LZ_NAME* variable in *vpc_ec2_local_zones/vpc_ec2_local_zones_stack.py* 
+In that case, you need to set accordingly the region. The stack uses automatically the default region configured in the [AWS CLI profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-region). If no region is configured in the profile, us-east-1 region is used. See *app.py* for details.
+
 
 ```
 # Local Zone to be used
