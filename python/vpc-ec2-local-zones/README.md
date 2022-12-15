@@ -35,7 +35,7 @@ SUBNET_SIZE=26
 vpc = ec2.Vpc(
             self, 
             "Vpc",
-            cidr=”172.31.100.0/24”,
+            ip_addresses = ec2.IpAddresses.cidr("172.31.100.0/24"),
             subnet_configuration=[
                 ec2.SubnetConfiguration(
                     name = 'Public-Subent',
