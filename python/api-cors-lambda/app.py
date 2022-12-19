@@ -28,21 +28,25 @@ class ApiCorsLambdaStack(Stack):
         example_entity_lambda_integration = _apigw.LambdaIntegration(
             base_lambda,
             proxy=False,
-            integration_responses=[{
-                'statusCode': '200',
-                'responseParameters': {
-                    'method.response.header.Access-Control-Allow-Origin': "'*'",
-                }
-            }]
+            integration_responses=[
+                _apigw.IntegrationResponse(
+                    status_code="200",
+                    response_parameters={
+                        'method.response.header.Access-Control-Allow-Origin': "'*'"
+                    }
+                )
+            ]
         )
         example_entity.add_method(
             'GET', example_entity_lambda_integration,
-            method_responses=[{
-                'statusCode': '200',
-                'responseParameters': {
-                    'method.response.header.Access-Control-Allow-Origin': True,
-                }
-            }]
+            method_responses=[
+                _apigw.MethodResponse(
+                    status_code="200",
+                    response_parameters={
+                        'method.response.header.Access-Control-Allow-Origin': True
+                    }
+                )
+            ]
         )
 
 

@@ -5,7 +5,7 @@ from ec2_cloudwatch.ec2_cloudwatch_stack import Ec2CloudwatchStack
 
 app = App()
 
-# # Replace the accoount and region with your information
+# # Replace the account and region with your information
 # env = core.Environment(account="You account information", region="cn-northwest-1")
 # Ec2CloudwatchStack(app, "ec2-cloudwatch", env=env)
 

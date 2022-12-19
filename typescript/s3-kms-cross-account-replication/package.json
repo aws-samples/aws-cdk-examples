@@ -1,0 +1,29 @@
+{
+  "name": "s3-encrypted-cross-account-replication-cdk",
+  "version": "0.1.0",
+  "bin": {
+    "s3-encrypted-cross-account-replication-cdk": "bin/s3-encrypted-cross-account-replication-cdk.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.10",
+    "@types/node": "10.17.27",
+    "aws-cdk": "2.19.0",
+    "cdk-nag": "^2.0.0",
+    "jest": "^26.4.2",
+    "prettier": "2.6.2",
+    "ts-jest": "^26.2.0",
+    "ts-node": "^9.0.0",
+    "typescript": "~4.2.0"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "2.19.0",
+    "constructs": "^10.0.0",
+    "source-map-support": "^0.5.16"
+  }
+}
