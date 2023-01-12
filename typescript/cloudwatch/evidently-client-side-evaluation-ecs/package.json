@@ -1,0 +1,22 @@
+{
+  "name": "evidently-client-side-evaluation-ecs",
+  "version": "1.0.0",
+  "description": "Running a load balanced service on Fargate with Evidently client-side evaluation",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "author": "cthienes",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/node": "^8.10.38",
+    "aws-cdk": "*",
+    "typescript": "~4.6.0"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.0.0",
+    "constructs": "^10.0.0"
+  }
+}
