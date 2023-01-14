@@ -1,8 +1,12 @@
-export const handler = async (event: any = {}): Promise<any> => {
-  // output event to logs
-  console.log("request:", JSON.stringify(event, undefined, 2));
+export interface LambdaResponse {
+  statusCode: number;
+  body: any;
+}
 
-  // return response back to upstream caller
+export const handler = async (event: Record<string, any>): Promise<LambdaResponse> => {
+  // Output event to CloudWatch logs.
+  console.log("CSV upload event:", JSON.stringify(event, undefined, 2));
+  // Respond to upstream caller.
   return {
     'statusCode': 200,
     'body': event

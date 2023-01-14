@@ -1,5 +1,4 @@
 # Chaining S3 to SNS to SQS to Lambda
----
 
 <!--BEGIN STABILITY BANNER-->
 ---
@@ -12,54 +11,67 @@
 ---
 <!--END STABILITY BANNER-->
 
-
 ## Overview
-A common pattern that I have used to create a resilient way to trigger a lambda when an event occurs on S3 is to chain the following services:
+
+A resilient way to trigger lambda when an S3 event occurs. This example uses the following services:
 
 - S3
 - SNS
 - SQS
 - Lambda
 
+## How it works
 
-## Justification
-This example illustrates the following concepts:
-- Chaining Services
-- Disconnected Event Notifications and Handling
-- Resilient storage to process request
-- Asynchronous processing of request
-- Scalable, Serverless Architecture
+1. A user uploads a specific file type (in our case .csv) to an S3 Bucket.
+2. The upload triggers an event that is automatically sent to an SNS Topic.
+3. The SNS Topic notifies a SQS queue, the SQS queue adds a message to it's queue.
+4. When the SQS queue adds new messages a Lambda is triggered to process the message.
 
+The lambda is where you can implement your own logic to process the message. In this example the lambda simply parses the message and logs it.
 
-## Example Details
-1. A user uploads a specific file type to an S3 Bucket
-2. This upload triggers an event that notifies an SNS Topic by publishing a message with the S3 event details
-3. The SNS Topic has an SQS queue that subscribes to notifications
-4. When the upload event is published, the SNS message is put into the SQS Queue
-5. A Lambda is polling the SQS as its Event Source
-6. The Lambda receives the message from the SQS queue and processes it
-7. If the message is not processed by the Lambda the message eventually ends up in a dead-letter queue
-
+> ⚠️ If the Lambda happens to throw an error (e.g. it fails to parse the message) the message ends up in a dead-letter queue.
 
 ## Build and Deploy
 
-Ensure aws-cdk is installed and your AWS account/region is [bootstrapped](https://docs.aws.amazon.com/cdk/latest/guide/bootstrapping.html).
+1. Ensure aws-cdk is installed and your AWS account/region is [bootstrapped](https://docs.aws.amazon.com/cdk/latest/guide/bootstrapping.html).
 
-	  ```bash
-	  $ npm install -g aws-cdk
-	  $ cdk bootstrap
-	  ```
+```bash
+npm install -g aws-cdk
+cdk bootstrap
+```
 
-Then build and deploy.
+2. Build and deploy.
 _You will need to have [Docker](https://docs.docker.com/get-docker/) installed and running._
 
-	  ```bash
-	  $ npm run build
-	  $ cdk deploy
-	  ```
+```bash
+npm run build
+cdk deploy
+```
 
+You should see some useful outputs in the terminal:
 
-## Tutorial  
+```bash
+✅  S3SnsSqsLambdaChainStack
+
+✨  Deployment time: 62.61s
+
+Outputs:
+S3SnsSqsLambdaChainStack.deadLetterQueue = <LINK_TO_DEAD_LETTER_QUEUE>
+S3SnsSqsLambdaChainStack.lambdaLogs = <LINK_TO_LAMBDA_LOGS>
+S3SnsSqsLambdaChainStack.s3UploadCommand = <S3_UPLOAD_COMMAND>
+Stack ARN: <STACK_ARN>
+
+✨  Total time: 67.29s
+```
+
+## Try it out
+
+1. Upload the [`example.csv`](https://github.com/aws-samples/aws-cdk-examples/blob/master/typescript/s3-sns-lambda-chain/example.csv) file to the S3 bucket. You can use the s3 upload command provided in the output of the terminal or the AWS CloudFormation Console.
+
+2. Verify the upload is logged by the lambda function in CloudWatch. A link to the CloudWatch logs can also be found in the output of the terminal or the AWS CloudFormation Console.
+
+## Tutorial
+
 See [this useful workshop](https://cdkworkshop.com/20-typescript.html) on working with the AWS CDK for Typescript projects.
 
 ## Useful commands

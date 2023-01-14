@@ -1,9 +1,3 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/s3_sns_sqs_lambda_chain.ts",
-  "context": {
-    "@aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId": true,
-    "@aws-cdk/core:stackRelativeExports": true,
-    "@aws-cdk/aws-rds:lowercaseDbIdentifier": true,
-    "@aws-cdk/aws-cloudfront:defaultSecurityPolicyTLSv1.2_2021": true
-  }
+  "app": "npx ts-node --prefer-ts-exts bin/s3-sns-sqs-lambda-chain.ts"
 }
