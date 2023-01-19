@@ -17,7 +17,21 @@
 This example constructs above architecture with CDK.
 You can start simple frontend CI/CD pipeline for ReactJS with this CDK.
 
-## Build
+If you finish this sample, you will get CloudFront Domain to access the s3 bucket which is the destination of CI/CD Pipeline from AWS CodeCommit Repository.
+
+![Output](https://d32sg88lpbkif7.cloudfront.net/frontend-cicd-out.png)
+
+you will be able to make Serverless Web Frontend with Continuous Delivery Pipeline.
+
+## How to build this sample?
+
+### Setup
+
+- Install AWS CDK
+- Install npm
+- Clone the repository
+
+### Build
 
 To build this app, you need to be in this example's root folder. Then run the following:
 
@@ -29,7 +43,7 @@ npm run build
 
 This will install the necessary CDK, then this example's dependencies, and then build your TypeScript files and your CloudFormation template.
 
-## Deploy
+### Deploy
 
 Run `cdk deploy`. This will deploy / redeploy your Stack to your AWS Account.
 
@@ -49,4 +63,7 @@ Clone your CodeCommit repository and push files inside "sources" folder.
 
 Then CodePipeline will be triggered by your Main branch merge requests and make build to your S3 bucket.
 
+
+
 After build is deployed to S3 bucket, the static web page will be served through Amazon CloudFront via OAI.
+

@@ -1,6 +1,4 @@
 import { aws_cloudfront_origins, Duration, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
-import { CodePipeline, CodePipelineSource, ShellStep } from 'aws-cdk-lib/pipelines';
-import * as ecr from 'aws-cdk-lib/aws-ecr';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
@@ -9,6 +7,8 @@ import * as codebuild from 'aws-cdk-lib/aws-codebuild';
 import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
 import * as codepipelineActions from 'aws-cdk-lib/aws-codepipeline-actions';
 import { Construct } from 'constructs';
+import { Asset } from 'aws-cdk-lib/aws-s3-assets';
+import path = require('path');
 
 export class FrontendCicdStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -22,14 +22,21 @@ export class FrontendCicdStack extends Stack {
     // Source
     const repository = new codecommit.Repository(this, 'MyFrontEndRepo', {
       repositoryName: 'MyFrontEndRepo',
-      description: 'My Frontend Repository'
+      description: 'My Frontend Repository',
+      code: codecommit.Code.fromAsset(new Asset(this, 'FrontendRepo', {
+        path: path.join(__dirname, '../sources/my-react'),
+        exclude: [
+            'node_modules',
+            '.git'
+        ]
+      }), 'main')
     });
 
     const sourceOutput = new codepipeline.Artifact();
     const sourceAction = new codepipelineActions.CodeCommitSourceAction({
       actionName: 'CodeCommit',
       repository: repository,
-      branch: 'master',   //or main
+      branch: 'main',
       output: sourceOutput
     });
     pipeLine.addStage({
@@ -58,9 +65,7 @@ export class FrontendCicdStack extends Stack {
       actionName: 'CodeBuild',
       project: project,
       input: sourceOutput,
-      outputs: [buildOutput],
-      // executeBatchBuild: true,
-      // combineBatchBuildArtifacts: true
+      outputs: [buildOutput]
     });
     pipeLine.addStage({
       stageName: 'Build',
@@ -68,7 +73,7 @@ export class FrontendCicdStack extends Stack {
     });
 
     // Change bucket name global unique.
-    const bucket = new s3.Bucket(this, '<YOUR UNIQUE BUCKET NAME>', {
+    const bucket = new s3.Bucket(this, 'MyFrontendBucket', {
       encryption: s3.BucketEncryption.S3_MANAGED,
       blockPublicAccess: new s3.BlockPublicAccess({
         blockPublicPolicy: true
@@ -82,7 +87,7 @@ export class FrontendCicdStack extends Stack {
         's3:*'
       ],
       resources: [bucket.arnForObjects('*')],
-      principals: [new iam.AccountRootPrincipal()]
+      principals: [new iam.AccountPrincipal(props?.env?.account)]
     }));
 
     const deployAction = new codepipelineActions.S3DeployAction({
@@ -110,12 +115,11 @@ export class FrontendCicdStack extends Stack {
           defaultTtl: Duration.days(1),
           maxTtl: Duration.days(7),
           cookieBehavior: cloudfront.CacheCookieBehavior.all(),
-          // headerBehavior: cloudfront.CacheHeaderBehavior.allowList('X-CustomHeader'),
           enableAcceptEncodingGzip: true,
           enableAcceptEncodingBrotli: true
         }),
-      }
+      },
+      defaultRootObject: 'index.html'
     });
-    // cf.addBehavior('*')
   }
 }
