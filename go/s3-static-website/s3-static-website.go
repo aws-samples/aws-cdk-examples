@@ -117,7 +117,7 @@ func NewS3StaticWebsiteStack(scope constructs.Construct, id string, props *S3Sta
 
 	deployment := awss3deployment.NewBucketDeployment(stack, jsii.String("MyS3BucketDeployment"), &awss3deployment.BucketDeploymentProps{
 		Sources: &[]awss3deployment.ISource{
-			awss3deployment.Source_Asset(jsii.String("./simple-web-app/dist"), &awss3assets.AssetOptions{}),
+			awss3deployment.Source_Asset(jsii.String("./simple-web-app"), &awss3assets.AssetOptions{}),
 		},
 		DestinationBucket: bucket,
 		Distribution:      distribution,
