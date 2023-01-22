@@ -11,7 +11,5 @@ A domain for the static site (i.e. mystaticsite.com) must be configured as a hos
 ## Deploy
 
 ```shell
-$ export AWS_ACCOUNT=<YOUR_ACCOUNT_ID>
-$ export AWS_REGION=<YOUR_REGION>
 $ cdk deploy -c domain=<YOUR_DOMAIN> -c subdomain=<YOUR_SUBDOMAIN>
 ```
