@@ -1,5 +1,5 @@
 {
-  "app": "go mod download && go run s3-angular.go",
+  "app": "go mod download && go run s3-static-website.go",
   "watch": {
     "include": [
       "**"
