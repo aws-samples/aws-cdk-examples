@@ -1,13 +1,12 @@
 
-# Welcome to CDK Python Backup & Cloudwatch event example project!
+# Welcome to CDK Python Backup & Cloudwatch Event example project!
 
-This is project demonstrates:
+This project demonstrates how to:
 
- * Create a new VPC with S3 endpoint
- * Two Instances, a web server and a bastion host
- * A cloudwatch event rule to stop instances at UTC 15pm everyday
- * A backup vault and a backup rule to protect resources 
- * Show some outputs example
+ * Create a new VPC with an S3 endpoint
+ * Create two instances - a web server and a bastion host
+ * Create a Cloudwatch Event rule to stop instances at UTC 15pm every day
+ * Create a backup vault and a backup rule to protect resources 
 
 
 
