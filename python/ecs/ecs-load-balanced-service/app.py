@@ -43,9 +43,11 @@ class BonjourECS(Stack):
             )
         )
 
+        asg.connections.allow_from_any_ipv4(port_range=ec2.Port.tcp_range(32768, 65535), description="allow incoming traffic from ALB")
+
         CfnOutput(
             self, "LoadBalancerDNS",
-            value=ecs_service.load_balancer.load_balancer_dns_name
+            value="http://"+ecs_service.load_balancer.load_balancer_dns_name
         )
 
 app = App()
