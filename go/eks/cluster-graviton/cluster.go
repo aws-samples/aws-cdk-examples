@@ -26,10 +26,10 @@ func NewClusterStack(scope constructs.Construct, id string, props *ClusterStackP
 	eksCluster := awseks.NewCluster(stack, jsii.String("Cluster"), &awseks.ClusterProps{
 		Vpc: vpc,
 		DefaultCapacity: jsii.Number(0), // manage capacity with managed nodegroups later since we want to customize nodegroup
-		Version: awseks.KubernetesVersion_V1_21(),
+		Version: awseks.KubernetesVersion_V1_24(),
 		// Enable alb controller to manage ingresses
 		AlbController: &awseks.AlbControllerOptions {
-			Version: awseks.AlbControllerVersion_V2_3_0(),
+			Version: awseks.AlbControllerVersion_V2_4_1(),
 		},
 	})
 

@@ -2,9 +2,32 @@
 
 This is an example of how to provision EKS cluster with AWS Graviton nodes with CDK.
 
-**NOTICE**: Go support is still in Developer Preview. This implies that APIs may
-change while we address early feedback from the community. We would love to hear
-about your experience through GitHub issues.
+<!--BEGIN STABILITY BANNER-->
+---
+
+![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
+
+> **This is a stable example. It should successfully build out of the box**
+>
+> This example is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
+---
+<!--END STABILITY BANNER-->
+
+## Requirements
+
+Make sure the latest version of cdk cli is installed. Use the [link](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html#getting_started_install) to install latest version of aws cdk. 
+Existing installations can be updated with below command
+
+```
+sudo  npm install -g aws-cdk@latest
+```
+
+
+Install go dependencies
+
+```
+go get -u ./...
+```
 
 ## Architecture Outline
 
