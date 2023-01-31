@@ -1,0 +1,28 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - pip install --upgrade pip
+      - pip install --upgrade awscli aws-sam-cli
+      - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2 &
+      - timeout 15 sh -c 'until docker info; do echo .; sleep 1; done'
+  build:
+    commands:
+      - . ./configure-pip.sh
+      - >
+        sam build --use-container --template ${SAM_TEMPLATE} \
+                          --container-env-var REGION_ARTIFACTS=${REGION_ARTIFACTS} \
+                          --container-env-var CODEARTIFACT_AUTH_TOKEN=${CODEARTIFACT_AUTH_TOKEN} \
+                          --container-env-var DOMAIN=${DOMAIN} \
+                          --container-env-var REPO=${REPO} \
+                          --container-env-var ACCOUNT=${ACCOUNT}
+      - >
+        sam package --s3-bucket ${ARTIFACT_BUCKET} \
+                      --region ${REGION} \
+                      --output-template-file packaged-sam.yaml
+artifacts:
+  files:
+    - packaged-sam.yaml
+    - assume-role.sh
+    - configure-pip.sh
+    - ./buildspecs/samdeploy.yaml

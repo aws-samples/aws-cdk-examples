@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - python3 -m pip install --upgrade pip
+      - python3 -m pip install --upgrade build
+  build:
+    commands:
+      - python3 -m build
+  post_build:
+    commands:
+      - ls ./dist
+      - echo Build completed on `date`
+artifacts:
+  files:
+    - './dist/*'
+    - './buildspecs/publishartifact.yaml'

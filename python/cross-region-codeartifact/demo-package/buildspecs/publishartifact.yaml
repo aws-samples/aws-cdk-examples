@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+      - unzip -q awscliv2.zip
+      - ./aws/install --update
+      - pip3 install twine 
+  build:
+    commands:
+      - aws codeartifact login --tool twine --domain ${DomainName} --domain-owner ${Account} --repository ${Repo} --region ${Region}
+      - twine upload --skip-existing --repository codeartifact ./dist/* --verbose
+
+  post_build: 
+    commands:
+      - echo Package Publishing completed on `date`
+

@@ -1,0 +1,16 @@
+version: 0.2
+phases: 
+  install: 
+    commands:
+      - pip install --upgrade pip
+      - pip install --upgrade awscli aws-sam-cli
+  build:
+    commands:
+      - . ./assume-role.sh ${CLOUDFORMATION_EXECUTION_ROLE} deploy
+      - >
+        sam deploy --stack-name ${STACK_NAME} \
+                --template ${TEMPLATE} \
+                --capabilities CAPABILITY_IAM \
+                --region ${REGION} \
+                --s3-bucket ${BUCKET} \
+                --no-fail-on-empty-changeset
