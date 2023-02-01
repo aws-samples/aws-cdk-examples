@@ -1,4 +1,4 @@
-# Local Zone: Getting started with CDK
+# AWS Local Zones - Getting resources deployed with CDK
 
 This is a project that demonstrates how to deploy resources in a AWS Local Zone.
 
