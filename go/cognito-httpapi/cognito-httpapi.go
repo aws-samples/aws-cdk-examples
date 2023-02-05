@@ -21,6 +21,7 @@ func NewCognitoHttpapiStack(scope constructs.Construct, id string, props *Cognit
 	}
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
+	// create Cognito User Pool
 	userpool := awscognito.NewUserPool(stack, jsii.String("myCognitoUserPool"), &awscognito.UserPoolProps{
 		UserPoolName: jsii.String("myCognitoUserPool"),
 		PasswordPolicy: &awscognito.PasswordPolicy{
@@ -42,6 +43,7 @@ func NewCognitoHttpapiStack(scope constructs.Construct, id string, props *Cognit
 		SelfSignUpEnabled: jsii.Bool(true),
 	})
 
+	// create Cognito User Pool Domain
 	userPoolDomain := awscognito.NewUserPoolDomain(stack, jsii.String("MyUserPoolDomain"), &awscognito.UserPoolDomainProps{
 		UserPool: userpool,
 		CognitoDomain: &awscognito.CognitoDomainOptions{
@@ -49,6 +51,7 @@ func NewCognitoHttpapiStack(scope constructs.Construct, id string, props *Cognit
 		},
 	})
 
+	// create Cognito User Pool Client
 	userPoolClient := awscognito.NewUserPoolClient(stack, jsii.String("MyUserPoolClient"), &awscognito.UserPoolClientProps{
 		UserPoolClientName: jsii.String("MyUserPoolClient"),
 		UserPool:           userpool,
@@ -75,6 +78,7 @@ func NewCognitoHttpapiStack(scope constructs.Construct, id string, props *Cognit
 		},
 	})
 
+	// create HTTP API
 	httpApi := awscdkapigatewayv2alpha.NewHttpApi(stack, jsii.String("MyHttpApi"), &awscdkapigatewayv2alpha.HttpApiProps{
 		ApiName: jsii.String("MyHttpApi"),
 		CorsPreflight: &awscdkapigatewayv2alpha.CorsPreflightOptions{
@@ -84,6 +88,7 @@ func NewCognitoHttpapiStack(scope constructs.Construct, id string, props *Cognit
 		},
 	})
 
+	// add JWT authorizer to previously created HTTP API
 	awscdkapigatewayv2alpha.NewHttpAuthorizer(stack, jsii.String("MyHttpAuthorizer"), &awscdkapigatewayv2alpha.HttpAuthorizerProps{
 		AuthorizerName: jsii.String("MyHttpAuthorizer"),
 		Type:           awscdkapigatewayv2alpha.HttpAuthorizerType_JWT,
@@ -93,10 +98,12 @@ func NewCognitoHttpapiStack(scope constructs.Construct, id string, props *Cognit
 		IdentitySource: jsii.Strings("$request.header.Authorization"),
 	})
 
+	// log authorizer URL
 	awscdk.NewCfnOutput(stack, jsii.String("authUrl"), &awscdk.CfnOutputProps{
 		Value: jsii.String("https://" + *userPoolDomain.DomainName() + ".auth." + *props.Env.Region + ".amazoncognito.com/login"),
 	})
 
+	// log user pool client ID
 	awscdk.NewCfnOutput(stack, jsii.String("UserPoolClientId"), &awscdk.CfnOutputProps{
 		Value: userPoolClient.UserPoolClientId(),
 	})

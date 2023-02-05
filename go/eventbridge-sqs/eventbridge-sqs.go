@@ -22,14 +22,17 @@ func NewEventbridgeSqsStack(scope constructs.Construct, id string, props *Eventb
 	}
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
+	// create SQS queue
 	queue := awssqs.NewQueue(stack, jsii.String("EventbridgeSqsQueue"), &awssqs.QueueProps{
 		VisibilityTimeout: awscdk.Duration_Seconds(jsii.Number(300)),
 	})
 
+	// create EventBridge event bus
 	eventBus := awsevents.NewEventBus(stack, jsii.String("MyEventBus"), &awsevents.EventBusProps{
 		EventBusName: jsii.String("MyEventBus"),
 	})
 
+	// create EventBridge rule
 	rule := awsevents.NewRule(stack, jsii.String("myEventBusRule"), &awsevents.RuleProps{
 		Description: jsii.String("Log all events"),
 		EventBus:    eventBus,
@@ -40,8 +43,10 @@ func NewEventbridgeSqsStack(scope constructs.Construct, id string, props *Eventb
 		},
 	})
 
+	// add SQS queue as target for EventBridge rule
 	rule.AddTarget(awseventstargets.NewSqsQueue(queue, &awseventstargets.SqsQueueProps{}))
 
+	// log SQS URL
 	awscdk.NewCfnOutput(stack, jsii.String("queueUrl"), &awscdk.CfnOutputProps{
 		Value:       queue.QueueUrl(),
 		Description: jsii.String("URL of SQS Queue"),

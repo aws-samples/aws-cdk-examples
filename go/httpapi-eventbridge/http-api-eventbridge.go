@@ -25,10 +25,12 @@ func NewHttpApiEventbridgeStack(scope constructs.Construct, id string, props *Ht
 	}
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
+	// create EventBridge event bus
 	eventBus := awsevents.NewEventBus(stack, jsii.String("myEventBus"), &awsevents.EventBusProps{
 		EventBusName: jsii.String("MyEventBus"),
 	})
 
+	// create EventBridge rule
 	eventLoggerRule := awsevents.NewRule(stack, jsii.String("myEventLoggerRule"), &awsevents.RuleProps{
 		Description: jsii.String("Log all events"),
 		EventBus:    eventBus,
@@ -37,20 +39,25 @@ func NewHttpApiEventbridgeStack(scope constructs.Construct, id string, props *Ht
 		},
 	})
 
+	// add CloudWatch log group as target
 	logGroup := awslogs.NewLogGroup(stack, jsii.String("MyEventLogGroup"), &awslogs.LogGroupProps{
 		LogGroupName: jsii.String("/aws/events/MyEventBus"),
 	})
 
+	// add target to rule
 	eventLoggerRule.AddTarget(awseventstargets.NewCloudWatchLogGroup(logGroup, &awseventstargets.LogGroupProps{}))
 
+	// create HTTP API
 	httpApi := awscdkapigatewayv2alpha.NewHttpApi(stack, jsii.String("myHttpApi"), &awscdkapigatewayv2alpha.HttpApiProps{
 		ApiName: jsii.String("myHttpApi"),
 	})
 
+	// create IAM role for API Gateway to put events to EventBridge
 	apiRole := awsiam.NewRole(stack, jsii.String("myEventBridgeIntegrationRole"), &awsiam.RoleProps{
 		AssumedBy: awsiam.NewServicePrincipal(jsii.String("apigateway.amazonaws.com"), &awsiam.ServicePrincipalOpts{}),
 	})
 
+	// add policy to role
 	apiRole.AddToPolicy(
 		awsiam.NewPolicyStatement(&awsiam.PolicyStatementProps{
 			Effect:    awsiam.Effect_ALLOW,
@@ -59,6 +66,7 @@ func NewHttpApiEventbridgeStack(scope constructs.Construct, id string, props *Ht
 		}),
 	)
 
+	// create HTTP API integration
 	eventbridgeIntegration := awsapigatewayv2.NewCfnIntegration(stack, jsii.String("myEventbridgeIntegration"), &awsapigatewayv2.CfnIntegrationProps{
 		ApiId:              httpApi.HttpApiId(),
 		IntegrationType:    jsii.String("AWS_PROXY"),
@@ -74,12 +82,14 @@ func NewHttpApiEventbridgeStack(scope constructs.Construct, id string, props *Ht
 		TimeoutInMillis:      jsii.Number(10000.0),
 	})
 
+	// create HTTP API route
 	awsapigatewayv2.NewCfnRoute(stack, jsii.String("myEventRoute"), &awsapigatewayv2.CfnRouteProps{
 		ApiId:    httpApi.HttpApiId(),
 		RouteKey: jsii.String("POST /"),
 		Target:   jsii.String("integrations/" + *eventbridgeIntegration.Ref()),
 	})
 
+	// log HTTP API endpoint URL
 	awscdk.NewCfnOutput(stack, jsii.String("apiUrl"), &awscdk.CfnOutputProps{
 		Value:       httpApi.Url(),
 		Description: jsii.String("HTTP API endpoint URL"),

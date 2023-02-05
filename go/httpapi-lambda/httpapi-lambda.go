@@ -21,6 +21,7 @@ func NewHttpapiLambdaStack(scope constructs.Construct, id string, props *Httpapi
 	}
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
+	// create Lambda function
 	getHandler := awscdklambdagoalpha.NewGoFunction(stack, jsii.String("myGoHandler"), &awscdklambdagoalpha.GoFunctionProps{
 		Runtime: awslambda.Runtime_GO_1_X(),
 		Entry:   jsii.String("./lambda-handler"),
@@ -29,16 +30,19 @@ func NewHttpapiLambdaStack(scope constructs.Construct, id string, props *Httpapi
 		},
 	})
 
+	// create HTTP API
 	httpApi := awscdkapigatewayv2alpha.NewHttpApi(stack, jsii.String("myHttpApi"), &awscdkapigatewayv2alpha.HttpApiProps{
 		ApiName: jsii.String("myHttpApi"),
 	})
 
+	// add route to HTTP API
 	httpApi.AddRoutes(&awscdkapigatewayv2alpha.AddRoutesOptions{
 		Path:        jsii.String("/"),
 		Methods:     &[]awscdkapigatewayv2alpha.HttpMethod{awscdkapigatewayv2alpha.HttpMethod_GET},
 		Integration: awscdkapigatewayv2integrationsalpha.NewHttpLambdaIntegration(jsii.String("MyHttpLambdaIntegration"), getHandler, &awscdkapigatewayv2integrationsalpha.HttpLambdaIntegrationProps{}),
 	})
 
+	// log HTTP API endpoint
 	awscdk.NewCfnOutput(stack, jsii.String("myHttpApiEndpoint"), &awscdk.CfnOutputProps{
 		Value:       httpApi.ApiEndpoint(),
 		Description: jsii.String("HTTP API Endpoint"),

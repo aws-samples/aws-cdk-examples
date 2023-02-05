@@ -20,6 +20,7 @@ func NewAppServerlessCdkGoStack(scope constructs.Construct, id string, props *Ap
 	}
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
+	// create Lambda function
 	getHandler := awscdklambdagoalpha.NewGoFunction(stack, jsii.String("myGoHandler"), &awscdklambdagoalpha.GoFunctionProps{
 		Runtime: awslambda.Runtime_GO_1_X(),
 		Entry:   jsii.String("./lambda-handler"),
@@ -28,11 +29,13 @@ func NewAppServerlessCdkGoStack(scope constructs.Construct, id string, props *Ap
 		},
 	})
 
+	// create API Gateway
 	restApi := awsapigateway.NewRestApi(stack, jsii.String("myGoApi"), &awsapigateway.RestApiProps{
 		RestApiName:    jsii.String("myGoApi"),
 		CloudWatchRole: jsii.Bool(false),
 	})
 
+	// create API Gateway resource
 	restApi.Root().AddResource(jsii.String("hello-world"), &awsapigateway.ResourceOptions{}).AddMethod(
 		jsii.String("GET"),
 		awsapigateway.NewLambdaIntegration(getHandler, &awsapigateway.LambdaIntegrationOptions{}),

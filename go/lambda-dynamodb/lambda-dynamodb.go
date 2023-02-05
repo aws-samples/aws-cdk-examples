@@ -22,6 +22,7 @@ func NewLambdaDynamodbStack(scope constructs.Construct, id string, props *Lambda
 	}
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
+	// create AmazonDynamoDBFullAccess role
 	dynamoDBRole := awsiam.NewRole(stack, aws.String("myDynamoDBFullAccessRole"), &awsiam.RoleProps{
 		AssumedBy: awsiam.NewServicePrincipal(aws.String("lambda.amazonaws.com"), &awsiam.ServicePrincipalOpts{}),
 		ManagedPolicies: &[]awsiam.IManagedPolicy{
@@ -29,6 +30,7 @@ func NewLambdaDynamodbStack(scope constructs.Construct, id string, props *Lambda
 		},
 	})
 
+	// create lambda function with previously created AmazonDynamoDBFullAccess role
 	awscdklambdagoalpha.NewGoFunction(stack, jsii.String("myGoHandler"), &awscdklambdagoalpha.GoFunctionProps{
 		Runtime: awslambda.Runtime_GO_1_X(),
 		Entry:   jsii.String("./lambda-handler"),
@@ -38,6 +40,7 @@ func NewLambdaDynamodbStack(scope constructs.Construct, id string, props *Lambda
 		Role: dynamoDBRole,
 	})
 
+	// create DynamoDB table
 	awsdynamodb.NewTable(stack, jsii.String("myDynamoDB"), &awsdynamodb.TableProps{
 		BillingMode: awsdynamodb.BillingMode_PAY_PER_REQUEST,
 		TableName:   jsii.String("MyDynamoDB"),

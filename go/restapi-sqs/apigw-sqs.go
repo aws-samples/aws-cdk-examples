@@ -23,11 +23,13 @@ func NewApigwSqsStack(scope constructs.Construct, id string, props *ApigwSqsStac
 	}
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
+	// create SQS queue
 	queue := awssqs.NewQueue(stack, jsii.String("EventbridgeSqsQueue"), &awssqs.QueueProps{
 		VisibilityTimeout: awscdk.Duration_Seconds(jsii.Number(300)),
 		QueueName:         jsii.String("MySqsQueue"),
 	})
 
+	// create AmazonSQSFullAccess role
 	restApiRole := awsiam.NewRole(stack, jsii.String("myRestAPIRole"), &awsiam.RoleProps{
 		AssumedBy: awsiam.NewServicePrincipal(jsii.String("apigateway.amazonaws.com"), &awsiam.ServicePrincipalOpts{}),
 		ManagedPolicies: &[]awsiam.IManagedPolicy{
@@ -35,11 +37,13 @@ func NewApigwSqsStack(scope constructs.Construct, id string, props *ApigwSqsStac
 		},
 	})
 
+	// create API Gateway response template
 	integrationResponse := &awsapigateway.IntegrationResponse{
 		StatusCode:        jsii.String("200"),
 		ResponseTemplates: &map[string]*string{"application/json": jsii.String("")},
 	}
 
+	// create API Gateway integration for previously created SQS queue
 	integration := awsapigateway.NewAwsIntegration(&awsapigateway.AwsIntegrationProps{
 		Service:               jsii.String("sqs"),
 		IntegrationHttpMethod: jsii.String("POST"),
@@ -55,13 +59,18 @@ func NewApigwSqsStack(scope constructs.Construct, id string, props *ApigwSqsStac
 		},
 	})
 
+	// create API Gateway with previously created integration
 	restApi := awsapigateway.NewRestApi(stack, jsii.String("myRestApi"), &awsapigateway.RestApiProps{
 		DefaultIntegration: integration,
 	})
+
+	// create API Gateway resource
 	apiResource := restApi.Root().AddResource(jsii.String("test"), &awsapigateway.ResourceOptions{})
 
+	// create API Gateway response
 	methodResponse := awsapigateway.MethodResponse{StatusCode: jsii.String("200")}
 
+	// create API Gateway method
 	apiResource.AddMethod(jsii.String("POST"), integration, &awsapigateway.MethodOptions{
 		MethodResponses: &[]*awsapigateway.MethodResponse{&methodResponse},
 	})

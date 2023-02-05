@@ -21,11 +21,13 @@ func NewSqsLambdaStack(scope constructs.Construct, id string, props *SqsLambdaSt
 	}
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
+	// create SQS queue
 	queue := awssqs.NewQueue(stack, jsii.String("EventbridgeSqsQueue"), &awssqs.QueueProps{
 		VisibilityTimeout: awscdk.Duration_Seconds(jsii.Number(300)),
 		QueueName:         jsii.String("MySqsQueue"),
 	})
 
+	// create Lambda function
 	awscdklambdagoalpha.NewGoFunction(stack, jsii.String("myGoHandler"), &awscdklambdagoalpha.GoFunctionProps{
 		Runtime: awslambda.Runtime_GO_1_X(),
 		Entry:   jsii.String("./sqs-consumer-handler"),
@@ -39,6 +41,7 @@ func NewSqsLambdaStack(scope constructs.Construct, id string, props *SqsLambdaSt
 		},
 	})
 
+	// log SQS endpoint URL
 	awscdk.NewCfnOutput(stack, jsii.String("sqsUrl"), &awscdk.CfnOutputProps{
 		Description: jsii.String("SQS endpoint URL"),
 		Value:       queue.QueueArn(),
