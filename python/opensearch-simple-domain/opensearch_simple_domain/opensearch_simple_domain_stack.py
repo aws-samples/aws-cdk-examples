@@ -30,7 +30,7 @@ class OpensearchSimpleDomainStack(cdk.Stack):
         # be granted access to the OpenSearch Domain.
         # Create an environment variable before running cdk deploy. E.g.:
         # OPENSEARCH_ALLOWED_IP='["33.45.123.8/32"]'
-        allowed_ip_addresses = os.environ["OPENSEARCH_ALLOWED_IP"]
+        allowed_ip_addresses = os.environ.get("OPENSEARCH_ALLOWED_IP", "x.x.x.x/32")
 
         # Creating OpenSearch access policy to restrict
         # access to a specific list of IPs. We are allowing all
