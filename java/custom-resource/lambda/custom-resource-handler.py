@@ -8,26 +8,26 @@ def on_event(event, context):
 
 def on_create(event):
   props = event["ResourceProperties"]
-  print("create new resource with props %s" % props)
+  print("Create new resource with props %s" % props)
 
   message = event['ResourceProperties']['Message']
 
   attributes = {
-      'Response': 'You said "%s"' % message
+      'Response': 'Resource message "%s"' % message
   }
   return { 'Data': attributes }
 
 def on_update(event):
   physical_id = event["PhysicalResourceId"]
   props = event["ResourceProperties"]
-  print("update resource %s with props %s" % (physical_id, props))
+  print("Update resource %s with props %s" % (physical_id, props))
   # ...
 
   return { 'PhysicalResourceId': physical_id }
 
 def on_delete(event):
   physical_id = event["PhysicalResourceId"]
-  print("delete resource %s" % physical_id)
+  print("Delete resource %s" % physical_id)
   # ...
 
   return { 'PhysicalResourceId': physical_id }
@@ -36,7 +36,7 @@ def is_complete(event, context):
   physical_id = event["PhysicalResourceId"]
   request_type = event["RequestType"]
 
-  # check if resource is stable based on request_type
+  # check if resource is stable based on request_type... fill in the blank below
   # is_ready = ...
 
   return { 'IsComplete': True }

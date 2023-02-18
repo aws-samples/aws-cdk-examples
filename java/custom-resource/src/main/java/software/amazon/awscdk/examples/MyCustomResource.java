@@ -19,7 +19,7 @@ public class MyCustomResource extends Construct {
   public String response = "";
   public MyCustomResource(final Construct scope, final String id, final Map<String, ? extends Object> props) {
     super(scope, id);
-    
+
 
     try {
 
@@ -30,7 +30,7 @@ public class MyCustomResource extends Construct {
         .uuid("f7d4f730-4ee1-11e8-9c2d-fa7ae01bbebc")
         .timeout(Duration.minutes(1))
         .build();
-      
+
       final Provider myProvider = Provider.Builder.create(this, "MyProvider")
         .onEventHandler(onEvent)
         .logRetention(RetentionDays.ONE_DAY)
@@ -49,12 +49,11 @@ public class MyCustomResource extends Construct {
   }
   // function to read the file content
   public static String readFileAsString(String fileName) throws Exception {
-    String data = "";
     try {
-      data = new String(Files.readAllBytes(Paths.get(fileName)), "UTF-8");
+      return new String(Files.readAllBytes(Paths.get(fileName)), "UTF-8");
     } catch (Exception e) {
       e.printStackTrace();
+      throw e;
     }
-    return data;
   }
 }

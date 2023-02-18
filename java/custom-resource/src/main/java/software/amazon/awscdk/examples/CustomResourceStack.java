@@ -24,24 +24,14 @@ public class CustomResourceStack extends Stack {
 
     try {
       MyCustomResource resource = new MyCustomResource(this, "DemoResource", props);
-  
+
       CfnOutput.Builder.create(this, "ResponseMessage")
         .description("The message that came back from the Custom Resource")
         .value((resource.response))
         .build();
-      
+
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
-  // // function to read the file content
-  // public static String readFileAsString(String fileName) throws Exception {
-  //   String data = "";
-  //   try {
-  //     data = new String(Files.readAllBytes(Paths.get(fileName)), "UTF-8");
-  //   } catch (Exception e) {
-  //     e.printStackTrace();
-  //   }
-  //   return data;
-  // }
 }
