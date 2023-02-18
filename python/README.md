@@ -73,3 +73,4 @@ $ cdk destroy
 | [url-shortener](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/url-shortener) | Demo from the [Infrastructure ***is*** Code with the AWS CDK](https://youtu.be/ZWCvNFUN-sU) AWS Online Tech Talk |
 | [ec2-instance](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/ec2/instance/) | Create EC2 Instance in new VPC with Systems Manager enabled |
 | [serverless-backend](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/serverless-backend/) | Create a serverless backend with API Gateway, Lambda, S3, DynamoDB, and Cognito |
+| [vpc-ec2-local-zones](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/vpc-ec2-local-zones/) | Create a VPC with public and private subnets in AWS Local Zones |
