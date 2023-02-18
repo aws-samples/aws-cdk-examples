@@ -7,7 +7,7 @@ import java.util.Map;
 import software.constructs.Construct;
 import software.amazon.awscdk.CustomResource;
 import software.amazon.awscdk.Duration;
-import software.amazon.awscdk.Stack;
+import java.util.UUID;
 import software.amazon.awscdk.customresources.*;
 
 import software.amazon.awscdk.services.logs.*;
@@ -27,7 +27,7 @@ public class MyCustomResource extends Construct {
         .code(InlineCode.fromAsset("lambda"))
         .handler("custom-resource-handler.on_event")
         .runtime(Runtime.PYTHON_3_8)
-        .uuid("f7d4f730-4ee1-11e8-9c2d-fa7ae01bbebc")
+        .uuid(UUID.randomUUID().toString())
         .timeout(Duration.minutes(1))
         .build();
 
