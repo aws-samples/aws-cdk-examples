@@ -77,7 +77,7 @@ https://docs.aws.amazon.com/lambda/latest/dg/dotnet-programming-model.html
     dotnet lambda package
     ```
 
-    This should have created a folder `bin/Release/netcoreapp3.1/publish/` which is the package
+    This should have created a folder `bin/Release/net6.0/publish/` which is the package
     that needs to be deployed to AWS Lambda as the function code.
 
 6. In the CDK project, create an instance of `Function` class from the Lambda module.
