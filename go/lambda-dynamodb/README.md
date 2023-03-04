@@ -16,11 +16,10 @@ This is similar to the `lambda-dynamodb` example but is implemented in CDK.
 Run `cdk deploy`. This will deploy / redeploy your Stack to your AWS Account.
 
 ## Testing
-Run the following Lambda CLI invoke command to invoke the function. Note, you must edit the {LambdFunctionArn} placeholder with the ARN of the deployed Lambda function. This is provided in the stack outputs. Note that this requires AWS CLI v2.
-
+Run the following Lambda CLI invoke command to test the deployed function. `<LAMBDA_FUNCTION_ARN>` will be logged at end of the deployment during `cdk deploy`. Note that this requires AWS CLI v2.
 
 ```bash
-aws lambda invoke --function-name "LAMBDA_FUNCTION_ARN" \
+aws lambda invoke --function-name "<LAMBDA_FUNCTION_ARN>" \
 --invocation-type Event \
 --payload '{ "Metadata": "Hello" }' \
 --cli-binary-format raw-in-base64-out \

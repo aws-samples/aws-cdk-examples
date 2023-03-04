@@ -12,10 +12,11 @@ Run `cdk deploy`. This will deploy / redeploy your Stack to your AWS Account.
 
 ## Testing
 
-To test the endpoint first send data using the following command. Be sure to update the endpoint with endpoint of your stack.
+To test your endpoint first send data using the following command. 
+`<YOUR_API_ENDPOINT>` will be logged at end of the deployment during `cdk deploy`.
 
 ```
-curl --location --request POST '<your api endpoint>' --header 'Content-Type: application/json' \
+curl --location --request POST '<YOUR_API_ENDPOINT>' --header 'Content-Type: application/json' \
 --data-raw '{
     "Detail":{
         "message": "This is my test"

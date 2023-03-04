@@ -31,7 +31,7 @@ func NewLambdaDynamodbStack(scope constructs.Construct, id string, props *Lambda
 	})
 
 	// create lambda function with previously created AmazonDynamoDBFullAccess role
-	awscdklambdagoalpha.NewGoFunction(stack, jsii.String("myGoHandler"), &awscdklambdagoalpha.GoFunctionProps{
+	lambdaFunction := awscdklambdagoalpha.NewGoFunction(stack, jsii.String("myGoHandler"), &awscdklambdagoalpha.GoFunctionProps{
 		Runtime: awslambda.Runtime_GO_1_X(),
 		Entry:   jsii.String("./lambda-handler"),
 		Bundling: &awscdklambdagoalpha.BundlingOptions{
@@ -48,6 +48,12 @@ func NewLambdaDynamodbStack(scope constructs.Construct, id string, props *Lambda
 			Name: aws.String("ID"),
 			Type: awsdynamodb.AttributeType_STRING,
 		},
+	})
+
+	// log lambda function ARN
+	awscdk.NewCfnOutput(stack, jsii.String("lambdaFunctionArn"), &awscdk.CfnOutputProps{
+		Value:       lambdaFunction.FunctionArn(),
+		Description: jsii.String("Lambda function ARN"),
 	})
 
 	return stack
