@@ -17,6 +17,17 @@ app = cdk.App()
 project = EnvSettings.PROJECT
 codeartifact_domain = CodeArtifactSettings.DOMAIN
 codeartifact_repo = CodeArtifactSettings.REPO
+codeartifact_domain_arn = cdk.Arn.format(
+    components=cdk.ArnComponents(
+        arn_format=cdk.ArnFormat.SLASH_RESOURCE_NAME,
+        account=EnvSettings.ACCOUNT,
+        region=EnvSettings.REGION_ARTIFACTS,
+        resource="domain",
+        service="codeartifact",
+        resource_name=codeartifact_domain,
+        partition=cdk.Aws.PARTITION
+    )
+)
 
 # instaniate stacks
 
@@ -38,6 +49,7 @@ us_stack = UpStreamPipelineStack(
     scope=app,
     construct_id="upstream-pipeline",
     stack_name=f"{project}-UpstreamPipeline",
+    codeartifact_domain_arn=codeartifact_domain_arn,
     env=CDKEnvBuilder.find_env("upstream-pipeline")
 )
 us_stack.add_dependency(target=codeartifact_stack,
@@ -50,6 +62,7 @@ if crossaccount_role:
         construct_id="downstream-pipeline",
         stack_name=f"{project}-DownstreamPipeline",
         iam_role_app=crossaccount_role,
+        codeartifact_domain_arn=codeartifact_domain_arn,
         env=CDKEnvBuilder.find_env("downstream-pipeline")
     )
     ds_stack.add_dependency(target=us_stack,
