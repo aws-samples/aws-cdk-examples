@@ -62,11 +62,22 @@ Run:
 ```
 cdk deploy --profile {aws_application_account_profile} crossaccount-role
 ```
+This will deploy a crossaccount IAM role in the Application account
     
 Followed by:
 ```
 cdk deploy --profile {aws_devops_account_profile} downstream-pipeline
 ```
+This will deploy the following resources:
+1. CodeArtifact domain and repository in us-west-2 or REGION_ARTIFACTS as defined in common.py.
+![CodeArtifact repository](APG-CodeArtifact.png)
+2. CodeCommit repositories in ca-central-1 if using the defaults or REGION_MAIN as defined in common.py
+![CodeCommit repositories](APG-CodeCommitRepos.png)
+3. UpstreamArtifactPipeline in ca-central-1 if using the defaults or REGION_MAIN as defined in common.py
+![Upstream CodePipeline](APG-UpstreamPipeline.png)
+4. DownstreamArtifactPipeline in ca-central-1 if using the defaults or REGION_MAIN as defined in common.py
+![Downstream CodePipeline](APG-DownstreamPipeline.png)
+
 
 ## To clean up and remove all deployed resources
 
@@ -80,6 +91,7 @@ Followed by:
 cdk destroy --profile {aws_devops_account_profile} codeartifact
 ```
 
+Througout the project cdk-nag has been used [cdk-nag on github](https://github.com/cdklabs/cdk-nag) to check for security best practices of deployed resources 
 
 ## Useful commands
  *  
