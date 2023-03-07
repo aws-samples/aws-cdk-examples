@@ -8,6 +8,10 @@ from aws_cdk import (
     aws_codecommit as _codecommit,
     aws_codepipeline as _codepipeline,
     aws_codebuild as _codebuild,
+    Arn,
+    ArnComponents,
+    ArnFormat,
+    Aws
 )
 from constructs import Construct
 
@@ -90,24 +94,35 @@ def create_output_artifact():
 
 
 def update_role_with_codeartifact_policy(
-    scope: Construct, construct_id: str, iam_role: _iam.Role
+    scope: Construct, construct_id: str,
+    iam_role: _iam.Role, codeartifact_domain_arn: str
 ):
+    assumed_role = Arn.format(
+        components=ArnComponents(
+            partition=Aws.PARTITION,
+            region=Aws.NO_VALUE,
+            account=EnvSettings.ACCOUNT,
+            arn_format=ArnFormat.SLASH_RESOURCE_NAME,
+            service="sts",
+            resource="assumed-role",
+            resource_name=iam_role.role_name
+        )
+    )
+    assumed_role_full = f"{assumed_role}/*"
     iam_policy = _iam.Policy(
         scope,
-        f"codebuild-push-artifact-policy-{construct_id}",
+        f"codebuild-push-pull-artifact-policy-{construct_id}",
         statements=[
             _iam.PolicyStatement(
                 effect=_iam.Effect.ALLOW,
-                resources=["*"],
+                resources=[codeartifact_domain_arn],
                 actions=[
-                    "codeartifact:GetAuthorizationToken",
-                    "codeartifact:GetRepositoryEndpoint",
-                    "codeartifact:ReadFromRepository",
+                    "codeartifact:GetAuthorizationToken"
                 ],
             ),
             _iam.PolicyStatement(
                 effect=_iam.Effect.ALLOW,
-                resources=["*"],
+                resources=[assumed_role_full],
                 actions=["sts:GetServiceBearerToken"],
                 conditions={
                     "StringEquals": {

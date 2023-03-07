@@ -16,7 +16,8 @@ from common import EnvSettings, CodeArtifactSettings
 
 class DownStreamPipelineStack(Stack):
     def __init__(
-        self, scope: Construct, construct_id: str, iam_role_app, **kwargs
+        self, scope: Construct, construct_id: str, iam_role_app,
+        codeartifact_domain_arn: str, **kwargs
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
         pipeline_cmk = pipeline_common.create_encryption_key(
@@ -73,6 +74,7 @@ class DownStreamPipelineStack(Stack):
             scope=self,
             construct_id=construct_id,
             iam_role=package_lambda_codebuild_project.role,
+            codeartifact_domain_arn=codeartifact_domain_arn
         )
 
         package_codebuild_action = _codepipeline_actions.CodeBuildAction(
@@ -141,7 +143,7 @@ class DownStreamPipelineStack(Stack):
                     value="packaged-sam.yaml"
                 ),
                 "STACK_NAME": _codebuild.BuildEnvironmentVariable(
-                    value="DeployLambdaFromSAMUsingCodeBuild"
+                    value=EnvSettings.CFN_STACK_NAME_SAM_DEPLOY
                 ),
                 "REGION": _codebuild.BuildEnvironmentVariable(
                     value=EnvSettings.REGION_MAIN

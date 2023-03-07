@@ -10,6 +10,8 @@ Globals:
   Function:
     Timeout: 3
     Tracing: Active
+    Tags:
+      Project: Demo Cross Region Code Artifact
   Api:
     TracingEnabled: True
 
@@ -23,6 +25,7 @@ Resources:
       CompatibleRuntimes:
         - python3.9
         - python3.8
+      RetentionPolicy: Delete
 
   TestPackageFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction

@@ -7,7 +7,10 @@ class EnvSettings:
     APP_ACCOUNT = 'XXXXXXXXXXXX'
     # Add Org ID required for adding permission org wide to CodeArtifact Repo
     ORG_ID = 'o-xxxxxxxxxx'
-    PROJECT = "crossregion-codeartifact"
+    PROJECT = 'crossregion-codeartifact'
+    # CFN Stack name used by CodeBuild running SAM to deploy in prod account
+    # using stack name defined below
+    CFN_STACK_NAME_SAM_DEPLOY = 'DeployLambdaAndLayerAppAccount'
     TAGS = {
         "Project": "Demo Cross Region Code Artifact"
     }

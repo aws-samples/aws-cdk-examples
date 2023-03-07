@@ -4,7 +4,7 @@ from aws_cdk import (
     Stack,
     aws_codepipeline as _codepipeline,
     aws_codepipeline_actions as _codepipeline_actions,
-    aws_codebuild as _codebuild,
+    aws_codebuild as _codebuild
 )
 from cdk_nag import NagSuppressions
 from constructs import Construct
@@ -14,7 +14,8 @@ from common import CodeArtifactSettings, EnvSettings
 
 
 class UpStreamPipelineStack(Stack):
-    def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, construct_id: str,
+                 codeartifact_domain_arn: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
         pipeline_cmk = pipeline_common.create_encryption_key(
@@ -103,11 +104,11 @@ class UpStreamPipelineStack(Stack):
                 ),
             },
         )
-
         pipeline_common.update_role_with_codeartifact_policy(
             scope=self,
             construct_id=construct_id,
             iam_role=codebuild_push_artifact.role,
+            codeartifact_domain_arn=codeartifact_domain_arn
         )
 
         codebuild_push_artifact_output = _codepipeline.Artifact()
