@@ -1,5 +1,19 @@
 # ECS Cluster With Application Load Balancer (ALB)
 
+## <!--BEGIN STABILITY BANNER-->
+
+![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
+
+> **This is a stable example. It should successfully build out of the box**
+>
+> This example is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
+
+---
+
+<!--END STABILITY BANNER-->
+
+## Overview
+
 This AWS CDK Go sample demonstrates how to configure and deploy an Elastic Container Service (ECS) Cluster behind an Application Load Balancer (ALB).
 
 This is useful because traffic will not directly hit the ECS cluster; rather, it will be routed through the ALB to access the application.
