@@ -21,16 +21,15 @@ func NewClusterAlbStack(scope constructs.Construct, id string, props *ClusterAlb
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
 	// The code that defines your stack goes here
-	cidrRange := "10.25.0.0/16"
 	containerPort := *jsii.Number(80)
 
+	// Creates a VPC
 	vpc := ec2.NewVpc(stack, jsii.String("EcsClusterVpc"), &ec2.VpcProps{
-		MaxAzs:             jsii.Number(3),
-		VpcName:            jsii.String("EcsClusterVpc"),
-		IpAddresses:        ec2.IpAddresses_Cidr(jsii.String(cidrRange)),
-		NatGatewayProvider: ec2.NatProvider_Gateway(&ec2.NatGatewayProps{}),
+		VpcName:     jsii.String("EcsClusterVpc"),
+		IpAddresses: ec2.IpAddresses_Cidr(jsii.String("10.25.0.0/16")),
 	})
 
+	// Creates an ECS Cluster of EC2 instances
 	ecsCluster := ecs.NewCluster(stack, jsii.String("EcsCluster"), &ecs.ClusterProps{
 		Vpc:         vpc,
 		ClusterName: jsii.String("MyEcsCluster"),
@@ -42,51 +41,56 @@ func NewClusterAlbStack(scope constructs.Construct, id string, props *ClusterAlb
 		},
 	})
 
+	// Creates a Task Definition
 	taskDefinition := ecs.NewTaskDefinition(stack, jsii.String("EcsTaskDef"), &ecs.TaskDefinitionProps{
 		Compatibility: ecs.Compatibility_EC2,
 	})
 
+	// Adds a container to the Task Definition
 	container := taskDefinition.AddContainer(jsii.String("EcsSampleContainer"), &ecs.ContainerDefinitionOptions{
 		ContainerName:  jsii.String("EcsSampleContainer"),
 		Image:          ecs.ContainerImage_FromRegistry(jsii.String("amazon/amazon-ecs-sample"), &ecs.RepositoryImageProps{}),
 		MemoryLimitMiB: jsii.Number(256),
 	})
 
+	// Adds a port mapping to the container
 	container.AddPortMappings(&ecs.PortMapping{
 		ContainerPort: jsii.Number(containerPort),
 		Protocol:      ecs.Protocol_TCP,
 	})
 
+	// Creates a Service within the ECS Cluster
 	ecsService := ecs.NewEc2Service(stack, jsii.String("EcsService"), &ecs.Ec2ServiceProps{
 		Cluster:        ecsCluster,
-		TaskDefinition: taskDefinition,
 		DesiredCount:   jsii.Number(2),
 		ServiceName:    jsii.String("ecs-sample-service"),
+		TaskDefinition: taskDefinition,
 	})
 
+	// Creates an Application Load Balancer (ALB)
 	alb := elb.NewApplicationLoadBalancer(stack, jsii.String("EcsLoadBalancer"), &elb.ApplicationLoadBalancerProps{
-		Vpc:              vpc,
-		LoadBalancerName: jsii.String("EcsClusterALB"),
 		InternetFacing:   jsii.Bool(true),
-		VpcSubnets: &ec2.SubnetSelection{
-			SubnetType: ec2.SubnetType_PUBLIC,
-		},
+		LoadBalancerName: jsii.String("EcsClusterALB"),
+		Vpc:              vpc,
 	})
 
+	// Adds a listener to the ALB
 	albListener := alb.AddListener(jsii.String("AlbPublicListener"), &elb.BaseApplicationListenerProps{
-		Port: jsii.Number(containerPort),
 		Open: jsii.Bool(true),
+		Port: jsii.Number(containerPort),
 	})
 
+	// Adds a Target Group to the ALB listener
 	albListener.AddTargets(jsii.String("AlbTargets"), &elb.AddApplicationTargetsProps{
 		Protocol: elb.ApplicationProtocol_HTTP,
 		Targets: &[]elb.IApplicationLoadBalancerTarget{
 			ecsService.LoadBalancerTarget(&ecs.LoadBalancerTargetOptions{
-				ContainerName: jsii.String("EcsSampleContainer"),
-				ContainerPort: jsii.Number(containerPort),
-				Protocol: ecs.Protocol_TCP,
+				ContainerName: container.ContainerName(),
+				ContainerPort: container.ContainerPort(),
+				Protocol:      ecs.Protocol_TCP,
 			}),
 		},
+		// Configures Target Group health checks
 		HealthCheck: &elb.HealthCheck{
 			Enabled:  jsii.Bool(true),
 			Interval: awscdk.Duration_Seconds(jsii.Number(60)),
@@ -95,10 +99,11 @@ func NewClusterAlbStack(scope constructs.Construct, id string, props *ClusterAlb
 		},
 	})
 
+	// Outputs the ALB endpoint after a successful deployment
 	awscdk.NewCfnOutput(stack, jsii.String("AlbEndpoint"), &awscdk.CfnOutputProps{
 		Value: alb.LoadBalancerDnsName(),
 	})
-	
+
 	return stack
 }
 
