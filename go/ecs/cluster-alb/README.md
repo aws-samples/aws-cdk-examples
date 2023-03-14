@@ -16,7 +16,9 @@
 
 This AWS CDK Go sample demonstrates how to configure and deploy an Elastic Container Service (ECS) Cluster behind an Application Load Balancer (ALB).
 
-This is useful because traffic will not directly hit the ECS cluster; rather, it will be routed through the ALB to access the application.
+## Real-world Example
+
+Imagine we are running a containerized application with multiple tasks within an ECS Cluster service. We wouldn't want to expose the service directly to the internet as part of security best practices. Therefore, we deploy an Application Load Balancer (ALB) in front of the service to both balance traffic, and act as the single point of entry to the application.
 
 ## Deploying
 
@@ -29,7 +31,31 @@ This is useful because traffic will not directly hit the ECS cluster; rather, it
 
 ## Testing
 
-- CDK will output the ALB endpoint. Copy/paste it into the browser to check that the application is running.
+- CDK will output the ALB endpoint after a successful deployment. Copy / paste it into the browser to check that the application is running.
+
   - e.g. `http://EcsClusterALB-xxxxxxxxx.us-east-1.elb.amazonaws.com`
-  - _Note: Be sure to prefix the ALB endpoint with `http://` as your browser may initially force `https`, which will not work as we are not issuing or installing an SSL certificate in this sample._
-- Navigate to the AWS console and view the services that were deployed in the VPC (Subnets, Route Tables, etc), ECS (Cluster, Service, Task Definition, etc) and EC2 (Load Balancer, Target Groups, etc) consoles.
+    - _Note: Be sure to prefix the ALB endpoint with `http://` as your browser may initially force `https`, which will not work as we are not issuing or installing an SSL certificate in this sample._
+    - We know that this endpoint belongs to an AWS Load balancer as it contains `elb`, which stands for [Elastic Load Balancing](https://aws.amazon.com/elasticloadbalancing/).
+
+- Confirming our ALB is in use:
+
+  - Navigate to the AWS Console &rarr; EC2 &rarr; Load balancers.
+  - Select the newly deployed ALB (in this example, it's named `EcsClusterALB`).
+  - We should see that the `DNS name` matches what was in the terminal output after the `cdk deploy` was successful.
+  - Towards the bottom of the page, we should see a `Listeners` section that forwards traffic to our ECS Cluster Target Group containing the EC2 instances.
+  - Clicking on the `Monitoring` tab, we are able to visualize metrics related to the ALB.
+  - For metrics related to the Target Groups and EC2 instances:
+    - Click on the `Listeners` tab.
+    - Under `Default routing rule`, click on the name of the target group.
+    - Click on the `Monitoring` tab in the Target Groups console.
+
+- Navigate to the AWS console to view the services that were deployed:
+  - VPC (Subnets, Route Tables, etc.)
+  - ECS (Cluster, Service, Task Definition, etc.)
+  - EC2 (Load Balancer, Target Groups, etc.)
+
+## Further Improvements
+
+- Enable TLS at the ALB by [creating an HTTPS listener](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#add-https-listener).
+- Route traffic to the ALB with a [custom Route 53 domain](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-to-elb-load-balancer.html).
+- Protect your ALB from attacks and malicious traffic using [Web Application Firewall (WAF)](https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html).
