@@ -1,6 +1,6 @@
-# ESC Cluster
+# ECS Cluster
 
-This is an example of how to provision ECS cluster with CDK.
+This is an example of how to provision an ECS cluster with CDK.
 
 **NOTICE**: Go support is still in Developer Preview. This implies that APIs may
 change while we address early feedback from the community. We would love to hear
