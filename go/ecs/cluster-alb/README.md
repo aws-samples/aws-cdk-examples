@@ -18,7 +18,7 @@ This AWS CDK Go sample demonstrates how to configure and deploy an Elastic Conta
 
 ## Real-world Example
 
-Imagine we are running a containerized application with multiple tasks within an ECS Cluster service. We wouldn't want to expose the service directly to the internet as part of security best practices. Therefore, we deploy an Application Load Balancer (ALB) in front of the service to both balance traffic, and act as the single point of entry to the application.
+When running a containerized application with multiple tasks in an ECS Cluster service, not exposing the service directly to the internet is part of security best practices. In this example, we deploy an Application Load Balancer (ALB) in front of the service to both balance traffic, and act as the single point of entry to the application.
 
 ## Deploying
 
@@ -56,6 +56,11 @@ Imagine we are running a containerized application with multiple tasks within an
 
 ## Further Improvements
 
+This example does not use an HTTPS listener. For improved security, HTTPS (TLS) is encouraged.
+
+Some further improvements that can be made are:
+
 - Enable TLS at the ALB by [creating an HTTPS listener](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#add-https-listener).
 - Route traffic to the ALB with a [custom Route 53 domain](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-to-elb-load-balancer.html).
 - Protect your ALB from attacks and malicious traffic using [Web Application Firewall (WAF)](https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html).
+- Use a [CloudFront Distribution to cache results](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ConfiguringCaching.html) returned from the application, reducing load on the containerized application overall.
