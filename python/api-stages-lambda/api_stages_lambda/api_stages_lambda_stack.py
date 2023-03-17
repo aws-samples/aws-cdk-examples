@@ -53,6 +53,11 @@ class ApiStagesLambdaStack(Stack):
             }
         )
 
+        # NOTE: We use this method of permissioning to further restrict 
+        # which API Gateway stage can invoke a specific Lambda Alias.
+        # This approach is more restrictive than using prod_alias.grant_invoke(api)
+        # which would give permission to the API Gateway service or a specific
+        # IAM role that APIGW can assume to invoke the Lambda Alias
         prod_alias.add_permission("ProdStageInvokeProdAliasPermission",
             principal=iam.ServicePrincipal("apigateway.amazonaws.com"),
             action="lambda:InvokeFunction",
