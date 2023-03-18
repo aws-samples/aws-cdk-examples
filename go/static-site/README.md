@@ -14,7 +14,18 @@
 
 ## Overview
 
+This AWS CDK Go sample demonstrates how to host a static website in an S3 Bucket and serve content using a CloudFront Distribution.
+
 ## Real-world Example
+
+When working with a static website, it is more efficient to host the static files in an S3 Bucket, rather than a server that is always running. To achieve this, we store the site static files in an S3 Bucket, and create a CloudFront Distribution that has the S3 Bucket set as its origin to retrieve, serve, and cache content.
+
+## AWS Services Utilized
+
+- CloudFront
+- Simple Storage Service (S3)
+- AWS Certificate Manager (ACM)
+- Identity and Access Management (IAM)
 
 ## Deploying
 

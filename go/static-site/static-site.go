@@ -25,9 +25,13 @@ func NewStaticSiteStack(scope constructs.Construct, id string, props *StaticSite
 
 	// The code that defines your stack goes here
 
+	// Change the bucket name to something unique before deploying
+	s3BucketName := "my-static-bucket-v1"
+	// route53HostedZone := ""
+
 	// Creates S3 Bucket to store our static site content
 	siteBucket := s3.NewBucket(stack, jsii.String("StaticSiteBucket"), &s3.BucketProps{
-		BucketName:        jsii.String("news3staticsite.com"),
+		BucketName:        jsii.String(s3BucketName),
 		BlockPublicAccess: s3.BlockPublicAccess_BLOCK_ALL(),
 		PublicReadAccess:  jsii.Bool(false),
 		Versioned:         jsii.Bool(true),
