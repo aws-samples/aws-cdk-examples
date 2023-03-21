@@ -19,15 +19,15 @@ import (
 	"github.com/aws/jsii-runtime-go"
 )
 
-type config struct {
-	bucketName string
-	hostedZone string `field:"optional"`
-	subdomain  string `field:"optional"`
+type StackConfigs struct {
+	BucketName string
+	HostedZone string `field:"optional"`
+	Subdomain  string `field:"optional"`
 }
 
 type StaticSiteStackProps struct {
 	awscdk.StackProps
-	stackDetails config
+	stackDetails StackConfigs
 }
 
 func NewStaticSiteStack(scope constructs.Construct, id string, props *StaticSiteStackProps) awscdk.Stack {
@@ -40,9 +40,9 @@ func NewStaticSiteStack(scope constructs.Construct, id string, props *StaticSite
 	// The code that defines your stack goes here
 
 	var cloudfrontDistribution cloudfront.Distribution
-	s3BucketName := props.stackDetails.bucketName
-	hostedZoneName := props.stackDetails.hostedZone
-	subdomain := props.stackDetails.subdomain
+	s3BucketName := props.stackDetails.BucketName
+	hostedZoneName := props.stackDetails.HostedZone
+	subdomain := props.stackDetails.Subdomain
 
 	// Creates S3 Bucket to store our static site content
 	siteBucket := s3.NewBucket(stack, jsii.String("StaticSiteBucket"), &s3.BucketProps{
@@ -89,7 +89,7 @@ func NewStaticSiteStack(scope constructs.Construct, id string, props *StaticSite
 
 	// If Route 53 Hosted Zone is set, update AWS Certificate Manager, Route 53, and CloudFront accordingly
 	if strings.TrimSpace(hostedZoneName) != "" {
-		fmt.Println("Route 53 Hosted Zone is set!")
+		fmt.Println("[INFO] Route 53 Hosted Zone is set")
 
 		fullDomain := fmt.Sprintf("%s.%s", subdomain, hostedZoneName)
 
@@ -128,7 +128,7 @@ func NewStaticSiteStack(scope constructs.Construct, id string, props *StaticSite
 			Value: publicEndpoint.DomainName(),
 		})
 	} else {
-		fmt.Println("Route 53 Hosted Zone is NOT set!")
+		fmt.Println("[INFO] Route 53 Hosted Zone is NOT set")
 
 		// Creates a new CloudFront Distribution
 		cloudfrontDistribution = cloudfront.NewDistribution(stack, jsii.String("SiteDistribution"), &cloudfront.DistributionProps{
@@ -172,17 +172,18 @@ func main() {
 		awscdk.StackProps{
 			Env: env(),
 		},
-		config{
-			// Change the bucket name to something unique before deploying
-			// e.g. "my-static-content-bucket"
-			bucketName: "",
+		StackConfigs{
+			// Required
+			// Change the bucket name to something unique before deploying e.g. "my-static-content-bucket"
+			BucketName: "",
 
 			// Optional
-			// If you have a Route 53 Hosted Zone e.g. "amazon.com". Otherwise, set to ""
-			hostedZone: "",
+			// To configure a public Route 53 Hosted Zone e.g. "amazon.com". Otherwise, set to ""
+			HostedZone: "",
 
+			// Optional
 			// To add a subdomain to the hosted zone e.g. "aws". Otherwise, set to ""
-			subdomain: "",
+			Subdomain: "",
 		},
 	})
 	app.Synth(nil)

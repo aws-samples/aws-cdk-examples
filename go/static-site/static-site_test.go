@@ -13,7 +13,7 @@ func TestStaticSiteStack(t *testing.T) {
 	app := awscdk.NewApp(nil)
 
 	// WHEN
-	stack := NewStaticSiteStack(app, "MyStack", nil)
+	stack := NewStaticSiteStack(app, "MyStack", &StaticSiteStackProps{})
 
 	// THEN
 	template := assertions.Template_FromStack(stack, &assertions.TemplateParsingOptions{})
