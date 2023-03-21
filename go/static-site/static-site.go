@@ -39,12 +39,10 @@ func NewStaticSiteStack(scope constructs.Construct, id string, props *StaticSite
 
 	// The code that defines your stack goes here
 
+	var cloudfrontDistribution cloudfront.Distribution
 	s3BucketName := props.stackDetails.bucketName
 	hostedZoneName := props.stackDetails.hostedZone
 	subdomain := props.stackDetails.subdomain
-	fullDomain := fmt.Sprintf("%s.%s", subdomain, hostedZoneName)
-
-	var cloudfrontDistribution cloudfront.Distribution
 
 	// Creates S3 Bucket to store our static site content
 	siteBucket := s3.NewBucket(stack, jsii.String("StaticSiteBucket"), &s3.BucketProps{
@@ -93,6 +91,8 @@ func NewStaticSiteStack(scope constructs.Construct, id string, props *StaticSite
 	if strings.TrimSpace(hostedZoneName) != "" {
 		fmt.Println("Route 53 Hosted Zone is set!")
 
+		fullDomain := fmt.Sprintf("%s.%s", subdomain, hostedZoneName)
+
 		// Searches Route 53 for existing zone using hosted zone name
 		hostedZone := route53.HostedZone_FromLookup(stack, jsii.String("MyHostedZone"), &route53.HostedZoneProviderProps{
 			DomainName:  jsii.String(hostedZoneName),
@@ -106,7 +106,7 @@ func NewStaticSiteStack(scope constructs.Construct, id string, props *StaticSite
 		})
 
 		// Creates a new CloudFront Distribution with a custom Route 53 domain and custom SSL/TLS Certificate
-		cloudfrontDistribution = cloudfront.NewDistribution(stack, jsii.String("SiteDistributionWithDomain"), &cloudfront.DistributionProps{
+		cloudfrontDistribution = cloudfront.NewDistribution(stack, jsii.String("SiteDistribution"), &cloudfront.DistributionProps{
 			DefaultRootObject: jsii.String("index.html"),
 			DefaultBehavior:   cloudfrontDefaultBehavior,
 			ErrorResponses:    cloudfrontErrorResponses,
@@ -180,7 +180,8 @@ func main() {
 			// Optional
 			// If you have a Route 53 Hosted Zone e.g. "amazon.com". Otherwise, set to ""
 			hostedZone: "",
-			// To add a subdomain to the hosted zone e.g. "static". Otherwise, set to ""
+
+			// To add a subdomain to the hosted zone e.g. "aws". Otherwise, set to ""
 			subdomain: "",
 		},
 	})
