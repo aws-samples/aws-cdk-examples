@@ -20,9 +20,9 @@ import (
 )
 
 type StackConfigs struct {
-	BucketName string
-	HostedZone string `field:"optional"`
-	Subdomain  string `field:"optional"`
+	BucketName     string
+	HostedZoneName string `field:"optional"`
+	Subdomain      string `field:"optional"`
 }
 
 type StaticSiteStackProps struct {
@@ -41,7 +41,7 @@ func NewStaticSiteStack(scope constructs.Construct, id string, props *StaticSite
 
 	var cloudfrontDistribution cloudfront.Distribution
 	s3BucketName := props.stackDetails.BucketName
-	hostedZoneName := props.stackDetails.HostedZone
+	hostedZoneName := props.stackDetails.HostedZoneName
 	subdomain := props.stackDetails.Subdomain
 
 	// Creates S3 Bucket to store our static site content
@@ -91,7 +91,14 @@ func NewStaticSiteStack(scope constructs.Construct, id string, props *StaticSite
 	if strings.TrimSpace(hostedZoneName) != "" {
 		fmt.Println("[INFO] Route 53 Hosted Zone is set")
 
-		fullDomain := fmt.Sprintf("%s.%s", subdomain, hostedZoneName)
+		var fullDomain string
+
+		// If a subdomain is not set
+		if strings.TrimSpace(subdomain) == "" {
+			fullDomain = hostedZoneName
+		} else {
+			fullDomain = fmt.Sprintf("%s.%s", subdomain, hostedZoneName)
+		}
 
 		// Searches Route 53 for existing zone using hosted zone name
 		hostedZone := route53.HostedZone_FromLookup(stack, jsii.String("MyHostedZone"), &route53.HostedZoneProviderProps{
@@ -179,7 +186,7 @@ func main() {
 
 			// Optional
 			// Set to an existing public Route 53 Hosted Zone in your control e.g. "amazon.com". Otherwise, set to ""
-			HostedZone: "",
+			HostedZoneName: "",
 
 			// Optional
 			// Add a subdomain to the hosted zone e.g. "aws". Otherwise, set to ""
