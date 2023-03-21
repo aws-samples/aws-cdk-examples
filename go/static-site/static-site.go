@@ -178,11 +178,11 @@ func main() {
 			BucketName: "",
 
 			// Optional
-			// To configure a public Route 53 Hosted Zone e.g. "amazon.com". Otherwise, set to ""
+			// Set to an existing public Route 53 Hosted Zone in your control e.g. "amazon.com". Otherwise, set to ""
 			HostedZone: "",
 
 			// Optional
-			// To add a subdomain to the hosted zone e.g. "aws". Otherwise, set to ""
+			// Add a subdomain to the hosted zone e.g. "aws". Otherwise, set to ""
 			Subdomain: "",
 		},
 	})
