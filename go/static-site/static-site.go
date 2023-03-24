@@ -8,7 +8,6 @@ import (
 	acm "github.com/aws/aws-cdk-go/awscdk/v2/awscertificatemanager"
 	cloudfront "github.com/aws/aws-cdk-go/awscdk/v2/awscloudfront"
 	origins "github.com/aws/aws-cdk-go/awscdk/v2/awscloudfrontorigins"
-	iam "github.com/aws/aws-cdk-go/awscdk/v2/awsiam"
 	route53 "github.com/aws/aws-cdk-go/awscdk/v2/awsroute53"
 	route53targets "github.com/aws/aws-cdk-go/awscdk/v2/awsroute53targets"
 	s3 "github.com/aws/aws-cdk-go/awscdk/v2/awss3"
@@ -19,7 +18,6 @@ import (
 )
 
 type StackConfigs struct {
-	BucketName     string
 	HostedZoneName string `field:"optional"`
 	Subdomain      string `field:"optional"`
 }
@@ -39,35 +37,21 @@ func NewStaticSiteStack(scope constructs.Construct, id string, props *StaticSite
 	// The code that defines your stack goes here
 
 	var cloudfrontDistribution cloudfront.Distribution
-	s3BucketName := props.stackDetails.BucketName
 	hostedZoneName := props.stackDetails.HostedZoneName
 	subdomain := props.stackDetails.Subdomain
 
+	// Creates Origin Access Identity (OAI) to only allow CloudFront to get content
+	cloudfrontOAI := cloudfront.NewOriginAccessIdentity(stack, jsii.String("CloudFrontOAI"), &cloudfront.OriginAccessIdentityProps{})
+
 	// Creates S3 Bucket to store our static site content
 	siteBucket := s3.NewBucket(stack, jsii.String("StaticSiteBucket"), &s3.BucketProps{
-		BucketName:        jsii.String(s3BucketName),
 		BlockPublicAccess: s3.BlockPublicAccess_BLOCK_ALL(),
 		PublicReadAccess:  jsii.Bool(false),
 		Versioned:         jsii.Bool(true),
 	})
 
-	// Creates Origin Access Identity (OAI) to only allow CloudFront to get content
-	cloudfrontOAI := cloudfront.NewOriginAccessIdentity(stack, jsii.String("CloudFrontOAI"), &cloudfront.OriginAccessIdentityProps{})
-
 	// Adds a policy to the S3 Bucket that allows the OAI to get objects
-	siteBucket.AddToResourcePolicy(
-		iam.NewPolicyStatement(&iam.PolicyStatementProps{
-			Actions: &[]*string{
-				jsii.String("s3:GetObject"),
-			},
-			Resources: &[]*string{
-				siteBucket.ArnForObjects(jsii.String("*")),
-			},
-			Principals: &[]iam.IPrincipal{
-				iam.NewCanonicalUserPrincipal(cloudfrontOAI.CloudFrontOriginAccessIdentityS3CanonicalUserId()),
-			},
-		}),
-	)
+	siteBucket.GrantRead(cloudfrontOAI, nil)
 
 	cloudfrontDefaultBehavior := &cloudfront.BehaviorOptions{
 		// Sets the S3 Bucket as the origin and tells CloudFront to use the created OAI to access it
@@ -88,8 +72,6 @@ func NewStaticSiteStack(scope constructs.Construct, id string, props *StaticSite
 
 	// If Route 53 Hosted Zone is set, update AWS Certificate Manager, Route 53, and CloudFront accordingly
 	if strings.TrimSpace(hostedZoneName) != "" {
-		fmt.Println("[INFO] Route 53 Hosted Zone is set")
-
 		var fullDomain string
 
 		// If a subdomain is not set
@@ -104,6 +86,8 @@ func NewStaticSiteStack(scope constructs.Construct, id string, props *StaticSite
 			DomainName:  jsii.String(hostedZoneName),
 			PrivateZone: jsii.Bool(false),
 		})
+
+		awscdk.Annotations_Of(hostedZone).AddInfo(jsii.String("Route 53 Hosted Zone is set"))
 
 		// Creates an SSL/TLS certificate
 		certificate := acm.NewCertificate(stack, jsii.String("StaticSiteCert"), &acm.CertificateProps{
@@ -134,7 +118,7 @@ func NewStaticSiteStack(scope constructs.Construct, id string, props *StaticSite
 			Value: publicEndpoint.DomainName(),
 		})
 	} else {
-		fmt.Println("[INFO] Route 53 Hosted Zone is NOT set")
+		awscdk.Annotations_Of(stack).AddInfo(jsii.String("Route 53 Hosted Zone is NOT set"))
 
 		// Creates a new CloudFront Distribution
 		cloudfrontDistribution = cloudfront.NewDistribution(stack, jsii.String("SiteDistribution"), &cloudfront.DistributionProps{
@@ -179,10 +163,6 @@ func main() {
 			Env: env(),
 		},
 		StackConfigs{
-			// Required
-			// Change the bucket name to something unique before deploying e.g. "my-static-content-bucket"
-			BucketName: "example-s3-static-bucket",
-
 			// Optional
 			// Set to an existing public Route 53 Hosted Zone in your control e.g. "amazon.com". Otherwise, set to ""
 			HostedZoneName: "",
@@ -216,8 +196,8 @@ func env() *awscdk.Environment {
 	// implied by the current CLI configuration. This is recommended for dev
 	// stacks.
 	//---------------------------------------------------------------------------
-	// 	return &awscdk.Environment{
-	// 		Account: jsii.String(os.Getenv("CDK_DEFAULT_ACCOUNT")),
-	// 		Region:  jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
-	// 	}
+	// return &awscdk.Environment{
+	// 	Account: jsii.String(os.Getenv("CDK_DEFAULT_ACCOUNT")),
+	// 	Region:  jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
+	// }
 }

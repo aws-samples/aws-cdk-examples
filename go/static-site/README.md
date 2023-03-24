@@ -43,7 +43,6 @@ When working with a static site, it is more efficient to host the assets in an S
 - Navigate to this `static-site` directory.
 - Run `go mod tidy` to set up the required dependencies.
 - In the `static-site.go` file, locate `StackConfigs` in the `main()` function and enter values for the following:
-  - `BucketName` (required; must be unique)
   - `HostedZoneName` (optional)
   - `Subdomain` (optional)
 - `cdk synth` to generate and review the CloudFormation template.
