@@ -4,9 +4,6 @@ import (
 	"os"
 
 	"github.com/aws/aws-cdk-go/awscdk/v2"
-	"github.com/aws/constructs-go/constructs/v10"
-	"github.com/aws/jsii-runtime-go"
-
 	codebuild "github.com/aws/aws-cdk-go/awscdk/v2/awscodebuild"
 	codecommit "github.com/aws/aws-cdk-go/awscdk/v2/awscodecommit"
 	codedeploy "github.com/aws/aws-cdk-go/awscdk/v2/awscodedeploy"
@@ -19,6 +16,8 @@ import (
 	iam "github.com/aws/aws-cdk-go/awscdk/v2/awsiam"
 	lambda "github.com/aws/aws-cdk-go/awscdk/v2/awslambda"
 	custom "github.com/aws/aws-cdk-go/awscdk/v2/customresources"
+	"github.com/aws/constructs-go/constructs/v10"
+	"github.com/aws/jsii-runtime-go"
 )
 
 type CodePipelineBuildDeployStackProps struct {
@@ -34,15 +33,14 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 
 	// Creates an AWS CodeCommit repository
 	codeRepo := codecommit.NewRepository(stack, jsii.String("CodeRepo"), &codecommit.RepositoryProps{
-		RepositoryName: jsii.String("MyContainerizedApp"),
 		// Copies files from ./app directory to the repo as the initial commit
-		Code: codecommit.Code_FromDirectory((jsii.String("./app")), jsii.String("main")),
+		Code:           codecommit.Code_FromDirectory((jsii.String("./app")), jsii.String("main")),
+		RepositoryName: jsii.String("simple-app-code-repo"),
 	})
 
 	// Creates an Elastic Container Registry (ECR) image repository
 	imageRepo := ecr.NewRepository(stack, jsii.String("ImageRepo"), &ecr.RepositoryProps{
-		RepositoryName: jsii.String("app-image-repo"),
-		RemovalPolicy:  awscdk.RemovalPolicy_DESTROY,
+		RemovalPolicy: awscdk.RemovalPolicy_DESTROY,
 	})
 
 	// Creates a Task Definition for the ECS Fargate service
@@ -59,8 +57,7 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 
 	// CodeBuild project that builds the initial Docker image when the stack is created
 	initialBuild := codebuild.NewProject(stack, jsii.String("InitialBuild"), &codebuild.ProjectProps{
-		ProjectName: jsii.String("initialDockerBuild"),
-		BuildSpec:   codebuild.BuildSpec_FromSourceFilename(jsii.String("buildspec.yaml")),
+		BuildSpec: codebuild.BuildSpec_FromSourceFilename(jsii.String("buildspec.yaml")),
 		Source: codebuild.Source_CodeCommit(&codebuild.CodeCommitSourceProps{
 			Repository: codeRepo,
 		}),
@@ -69,7 +66,7 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 		},
 		// Sets environment variables to use during the build
 		EnvironmentVariables: &map[string]*codebuild.BuildEnvironmentVariable{
-			"AWS_DEFAULT_REGION": &codebuild.BuildEnvironmentVariable{
+			"REGION": &codebuild.BuildEnvironmentVariable{
 				Value: jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
 			},
 			"AWS_ACCOUNT_ID": &codebuild.BuildEnvironmentVariable{
@@ -99,14 +96,14 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 	// Grants CodeBuild Project access to pull/push images from/to ECR repo
 	imageRepo.GrantPullPush(initialBuild)
 
-	// Lambda function containing logic to trigger the CodeBuild image build project
-	triggerBuildLambda := lambda.NewFunction(stack, jsii.String("InitialBuildLambda"), &lambda.FunctionProps{
-		FunctionName: jsii.String("initial-image-build"),
+	// Lambda function that triggers CodeBuild image build project
+	triggerCodeBuild := lambda.NewFunction(stack, jsii.String("InitialBuildLambda"), &lambda.FunctionProps{
+		Architecture: lambda.Architecture_ARM_64(),
 		Code:         lambda.AssetCode_FromAsset(jsii.String("./lambda/"), nil),
 		Handler:      jsii.String("trigger-build.handler"),
 		Runtime:      lambda.Runtime_NODEJS_18_X(),
-		Architecture: lambda.Architecture_ARM_64(),
 		Environment: &map[string]*string{
+			"REGION":                 jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
 			"CODEBUILD_PROJECT_NAME": jsii.String(*initialBuild.ProjectName()),
 		},
 		InitialPolicy: &[]iam.PolicyStatement{
@@ -122,8 +119,8 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 		},
 	})
 
-	// Triggers a Lambda function
-	custom.NewAwsCustomResource(stack, jsii.String("BuildLambdaTrigger"), &custom.AwsCustomResourceProps{
+	// Triggers a Lambda function using AWS SDK
+	triggerLambda := custom.NewAwsCustomResource(stack, jsii.String("BuildLambdaTrigger"), &custom.AwsCustomResourceProps{
 		InstallLatestAwsSdk: jsii.Bool(true),
 		Policy: custom.AwsCustomResourcePolicy_FromStatements(&[]iam.PolicyStatement{
 			iam.NewPolicyStatement(&iam.PolicyStatementProps{
@@ -132,7 +129,7 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 				},
 				Effect: iam.Effect_ALLOW,
 				Resources: &[]*string{
-					triggerBuildLambda.FunctionArn(),
+					triggerCodeBuild.FunctionArn(),
 				},
 			}),
 		}),
@@ -141,7 +138,7 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 			Action:             jsii.String("invoke"),
 			PhysicalResourceId: custom.PhysicalResourceId_Of(jsii.String("id")),
 			Parameters: map[string]*string{
-				"FunctionName":   triggerBuildLambda.FunctionName(),
+				"FunctionName":   triggerCodeBuild.FunctionName(),
 				"InvocationType": jsii.String("Event"),
 			},
 		},
@@ -149,7 +146,7 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 			Service: jsii.String("Lambda"),
 			Action:  jsii.String("invoke"),
 			Parameters: map[string]*string{
-				"FunctionName":   triggerBuildLambda.FunctionName(),
+				"FunctionName":   triggerCodeBuild.FunctionName(),
 				"InvocationType": jsii.String("Event"),
 			},
 		},
@@ -158,7 +155,6 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 	// Creates VPC for the ECS Cluster
 	clusterVpc := ec2.NewVpc(stack, jsii.String("ClusterVpc"), &ec2.VpcProps{
 		IpAddresses: ec2.IpAddresses_Cidr(jsii.String("10.45.0.0/16")),
-		VpcName:     jsii.String("simple-app-vpc"),
 	})
 
 	// Creates a new blue Target Group
@@ -190,10 +186,9 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 
 	// Creates a public ALB
 	publicAlb := elb.NewApplicationLoadBalancer(stack, jsii.String("publicAlb"), &elb.ApplicationLoadBalancerProps{
-		Vpc:              clusterVpc,
-		LoadBalancerName: jsii.String("public-alb"),
-		InternetFacing:   jsii.Bool(true),
-		SecurityGroup:    albSg,
+		Vpc:            clusterVpc,
+		InternetFacing: jsii.Bool(true),
+		SecurityGroup:  albSg,
 	})
 
 	// Adds a listener on port 80 to the ALB
@@ -211,14 +206,17 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 		ServiceName:    jsii.String("fargate-frontend-service"),
 		TaskDefinition: fargateTaskDef,
 		Cluster: ecs.NewCluster(stack, jsii.String("EcsCluster"), &ecs.ClusterProps{
-			ClusterName:                    jsii.String("simple-app-ecs-cluster"),
 			EnableFargateCapacityProviders: jsii.Bool(true),
 			Vpc:                            clusterVpc,
 		}),
+		// Sets CodeDeploy as the deployment controller
 		DeploymentController: &ecs.DeploymentController{
 			Type: ecs.DeploymentControllerType_CODE_DEPLOY,
 		},
 	})
+
+	// Deploys the ECS Fargate service after the image build triggers
+	fargateService.Node().AddDependency(triggerLambda)
 
 	// Adds the ECS Fargate service to the ALB target group
 	fargateService.AttachToApplicationTargetGroup(targetGroupBlue)
@@ -229,16 +227,16 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 
 	// Creates an AWS CodePipeline with source, build, and deploy stages
 	pipeline.NewPipeline(stack, jsii.String("BuildPipeline"), &pipeline.PipelineProps{
-		PipelineName: jsii.String("ImageBuildPipeline"),
+		PipelineName: jsii.String("ImageBuildDeployPipeline"),
 		Stages: &[]*pipeline.StageProps{
 			&pipeline.StageProps{
 				StageName: jsii.String("Source"),
 				Actions: &[]pipeline.IAction{
 					pipelineactions.NewCodeCommitSourceAction(&pipelineactions.CodeCommitSourceActionProps{
 						ActionName: jsii.String("CodeCommit"),
-						Repository: codeRepo,
 						Branch:     jsii.String("main"),
 						Output:     sourceArtifact,
+						Repository: codeRepo,
 					}),
 				},
 			},
@@ -248,10 +246,10 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 					pipelineactions.NewCodeBuildAction(&pipelineactions.CodeBuildActionProps{
 						ActionName: jsii.String("DockerBuildPush"),
 						Input:      pipeline.NewArtifact(jsii.String("SourceArtifact")),
+						Project:    initialBuild,
 						Outputs: &[]pipeline.Artifact{
 							buildArtifact,
 						},
-						Project: initialBuild,
 					}),
 				},
 			},
