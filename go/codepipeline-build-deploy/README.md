@@ -18,7 +18,7 @@ This AWS Cloud Development Kit (CDK) Go example demonstrates how to configure AW
 
 ## Real-world Example
 
-When working in fast paced development environments, CI/CD (Continuous Integration and Continuous Delivery) pipelines are used to automatically build, test, and deploy application changes across multiple accounts and environments. This allows new features and bug fixes to be tested and deployed quickly to continuously improve the application.
+When working in fast-paced development environments, CI/CD (Continuous Integration and Continuous Delivery) pipelines are used to automatically build, test, and deploy application changes across multiple accounts and environments. This allows new features and bug fixes to be tested and deployed quickly to continuously improve the application.
 
 ## Requirements
 
@@ -54,7 +54,7 @@ After a successful deployment, CDK will output a public endpoint for:
 
 ## Testing
 
-- To test that the Docker image was built and deployed successfully to ECS, we can use the Application Load Balancer (ALB) public endpoint.
+- To test that the Docker image was built and deployed successfully to ECS, we can use the Application Load Balancer (ALB) public endpoint, e.g. `http://xyz123.us-east-1.elb.amazonaws.com`.
 - The simple containerized application contains multiple pages for testing:
   - `/index.html`
   - `/about.html`
