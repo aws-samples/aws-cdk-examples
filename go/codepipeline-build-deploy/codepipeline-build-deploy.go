@@ -280,7 +280,7 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 
 	// Outputs the ALB public endpoint
 	awscdk.NewCfnOutput(stack, jsii.String("PublicAlbEndpoint"), &awscdk.CfnOutputProps{
-		Value: publicAlb.LoadBalancerDnsName(),
+		Value: jsii.String("http://" + *publicAlb.LoadBalancerDnsName()),
 	})
 
 	return stack
