@@ -56,7 +56,7 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 	})
 
 	// CodeBuild project that builds the initial Docker image when the stack is created
-	initialBuild := codebuild.NewProject(stack, jsii.String("InitialBuild"), &codebuild.ProjectProps{
+	initialBuild := codebuild.NewProject(stack, jsii.String("BuildImage"), &codebuild.ProjectProps{
 		BuildSpec: codebuild.BuildSpec_FromSourceFilename(jsii.String("buildspec.yaml")),
 		Source: codebuild.Source_CodeCommit(&codebuild.CodeCommitSourceProps{
 			Repository: codeRepo,
@@ -97,7 +97,7 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 	imageRepo.GrantPullPush(initialBuild)
 
 	// Lambda function that triggers CodeBuild image build project
-	triggerCodeBuild := lambda.NewFunction(stack, jsii.String("InitialBuildLambda"), &lambda.FunctionProps{
+	triggerCodeBuild := lambda.NewFunction(stack, jsii.String("BuildLambda"), &lambda.FunctionProps{
 		Architecture: lambda.Architecture_ARM_64(),
 		Code:         lambda.AssetCode_FromAsset(jsii.String("./lambda/"), nil),
 		Handler:      jsii.String("trigger-build.handler"),
@@ -157,6 +157,9 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 		IpAddresses: ec2.IpAddresses_Cidr(jsii.String("10.45.0.0/16")),
 	})
 
+	// Deploys the cluster VPC after the initial image build triggers
+	clusterVpc.Node().AddDependency(triggerLambda)
+
 	// Creates a new blue Target Group
 	targetGroupBlue := elb.NewApplicationTargetGroup(stack, jsii.String("BlueTargetGroup"),
 		&elb.ApplicationTargetGroupProps{
@@ -214,9 +217,6 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 			Type: ecs.DeploymentControllerType_CODE_DEPLOY,
 		},
 	})
-
-	// Deploys the ECS Fargate service after the image build triggers
-	fargateService.Node().AddDependency(triggerLambda)
 
 	// Adds the ECS Fargate service to the ALB target group
 	fargateService.AttachToApplicationTargetGroup(targetGroupBlue)
@@ -292,9 +292,7 @@ func main() {
 	app := awscdk.NewApp(nil)
 
 	NewCodePipelineBuildDeployStack(app, "CodePipelineBuildDeployStack", &CodePipelineBuildDeployStackProps{
-		awscdk.StackProps{
-			Env: env(),
-		},
+		awscdk.StackProps{Env: env()},
 	})
 
 	app.Synth(nil)
