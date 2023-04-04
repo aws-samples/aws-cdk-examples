@@ -1,4 +1,4 @@
-FROM public.ecr.aws/nginx/nginx:perl
+FROM public.ecr.aws/nginx/nginx:stable-alpine
 
 COPY ./site-assets/ /usr/share/nginx/html
 

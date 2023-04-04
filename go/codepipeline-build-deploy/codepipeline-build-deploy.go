@@ -56,7 +56,7 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 	})
 
 	// CodeBuild project that builds the initial Docker image when the stack is created
-	initialBuild := codebuild.NewProject(stack, jsii.String("BuildImage"), &codebuild.ProjectProps{
+	buildImage := codebuild.NewProject(stack, jsii.String("BuildImage"), &codebuild.ProjectProps{
 		BuildSpec: codebuild.BuildSpec_FromSourceFilename(jsii.String("buildspec.yaml")),
 		Source: codebuild.Source_CodeCommit(&codebuild.CodeCommitSourceProps{
 			Repository: codeRepo,
@@ -94,7 +94,7 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 	})
 
 	// Grants CodeBuild Project access to pull/push images from/to ECR repo
-	imageRepo.GrantPullPush(initialBuild)
+	imageRepo.GrantPullPush(buildImage)
 
 	// Lambda function that triggers CodeBuild image build project
 	triggerCodeBuild := lambda.NewFunction(stack, jsii.String("BuildLambda"), &lambda.FunctionProps{
@@ -104,16 +104,17 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 		Runtime:      lambda.Runtime_NODEJS_18_X(),
 		Environment: &map[string]*string{
 			"REGION":                 jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
-			"CODEBUILD_PROJECT_NAME": jsii.String(*initialBuild.ProjectName()),
+			"CODEBUILD_PROJECT_NAME": jsii.String(*buildImage.ProjectName()),
 		},
+		// Allows this Lambda function to trigger the buildImage CodeBuild project
 		InitialPolicy: &[]iam.PolicyStatement{
 			iam.NewPolicyStatement(&iam.PolicyStatementProps{
+				Effect: iam.Effect_ALLOW,
 				Actions: &[]*string{
 					jsii.String("codebuild:StartBuild"),
 				},
-				Effect: iam.Effect_ALLOW,
 				Resources: &[]*string{
-					jsii.String(*initialBuild.ProjectArn()),
+					jsii.String(*buildImage.ProjectArn()),
 				},
 			}),
 		},
@@ -160,7 +161,9 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 	// Deploys the cluster VPC after the initial image build triggers
 	clusterVpc.Node().AddDependency(triggerLambda)
 
-	// Creates a new blue Target Group
+	// Creates a new blue Target Group that routes traffic from the public Application Load Balancer (ALB) to the
+	// registered targets within the Target Group e.g. (EC2 instances, IP addresses, Lambda functions)
+	// https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html
 	targetGroupBlue := elb.NewApplicationTargetGroup(stack, jsii.String("BlueTargetGroup"),
 		&elb.ApplicationTargetGroupProps{
 			TargetGroupName: jsii.String("alb-blue-tg"),
@@ -225,57 +228,64 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 	sourceArtifact := pipeline.NewArtifact(jsii.String("SourceArtifact"))
 	buildArtifact := pipeline.NewArtifact(jsii.String("BuildArtifact"))
 
+	// Creates the source stage for CodePipeline
+	sourceStage := &pipeline.StageProps{
+		StageName: jsii.String("Source"),
+		Actions: &[]pipeline.IAction{
+			pipelineactions.NewCodeCommitSourceAction(&pipelineactions.CodeCommitSourceActionProps{
+				ActionName: jsii.String("CodeCommit"),
+				Branch:     jsii.String("main"),
+				Output:     sourceArtifact,
+				Repository: codeRepo,
+			}),
+		},
+	}
+
+	// Creates the build stage for CodePipeline
+	buildStage := &pipeline.StageProps{
+		StageName: jsii.String("Build"),
+		Actions: &[]pipeline.IAction{
+			pipelineactions.NewCodeBuildAction(&pipelineactions.CodeBuildActionProps{
+				ActionName: jsii.String("DockerBuildPush"),
+				Input:      pipeline.NewArtifact(jsii.String("SourceArtifact")),
+				Project:    buildImage,
+				Outputs: &[]pipeline.Artifact{
+					buildArtifact,
+				},
+			}),
+		},
+	}
+
+	// Creates a new CodeDeploy Deployment Group
+	deploymentGroup := codedeploy.NewEcsDeploymentGroup(stack, jsii.String("CodeDeployGroup"),
+		&codedeploy.EcsDeploymentGroupProps{
+			Service: fargateService,
+			// Configurations for CodeDeploy Blue/Green deployments
+			BlueGreenDeploymentConfig: &codedeploy.EcsBlueGreenDeploymentConfig{
+				Listener:         albListener,
+				BlueTargetGroup:  targetGroupBlue,
+				GreenTargetGroup: targetGroupGreen,
+			},
+		},
+	)
+
+	// Creates the deploy stage for CodePipeline
+	deployStage := &pipeline.StageProps{
+		StageName: jsii.String("Deploy"),
+		Actions: &[]pipeline.IAction{
+			pipelineactions.NewCodeDeployEcsDeployAction(&pipelineactions.CodeDeployEcsDeployActionProps{
+				ActionName:                  jsii.String("EcsFargateDeploy"),
+				AppSpecTemplateInput:        buildArtifact,
+				DeploymentGroup:             deploymentGroup,
+				TaskDefinitionTemplateInput: buildArtifact,
+			}),
+		},
+	}
+
 	// Creates an AWS CodePipeline with source, build, and deploy stages
 	pipeline.NewPipeline(stack, jsii.String("BuildPipeline"), &pipeline.PipelineProps{
 		PipelineName: jsii.String("ImageBuildDeployPipeline"),
-		Stages: &[]*pipeline.StageProps{
-			&pipeline.StageProps{
-				StageName: jsii.String("Source"),
-				Actions: &[]pipeline.IAction{
-					pipelineactions.NewCodeCommitSourceAction(&pipelineactions.CodeCommitSourceActionProps{
-						ActionName: jsii.String("CodeCommit"),
-						Branch:     jsii.String("main"),
-						Output:     sourceArtifact,
-						Repository: codeRepo,
-					}),
-				},
-			},
-			&pipeline.StageProps{
-				StageName: jsii.String("Build"),
-				Actions: &[]pipeline.IAction{
-					pipelineactions.NewCodeBuildAction(&pipelineactions.CodeBuildActionProps{
-						ActionName: jsii.String("DockerBuildPush"),
-						Input:      pipeline.NewArtifact(jsii.String("SourceArtifact")),
-						Project:    initialBuild,
-						Outputs: &[]pipeline.Artifact{
-							buildArtifact,
-						},
-					}),
-				},
-			},
-			&pipeline.StageProps{
-				StageName: jsii.String("Deploy"),
-				Actions: &[]pipeline.IAction{
-					pipelineactions.NewCodeDeployEcsDeployAction(&pipelineactions.CodeDeployEcsDeployActionProps{
-						ActionName:                  jsii.String("EcsFargateDeploy"),
-						AppSpecTemplateInput:        buildArtifact,
-						TaskDefinitionTemplateInput: buildArtifact,
-						// Creates a CodeDeploy Deployment Group
-						DeploymentGroup: codedeploy.NewEcsDeploymentGroup(stack, jsii.String("CodeDeployGroup"),
-							&codedeploy.EcsDeploymentGroupProps{
-								Service: fargateService,
-								// Configurations for CodeDeploy Blue/Green deployments
-								BlueGreenDeploymentConfig: &codedeploy.EcsBlueGreenDeploymentConfig{
-									Listener:         albListener,
-									BlueTargetGroup:  targetGroupBlue,
-									GreenTargetGroup: targetGroupGreen,
-								},
-							},
-						),
-					}),
-				},
-			},
-		},
+		Stages:       &[]*pipeline.StageProps{sourceStage, buildStage, deployStage},
 	})
 
 	// Outputs the ALB public endpoint
