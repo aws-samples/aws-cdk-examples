@@ -49,8 +49,8 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       environment: {
         privileged: true,
         environmentVariables: {
-          AWS_ACCOUNT_ID: { value: process.env.CDK_DEFAULT_ACCOUNT! },
-          REGION: { value: process.env.CDK_DEFAULT_REGION! },
+          AWS_ACCOUNT_ID: { value: process.env?.CDK_DEFAULT_ACCOUNT },
+          REGION: { value: process.env?.CDK_DEFAULT_REGION },
           IMAGE_TAG: { value: "latest" },
           IMAGE_REPO_NAME: { value: imageRepo.repositoryName },
           REPOSITORY_URI: { value: imageRepo.repositoryUri },
