@@ -67,7 +67,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     // Lambda function that triggers CodeBuild image build project
     const triggerCodeBuild = new lambda.Function(this, "BuildLambda", {
       architecture: lambda.Architecture.ARM_64,
-      code: lambda.AssetCode.fromAsset(path.join(__dirname, "../lambda")),
+      code: lambda.Code.fromAsset("./lambda/"),
       handler: "trigger-build.handler",
       runtime: lambda.Runtime.NODEJS_18_X,
       environment: {
