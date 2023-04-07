@@ -10,6 +10,7 @@ import * as ecs from "aws-cdk-lib/aws-ecs";
 import * as elb from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as lambda from "aws-cdk-lib/aws-lambda";
+import * as assets from "aws-cdk-lib/aws-s3-assets";
 import * as custom from "aws-cdk-lib/custom-resources";
 import { Construct } from "constructs";
 import * as path from "path";
@@ -64,10 +65,15 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     // Grants CodeBuild project access to pull/push images from/to ECR repo
     imageRepo.grantPullPush(buildImage);
 
+    // Copies the Lambda function code to an S3 Bucket
+    const lambdaAsset = new assets.Asset(this, "CodeToS3", {
+      path: "resources",
+    });
+
     // Lambda function that triggers CodeBuild image build project
     const triggerCodeBuild = new lambda.Function(this, "BuildLambda", {
       architecture: lambda.Architecture.ARM_64,
-      code: new lambda.AssetCode("./resources/"),
+      code: lambda.Code.fromBucket(lambdaAsset.bucket, lambdaAsset.s3ObjectKey),
       handler: "trigger-build.handler",
       runtime: lambda.Runtime.NODEJS_18_X,
       environment: {
