@@ -65,36 +65,11 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     // Grants CodeBuild project access to pull/push images from/to ECR repo
     imageRepo.grantPullPush(buildImage);
 
-    // Code to be executed by the BuildLambda function
-    const lambdaCode = `
-      const {
-        CodeBuildClient,
-        StartBuildCommand,
-      } = require("@aws-sdk/client-codebuild");
-
-      exports.handler = async (event) => {
-        const region = process.env.REGION;
-        const buildProjectName = process.env.CODEBUILD_PROJECT_NAME;
-
-        const codebuild = new CodeBuildClient({ region: region });
-        const buildCommand = new StartBuildCommand({ projectName: buildProjectName });
-
-        console.log("Triggering CodeBuild Project...");
-        const buildResponse = await codebuild.send(buildCommand);
-        console.log(buildResponse);
-
-        return {
-          statusCode: 200,
-          body: "CodeBuild Project building...",
-        };
-      };
-    `;
-
     // Lambda function that triggers CodeBuild image build project
     const triggerCodeBuild = new lambda.Function(this, "BuildLambda", {
       architecture: lambda.Architecture.ARM_64,
-      code: lambda.Code.fromInline(lambdaCode),
-      handler: "index.handler",
+      code: lambda.Code.fromAsset("./lambda"),
+      handler: "trigger-build.handler",
       runtime: lambda.Runtime.NODEJS_18_X,
       environment: {
         REGION: process.env.CDK_DEFAULT_REGION!,
