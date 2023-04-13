@@ -3,13 +3,49 @@ import aws_cdk.assertions as assertions
 
 from codepipeline_build_deploy.codepipeline_build_deploy_stack import CodepipelineBuildDeployStack
 
-# example tests. To run these tests, uncomment this file along with the example
-# resource in codepipeline_build_deploy/codepipeline_build_deploy_stack.py
-def test_sqs_queue_created():
+
+def test_deployment_controller_set():
     app = core.App()
     stack = CodepipelineBuildDeployStack(app, "codepipeline-build-deploy")
     template = assertions.Template.from_stack(stack)
 
-#     template.has_resource_properties("AWS::SQS::Queue", {
-#         "VisibilityTimeout": 300
-#     })
+    # Checks if the ECS Deployment Controller is set to AWS CodeDeploy
+    template.has_resource_properties("AWS::ECS::Service", {
+        "DeploymentController": {
+            "Type": "CODE_DEPLOY"
+        }
+    })
+
+
+def test_port_80_open():
+    app = core.App()
+    stack = CodepipelineBuildDeployStack(app, "codepipeline-build-deploy")
+    template = assertions.Template.from_stack(stack)
+
+    # Checks if the ALB Security Group allows all traffic on port 80
+    template.has_resource_properties("AWS::EC2::SecurityGroup", {
+        "SecurityGroupIngress": [
+            {
+                "CidrIp": "0.0.0.0/0",
+                "IpProtocol": "tcp",
+                "FromPort": 80,
+                "ToPort": 80
+            },
+        ]
+    })
+
+
+def test_s3_bucket_restricted():
+    app = core.App()
+    stack = CodepipelineBuildDeployStack(app, "codepipeline-build-deploy")
+    template = assertions.Template.from_stack(stack)
+
+    # Checks if public access to the S3 Bucket is disabled
+    template.has_resource_properties("AWS::S3::Bucket", {
+        "PublicAccessBlockConfiguration": {
+            "BlockPublicAcls": True,
+            "BlockPublicPolicy": True,
+            "IgnorePublicAcls": True,
+            "RestrictPublicBuckets": True
+        },
+    })

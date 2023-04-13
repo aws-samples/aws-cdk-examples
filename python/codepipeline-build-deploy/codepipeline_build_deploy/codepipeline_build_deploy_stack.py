@@ -79,7 +79,7 @@ class CodepipelineBuildDeployStack(Stack):
             runtime=lambda_.Runtime.NODEJS_18_X,
             environment={
                 "CODEBUILD_PROJECT_NAME": build_image.project_name,
-                "REGION": os.getenv('CDK_DEFAULT_REGION')
+                "REGION": os.getenv('CDK_DEFAULT_REGION') or ""
             },
             # Allows this Lambda function to trigger the buildImage CodeBuild project
             initial_policy=[
