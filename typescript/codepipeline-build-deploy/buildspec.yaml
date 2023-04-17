@@ -6,7 +6,7 @@ phases:
       - npm install
   build:
     commands:
-      - npm install
+      - npm build
       - npm test
 reports:
   jest_reports:
