@@ -257,7 +257,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       stageName: "Test",
       actions: [
         new pipelineactions.CodeBuildAction({
-          actionName: "Run test",
+          actionName: "JestCDK",
           input: new pipeline.Artifact("FullSourceArtifact"),
           project: buildTest,
         }),
