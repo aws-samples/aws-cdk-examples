@@ -14,6 +14,10 @@ import * as assets from "aws-cdk-lib/aws-s3-assets";
 import * as custom from "aws-cdk-lib/custom-resources";
 import { Construct } from "constructs";
 import * as path from "path";
+import * as fs from 'fs';
+import { Asset } from 'aws-cdk-lib/aws-s3-assets';
+import { IgnoreMode } from 'aws-cdk-lib';
+import { Code, Repository } from 'aws-cdk-lib/aws-codecommit';
 
 export class CodepipelineBuildDeployStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -28,7 +32,29 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
         "main"
       ),
     });
+    
+    
+    let gitignore = fs.readFileSync('.gitignore').toString().split(/\r?\n/);
+    gitignore.push('.git/');
 
+    // Allow canary code to package properly
+    // see: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries_WritingCanary_Nodejs.html#CloudWatch_Synthetics_Canaries_package
+    gitignore = gitignore.filter(g => g != 'node_modules/');
+    gitignore.push('/node_modules/');
+    gitignore.push('/app/');
+    
+    const codeAsset = new Asset(this, 'SourceAsset', {
+      path: path.join(__dirname, "../"),
+      ignoreMode: IgnoreMode.GIT,
+      exclude: gitignore,
+    });
+    
+    const fullRepo = new codecommit.Repository(this, "fullRepo", {
+      repositoryName: "simple-full-code-repo",
+      // Copies files from ./app directory to the repo as the initial commit
+      code: Code.fromAsset(codeAsset, 'main'),
+    });
+    
     // Creates an Elastic Container Registry (ECR) image repository
     const imageRepo = new ecr.Repository(this, "imageRepo");
 
@@ -60,6 +86,12 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
           EXECUTION_ROLE_ARN: { value: fargateTaskDef.executionRole?.roleArn },
         },
       },
+    });
+    
+    // CodeBuild project that builds the Docker image
+    const buildTest = new codebuild.Project(this, "BuildTest", {
+      buildSpec: codebuild.BuildSpec.fromSourceFilename("buildspec.yaml"),
+      source: codebuild.Source.codeCommit({ repository: fullRepo }),
     });
 
     // Grants CodeBuild project access to pull/push images from/to ECR repo
@@ -198,6 +230,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
 
     // Creates new pipeline artifacts
     const sourceArtifact = new pipeline.Artifact("SourceArtifact");
+    const fullSourceArtifact = new pipeline.Artifact("FullSourceArtifact");
     const buildArtifact = new pipeline.Artifact("BuildArtifact");
 
     // Creates the source stage for CodePipeline
@@ -205,10 +238,28 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       stageName: "Source",
       actions: [
         new pipelineactions.CodeCommitSourceAction({
-          actionName: "CodeCommit",
+          actionName: "AppCodeCommit",
           branch: "main",
           output: sourceArtifact,
           repository: codeRepo,
+        }),
+        new pipelineactions.CodeCommitSourceAction({
+          actionName: "FullCodeCommit",
+          branch: "main",
+          output: fullSourceArtifact,
+          repository: fullRepo,
+        }),
+      ],
+    };
+
+    // Run jest test and send result to CodeBuild    
+    const testStage = {
+      stageName: "Test",
+      actions: [
+        new pipelineactions.CodeBuildAction({
+          actionName: "Run test",
+          input: new pipeline.Artifact("FullSourceArtifact"),
+          project: buildTest,
         }),
       ],
     };
@@ -225,6 +276,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
         }),
       ],
     };
+
 
     // Creates a new CodeDeploy Deployment Group
     const deploymentGroup = new codedeploy.EcsDeploymentGroup(
@@ -257,7 +309,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     // Creates an AWS CodePipeline with source, build, and deploy stages
     new pipeline.Pipeline(this, "BuildDeployPipeline", {
       pipelineName: "ImageBuildDeployPipeline",
-      stages: [sourceStage, buildStage, deployStage],
+      stages: [sourceStage, testStage, buildStage, deployStage],
     });
 
     // Outputs the ALB public endpoint
