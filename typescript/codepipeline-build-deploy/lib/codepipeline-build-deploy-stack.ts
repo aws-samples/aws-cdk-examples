@@ -33,7 +33,6 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       ),
     });
     
-    
     let gitignore = fs.readFileSync('.gitignore').toString().split(/\r?\n/);
     gitignore.push('.git/');
 

@@ -1,5 +1,6 @@
 *.js
 !jest.config.js
+!*/trigger-build.js
 *.d.ts
 node_modules
 
