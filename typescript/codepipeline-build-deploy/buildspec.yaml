@@ -6,8 +6,6 @@ phases:
       - npm install
   build:
     commands:
-      - npm run build
-      - codebuild-breakpoint
       - npm run test
 reports:
   jest_reports:
