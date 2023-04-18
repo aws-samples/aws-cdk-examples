@@ -32,12 +32,10 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
         "main"
       ),
     });
-    
+
+    // modify gitignore file to remove unneeded files from the codecommit copy    
     let gitignore = fs.readFileSync('.gitignore').toString().split(/\r?\n/);
     gitignore.push('.git/');
-
-    // Allow canary code to package properly
-    // see: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries_WritingCanary_Nodejs.html#CloudWatch_Synthetics_Canaries_package
     gitignore = gitignore.filter(g => g != 'node_modules/');
     gitignore.push('/node_modules/');
     gitignore.push('/app/');
@@ -50,7 +48,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     
     const fullRepo = new codecommit.Repository(this, "fullRepo", {
       repositoryName: "simple-full-code-repo",
-      // Copies files from ./app directory to the repo as the initial commit
+      // Copies files from codepipeline-build-deploy directory to the repo as the initial commit
       code: Code.fromAsset(codeAsset, 'main'),
     });
     
@@ -228,7 +226,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     fargateService.attachToApplicationTargetGroup(targetGroupBlue);
 
     // Creates new pipeline artifacts
-    const sourceArtifact = new pipeline.Artifact("SourceArtifact");
+    const appSourceArtifact = new pipeline.Artifact("AppSourceArtifact");
     const fullSourceArtifact = new pipeline.Artifact("FullSourceArtifact");
     const buildArtifact = new pipeline.Artifact("BuildArtifact");
 
@@ -239,7 +237,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
         new pipelineactions.CodeCommitSourceAction({
           actionName: "AppCodeCommit",
           branch: "main",
-          output: sourceArtifact,
+          output: appSourceArtifact,
           repository: codeRepo,
         }),
         new pipelineactions.CodeCommitSourceAction({
@@ -269,7 +267,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       actions: [
         new pipelineactions.CodeBuildAction({
           actionName: "DockerBuildPush",
-          input: new pipeline.Artifact("SourceArtifact"),
+          input: new pipeline.Artifact("AppSourceArtifact"),
           project: buildImage,
           outputs: [buildArtifact],
         }),
