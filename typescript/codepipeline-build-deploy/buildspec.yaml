@@ -12,4 +12,4 @@ reports:
     files:
       - report.xml
     file-format: JUNITXML
-    base-directory: .
+    base-directory: "./"

@@ -89,6 +89,9 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     const buildTest = new codebuild.Project(this, "BuildTest", {
       buildSpec: codebuild.BuildSpec.fromSourceFilename("buildspec.yaml"),
       source: codebuild.Source.codeCommit({ repository: fullRepo }),
+      environment: {
+        buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_4,  
+      }
     });
 
     // Grants CodeBuild project access to pull/push images from/to ECR repo
