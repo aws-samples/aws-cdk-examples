@@ -23,18 +23,6 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // Creates an AWS CodeCommit repository
-    /*
-    const codeRepo = new codecommit.Repository(this, "codeRepo", {
-      repositoryName: "simple-app-code-repo",
-      // Copies files from ./app directory to the repo as the initial commit
-      code: codecommit.Code.fromDirectory(
-        path.join(__dirname, "../app"),
-        "main"
-      ),
-    });
-    */
-
     // modify gitignore file to remove unneeded files from the codecommit copy    
     let gitignore = fs.readFileSync('.gitignore').toString().split(/\r?\n/);
     gitignore.push('.git/');
@@ -47,6 +35,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       exclude: gitignore,
     });
     
+    // Creates an AWS CodeCommit repository
     const codeRepo = new codecommit.Repository(this, "fullRepo", {
       repositoryName: "simple-full-code-repo",
       // Copies files from codepipeline-build-deploy directory to the repo as the initial commit
