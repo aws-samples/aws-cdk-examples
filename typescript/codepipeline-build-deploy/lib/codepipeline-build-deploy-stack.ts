@@ -36,8 +36,8 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       exclude: gitignore,
     });
     
-    const codeRepo = new codecommit.Repository(this, "fullRepo", {
-      repositoryName: "simple-full-code-repo",
+    const codeRepo = new codecommit.Repository(this, "repo", {
+      repositoryName: "simple-code-repo",
       // Copies files from codepipeline-build-deploy directory to the repo as the initial commit
       code: Code.fromAsset(codeAsset, 'main'),
     });
