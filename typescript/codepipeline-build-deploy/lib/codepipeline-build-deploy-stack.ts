@@ -23,11 +23,22 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
+    // Creates an AWS CodeCommit repository
+    const codeRepo = new codecommit.Repository(this, "codeRepo", {
+      repositoryName: "simple-app-code-repo",
+      // Copies files from ./app directory to the repo as the initial commit
+      code: codecommit.Code.fromDirectory(
+        path.join(__dirname, "../app"),
+        "main"
+      ),
+    });
+
     // modify gitignore file to remove unneeded files from the codecommit copy    
     let gitignore = fs.readFileSync('.gitignore').toString().split(/\r?\n/);
     gitignore.push('.git/');
     gitignore = gitignore.filter(g => g != 'node_modules/');
     gitignore.push('/node_modules/');
+    gitignore.push('/app/');
     
     const codeAsset = new Asset(this, 'SourceAsset', {
       path: path.join(__dirname, "../"),
@@ -35,8 +46,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       exclude: gitignore,
     });
     
-    // Creates an AWS CodeCommit repository
-    const codeRepo = new codecommit.Repository(this, "fullRepo", {
+    const fullRepo = new codecommit.Repository(this, "fullRepo", {
       repositoryName: "simple-full-code-repo",
       // Copies files from codepipeline-build-deploy directory to the repo as the initial commit
       code: Code.fromAsset(codeAsset, 'main'),
@@ -58,7 +68,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
 
     // CodeBuild project that builds the Docker image
     const buildImage = new codebuild.Project(this, "BuildImage", {
-      buildSpec: codebuild.BuildSpec.fromSourceFilename("./app/buildspec.yaml"),
+      buildSpec: codebuild.BuildSpec.fromSourceFilename("buildspec.yaml"),
       source: codebuild.Source.codeCommit({ repository: codeRepo }),
       environment: {
         privileged: true,
@@ -78,7 +88,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     // CodeBuild project that builds the Docker image
     const buildTest = new codebuild.Project(this, "BuildTest", {
       buildSpec: codebuild.BuildSpec.fromSourceFilename("buildspec.yaml"),
-      source: codebuild.Source.codeCommit({ repository: codeRepo }),
+      source: codebuild.Source.codeCommit({ repository: fullRepo }),
       environment: {
         buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_4,  
       }
@@ -228,10 +238,16 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       stageName: "Source",
       actions: [
         new pipelineactions.CodeCommitSourceAction({
-          actionName: "CodeCommit",
+          actionName: "AppCodeCommit",
+          branch: "main",
+          output: appSourceArtifact,
+          repository: codeRepo,
+        }),
+        new pipelineactions.CodeCommitSourceAction({
+          actionName: "FullCodeCommit",
           branch: "main",
           output: fullSourceArtifact,
-          repository: codeRepo,
+          repository: fullRepo,
         }),
       ],
     };
