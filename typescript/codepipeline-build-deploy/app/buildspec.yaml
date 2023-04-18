@@ -23,7 +23,7 @@ phases:
       - sed -i "s|EXECUTION_ROLE_ARN|${EXECUTION_ROLE_ARN}|g" taskdef.json
       - sed -i "s|TASK_DEFINITION_ARN|${TASK_DEFINITION_ARN}|g" appspec.yaml
       - cat appspec.yaml && cat taskdef.json
-      - mv appsec.yaml ../
+      - mv appspec.yaml ../
       - mv taskdef.json ../
 artifacts:
   files:
