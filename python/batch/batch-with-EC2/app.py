@@ -2,7 +2,7 @@ from aws_cdk import (
                      aws_ec2 as ec2, 
                      aws_batch_alpha as batch,
                      aws_ecs as ecs,
-                     App, Stack, CfnOutput
+                     App, Stack, CfnOutput, Size
                      )
 from constructs import Construct
 
@@ -17,38 +17,34 @@ class BatchEC2Stack(Stack):
         # To create number of Batch Compute Environment
         count = 3
 
-        batch_ce = []
+        # Create AWS Batch Job Queue
+        self.batch_queue = batch.JobQueue(self, "JobQueue")
 
         # For loop to create Batch Compute Environments
         for i in range(count):
             name = "MyBatchEC2Env" + str(i)
-            batch_environment = batch.ComputeEnvironment(self, name,
-            compute_resources=batch.ComputeResources(
-                type=batch.ComputeResourceType.SPOT,
-                bid_percentage=75,
+            batch_environment = batch.ManagedEc2EcsComputeEnvironment(self, name,
+                spot=True,
+                spot_bid_percentage=75,
                 vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE_WITH_NAT),
                 vpc=vpc
-                )
             )
 
-            batch_ce.append(batch.JobQueueComputeEnvironment(compute_environment=batch_environment,order=i))
+            self.batch_queue.add_compute_environment(batch_environment, i)
 
-        # Create AWS Batch Job Queue and associate all Batch CE.
-        self.batch_queue = batch.JobQueue(self, "JobQueue",
-                                           compute_environments=batch_ce)
-
-
-        # Create Job Definition to submit job in batch job queue. 
-        batch_jobDef = batch.JobDefinition(self, "MyJobDef",
-                                           job_definition_name="BatchCDKJobDef",
-                                           container=batch.JobDefinitionContainer(image=ecs.ContainerImage.from_registry(
-                                               "public.ecr.aws/amazonlinux/amazonlinux:latest"), command=["sleep", "60"], memory_limit_mib=512, vcpus=1),
+        # Create Job Definition to submit job in batch job queue.
+        batch_jobDef = batch.EcsJobDefinition(self, "MyJobDef",
+                                           container=batch.EcsEc2ContainerDefinition(self, "BatchCDKJobDef",
+                                               image=ecs.ContainerImage.from_registry("public.ecr.aws/amazonlinux/amazonlinux:latest"), 
+                                               command=["sleep", "60"],
+                                               memory=Size.mebibytes(512),
+                                               cpu=1
                                            )
-
+        )
 
         # Output resources
         CfnOutput(self, "BatchJobQueue",value=self.batch_queue.job_queue_name)
-        CfnOutput(self, "JobDefinition",value=batch_jobDef.job_definition_name)
+        CfnOutput(self, "EcsJobDefinition",value=batch_jobDef.job_definition_name)
 
 
 
