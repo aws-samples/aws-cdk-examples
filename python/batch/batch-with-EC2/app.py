@@ -23,7 +23,7 @@ class BatchEC2Stack(Stack):
         # For loop to create Batch Compute Environments
         for i in range(count):
             name = "MyBatchEC2Env" + str(i)
-            batch_environment = batch.ComputeEnvironment(self, name,
+            batch_environment = batch.ManagedEc2EcsComputeEnvironment(self, name,
                 spot=True,
                 spot_bid_percentage=75,
                 vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE_WITH_NAT),
