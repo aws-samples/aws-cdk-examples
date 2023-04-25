@@ -1,7 +1,7 @@
 # What's this?
 This is code sample that uses CDK to:
 * Create a Lambda function that can be invoked using API Gateway
-* Create a CI using CodeSuite that deploys the Lambda+ApiGateway resources using `cdk deploy`
+* Create a CI using AWS code services that deploys the Lambda+ApiGateway resources using `cdk deploy`
 
 # How do I start using it?
 * Ensure you've followed the [guide to Getting Started to AWS CDK](https://docs.aws.amazon.com/cdk/latest/guide/getting_started.html), and you have CDK installed, and the AWS SDK installed and credentials configured. 
