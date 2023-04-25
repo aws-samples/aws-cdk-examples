@@ -26,7 +26,7 @@ describe('lambda tests', () => {
       DependsOn: [ dependencyCapture ],
     });
 
-    expect(dependencyCapture.asString().match(/SingletonServiceRole/)).toBeDefined();
+    expect(dependencyCapture.asString().match(/SingletonServiceRole/)).not.toBeNull();
   });
 
   test('lambda has correct iam permissions', () => {
@@ -48,7 +48,7 @@ describe('lambda tests', () => {
       }],
     });
 
-    expect(roleCapture.asString().match(/AWSLambdaBasicExecutionRole/)).toBeDefined();
+    expect(roleCapture.asString().match(/AWSLambdaBasicExecutionRole/)).not.toBeNull();
   });
 
   test('lambda not running in vpc', () => {
