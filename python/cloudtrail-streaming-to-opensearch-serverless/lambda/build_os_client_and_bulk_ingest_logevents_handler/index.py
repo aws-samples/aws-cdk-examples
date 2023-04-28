@@ -13,12 +13,9 @@ import json
 import logging
 import os
 from requests_aws4auth import AWS4Auth
-
-
 from opensearchpy import OpenSearch, RequestsHttpConnection
 
 INDEX_NAME = "cwl"
-
 
 # Lambda handler
 def handler(event, context):
@@ -29,8 +26,7 @@ def handler(event, context):
         region = os.environ["REGION"]
         service = "aoss"
         credentials = boto3.Session().get_credentials()
-      
-        
+
         awsauth = AWS4Auth(
             credentials.access_key,
             credentials.secret_key,
@@ -46,9 +42,9 @@ def handler(event, context):
             use_ssl=True,
             verify_certs=False,
             connection_class=RequestsHttpConnection,
-            timeout=300, 
+            timeout=300,
         )
-         
+
         cw_data = str(event["awslogs"]["data"])
         cw_logs = gzip.GzipFile(
             fileobj=BytesIO(base64.b64decode(cw_data, validate=True))
@@ -89,7 +85,6 @@ def events_md(log_events):
     ret["@log_stream"] = log_events["logStream"]
     return ret
 
-
 def transform(md, log_event):
     ret = copy.deepcopy(md)
     ret["@id"] = log_event["id"]
@@ -99,5 +94,13 @@ def transform(md, log_event):
     ret["@message"] = log_event["message"]
     fields = json.loads(log_event["message"])
     for key, value in fields.items():
-        ret[key] = value  ##TODO check if integer present then convert to integer type. 
+        ret[key] = int(value) if is_int(value) else value
     return ret
+
+def is_int(s):
+    try:
+        int(s)
+    except ValueError:
+        return False
+    else:
+        return True

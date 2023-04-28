@@ -38,7 +38,7 @@ DATAPOLICY = f"""[
         }},
         {{
           "ResourceType":"index",
-          "Resource":["index/{INDEX_NAME}*"], 
+          "Resource":["index/{INDEX_NAME}/*"],
           "Permission":["aoss:*"]
         }}
     ],
@@ -46,7 +46,6 @@ DATAPOLICY = f"""[
   }}
 ]
 """
-
 
 class OpensearchServerlessStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
@@ -103,14 +102,6 @@ class OpensearchServerlessStack(Stack):
         col.add_dependency(sec)
 
         ################################################################################
-        # define a Lambda Layer for boto3
-        boto3_lambda_layer = lambda_.LayerVersion(
-            self,
-            "Boto3LambdaLayer",
-            code=lambda_.AssetCode("boto3-layer/"),
-            compatible_runtimes=[lambda_.Runtime.PYTHON_3_9],
-        )
-
         # Lambda for subscription filter
         subscription_filter_lambda = lambda_.Function(
             self,
@@ -123,7 +114,6 @@ class OpensearchServerlessStack(Stack):
             handler="index.handler",
             vpc=vpc,
             memory_size=1024,
-            layers=[boto3_lambda_layer],
             timeout=Duration.minutes(5),
         )
 
