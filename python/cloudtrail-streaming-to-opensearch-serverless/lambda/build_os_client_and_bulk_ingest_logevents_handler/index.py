@@ -99,5 +99,5 @@ def transform(md, log_event):
     ret["@message"] = log_event["message"]
     fields = json.loads(log_event["message"])
     for key, value in fields.items():
-        ret[key] = value  ##TODO
+        ret[key] = value  ##TODO check if integer present then convert to integer type. 
     return ret

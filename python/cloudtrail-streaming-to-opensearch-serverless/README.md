@@ -30,7 +30,7 @@ Amazon OpenSearch API is only within VPC and the OpenSearch dashboard is allowed
 You can change the CloudTrail group name, Amazon OpenSearch collection name, CloudWatch retention. Below are default values. Here is the documentation of [Amazon OpenSearch Serverless Security](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-security.html) to read for you.
 
 ```
-LOG_GROUP_NAME = "handler/svl_cloudtrail_logs"
+LOG_GROUP_NAME = "SvlCTCWL/svl_cloudtrail_logs"
 COLLECTION_NAME = "ctcollection"
 ```
 
