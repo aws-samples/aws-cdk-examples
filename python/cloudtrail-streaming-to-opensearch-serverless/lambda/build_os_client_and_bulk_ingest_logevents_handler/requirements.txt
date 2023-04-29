@@ -1,4 +1,4 @@
 requests_aws4auth==1.2.2
 opensearch-py==2.2.0
-
+boto3
 

@@ -26,7 +26,7 @@ def handler(event, context):
         region = os.environ["REGION"]
         service = "aoss"
         credentials = boto3.Session().get_credentials()
-
+  
         awsauth = AWS4Auth(
             credentials.access_key,
             credentials.secret_key,
@@ -94,13 +94,12 @@ def transform(md, log_event):
     ret["@message"] = log_event["message"]
     fields = json.loads(log_event["message"])
     for key, value in fields.items():
-        ret[key] = int(value) if is_int(value) else value
+        ret[key] = int(value) if isNumber(value) else value
     return ret
 
-def is_int(s):
+def isNumber(x):
     try:
-        int(s)
-    except ValueError:
+        return bool(0 == x*0)
+    except:
         return False
-    else:
-        return True
+
