@@ -24,7 +24,7 @@
     "@aws-cdk/aws-cloudformation": "*",
     "@types/node": "^13.7.0",
     "ts-node": "^8.1.0",
-    "typescript": "~3.9.7",
+    "typescript": "~4.6.0",
     "prettier": "^2.0.4"
   },
   "dependencies": {

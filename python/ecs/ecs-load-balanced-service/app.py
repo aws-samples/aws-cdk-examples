@@ -38,14 +38,16 @@ class BonjourECS(Stack):
             self, "Ec2Service",
             cluster=cluster,
             memory_limit_mib=512,
-            task_image_options={
-                'image': ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
-            }
+            task_image_options=ecs_patterns.NetworkLoadBalancedTaskImageOptions(
+                image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
+            )
         )
+
+        asg.connections.allow_from_any_ipv4(port_range=ec2.Port.tcp_range(32768, 65535), description="allow incoming traffic from ALB")
 
         CfnOutput(
             self, "LoadBalancerDNS",
-            value=ecs_service.load_balancer.load_balancer_dns_name
+            value="http://"+ecs_service.load_balancer.load_balancer_dns_name
         )
 
 app = App()
