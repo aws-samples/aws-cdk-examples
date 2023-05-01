@@ -73,8 +73,6 @@ class OpensearchServerlessStack(Stack):
             subnet_ids=[s.subnet_id for s in vpc.public_subnets],
         )
 
-        # endpoint = ec2.VpcEndpoint(self, "ServerlessCtCWLVPCE")
-
         ###############################################################################
         # Amazon OpenSearch Serverless collection
         network_policy = NETWORKPOLICY.replace("VPCENDPOINTID", endpoint.attr_id)
