@@ -1,0 +1,27 @@
+#cloud-config
+packages:
+ - docker
+write_files:
+- content: |
+    version: '3.1'
+    services:
+      wordpress:
+        image: wordpress
+        restart: always
+        ports:
+          - 8080:80
+        environment:
+          WORDPRESS_DB_HOST: dbhost
+          WORDPRESS_DB_USER: exampleuser
+          WORDPRESS_DB_PASSWORD: examplepass
+          WORDPRESS_DB_NAME: exampledb
+        volumes:
+          - wordpress:/var/www/html
+    volumes:
+      wordpress:
+  path: /home/ec-2user/stack.yml
+runcmd:
+ - [ yum, update, aws-cfn-bootstrap ]
+ - [ service, docker, start ]
+ - [ docker, swarm, init ]
+ - [ docker, stack, deploy, -c, '/home/ec-2user/stack.yml', wordpress ]

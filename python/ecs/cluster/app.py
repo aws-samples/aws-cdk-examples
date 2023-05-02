@@ -23,7 +23,7 @@ class ECSCluster(Stack):
             associate_public_ip_address=True,
             desired_capacity=3,
             vpc=vpc,
-            vpc_subnets={ 'subnet_type': ec2.SubnetType.PUBLIC },
+            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
         )
 
         cluster = ecs.Cluster(
@@ -35,6 +35,7 @@ class ECSCluster(Stack):
             auto_scaling_group=asg
         )
         cluster.add_asg_capacity_provider(capacity_provider)
+
 
 app = App()
 ECSCluster(app, "MyFirstEcsCluster")

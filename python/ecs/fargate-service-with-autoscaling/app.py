@@ -27,9 +27,9 @@ class AutoScalingFargateService(Stack):
         fargate_service = ecs_patterns.NetworkLoadBalancedFargateService(
             self, "sample-app",
             cluster=cluster,
-            task_image_options={
-                'image': ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
-            }
+            task_image_options=ecs_patterns.NetworkLoadBalancedTaskImageOptions(
+                image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
+            )
         )
 
         fargate_service.service.connections.security_groups[0].add_ingress_rule(

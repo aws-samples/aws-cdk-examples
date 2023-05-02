@@ -6,7 +6,7 @@ from aws_cdk import (
 )
 
 app = App()
-stack = Stack(app, "aws-ecs-integ-ecs")
+stack = Stack(app, "sample-ecs-task-placement")
 
 # Create a cluster
 vpc = ec2.Vpc(
@@ -32,10 +32,7 @@ cluster.add_asg_capacity_provider(capacity_provider)
 
 # Create a task definition with placement constraints
 task_definition = ecs.Ec2TaskDefinition(
-    stack, "TaskDef",
-    placement_constraints=[
-        ecs.PlacementConstraint.distinct_instances()
-    ]
+    stack, "TaskDef"
 )
 
 container = task_definition.add_container(
@@ -55,6 +52,9 @@ service = ecs.Ec2Service(
     stack, "Service",
     cluster=cluster,
     task_definition=task_definition,
+    placement_constraints=[
+        ecs.PlacementConstraint.distinct_instances()
+    ]
 )
 
 service.add_placement_strategies(

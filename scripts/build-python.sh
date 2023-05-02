@@ -23,5 +23,9 @@ for requirements in $(find $scriptdir/../python -name requirements.txt  -not -pa
         pip install -r requirements.txt
 
         $scriptdir/synth.sh
+        
+        # It is critical that we clean up the pip venv before we build the next python project
+        # Otherwise, if anything gets pinned in a requirements.txt, you end up with a weird broken environment
+        pip freeze | xargs pip uninstall -y
     )
 done
