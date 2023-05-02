@@ -22,7 +22,6 @@ from constructs import Construct
 ## Constants
 LOG_GROUP_NAME = "SvlCTCWL/svl_cloudtrail_logs"
 COLLECTION_NAME = "ctcollection"
-INDEX_NAME="cwl"
 CWL_RETENTION = cwl.RetentionDays.THREE_DAYS
 ARN_IAM_USER = boto3.client("sts").get_caller_identity()["Arn"]
 ENCRYPTIONPOLICY = f"""{{"Rules":[{{"ResourceType":"collection","Resource":["collection/{COLLECTION_NAME}"]}}],"AWSOwnedKey":true}}"""
