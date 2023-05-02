@@ -37,7 +37,7 @@ DATAPOLICY = f"""[
         }},
         {{
           "ResourceType":"index",
-          "Resource":["index/*/*"],
+          "Resource":["index/{COLLECTION_NAME}/*"],
           "Permission":["aoss:*"]
         }}
     ],
