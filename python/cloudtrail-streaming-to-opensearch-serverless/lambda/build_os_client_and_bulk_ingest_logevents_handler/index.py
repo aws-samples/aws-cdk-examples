@@ -15,8 +15,6 @@ import os
 from requests_aws4auth import AWS4Auth
 from opensearchpy import OpenSearch, RequestsHttpConnection
 
-INDEX_NAME = "cwl"
-
 # Lambda handler
 def handler(event, context):
     try:
@@ -26,7 +24,7 @@ def handler(event, context):
         region = os.environ["REGION"]
         service = "aoss"
         credentials = boto3.Session().get_credentials()
-  
+
         awsauth = AWS4Auth(
             credentials.access_key,
             credentials.secret_key,
@@ -67,10 +65,10 @@ def handler(event, context):
 
 def parse_and_send(os_client, cw_logs):
     # OpenSearch serverless using daily index automatically
-
+    index_name = os.environ["INDEX_NAME"]
     bulk_body = ""
     for log_event in cw_logs["logEvents"]:
-        bulk_body += f'{{"index": {{"_index": "{INDEX_NAME}"}} }}\n'
+        bulk_body += f'{{"index": {{"_index": "{index_name}"}} }}\n'
         fields = transform(events_md(cw_logs), log_event)
         bulk_body += f"{json.dumps(fields)}\n"
     print(f"Sending {len(bulk_body)} characters to OpenSearch")

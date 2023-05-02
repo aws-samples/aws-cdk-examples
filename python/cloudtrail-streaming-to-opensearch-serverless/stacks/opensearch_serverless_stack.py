@@ -128,7 +128,9 @@ class OpensearchServerlessStack(Stack):
         subscription_filter_lambda.add_to_role_policy(
             iam.PolicyStatement(actions=["logs:*"], resources=["*"])
         )
-
+        subscription_filter_lambda.add_environment(
+            "INDEX_NAME", INDEX_NAME
+        )
         #################################################################################
         # The data access policy needs the lambda role ARN to allow writing.
         dap = DATAPOLICY.replace(
