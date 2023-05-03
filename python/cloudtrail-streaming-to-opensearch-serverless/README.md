@@ -14,29 +14,31 @@
 
 ## Overview
 
-Do you want to stream [AWS CloudTrail logs](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html) to [Amazon OpenSearch Serverless](https://aws.amazon.com/opensearch-service/features/serverless/) and monitor it using [OpenSearch Dashboard](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/dashboards.html)? Then this CDK is for you!
+[Amazon OpenSearch Serverless](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless.html) is an on-demand auto scaling configuration for [Amazon OpenSearch Service](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html). An OpenSearch Serverless collection is an OpenSearch cluster that scales compute capacity based on your application's needs. OpenSearch Serverless provides a simple, cost-effective option for infrequent, intermittent, or unpredictable workloads. It's cost-effective because it automatically scales compute capacity to match your application's usage.
 
-CDK example to create an [Amazon OpenSearch Serverless](https://aws.amazon.com/opensearch-service/features/serverless/), [AWS Lambda](https://aws.amazon.com/pm/lambda), [Amazon CloudWatch Logs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html) and [AWS CloudTrail logs](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html) using Python.
+In this example, we show you how to use the [AWS Cloud Development Kit (CDK)](https://docs.aws.amazon.com/cdk/v2/guide/home.html) to deploy an Amazon OpenSearch Serverless collection in an [Amazon Virtual Private Cloud (VPC)](https://aws.amazon.com/vpc/). We use [AWS CloudTrail logs](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html) as a sample data set. The stack sets up a CloudTrail Trail to send logs to [Amazon CloudWatch Logs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html). It sets up a CloudWatch Logs Subscription Filter to forward logs to an included [AWS Lambda](https://aws.amazon.com/lambda/) function. The Lambda function decodes the CloudTrail data and transforms  it to [JavaScript Object Notation (JSON)](https://www.json.org/) format. It then writes the data to OpenSearch Serverless.
 
 ![](docs/streaming%20cloudtrail%20in%20OpenSearch.png)
 _figure1.Architecture Diagram of CloudTrail log streaming to Amazon OpenSearch Serverless_
 
-This example demonstrates setting up a OpenSearch Serverless, CloudTrail and CloudWatch group to stream CloudTrail logs to OpenSearch Collection with Lambda and subscription filter using CDK.
+The CDK stack sets up roles and permissions to enable all of the services to communicate with one-another. It further provides access for the deploying user's IAM identity. Finally, the stack sets up a VPC, and creates a VPC endpoint for communication to OpenSearch Serverless (see below for configuration). 
 
-### Security
+### Configuration of the code
 
-Amazon OpenSearch API is only within VPC and the OpenSearch dashboard is allowed for public so you do not need to run Nginx.
-
-You can change the CloudTrail group name, Amazon OpenSearch collection name, CloudWatch retention. Below are default values. Here is the documentation of [Amazon OpenSearch Serverless Security](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-security.html) to read for you.
+To configure the solution for your account, visit _opensearch_serverless_stack.py_. At the top of the file, you can modify the OpenSearch Serverless index name, CloudTrail log group name, OpenSearch Serverless collection name, and CloudWatch logs retention time. Below are default values.
 
 ```
+INDEX_NAME = "cwl"
 LOG_GROUP_NAME = "SvlCTCWL/svl_cloudtrail_logs"
 COLLECTION_NAME = "ctcollection"
+CWL_RETENTION = cwl.RetentionDays.THREE_DAYS
 ```
 
-Currently we are using TLS with AWS encryption key, read more about [Amazon OpenSearch Serverless encryption](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-encryption.html).
+Once deployed, navigate to the Amazon OpenSearch Service console. In the left, navigation pane, click the reveal triangle if it's not already open. Click **Collections**. Click **ctcollection** (or find your **COLLECTION_NAME** if you changed it). Scroll down until you see the **Endpoint** section, and click the URL under **OpenSearch Dashboards URL**. This will launch OpenSearch Dashboards.
 
-Once deployed, navigate to Amazon OpenSearch service console, select collections in Serverless section, select `ctcollection` and select dashboard URL, create your own Index pattern and explore the logs.
+In OpenSearch Dashboards, dismiss the initial splash screen. In the upper right, find the **Manage** link, and click it. Click **Index Patterns** in the left navigation pane. Click **Create index pattern**. and type `cwl` into the **Index pattern name** text box. Click **Next step**. Drop down the **Time field** menu, and select `@timestamp`. Click **Create index pattern**.
+
+You're now set up and ready to explore your logs!
 
 ## Build and Deploy
 
@@ -46,31 +48,31 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
 This project is set up like a standard Python project. The initialization process also creates a virtualenv within this project, stored under the `.env` directory. To create the virtualenv it assumes that there is a `python3` (or `python` for Windows) executable in your path with access to the `venv` package. If for any reason the automatic creation of the virtualenv fails, you can create the virtualenv manually.
 
-Run below command to create a virtualenv and to install local dependencies/requirements for lambda on MacOS and Linux.
+Run the below commands to create a virtualenv and to install local dependencies/requirements for lambda on MacOS and Linux.
 
 ```
 $ bash bootstrap.sh
 ```
 
-After the bootstrap process completes and the virtualenv is created, you can use the following step to activate your virtualenv.
+After the bootstrap process completes and the virtualenv is created, use the following step to activate your virtualenv.
 
 ```
 $ source .env/bin/activate
 ```
 
-If you are a Windows platform, you would activate the virtualenv like this:
+If you are a Windows platform, activate the virtualenv like this:
 
 ```
 % .env\Scripts\activate.bat
 ```
 
-Once the virtualenv is activated, you can install the required dependencies.
+Once the virtualenv is activated, install the required dependencies.
 
 ```
 $ pip install -r requirements.txt
 ```
 
-At this point you can now synthesize the CloudFormation template for this code.
+Now synthesize the CloudFormation template for this code. This will generate the CloudFormation template for you to examine, and verify that your setup is complete.
 
 ```
 $ cdk synth
@@ -78,28 +80,22 @@ $ cdk synth
 
 ### CDK Deploy
 
-At this point you can deploy the stack to create OpenSearch Serverless domain, an AWS Lambda and cloud trail group, Index template and dashboards.
-
-Using the default profile
+You use `cdk deploy` actually to create the resources.
 
 ```
 $ cdk deploy
 ```
 
-With specific profile
-
-```
-$ cdk deploy --profile test
-```
-
 ### CDK Destroy
 
-To clean up AWS resources run below script.
-⚠️ Please delete below resource manually.
-
-1. `CloudWatch Log groups`
-2. `s3 buckets`.
+You use `cdk destroy` to remove the resources you created with `cdk deploy`.
 
 ```
 $ cdk destroy
 ```
+
+⚠️ You must delete the below resources manually.
+
+1. `CloudWatch Log groups`
+2. `s3 buckets`
+

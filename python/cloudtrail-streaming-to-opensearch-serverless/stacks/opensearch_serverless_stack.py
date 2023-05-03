@@ -20,7 +20,7 @@ from aws_cdk.aws_s3_assets import Asset
 from constructs import Construct
 
 ## Constants
-INDEX_NAME = "cwl";
+INDEX_NAME = "cwl"
 LOG_GROUP_NAME = "SvlCTCWL/svl_cloudtrail_logs"
 COLLECTION_NAME = "ctcollection"
 CWL_RETENTION = cwl.RetentionDays.THREE_DAYS
