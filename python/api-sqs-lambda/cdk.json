@@ -1,3 +1,7 @@
 {
   "app": "python3 app.py"
+  "app": "python3 app.py",
+  "context": {
+    "aws-cdk:enableDiffNoFail": "true"
+  }
 }

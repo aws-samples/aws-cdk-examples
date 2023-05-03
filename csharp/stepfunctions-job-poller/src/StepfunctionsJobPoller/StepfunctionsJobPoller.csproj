@@ -4,12 +4,17 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <!-- Roll forward to future major versions of the netcoreapp as needed -->
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <RollForward>Major</RollForward>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Amazon.CDK.Lib" Version="2.0.0" />
     <PackageReference Include="Constructs" Version="10.0.0" />
+    <!-- CDK Construct Library dependencies -->
+    <PackageReference Include="Amazon.CDK.Lib" Version="2.0.0-alpha.13" />
+    <PackageReference Include="Constructs" Version="10.0.0" />
+    <!-- PackageReference Include="Amazon.Jsii.Analyzers" Version="*" PrivateAssets="all" /-->
   </ItemGroup>
 
 </Project>

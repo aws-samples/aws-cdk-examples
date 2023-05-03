@@ -1,3 +1,4 @@
+using Constructs;
 using Amazon.CDK;
 using Amazon.CDK.AWS.StepFunctions;
 using Amazon.CDK.AWS.StepFunctions.Tasks;
@@ -11,7 +12,6 @@ namespace StepfunctionsJobPoller
         {
             var submitJobActivity = new Activity(this, "SubmitJob");
             var checkJobActivity = new Activity(this, "CheckJob");
-
             var submitJob = new StepFunctionsInvokeActivity(this, "Submit Job", new StepFunctionsInvokeActivityProps
             {
                 Activity = submitJobActivity,

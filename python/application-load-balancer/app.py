@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import base64
+import aws_cdk as core
 from aws_cdk import (
     aws_autoscaling as autoscaling,
     aws_ec2 as ec2,
@@ -41,6 +42,7 @@ class LoadBalancerStack(Stack):
 
         asg.scale_on_request_count("AModestLoad", target_requests_per_minute=60)
         CfnOutput(self,"LoadBalancer",export_name="LoadBalancer",value=lb.load_balancer_dns_name)
+        core.CfnOutput(self,"LoadBalancer",export_name="LoadBalancer",value=lb.load_balancer_dns_name)
 
 
 app = App()

@@ -2,6 +2,10 @@ import { LambdaRestApi, CfnAuthorizer, LambdaIntegration, AuthorizationType } fr
 import { AssetCode, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { App, Stack } from 'aws-cdk-lib';
 import { UserPool } from 'aws-cdk-lib/aws-cognito'
+import { App, Stack } from 'aws-cdk-lib';
+import { UserPool } from 'aws-cdk-lib/aws-cognito'
+import { AssetCode, Function, Runtime } from 'aws-cdk-lib/aws-lambda'
+import { LambdaRestApi, CfnAuthorizer, LambdaIntegration, AuthorizationType } from 'aws-cdk-lib/aws-apigateway'
 
 export class CognitoProtectedApi extends Stack {
   constructor(app: App, id: string) {

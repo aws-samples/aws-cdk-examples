@@ -1,4 +1,6 @@
 from constructs import Construct
+import constructs
+import aws_cdk as core
 from aws_cdk import (
     aws_sqs as sqs,
     aws_iam as iam,
@@ -11,6 +13,7 @@ from aws_cdk import (
 class ApiSqsLambdaStack(Stack):
 
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: constructs.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         #Create the SQS queue
