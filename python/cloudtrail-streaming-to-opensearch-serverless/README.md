@@ -18,20 +18,22 @@
 
 In this example, we show you how to use the [AWS Cloud Development Kit (CDK)](https://docs.aws.amazon.com/cdk/v2/guide/home.html) to deploy an Amazon OpenSearch Serverless collection in an [Amazon Virtual Private Cloud (VPC)](https://aws.amazon.com/vpc/). We use [AWS CloudTrail logs](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html) as a sample data set. The stack sets up a CloudTrail Trail to send logs to [Amazon CloudWatch Logs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html). It sets up a CloudWatch Logs Subscription Filter to forward logs to an included [AWS Lambda](https://aws.amazon.com/lambda/) function. The Lambda function decodes the CloudTrail data and transforms  it to [JavaScript Object Notation (JSON)](https://www.json.org/) format. It then writes the data to OpenSearch Serverless.
 
-![](docs/streaming%20cloudtrail%20in%20OpenSearch.png)
+![](docs/architecture.png)
 _figure1.Architecture Diagram of CloudTrail log streaming to Amazon OpenSearch Serverless_
 
-The CDK stack sets up roles and permissions to enable all of the services to communicate with one-another. It further provides access for the deploying user's IAM identity. Finally, the stack sets up a VPC, and creates a VPC endpoint for communication to OpenSearch Serverless (see below for configuration). 
+The CDK stack sets up roles and permissions to enable all of the services to communicate with one-another. It further provides access for the deploying user's IAM identity. Finally, the stack sets up a VPC, and creates a VPC endpoint for communication to OpenSearch Serverless (see below for configuration).
 
 ### Configuration of the code
 
-To configure the solution for your account, visit _opensearch_serverless_stack.py_. At the top of the file, you can modify the OpenSearch Serverless index name, CloudTrail log group name, OpenSearch Serverless collection name, and CloudWatch logs retention time. Below are default values.
+To configure the solution for your account, visit _opensearch_serverless_stack.py_. At the top of this [opensearch_serverless_stack file](./stacks/opensearch_serverless_stack.py), you can modify the OpenSearch Serverless index name, CloudTrail log group name, OpenSearch Serverless collection name, and CloudWatch logs retention time and IAM User role who can access the dashboard. Below are default values.
 
 ```
 INDEX_NAME = "cwl"
 LOG_GROUP_NAME = "SvlCTCWL/svl_cloudtrail_logs"
 COLLECTION_NAME = "ctcollection"
 CWL_RETENTION = cwl.RetentionDays.THREE_DAYS
+# This is the arn of the user role who wants to visualize the dashboard
+ARN_IAM_USER = boto3.client("sts").get_caller_identity()["Arn"]
 ```
 
 Once deployed, navigate to the Amazon OpenSearch Service console. In the left, navigation pane, click the reveal triangle if it's not already open. Click **Collections**. Click **ctcollection** (or find your **COLLECTION_NAME** if you changed it). Scroll down until you see the **Endpoint** section, and click the URL under **OpenSearch Dashboards URL**. This will launch OpenSearch Dashboards.
