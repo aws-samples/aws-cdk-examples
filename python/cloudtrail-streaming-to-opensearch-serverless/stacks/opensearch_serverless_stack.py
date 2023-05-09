@@ -89,7 +89,7 @@ class OpensearchServerlessStack(Stack):
             self,
             "SvlCTCWLEncryption",
             name="svlctcwlencryption",
-            description="AWS Owned key policy for {COLLECTION_NAME}",
+            description=f"AWS Owned key policy for {COLLECTION_NAME}",
             type="encryption",
             policy=ENCRYPTIONPOLICY,
         )
