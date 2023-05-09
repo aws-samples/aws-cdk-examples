@@ -33,7 +33,7 @@ LOG_GROUP_NAME = "SvlCTCWL/svl_cloudtrail_logs"
 COLLECTION_NAME = "ctcollection"
 CWL_RETENTION = cwl.RetentionDays.THREE_DAYS
 # This is the arn of the user role who wants to visualize the dashboard
-ARN_IAM_USER = boto3.client("sts").get_caller_identity()["Arn"]
+ARN_IAM_ROLE = "#TODO:" # add your IAM role which has permission for `arn:aws:aoss:*` for `aoss:*` action.
 ```
 
 Once deployed, navigate to the Amazon OpenSearch Service console. In the left, navigation pane, click the reveal triangle if it's not already open. Click **Collections**. Click **ctcollection** (or find your **COLLECTION_NAME** if you changed it). Scroll down until you see the **Endpoint** section, and click the URL under **OpenSearch Dashboards URL**. This will launch OpenSearch Dashboards.

@@ -24,7 +24,7 @@ INDEX_NAME = "cwl"
 LOG_GROUP_NAME = "SvlCTCWL/svl_cloudtrail_logs"
 COLLECTION_NAME = "ctcollection"
 CWL_RETENTION = cwl.RetentionDays.THREE_DAYS
-ARN_IAM_USER = boto3.client("sts").get_caller_identity()["Arn"]
+ARN_IAM_ROLE = "#TODO:" # add your IAM role which has permission for `arn:aws:aoss:*` for `aoss:*` action.
 ENCRYPTIONPOLICY = f"""{{"Rules":[{{"ResourceType":"collection","Resource":["collection/{COLLECTION_NAME}"]}}],"AWSOwnedKey":true}}"""
 NETWORKPOLICY = f"""[{{"Description":"Endpoint access for Lambda and for random querying","SourceVPCEs":["VPCENDPOINTID"],"Rules":[{{"ResourceType":"collection","Resource":["collection/{COLLECTION_NAME}"]}}],"AllowFromPublic":false}},{{"Description":"Dashboards access","AllowFromPublic":true,"Rules":[{{"ResourceType":"dashboard","Resource":["collection/{COLLECTION_NAME}"]}}]}}]"""
 DATAPOLICY = f"""[
@@ -42,7 +42,7 @@ DATAPOLICY = f"""[
           "Permission":["aoss:*"]
         }}
     ],
-    "Principal":["{ARN_IAM_USER}", "LAMBDAROLEARN"]
+    "Principal":["{ARN_IAM_ROLE}", "LAMBDAROLEARN"]
   }}
 ]
 """
