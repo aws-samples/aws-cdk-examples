@@ -18,4 +18,7 @@ source .env/bin/activate
 # Bootstrap the environment
 cdk bootstrap
 
- 
+# Synthesize
+cdk synth
+
+
