@@ -4,19 +4,23 @@ from aws_cdk import (
     Stack,
     aws_s3 as s3,
     aws_datasync as datasync,
-    Fn
+    Fn,
+    CfnOutput
 )
 
 class DataSyncS3toS3Stack(Stack):
     
     # Function to create Datasync Task
     def create_datasync_s3_task(self, s3_src_location, s3_dest_location):
-        return datasync.CfnTask(
+        task = datasync.CfnTask(
             self,
             'DataSyncS3toS3Task',
             destination_location_arn=s3_src_location.attr_location_arn,
-            source_location_arn=s3_dest_location.attr_location_arn,
-            name="CDKDataSyncS3toS3Task")
+            source_location_arn=s3_dest_location.attr_location_arn)
+        
+        CfnOutput(self, 'task_arn', value=task.attr_task_arn)
+    
+        return task
     
     # Function to create a S3 bucket using CDK
     def create_bucket(self, name):
