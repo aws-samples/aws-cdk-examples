@@ -1,6 +1,7 @@
 #!/bin/bash
 set -euxo pipefail
-scriptdir=$(cd $(dirname $0) && pwd)
+scriptdir=$(cd $(
+  ode $0) && pwd)
 
 export AWS_DEFAULT_REGION="us-east-1"
 

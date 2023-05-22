@@ -15,6 +15,7 @@ import os
 from requests_aws4auth import AWS4Auth
 from opensearchpy import OpenSearch, RequestsHttpConnection
 
+
 # Lambda handler
 def handler(event, context):
     try:
@@ -83,6 +84,7 @@ def events_md(log_events):
     ret["@log_stream"] = log_events["logStream"]
     return ret
 
+
 def transform(md, log_event):
     ret = copy.deepcopy(md)
     ret["@id"] = log_event["id"]
@@ -95,9 +97,9 @@ def transform(md, log_event):
         ret[key] = int(value) if isNumber(value) else value
     return ret
 
+
 def isNumber(x):
     try:
-        return bool(0 == x*0)
+        return bool(0 == x * 0)
     except:
         return False
-
