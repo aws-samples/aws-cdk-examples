@@ -6,6 +6,9 @@ import fs = require('fs');
 import sns = require('aws-cdk-lib/aws-sns');
 import subscriptions = require('aws-cdk-lib/aws-sns-subscriptions');
 import iam = require('aws-cdk-lib/aws-iam');
+import { CfnParameter } from 'aws-cdk-lib';
+
+
 
 export class EventBridgeLambdaStack extends cdk.Stack {
   constructor(app: cdk.App, id: string) {
@@ -16,8 +19,13 @@ export class EventBridgeLambdaStack extends cdk.Stack {
       displayName: 'Lambda SNS Topic',
     });
 
+    //Email Variable
+    const emailaddress = new CfnParameter(this, "email", {
+      type: "String",
+      description: "The name of the Amazon S3 bucket where uploaded files will be stored."});
+
     // Subscription to the topic
-    topic.addSubscription(new subscriptions.EmailSubscription('webbbm@amazon.com'));
+    topic.addSubscription(new subscriptions.EmailSubscription(emailaddress.valueAsString));
 
     // Lambda Function to publish message to SNS
     const lambdaFn = new lambda.Function(this, 'Singleton', {

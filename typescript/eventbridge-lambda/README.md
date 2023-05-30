@@ -11,7 +11,7 @@
 ---
 <!--END STABILITY BANNER-->
 
-This example creates a new EventBridge rule that executes a Lambda function every day at 6pm UTC
+This example creates a new EventBridge rule that executes a Lambda function every minute and sends you and email via a lambda that calls a SNS topic
 
 
 ## Build
@@ -28,7 +28,7 @@ This will install the necessary CDK, then this example's dependencies, and then 
 
 ## Deploy
 
-Run `cdk deploy`. This will deploy / redeploy your Stack to your AWS Account.
+Run `cdk deploy --parameters email=<email_address>` replacing <email_address> with your email. This will deploy / redeploy your Stack to your AWS Account and start sending email notifications to yourself every 1 minute
 
 ## Synthesize Cloudformation Template
 
