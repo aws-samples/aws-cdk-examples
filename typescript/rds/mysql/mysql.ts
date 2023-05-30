@@ -182,7 +182,7 @@ export class Mysql extends Stack {
         excludeCharacters: "\"@/\\ '",
         generateStringKey: 'password',
         passwordLength: 30,
-        secretStringTemplate: `{"username":${mysqlUsername}}`,
+        secretStringTemplate: JSON.stringify({username: mysqlUsername}),
       },
     });
 

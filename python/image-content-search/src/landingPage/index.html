@@ -8,7 +8,7 @@
     input[type=text],select{width:30%;padding:12px 20px;margin:8px 0;display:inline-block;border:1px solid #ccc;border-radius:4px;box-sizing:border-box}.submit[type=submit]{width:20%;background-color:#4caf50;color:#fff;padding:14px 20px;margin:8px 0;border:none;border-radius:4px;cursor:pointer}input[type=submit]:hover{background-color:#45a049}.div{border-radius:5px;background-color:#f2f2f2;padding:20px}
     table{border-collapse:collapse;table-layout: fixed;width:100%}td,th{text-align:left;padding:8px;word-wrap:break-word;}tr:nth-child(even){background-color:#f2f2f2}
   </style>
-  <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <script>
     var authData = window.location.hash.substring(1);
     var idToken = authData.split('&').find((rec) => rec.split('=')[0] == 'id_token').split('=')[1]
@@ -47,9 +47,9 @@
 
     function listImagesByLabel(outputTab, label, language, country) {
       console.log('Finding images with label: ' + label);
-      
+
       var formData = language ? {label, language, country} : {label}
-      
+
       $.ajax({
         url: searchImageEndpoint,
         headers: { 'Authorization': idToken },
@@ -84,7 +84,7 @@
     });
 
     function submitSearchQuery() {
-      event.preventDefault();    
+      event.preventDefault();
       var language = $('#language').val();
       var country = $('#country').val();
       var label = $('input[name=label]').val();
@@ -119,7 +119,7 @@
     }
 
     function submitFileUpload() {
-      event.preventDefault();    
+      event.preventDefault();
 
       var formData = new FormData();
       var selectedFile = $('input[name="file"]')[0]
@@ -128,8 +128,8 @@
         formData.append(v.name, v.defaultValue);
       });
 
-      formData.append("file", selectedFile.files[0]); 
-      
+      formData.append("file", selectedFile.files[0]);
+
       $.ajax({
           url: $("#upload_image_form").attr('action'),
           type: 'POST',
@@ -168,7 +168,7 @@
 
     <div id="upload" class="tabcontent">
       <h3>Upload Image</h3>
-      <p>Select image to upload:</p> 
+      <p>Select image to upload:</p>
       <form id="upload_image_form" method="post" enctype="multipart/form-data">
         <input type="hidden" name="key"/><br />
         <input type="hidden" name="X-Amz-Credential"/>
@@ -182,10 +182,10 @@
       </form>
       <p id="upload_result"></p>
     </div>
-    
+
     <div id="search" class="tabcontent">
       <h3>Search Labels</h3>
-      
+
       <form id="search_image_form" method="post">
         <label >Language:</label>
         <select name="language" id="language">
@@ -204,7 +204,7 @@
         <input type="text" name="label"/><br />
         <input class="submit" type="submit" value="Search" onclick="submitSearchQuery()"/>
       </form>
-    
+
       <table id="search_image_result"></table>
     </div>
 
@@ -214,7 +214,7 @@
     </div>
 
   </div>
-  
+
   <script>
     document.getElementById("default_tab").click();
   </script>

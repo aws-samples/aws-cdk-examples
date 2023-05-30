@@ -1,0 +1,22 @@
+{
+  "containerDefinitions": [
+    {
+      "name": "web",
+      "image": "REPOSITORY_URI:IMAGE_TAG",
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true
+    }
+  ],
+  "taskRoleArn": "TASK_ROLE_ARN",
+  "executionRoleArn": "EXECUTION_ROLE_ARN",
+  "family": "codedeploy-sample",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512"
+}
