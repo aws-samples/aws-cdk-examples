@@ -1,8 +1,0 @@
-{
-  "app": "python3 app.py",
-  "context": {
-    "aws-cdk:enableDiffNoFail": "true",
-    "@aws-cdk/core:stackRelativeExports": "true",
-    "@aws-cdk/aws-ecr-assets:dockerIgnoreSupport": true
-  }
-}
