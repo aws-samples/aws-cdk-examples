@@ -73,21 +73,21 @@ jobs:
         HAS_TYPESCRIPT_CHANGES="${{needs.check_file_changes.outputs.has_typescript_changes}}"
 
         if [ "${HAS_CSHARP_CHANGES}" == "true" ]; then
-          docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node14 /bin/bash -c "scripts/build-csharp.sh"
+          docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node18 /bin/bash -c "scripts/build-csharp.sh"
         fi
 
         if [ "${HAS_GO_CHANGES}" == "true" ]; then
-          docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node14 /bin/bash -c "scripts/build-go.sh"
+          docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node18 /bin/bash -c "scripts/build-go.sh"
         fi
 
         if [ "${HAS_JAVA_CHANGES}" == "true" ]; then
-          docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node14 /bin/bash -c "scripts/build-java.sh"
+          docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node18 /bin/bash -c "scripts/build-java.sh"
         fi
 
         if [ "${HAS_PYTHON_CHANGES}" == "true" ]; then
-          docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node14 /bin/bash -c "scripts/build-python.sh"
+          docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node18 /bin/bash -c "scripts/build-python.sh"
         fi
 
         if [ "${HAS_TYPESCRIPT_CHANGES}" == "true" ]; then
-          docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node14 /bin/bash -c "scripts/build-typescript.sh"
+          docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node18 /bin/bash -c "scripts/build-typescript.sh"
         fi
