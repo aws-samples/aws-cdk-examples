@@ -1,0 +1,25 @@
+{
+  "name": "aws-transfer-sftp-server",
+  "version": "0.1.0",
+  "bin": {
+    "aws-transfer-sftp-server": "ts-node bin/main.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.2",
+    "@types/node": "18.15.11",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.1",
+    "typescript": "~5.1.3"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.83.1",
+    "constructs": "^10.2.52"
+  }
+}
