@@ -77,106 +77,11 @@ exports[`SftpServerStack has required resources 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "IncomingDataBucket3554D835": {
-      "DeletionPolicy": "Delete",
-      "Properties": {
-        "BucketEncryption": {
-          "ServerSideEncryptionConfiguration": [
-            {
-              "ServerSideEncryptionByDefault": {
-                "SSEAlgorithm": "aws:kms",
-              },
-            },
-          ],
-        },
-        "BucketName": {
-          "Fn::Join": [
-            "",
-            [
-              "sftp-server-data-bucket-",
-              {
-                "Ref": "AWS::AccountId",
-              },
-              "-",
-              {
-                "Ref": "AWS::Region",
-              },
-            ],
-          ],
-        },
-        "PublicAccessBlockConfiguration": {
-          "BlockPublicAcls": true,
-          "BlockPublicPolicy": true,
-          "IgnorePublicAcls": true,
-          "RestrictPublicBuckets": true,
-        },
-      },
-      "Type": "AWS::S3::Bucket",
-      "UpdateReplacePolicy": "Delete",
-    },
-    "IncomingDataBucketPolicyCA22042A": {
-      "Properties": {
-        "Bucket": {
-          "Ref": "IncomingDataBucket3554D835",
-        },
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "s3:*",
-              "Condition": {
-                "Bool": {
-                  "aws:SecureTransport": "false",
-                },
-              },
-              "Effect": "Deny",
-              "Principal": {
-                "AWS": "*",
-              },
-              "Resource": [
-                {
-                  "Fn::GetAtt": [
-                    "IncomingDataBucket3554D835",
-                    "Arn",
-                  ],
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "IncomingDataBucket3554D835",
-                          "Arn",
-                        ],
-                      },
-                      "/*",
-                    ],
-                  ],
-                },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::S3::BucketPolicy",
-    },
     "MetricFilter1B93B6E5": {
       "Properties": {
         "FilterPattern": "?"ERRORS AUTH_FAILURE" ?"ERROR Message"",
         "LogGroupName": {
-          "Fn::Join": [
-            "",
-            [
-              "/aws/transfer/",
-              {
-                "Fn::GetAtt": [
-                  "SFTPServer",
-                  "ServerId",
-                ],
-              },
-            ],
-          ],
+          "Ref": "SftpLogGroupC79A244B",
         },
         "MetricTransformations": [
           {
@@ -249,7 +154,7 @@ exports[`SftpServerStack has required resources 1`] = `
             [
               "/",
               {
-                "Ref": "IncomingDataBucket3554D835",
+                "Fn::ImportValue": "IncomingDataStack-dev:ExportsOutputRefIncomingDataBucket3554D8354A965D28",
               },
               "/incoming-data",
             ],
@@ -297,20 +202,14 @@ exports[`SftpServerStack has required resources 1`] = `
               "Effect": "Allow",
               "Resource": [
                 {
-                  "Fn::GetAtt": [
-                    "IncomingDataBucket3554D835",
-                    "Arn",
-                  ],
+                  "Fn::ImportValue": "IncomingDataStack-dev:ExportsOutputFnGetAttIncomingDataBucket3554D835Arn7B042284",
                 },
                 {
                   "Fn::Join": [
                     "",
                     [
                       {
-                        "Fn::GetAtt": [
-                          "IncomingDataBucket3554D835",
-                          "Arn",
-                        ],
+                        "Fn::ImportValue": "IncomingDataStack-dev:ExportsOutputFnGetAttIncomingDataBucket3554D835Arn7B042284",
                       },
                       "/*",
                     ],
@@ -358,6 +257,28 @@ exports[`SftpServerStack has required resources 1`] = `
         "Domain": "vpc",
       },
       "Type": "AWS::EC2::EIP",
+    },
+    "SftpLogGroupC79A244B": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/transfer/",
+              {
+                "Fn::GetAtt": [
+                  "SFTPServer",
+                  "ServerId",
+                ],
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 30,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
     },
     "SftpServerSG79C38856": {
       "Properties": {
