@@ -50,9 +50,17 @@ npm run test
 
 ## Deploy
 
-First, review the `main.ts` and configure user name and the public key.
+First, review the `main.ts` to see if you want to configure account, region or SFTP user name.
+Proceed to run CDK deploy with [context variable](https://docs.aws.amazon.com/cdk/v2/guide/context.html) `userPublicKeys` and optionally also `allowedIps`.
 
-Run `cdk deploy`. This will deploy or update the stack on the active AWS account. `cdk destroy` can be used to remove the deployed resources after they are no longer needed.
+```sh
+cdk deploy --context "userPublicKeys=ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBCJlxu5q1M3icgvrvNvCyE4gavDWaB8L7ZyGjnpsp/7GZhczaqY49KmZnZrbsKfoKtKu5bkNN8BXcjrAAwwv0Hk="
+```
+
+When running the deployment in CI/CD environment, you likely want to fetch the context from your own parameter or secrets store.
+
+The command will deploy or update the stack on the active AWS account.
+`cdk destroy` can be used to remove the deployed resources after they are no longer needed.
 
 ## Connect
 

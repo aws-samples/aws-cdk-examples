@@ -10,9 +10,12 @@ const props: cdk.StackProps = {
   }
 };
 
-const userPublicKeys = [
-  'ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBCJlxu5q1M3icgvrvNvCyE4gavDWaB8L7ZyGjnpsp/7GZhczaqY49KmZnZrbsKfoKtKu5bkNN8BXcjrAAwwv0Hk='
-];
+const app = new cdk.App();
+
+// Use CDK Context to get configuration variables
+// https://docs.aws.amazon.com/cdk/v2/guide/context.html
+const userPublicKeys = (app.node.getContext('userPublicKeys') as string).split(',');
+const allowedIps = app.node.tryGetContext('allowedIps') as string | undefined;
 
 // Different properties for dev/test environment
 const sftpPropsDev: SftpServerStackProps = {
@@ -25,11 +28,9 @@ const sftpPropsDev: SftpServerStackProps = {
 const sftpProps: SftpServerStackProps = {
   userName: 'sftp-user',
   userPublicKeys,
-  allowedIps: ['127.0.0.1/32'],
+  allowedIps: allowedIps ? allowedIps.split(',') : undefined,
   ...props,
 };
-
-const app = new cdk.App();
 
 new SftpServerStack(app, 'SftpServerStack-dev', sftpPropsDev);
 
