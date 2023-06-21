@@ -1,4 +1,4 @@
-import { Stack, StackProps, RemovalPolicy } from 'aws-cdk-lib';
+import { Stack, StackProps, RemovalPolicy, CfnOutput } from 'aws-cdk-lib';
 import {
   aws_s3 as s3,
   aws_ec2 as ec2,
@@ -97,6 +97,12 @@ export class SftpServerStack extends Stack {
       loggingRole: cloudWatchLoggingRole.roleArn,
       protocols: ['SFTP'],
       domain: 'S3',
+    });
+
+    // Output Server Endpoint access where clients can connect
+    new CfnOutput(this, 'SFTPServerEndpoint', {
+      description: 'Server Endpoint',
+      value: `${server.attrServerId}.server.transfer.${this.region}.amazonaws.com`,
     });
 
     // Allow SFTP user to write the S3 bucket
