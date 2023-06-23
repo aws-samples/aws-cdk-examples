@@ -23,7 +23,6 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-
     // modify gitignore file to remove unneeded files from the codecommit copy    
     let gitignore = fs.readFileSync('.gitignore').toString().split(/\r?\n/);
     gitignore.push('.git/');
@@ -219,7 +218,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     fargateService.attachToApplicationTargetGroup(targetGroupBlue);
 
     // Creates new pipeline artifacts
-    const SourceArtifact = new pipeline.Artifact("SourceArtifact");
+    const sourceArtifact = new pipeline.Artifact("SourceArtifact");
     const buildArtifact = new pipeline.Artifact("BuildArtifact");
 
     // Creates the source stage for CodePipeline
@@ -259,7 +258,6 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
         }),
       ],
     };
-
 
     // Creates a new CodeDeploy Deployment Group
     const deploymentGroup = new codedeploy.EcsDeploymentGroup(
