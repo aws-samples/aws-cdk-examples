@@ -22,5 +22,4 @@ email_default="user@example.com"
 echo -e
 read -p "Please enter an e-mail for alert [$email_default]: " email
 email="${email:-$email_default}"
-sed -i -e 's/user@example.com/'$email'/g' opensearch/opensearch_stack.py
-
+sed -i -e 's/user@example.com/'$email'/g' os_vpc_provision/os_vpc_provision_stack.py
