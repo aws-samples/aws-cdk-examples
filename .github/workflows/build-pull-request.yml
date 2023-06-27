@@ -19,6 +19,9 @@ jobs:
         with:
           fetch-depth: 2
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 037319d (Update build-pull-request.yml)
   build:
     needs: check_file_changes
     runs-on: ubuntu-latest
@@ -26,12 +29,15 @@ jobs:
     - uses: actions/checkout@v2
     - name: Runs docker builds with JSII superchain
       run: |
+<<<<<<< HEAD
 =======
 
       - name: Build
         id: build
         run: |
 >>>>>>> d55a6bb (Update build-pull-request.yml)
+=======
+>>>>>>> 037319d (Update build-pull-request.yml)
           echo "========== categorization of changed files =========="
           buildpath=""
           for file in $(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }})
