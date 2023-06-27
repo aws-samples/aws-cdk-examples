@@ -52,6 +52,18 @@ NagSuppressions.addResourceSuppressions(
 );
 
 NagSuppressions.addResourceSuppressions(
+  app,
+  [
+    {
+      id: "AwsSolutions-S1",
+      reason:
+        "Suppress access logs. Access logs cannot be enabled on buckets with KMS encryption which is the purpose of this example",
+    },
+  ],
+  true
+);
+
+NagSuppressions.addResourceSuppressions(
   step1,
   [
     {
