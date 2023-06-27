@@ -4,7 +4,7 @@ on: [pull_request]
 
 jobs:
   check_file_changes:
-    name: Check file changes
+    name: Check file changes v2
     outputs:
       has_csharp_changes: ${{ steps.check_files.outputs.has_csharp_changes }}
       has_go_changes: ${{ steps.check_files.outputs.has_go_changes }}
@@ -18,39 +18,58 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 2
-
-      - name: Check files
-        id: check_files
-        run: |
+  build:
+    needs: check_file_changes
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Runs docker builds with JSII superchain
+      run: |
           echo "========== categorization of changed files =========="
+          buildpath=""
           for file in $(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }})
           do
+
+            IFS="/" read path1 path2 path3 <<< $file
+            echo $path1 $path2 $path3
+            if [[ "$buildpath" == "$path1/$path2" ]]; then
+              continue
+            fi
+            buildpath=$path1/$path2
+            echo "Build Path ${buildpath}"
+
+
             echo -n "$file => "
 
-            case $file in
-            csharp/*)
+            case $path1 in
+            csharp)
               echo "C#"
               echo "::set-output name=has_csharp_changes::true"
+              docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node18 /bin/bash -c "scripts/build-csharp.sh $path2"
               ;;
 
-            go/*)
+            go)
               echo "Go"
               echo "::set-output name=has_go_changes::true"
+              docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node18 /bin/bash -c "scripts/build-go.sh $path2"
               ;;
 
-            java/*)
+            java)
               echo "Java"
               echo "::set-output name=has_java_changes::true"
+              docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node18 /bin/bash -c "scripts/build-java.sh $path2"
               ;;
 
-            python/*)
+            python)
               echo "Python"
               echo "::set-output name=has_python_changes::true"
+              docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node18 /bin/bash -c "scripts/build-python.sh $path2"
               ;;
 
-            typescript/*)
+            typescript)
               echo "TypeScript"
               echo "::set-output name=has_typescript_changes::true"
+              docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node18 /bin/bash -c "scripts/build-typescript.sh $path2"
               ;;
 
             *)
@@ -59,35 +78,3 @@ jobs:
             esac
           done
 
-  build:
-    needs: check_file_changes
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Runs docker builds with JSII superchain
-      run: |
-        HAS_CSHARP_CHANGES="${{needs.check_file_changes.outputs.has_csharp_changes}}"
-        HAS_GO_CHANGES="${{needs.check_file_changes.outputs.has_go_changes}}"
-        HAS_JAVA_CHANGES="${{needs.check_file_changes.outputs.has_java_changes}}"
-        HAS_PYTHON_CHANGES="${{needs.check_file_changes.outputs.has_python_changes}}"
-        HAS_TYPESCRIPT_CHANGES="${{needs.check_file_changes.outputs.has_typescript_changes}}"
-
-        if [ "${HAS_CSHARP_CHANGES}" == "true" ]; then
-          docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node18 /bin/bash -c "scripts/build-csharp.sh"
-        fi
-
-        if [ "${HAS_GO_CHANGES}" == "true" ]; then
-          docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node18 /bin/bash -c "scripts/build-go.sh"
-        fi
-
-        if [ "${HAS_JAVA_CHANGES}" == "true" ]; then
-          docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node18 /bin/bash -c "scripts/build-java.sh"
-        fi
-
-        if [ "${HAS_PYTHON_CHANGES}" == "true" ]; then
-          docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node18 /bin/bash -c "scripts/build-python.sh"
-        fi
-
-        if [ "${HAS_TYPESCRIPT_CHANGES}" == "true" ]; then
-          docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node18 /bin/bash -c "scripts/build-typescript.sh"
-        fi
