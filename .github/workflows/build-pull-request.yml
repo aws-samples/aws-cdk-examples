@@ -18,10 +18,13 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 2
-
-      - name: Build
-        id: build
-        run: |
+  build:
+    needs: check_file_changes
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Runs docker builds with JSII superchain
+      run: |
           echo "========== categorization of changed files =========="
           buildpath=""
           for file in $(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }})
