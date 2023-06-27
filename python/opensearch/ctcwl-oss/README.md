@@ -25,7 +25,7 @@ The CDK stack sets up roles and permissions to enable all of the services to com
 
 ### Configuration of the code
 
-To configure the solution for your account, visit _opensearch_serverless_stack.py_. At the top of this [opensearch_serverless_stack file](./stacks/opensearch_serverless_stack.py), you can modify the OpenSearch Serverless index name, CloudTrail log group name, OpenSearch Serverless collection name, and CloudWatch logs retention time and IAM User role who can access the dashboard. Below are default values.
+To configure the solution for your account, visit `ctcwl_oss_stack`. At the top of this [ctcwl_oss_stack](./ctcwl_oss/ctcwl_oss_stack.py), you can modify the OpenSearch Serverless index name, CloudTrail log group name, OpenSearch Serverless collection name, and CloudWatch logs retention time and IAM User role who can access the dashboard. Below are default values.
 
 ```
 INDEX_NAME = "cwl"
@@ -102,3 +102,5 @@ $ cdk destroy
 2. `s3 buckets`
 
 # cwctl-oss
+
+
