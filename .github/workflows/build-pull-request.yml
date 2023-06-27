@@ -19,8 +19,8 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Check files
-        id: check_files
+      - name: Build
+        id: build
         run: |
           echo "========== categorization of changed files =========="
           buildpath=""
