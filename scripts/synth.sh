@@ -17,4 +17,3 @@ npx cdk synth
 if $fake_context; then
   rm -f cdk.context.json
 fi
-
