@@ -1,6 +1,7 @@
 #!/bin/bash
 set -euxo pipefail
 scriptdir=$(cd $(dirname $0) && pwd)
+modifieddir=$1
 
 python3 -m venv /tmp/.venv
 
@@ -9,7 +10,7 @@ cd $scriptdir/../python
 npm install
 
 # Find and build all Python projects
-for requirements in $(find $scriptdir/../python -name requirements.txt  -not -path "$scriptdir/../python/node_modules/*"); do
+for requirements in $(find $scriptdir/../python/$modifieddir -name requirements.txt  -not -path "$scriptdir/../python/node_modules/*"); do
     (
         echo "=============================="
         echo "building project: $requirements"
@@ -23,5 +24,6 @@ for requirements in $(find $scriptdir/../python -name requirements.txt  -not -pa
         pip install -r requirements.txt
 
         $scriptdir/synth.sh
+
     )
 done
