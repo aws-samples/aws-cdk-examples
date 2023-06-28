@@ -1,0 +1,8 @@
+[
+    {
+      "EventBusName": "MyEventBus",
+      "Source": "MyCdkApp",
+      "DetailType": "message-for-queue",
+      "Detail": "{\"message\":\"Hello CDK world! :)\"}"
+    }
+  ]
