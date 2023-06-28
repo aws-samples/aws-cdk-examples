@@ -26,4 +26,3 @@ func TestLambdaCronStack(t *testing.T) {
 	handler := template.Get("Resources.Singleton8C7B99F3.Properties.Handler").String()
 	assert.Equal(t, "handler.main", handler)
 }
-x
