@@ -97,7 +97,6 @@ export class Step3SourceAccount extends Stack {
       bucketKeyEnabled: true,
       encryption: BucketEncryption.KMS,
       encryptionKey: sourceKmsKey,
-      serverAccessLogsPrefix: "_logs",
       enforceSSL: true,
     });
 
