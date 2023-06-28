@@ -1,13 +1,14 @@
 #!/bin/bash
 set -euxo pipefail
 scriptdir=$(cd $(dirname $0) && pwd)
+modifieddir=$1
 
 # install CDK CLI from npm, so that npx can find it later
 cd $scriptdir/../csharp
 npm install
 
 # Find and build all CSharp projects
-for projFile in $(find $scriptdir/../csharp -name cdk.json | grep -v node_modules); do
+for projFile in $(find $scriptdir/../csharp/$modifieddir -name cdk.json | grep -v node_modules); do
     (
         echo "=============================="
         echo "building project: $projFile"
