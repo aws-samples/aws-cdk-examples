@@ -78,25 +78,24 @@ class ResourceOverridesStack extends Stack {
     bucketResource.addPropertyOverride(
         "LoggingConfiguration.DestinationBucketName", otherBucket.getBucketName());
 
-    bucketResource.setAnalyticsConfigurations(
-        Collections.singletonList(
-            ImmutableMap.builder()
-                .put("id", "config1")
-                .put(
-                    "storageClassAnalysis",
-                    ImmutableMap.of(
-                        "dataExport",
-                        ImmutableMap.builder()
-                            .put("outputSchemaVersion", "1")
-                            .put(
-                                "destination",
-                                ImmutableMap.builder()
-                                    .put("format", "html")
-                                    // using L2 construct's method will work as expected
-                                    .put("bucketArn", otherBucket.getBucketArn())
+    CfnBucket.AnalyticsConfigurationProperty properties =
+        CfnBucket.AnalyticsConfigurationProperty.builder()
+            .id("config1")
+            .storageClassAnalysis(
+                CfnBucket.StorageClassAnalysisProperty.builder()
+                    .dataExport(
+                        CfnBucket.DataExportProperty.builder()
+                            .outputSchemaVersion("1")
+                            .destination(
+                                CfnBucket.DestinationProperty.builder()
+                                    .bucketArn(otherBucket.getBucketArn())
+                                    .format("html")
                                     .build())
-                            .build()))
-                .build()));
+                            .build())
+                    .build())
+            .build();
+
+    bucketResource.setAnalyticsConfigurations(Collections.singletonList(properties));
 
     //
     // It is also possible to request a deletion of a value by either assigning
@@ -144,7 +143,9 @@ class ResourceOverridesStack extends Stack {
         (CfnBucket)
             bucket.getNode().getChildren().stream()
                 .filter(
-                    child -> child instanceof CfnResource && ((CfnResource)child).getCfnResourceType().equals("AWS::S3::Bucket"))
+                    child ->
+                        child instanceof CfnResource
+                            && ((CfnResource) child).getCfnResourceType().equals("AWS::S3::Bucket"))
                 .findFirst()
                 .get();
 

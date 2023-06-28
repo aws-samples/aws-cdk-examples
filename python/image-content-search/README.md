@@ -73,8 +73,13 @@ $ npm i -g aws-cdk
 
 </br>
 
-## Deployment
+## Configuration
 
+The following [config.yml](./stack/config.yml) has example values. You many want to change to customize the deployment. Though before you can successfully deploy you will need/may to change: 
+- (required) DomainPrefix value as [Amazon Cognito requires that the domain be unique](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-assign-domain.html)
+- (optional) Region to a region that you would want to use.
+
+## Deployment
 
 At this point you can now synthesize the CloudFormation template for this code.
 
