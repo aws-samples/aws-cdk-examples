@@ -1,9 +1,10 @@
 #!/bin/bash
 set -euxo pipefail
 scriptdir=$(cd $(dirname $0) && pwd)
+modifieddir=$1
 
 # Find and build all NPM projects
-for pkgJson in $(find typescript -name cdk.json | grep -v node_modules | sort); do
+for pkgJson in $(find $scriptdir/../typescript/$modifieddir -name cdk.json | grep -v node_modules | sort); do
     (
         echo "=============================="
         echo "building project: $(dirname $pkgJson)"
