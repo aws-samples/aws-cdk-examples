@@ -2,6 +2,8 @@
 
 `InstanceConnectEndpoint` is a sample AWS CDK construct that allows you to build [EC2 Instance Connect Endpoint](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/connect-using-eice.html) in your VPC with CDK custom resource.
 
+This sample is generated with [projen](https://github.com/projen/projen) `awscdk-construct` project type so you can reference the `.projenrc.ts` and create your own CDK construct library like this with very little modification.
+
 # Sample
 
 ```ts
