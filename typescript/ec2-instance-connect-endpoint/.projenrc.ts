@@ -32,6 +32,23 @@ new JsonFile(project, 'cdk.json', {
   },
 });
 
+project.addTask('compile-only', {
+  description: 'full build',
+  steps: [
+    { spawn: 'default' },
+    { spawn: 'pre-compile' },
+    { spawn: 'compile' },
+    { spawn: 'post-compile' },
+  ],
+});
+/**
+ * As aws-cdk-examples run `npm build` in docker with jsii/superchain image, our integration test will require `docker build`
+ * for container assets bundling and this will fail with "docker daemon not running" error. To workaroud this, we create a
+ * `compile-only` task and trigger it with `npm build` to avoid this error. You will need to run `npx projen build` to trigger
+ * a full build with `test` and `package` instead.
+ */
+project.setScript('build', 'npx projen compile-only');
+
 const common_exclude = ['cdk.out', 'cdk.context.json', 'yarn-error.log'];
 project.npmignore?.exclude(...common_exclude);
 project.gitignore.exclude(...common_exclude);
