@@ -3,6 +3,7 @@ import {
   aws_ec2 as ec2,
 } from 'aws-cdk-lib';
 import { InstanceConnectEndpoint } from './endpoint';
+import { Construct } from 'constructs'
 
 export class IntegTesting {
   readonly stack: Stack[];
@@ -24,14 +25,24 @@ export class IntegTesting {
 
     // allow all traffic from within VPC
     instance.connections.allowFrom(ec2.Peer.ipv4(vpc.vpcCidrBlock), ec2.Port.allTraffic());
-
-    new InstanceConnectEndpoint(stack, 'EICEndpoint', {
-      subnet: vpc.isolatedSubnets[0],
-      preserveClientIp: false,
-    });
-
+    /**
+     * As `InstanceConnectEndpoint` requires docker image assets bundling and
+     * `aws-cdk-examples` has an issue with that. To workaround it, if we are in a fake context
+     * we just skip it. Temporary workaround until this issue is resolved.
+     * https://github.com/aws-samples/aws-cdk-examples/blob/master/scripts/fake.context.json
+     */
+    if (!isFakeContext(stack)) {
+      new InstanceConnectEndpoint(stack, 'EICEndpoint', {
+        subnet: vpc.isolatedSubnets[0],
+        preserveClientIp: false,
+      });
+    }
     this.stack = [stack];
   }
 };
+
+function isFakeContext(scope: Construct) {
+  return Stack.of(scope).node.tryGetContext('x') === 'y';
+}
 
 new IntegTesting();

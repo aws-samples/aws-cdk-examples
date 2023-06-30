@@ -46,7 +46,7 @@ project.addTask('compile-only', {
  * `compile-only` task and trigger it with `npm build` to avoid this error. You will need to run `npx projen build` to trigger
  * a full build with `test` and `package` instead.
  */
-project.setScript('build', 'npx projen compile-only');
+// project.setScript('build', 'npx projen compile-only');
 
 const common_exclude = ['cdk.out', 'cdk.context.json', 'yarn-error.log'];
 project.npmignore?.exclude(...common_exclude);
