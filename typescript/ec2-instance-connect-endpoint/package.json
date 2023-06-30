@@ -5,11 +5,12 @@
     "url": "https://github.com/aws-samples/aws-cdk-examples.git"
   },
   "scripts": {
-    "build": "npx projen build",
+    "build": "npx projen compile-only",
     "bump": "npx projen bump",
     "clobber": "npx projen clobber",
     "compat": "npx projen compat",
     "compile": "npx projen compile",
+    "compile-only": "npx projen compile-only",
     "default": "npx projen default",
     "docgen": "npx projen docgen",
     "eject": "npx projen eject",
