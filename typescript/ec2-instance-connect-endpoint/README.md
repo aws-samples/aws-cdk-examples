@@ -4,7 +4,7 @@
 
 This sample is generated with [projen](https://github.com/projen/projen) `awscdk-construct` project type so you can reference the `.projenrc.ts` and create your own CDK construct library like this with very little modification.
 
-# Sample
+# sample
 
 ```ts
 // create an EIC Endpoint in an isolated subnet
@@ -16,7 +16,7 @@ new InstanceConnectEndpoint(stack, 'EICEndpoint', {
 
 See full sample at [integ.default.ts](./src/integ.default.ts).
 
-# Deploy the default integration test
+# deploy the default integration test
 
 ```sh
 $ cd typescripts/ec2-instance-connect-endpoint
@@ -52,8 +52,7 @@ Now, you can just `awssh` into any ec2 instance behind the endpoint.
 $ awssh i-01d0f0c7ca761ff29
 ```
 
-
-# Run the tests
+# run the tests
 
 ```sh
 $ yarn test
