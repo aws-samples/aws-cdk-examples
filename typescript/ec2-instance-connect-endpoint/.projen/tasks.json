@@ -91,21 +91,6 @@
         }
       ]
     },
-    "compile-only": {
-      "name": "compile-only",
-      "description": "full build",
-      "steps": [
-        {
-          "spawn": "default"
-        },
-        {
-          "spawn": "pre-compile"
-        },
-        {
-          "spawn": "compile"
-        }
-      ]
-    },
     "default": {
       "name": "default",
       "description": "Synthesize project files",
