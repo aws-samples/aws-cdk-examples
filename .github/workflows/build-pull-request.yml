@@ -18,7 +18,7 @@ jobs:
         run: |
             buildlang=${{ matrix.language }}
 
-            langfiles =  $(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep "^$buildlang" )
+            langfiles=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep "^$buildlang" )
             if [[ $langfiles == "" ]]; then 
               return
             fi
