@@ -38,7 +38,6 @@ project.addTask('compile-only', {
     { spawn: 'default' },
     { spawn: 'pre-compile' },
     { spawn: 'compile' },
-    { spawn: 'post-compile' },
   ],
 });
 /**

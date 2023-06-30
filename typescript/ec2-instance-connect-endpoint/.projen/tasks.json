@@ -103,9 +103,6 @@
         },
         {
           "spawn": "compile"
-        },
-        {
-          "spawn": "post-compile"
         }
       ]
     },
