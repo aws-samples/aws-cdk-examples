@@ -20,6 +20,8 @@ jobs:
           fetch-depth: 2
       - name: Runs docker builds with JSII superchain
         run: |
+          echo "::group::Build changes for ${{ matrix.language }}"
+          echo ""
           buildlang="${{ matrix.language }}"
 
           langfiles=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep "^$buildlang" )
@@ -27,7 +29,6 @@ jobs:
             return
           fi
 
-          echo "::group::Build changes for ${buildlang}"
           echo "# Build summary for ${buildlang}" >> $GITHUB_STEP_SUMMARY
           buildpath=""
           # For each file that is in the changed set
