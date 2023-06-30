@@ -16,8 +16,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
       - name: Runs docker builds with JSII superchain
         run: |
           echo "::group::Build changes for ${{ matrix.language }}"
@@ -26,16 +24,18 @@ jobs:
 
           langfiles=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep "^$buildlang" )
           if [[ $langfiles == "" ]]; then 
-            return
+            echo "Nothing to do"
+            echo "::endgroup::"
+            exit 0
           fi
 
           echo "# Build summary for ${buildlang}" >> $GITHUB_STEP_SUMMARY
           buildpath=""
           # For each file that is in the changed set
-          for file in $(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep "^$buildlang" )
+          for file in $langfiles
           do
             # Split the path into the language, example, and 
-            IFS="/" read path1 path2 path3 <<< $file
+            IFS="/" read path1 path2 extra <<<"$file"
             if [[ $path1 != $buildlang ]]; then
               continue
             fi 
@@ -44,17 +44,12 @@ jobs:
             fi
             buildpath=$path1/$path2
             echo "Build Path ${buildpath}"
-            case $path1 in 
-            $buildlang)
-              docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node18 /bin/bash -c "scripts/build-${buildlang}.sh $path2"
-              if [[ $? == 0 ]; then
-                echo "- :o: $buildpath" >> $GITHUB_STEP_SUMMARY
-              else
-                echo "- :x: $buildpath" >> $GITHUB_STEP_SUMMARY
-              fi 
-              ;;
-            *) ;;
-            esac
+            docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node18 /bin/bash -c "scripts/build-${buildlang}.sh $path2"
+            if [[ $? == 0 ]]; then
+              echo "- :o: $buildpath" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- :x: $buildpath" >> $GITHUB_STEP_SUMMARY
+            fi 
           done
           echo "::endgroup::"
 
