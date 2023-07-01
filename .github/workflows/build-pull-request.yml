@@ -25,8 +25,9 @@ jobs:
           langfiles=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep "^$buildlang" )
           if [[ $langfiles == "" ]]; then 
             echo "Nothing to do"
+            touch success
             echo "::endgroup::"
-            exit 0
+            exit
           fi
 
           echo "# Build summary for ${buildlang}" >> $GITHUB_STEP_SUMMARY
