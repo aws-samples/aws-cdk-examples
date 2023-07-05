@@ -19,7 +19,7 @@ export class Ec2CdkStack extends cdk.Stack {
     // key.grantReadOnPublicKey
 
     // Create new VPC with 2 Subnets
-    const vpc = new ec2.Vpc(this, 'VPC', {
+    const vpc = new ec2.Vpc(this, 'VPCweeeee', {
       natGateways: 0,
       subnetConfiguration: [{
         cidrMask: 24,
