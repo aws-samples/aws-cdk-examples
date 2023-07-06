@@ -91,21 +91,6 @@
         }
       ]
     },
-    "compile-only": {
-      "name": "compile-only",
-      "description": "full build",
-      "steps": [
-        {
-          "spawn": "default"
-        },
-        {
-          "spawn": "pre-compile"
-        },
-        {
-          "spawn": "compile"
-        }
-      ]
-    },
     "default": {
       "name": "default",
       "description": "Synthesize project files",
@@ -280,19 +265,19 @@
           "exec": "yarn upgrade npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='aws-cdk-lib,aws-cdk,constructs,jsii'"
+          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='aws-cdk-lib,aws-cdk,constructs,jsii-rosetta,jsii'"
         },
         {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='aws-cdk-lib,aws-cdk,constructs,jsii'"
+          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='aws-cdk-lib,aws-cdk,constructs,jsii-rosetta,jsii'"
         },
         {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='aws-cdk-lib,aws-cdk,constructs,jsii'"
+          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='aws-cdk-lib,aws-cdk,constructs,jsii-rosetta,jsii'"
         },
         {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='aws-cdk-lib,aws-cdk,constructs,jsii'"
+          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='aws-cdk-lib,aws-cdk,constructs,jsii-rosetta,jsii'"
         },
         {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='aws-cdk-lib,aws-cdk,constructs,jsii'"
+          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='aws-cdk-lib,aws-cdk,constructs,jsii-rosetta,jsii'"
         },
         {
           "exec": "yarn install --check-files"

@@ -5,12 +5,11 @@
     "url": "https://github.com/aws-samples/aws-cdk-examples.git"
   },
   "scripts": {
-    "build": "npx projen compile-only",
+    "build": "npx projen build",
     "bump": "npx projen bump",
     "clobber": "npx projen clobber",
     "compat": "npx projen compat",
     "compile": "npx projen compile",
-    "compile-only": "npx projen compile-only",
     "default": "npx projen default",
     "docgen": "npx projen docgen",
     "eject": "npx projen eject",
@@ -52,6 +51,7 @@
     "jsii-diff": "^1.84.0",
     "jsii-docgen": "^9.0.14",
     "jsii-pacmak": "^1.84.0",
+    "jsii-rosetta": "~5.0.0",
     "npm-check-updates": "^16",
     "projen": "^0.71.118",
     "standard-version": "^9",
