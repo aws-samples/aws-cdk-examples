@@ -23,7 +23,7 @@ jobs:
           node-version: 18
       - uses: actions/setup-java@v3
         with:
-          distribution: 'coretto'
+          distribution: 'corretto'
           java-version: '17'
       - uses: actions/setup-python@v4
         with:
