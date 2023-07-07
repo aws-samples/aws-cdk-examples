@@ -3,11 +3,6 @@ name: Build Pull Request
 on: [pull_request]
 
 jobs:
-  checkout:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
   build:
     runs-on: ubuntu-latest
     strategy:
@@ -16,41 +11,48 @@ jobs:
     steps:
       - name: Set up Go
         uses: actions/setup-go@v4
+        if: ${{ matrix.language == 'go' }}
         with:
           go-version: '1.20'
       - uses: actions/setup-node@v3
+        if: ${{matrix.language == 'typescript'}}
         with:
           node-version: 18
       - uses: actions/setup-java@v3
+        if: ${{matrix.language == 'java'}}
         with:
           distribution: 'corretto'
           java-version: '17'
       - uses: actions/setup-python@v4
+        if: ${{matrix.language == 'python'}}
         with:
           python-version: '3.10'
       - uses: actions/setup-dotnet@v3
+        if: ${{matrix.language == 'csharp'}}
         with:
           dotnet-version: 8
       - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Runs docker builds with JSII superchain
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Get changed files
+        id: changed-files-specific
+        uses: tj-actions/changed-files@v37
+        with:
+          files: ${{matrix.language}}/
+          files_ignore: "*.md"
+        
+      - name: Build changed files
+        if: steps.changed-files-specific.outputs.any_changed == 'true'
         run: |
           echo "::group::Build changes for ${{ matrix.language }}"
           echo ""
           buildlang="${{ matrix.language }}"
 
-          langfiles=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep "^$buildlang" )
-          if [[ $langfiles == "" ]]; then 
-            echo "Nothing to do"
-            touch success
-            echo "::endgroup::"
-            exit 0
-          fi
-
           echo "# Build summary for ${buildlang}" >> $GITHUB_STEP_SUMMARY
           buildpath=""
           # For each file that is in the changed set
-          for file in $langfiles
+          for file in ${{ steps.changed-files-specific.outputs.all_modified_files }}
           do
             # Split the path into the language, example, and 
             IFS="/" read path1 path2 extra <<<"$file"
