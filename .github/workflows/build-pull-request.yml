@@ -39,9 +39,14 @@ jobs:
         id: changed-files-specific
         uses: tj-actions/changed-files@v37
         with:
-          files: ${{matrix.language}}/
+          files: ${{matrix.language}}/**
           files_ignore: "*.md"
-        
+      - name: list changed files
+        if: steps.changed-files-specific.outputs.any_changed == 'true'
+        run: |
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
       - name: Build changed files
         if: steps.changed-files-specific.outputs.any_changed == 'true'
         run: |
