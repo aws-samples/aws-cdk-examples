@@ -19,7 +19,8 @@ class S3SnsSqsLambdaChainStack(Stack):
     super().__init__(scope, construct_id)
 
     lambda_dir = kwargs["lambda_dir"]
-
+    LAMBDA_TIMEOUT = 30
+    
     # Note: A dead-letter queue is optional but it helps capture any failed messages
     dlq = sqs.Queue(
       self,
@@ -35,7 +36,8 @@ class S3SnsSqsLambdaChainStack(Stack):
       self,
       id="sample_queue_id",
       visibility_timeout=Duration.seconds(30),
-      dead_letter_queue=dead_letter_queue
+      dead_letter_queue=dead_letter_queue,
+      visibility_timeout = LAMBDA_TIMEOUT * 6
     )
 
     sqs_subscription = sns_subs.SqsSubscription(
@@ -88,7 +90,9 @@ class S3SnsSqsLambdaChainStack(Stack):
     function = _lambda.Function(self, "lambda_function",
                                 runtime=_lambda.Runtime.PYTHON_3_9,
                                 handler="lambda_function.handler",
-                                code=_lambda.Code.from_asset(path=lambda_dir))
+                                code=_lambda.Code.from_asset(path=lambda_dir),
+                                timeout = LAMBDA_TIMEOUT
+                               )
 
     # This binds the lambda to the SQS Queue
     invoke_event_source = lambda_events.SqsEventSource(upload_queue)
