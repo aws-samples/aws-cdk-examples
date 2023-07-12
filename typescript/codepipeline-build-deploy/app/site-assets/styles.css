@@ -1,0 +1,38 @@
+body {
+  text-align: center;
+  color: whitesmoke;
+  background-color: rgb(0, 128, 0, 0.5);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#current {
+  font-weight: bold;
+}
+
+#error {
+  background-color: rgb(255, 0, 0, 0.5);
+}
+
+ul {
+  background-color: rgb(127, 255, 212, 0.2);
+  list-style-type: none;
+  padding: 10px;
+}
+
+li {
+  display: inline;
+  margin: 20px;
+  border-bottom: 3px solid transparent;
+}
+
+li a {
+  text-decoration: none;
+  color: white;
+}
+
+li a:hover {
+  color: rgb(127, 255, 0, 70);
+  padding: 5px 10px;
+  border-radius: 10px;
+  background-color: darkcyan;
+}
