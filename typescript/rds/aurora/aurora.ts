@@ -174,7 +174,6 @@ export class Aurora extends Stack {
 
     for (let subnetId of subnetIds!) {
       const subid = subnetId
-        .replace('-', '')
         .replace('_', '')
         .replace(' ', '');
       subnets.push(
@@ -261,7 +260,7 @@ export class Aurora extends Stack {
           excludeCharacters: "\"@/\\ '",
           generateStringKey: 'password',
           passwordLength: 30,
-          secretStringTemplate: `{"username":${props.auroraClusterUsername}}`,
+          secretStringTemplate: JSON.stringify({username: props.auroraClusterUsername}),
         },
       },
     );
@@ -517,8 +516,8 @@ const app = new App();
 
 new Aurora(app, 'AuroraStack', {
   env:{region:"us-east-2"}, description:"Aurora Stack",
-  vpcId:"vpc-aaaaaaaa",
-  subnetIds:["subnet-xxxxxxxx", "subnet-yyyyyyyy", "subnet-zzzzzzzz"],
+  vpcId:"vpc-xxx",
+  subnetIds:["subnet-xxx", "subnet-xxxxSS"],
   dbName:"sampledb",
   engine:"postgresql"
 });
