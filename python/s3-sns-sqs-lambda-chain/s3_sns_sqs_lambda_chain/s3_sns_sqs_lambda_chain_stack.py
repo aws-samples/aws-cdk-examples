@@ -90,7 +90,7 @@ class S3SnsSqsLambdaChainStack(Stack):
                                 runtime=_lambda.Runtime.PYTHON_3_9,
                                 handler="lambda_function.handler",
                                 code=_lambda.Code.from_asset(path=lambda_dir),
-                                timeout = LAMBDA_TIMEOUT
+                                timeout = Duration.seconds(LAMBDA_TIMEOUT)
                                )
 
     # This binds the lambda to the SQS Queue
