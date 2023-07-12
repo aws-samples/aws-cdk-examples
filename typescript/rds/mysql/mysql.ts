@@ -131,7 +131,6 @@ export class Mysql extends Stack {
 
     for (let subnetId of props.subnetIds!) {
       const subid = subnetId
-        .replace('-', '')
         .replace('_', '')
         .replace(' ', '');
       subnets.push(
@@ -195,7 +194,6 @@ export class Mysql extends Stack {
       engine: rds.DatabaseInstanceEngine.mysql({
         version: engineVersion,
       }),
-      parameters: { open_cursors: '2500' },
     });
 
 
