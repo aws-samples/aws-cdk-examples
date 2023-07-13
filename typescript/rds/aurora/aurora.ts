@@ -24,7 +24,7 @@ export interface AuroraProps extends StackProps {
    * @type {string}
    * @memberof AuroraProps
    */
-  readonly vpcId?: string;
+  readonly vpcId: string;
 
 
   /**
@@ -141,8 +141,8 @@ export class Aurora extends Stack {
 
     let subnetIds = props.subnetIds;
     let instanceType = props.instanceType;
-    let replicaInstances = props.replicaInstances;
-    let backupRetentionDays = props.backupRetentionDays;
+    let replicaInstances = props.replicaInstances ?? 1;
+    let backupRetentionDays = props.backupRetentionDays ?? 14;
 
     var ingressSources = [];
     if (typeof props.ingressSources !== 'undefined') {
@@ -154,10 +154,10 @@ export class Aurora extends Stack {
       throw new Error('Unknown Engine Please Use mysql or postgresql');
       process.exit(1);
     }
-    if (backupRetentionDays! < 14) {
+    if (backupRetentionDays < 14) {
       backupRetentionDays = 14;
     }
-    if (replicaInstances! < 1) {
+    if (replicaInstances < 1) {
       replicaInstances = 1;
     }
 
@@ -165,7 +165,7 @@ export class Aurora extends Stack {
 
     // vpc
     const vpc = ec2.Vpc.fromVpcAttributes(this, 'ExistingVPC', {
-      vpcId: props.vpcId!,
+      vpcId: props.vpcId,
       availabilityZones: azs,
     });
 
@@ -174,7 +174,6 @@ export class Aurora extends Stack {
 
     for (let subnetId of subnetIds!) {
       const subid = subnetId
-        .replace('-', '')
         .replace('_', '')
         .replace(' ', '');
       subnets.push(
@@ -261,7 +260,7 @@ export class Aurora extends Stack {
           excludeCharacters: "\"@/\\ '",
           generateStringKey: 'password',
           passwordLength: 30,
-          secretStringTemplate: `{"username":${props.auroraClusterUsername}}`,
+          secretStringTemplate: JSON.stringify({username: props.auroraClusterUsername}),
         },
       },
     );
@@ -295,10 +294,10 @@ export class Aurora extends Stack {
       credentials: auroraClusterCrendentials,
       backup: {
         preferredWindow: props.backupWindow,
-        retention: Duration.days(props.backupRetentionDays!),
+        retention: Duration.days(backupRetentionDays),
       },
       parameterGroup: auroraParameterGroup,
-      instances: props.replicaInstances,
+      instances: replicaInstances,
       iamAuthentication: true,
       storageEncrypted: true,
       storageEncryptionKey: kmsKey,
@@ -517,8 +516,8 @@ const app = new App();
 
 new Aurora(app, 'AuroraStack', {
   env:{region:"us-east-2"}, description:"Aurora Stack",
-  vpcId:"vpc-aaaaaaaa",
-  subnetIds:["subnet-xxxxxxxx", "subnet-yyyyyyyy", "subnet-zzzzzzzz"],
+  vpcId:"vpc-xxx",
+  subnetIds:["subnet-xxx", "subnet-xxxxSS"],
   dbName:"sampledb",
   engine:"postgresql"
 });
