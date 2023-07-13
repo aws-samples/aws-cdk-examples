@@ -1,7 +1,17 @@
 
-# Welcome to your CDK Python project!
+# How to enable CDK Validator for CFNGuard
 
-This is a blank project for CDK development with Python.
+
+## Overview
+
+Example on how to enable CDK Validator for your CDK stack.  By default this
+will test your stack against the proactive Control Tower controls when you
+run `cdk synth`.
+
+references:
+[CDK-Validator on Github](https://github.com/cdklabs/cdk-validator-cfnguard)
+[CDK-Validator on Pypi](https://pypi.org/project/cdklabs.cdk-validator-cfnguard)
+
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
