@@ -87,7 +87,6 @@ export class Step2DestinationAccount extends Stack {
         bucketKeyEnabled: true,
         encryption: BucketEncryption.KMS,
         encryptionKey: destinationKmsKey,
-        serverAccessLogsPrefix: "_logs",
         enforceSSL: true,
       }
     );
