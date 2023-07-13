@@ -35,9 +35,8 @@ class S3SnsSqsLambdaChainStack(Stack):
     upload_queue = sqs.Queue(
       self,
       id="sample_queue_id",
-      visibility_timeout=Duration.seconds(30),
       dead_letter_queue=dead_letter_queue,
-      visibility_timeout = LAMBDA_TIMEOUT * 6
+      visibility_timeout = Duration.seconds(LAMBDA_TIMEOUT * 6)
     )
 
     sqs_subscription = sns_subs.SqsSubscription(
@@ -91,7 +90,7 @@ class S3SnsSqsLambdaChainStack(Stack):
                                 runtime=_lambda.Runtime.PYTHON_3_9,
                                 handler="lambda_function.handler",
                                 code=_lambda.Code.from_asset(path=lambda_dir),
-                                timeout = LAMBDA_TIMEOUT
+                                timeout = Duration.seconds(LAMBDA_TIMEOUT)
                                )
 
     # This binds the lambda to the SQS Queue
