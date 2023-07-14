@@ -2,7 +2,7 @@ from aws_cdk import (
     aws_stepfunctions as _aws_stepfunctions,
     aws_stepfunctions_tasks as _aws_stepfunctions_tasks,
     aws_lambda as _lambda,
-    App, Duration, Stack, DefinitionBody
+    App, Duration, Stack
 )
 
 
@@ -65,6 +65,6 @@ class JobPollerStack(Stack):
         # Create state machine
         sm = _aws_stepfunctions.StateMachine(
             self, "StateMachine",
-            definition_body=DefinitionBody.from_chainable(chain),
+            definition_body=_aws_stepfunctions.DefinitionBody.from_chainable(chain),
             timeout=Duration.minutes(5),
         )
