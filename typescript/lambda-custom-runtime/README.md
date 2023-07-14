@@ -1,6 +1,6 @@
 # lambda-custom-runtime
 
-This example demonstrates how to create a lambda custom runtime and execute the user executable.
+This example demonstrates how to create a lambda function with the custom runtime and execute the user executable using AWS CDK.
 
 # Sample
 
