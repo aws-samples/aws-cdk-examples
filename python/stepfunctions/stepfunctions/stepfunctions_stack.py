@@ -2,7 +2,7 @@ from aws_cdk import (
     aws_stepfunctions as _aws_stepfunctions,
     aws_stepfunctions_tasks as _aws_stepfunctions_tasks,
     aws_lambda as _lambda,
-    App, Duration, Stack
+    App, Duration, Stack, DefinitionBody
 )
 
 
@@ -55,7 +55,7 @@ class JobPollerStack(Stack):
 
         # Create Chain
 
-        definition = submit_job.next(wait_job)\
+        chain = submit_job.next(wait_job)\
             .next(status_job)\
             .next(_aws_stepfunctions.Choice(self, 'Job Complete?')
                   .when(_aws_stepfunctions.Condition.string_equals('$.status', 'FAILED'), fail_job)
@@ -65,6 +65,6 @@ class JobPollerStack(Stack):
         # Create state machine
         sm = _aws_stepfunctions.StateMachine(
             self, "StateMachine",
-            definition=definition,
+            definition_body=DefinitionBody.from_chainable(chain),
             timeout=Duration.minutes(5),
         )
