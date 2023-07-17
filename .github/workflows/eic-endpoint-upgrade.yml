@@ -38,7 +38,7 @@ jobs:
         if: steps.create_patch.outputs.patch_created
         uses: actions/upload-artifact@v3
         with:
-          name: /tmp/.repo.patch
+          name: .repo.patch
           path: /tmp/.repo.patch
   pr:
     name: Create Pull Request
