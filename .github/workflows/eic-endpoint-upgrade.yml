@@ -20,7 +20,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: ecs-fargate-apigateway-cloudmap-cdk 
+          ref: eic-endpoint
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -51,7 +51,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: ecs-fargate-apigateway-cloudmap-cdk
+          ref: eic-endpoint
       - name: Download patch
         uses: actions/download-artifact@v3
         with:
