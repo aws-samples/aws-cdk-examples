@@ -33,13 +33,13 @@ jobs:
         id: create_patch
         run: |-
           git add .
-          git diff --staged --patch --exit-code > .repo.patch || echo "patch_created=true" >> $GITHUB_OUTPUT
+          git diff --staged --patch --exit-code > /tmp/.repo.patch || echo "patch_created=true" >> $GITHUB_OUTPUT
       - name: Upload patch
         if: steps.create_patch.outputs.patch_created
         uses: actions/upload-artifact@v3
         with:
-          name: .repo.patch
-          path: .repo.patch
+          name: /tmp/.repo.patch
+          path: /tmp/.repo.patch
   pr:
     name: Create Pull Request
     needs: upgrade
