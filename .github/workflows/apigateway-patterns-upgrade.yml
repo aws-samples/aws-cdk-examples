@@ -76,7 +76,7 @@ jobs:
             ------
 
             *Automatically created by projen via the "upgrade-main" workflow*
-          branch: github-actions/upgrade-main
+          branch: github-actions/upgrade-apigateway-patterns
           title: "chore(deps): upgrade dependencies"
           body: |-
             Upgrades project dependencies. See details in [workflow run].
