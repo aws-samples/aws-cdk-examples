@@ -1,7 +1,7 @@
 # AWS CDK Examples
 
 This repository contains a set of example projects for the [AWS Cloud Development
-Kit](https://github.com/awslabs/aws-cdk).
+Kit](https://github.com/awslabs/aws-cdk)
 
 ## Table of Contents
 1. [About this Repo](#About)
