@@ -56,3 +56,4 @@ cdk.context.json
 yarn-error.log
 .mergify.yml
 .github
+!yarn.lock
