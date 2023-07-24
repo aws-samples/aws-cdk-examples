@@ -6,7 +6,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   projenrcTs: true,
 });
 
-const common_exclude = ['cdk.out', 'cdk.context.json', 'yarn-error.log', '.mergify.yml', '.github'];
+const common_exclude = ['cdk.out', 'cdk.context.json', 'yarn-error.log', '.mergify.yml', '.github', '!yarn.lock'];
 
 project.npmignore!.exclude(...common_exclude);
 project.gitignore.exclude(...common_exclude);
