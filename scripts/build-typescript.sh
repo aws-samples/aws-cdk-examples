@@ -12,9 +12,12 @@ echo "=============================="
 echo "running build for typescript/${given_path}"
 echo "=============================="
 
-
 function build_it() {
   cd $1
+  if [ -f DO_NOT_AUTOTEST ]; then 
+    echo "found DO_NOT_AUTOTEST, skip it."
+    return
+  fi
   # Check if yarn.lock exists
   if [ -f "yarn.lock" ]; then
       echo "yarn.lock file found. Running 'yarn install'..."
