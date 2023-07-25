@@ -14,7 +14,7 @@ echo "=============================="
 cd "typescript/$projectname";
 
 # Skip if package.json is not available.
-# This happens in directory like typescript/ecs which containers sub-directories for examples.
+# This happens in directory like typescript/ecs which contains sub-directories examples.
 if [ ! -f "package.json" ]; then
     echo "package.json is not available. Skip package installation"
     exit 0
