@@ -12,6 +12,7 @@ echo "building project: typescript/$projectname"
 echo "=============================="
 
 cd "typescript/$projectname";
+if [[ -f DO_NOT_AUTOTEST ]]; then exit 0; fi
 
 # Check if yarn.lock exists
 if [ -f "yarn.lock" ]; then
