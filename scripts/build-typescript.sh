@@ -13,6 +13,13 @@ echo "=============================="
 
 cd "typescript/$projectname";
 
+# Skip if package.json is not available.
+# This happens in directory like typescript/ecs which containers sub-directories for examples.
+if [ ! -f "package.json" ]; then
+    echo "package.json is not available. Skip package installation"
+    exit 0
+fi
+
 # Check if yarn.lock exists
 if [ -f "yarn.lock" ]; then
     echo "yarn.lock file found. Running 'yarn install'..."
