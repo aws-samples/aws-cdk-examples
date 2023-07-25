@@ -1,13 +1,11 @@
 #!/bin/bash
 #
-# This script is triggered from `build-pull-request.yml` with scripts/build-${buildlang}.sh PATH where PATH is the directory under `typescripts`.
-# for examples at typescript/example-name which comes with package.json, we just cd into example-name to install/build/test/synth.
-# for examples at typescript/<type-name>/example-name such as typescript/ecs/example-name, we cd into the next directory level under ecs to install/build/test/synth.
+# This script is triggered by `build-pull-request.yml` with `scripts/build-${buildlang}.sh $path2 $extra`.
+# We concat the arguments for a full given_path and traverse this given_path from top down to find the first package.json
+# and run yarn/npm install/build/test and cdk synth in that directory.
 #
 set -euxo pipefail
 scriptdir=$(cd $(dirname $0) && pwd)
-firstlevel="$1"
-extra="$2"
 given_path="${1}/${2}"
 
 echo "=============================="
