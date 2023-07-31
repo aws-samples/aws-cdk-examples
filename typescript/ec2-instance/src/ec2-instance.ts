@@ -22,8 +22,11 @@ export class EC2Example extends Stack {
 
     envValidator(props);
 
+    // Create VPC and Security Group
     const vpcResources = new VPCResources(this, 'VPC');
 
+    // Create EC2 Instance
+    // We will pass props to ServerResources to create the EC2 instance
     const serverResources = new ServerResources(this, 'EC2', {
       vpc: vpcResources.vpc,
       sshSecurityGroup: vpcResources.sshSecurityGroup,
@@ -33,10 +36,12 @@ export class EC2Example extends Stack {
       instanceSize: instanceSize.toLowerCase(),
     });
 
+    // SSM Command to start a session
     new CfnOutput(this, 'ssmCommand', {
       value: `aws ssm start-session --target ${serverResources.instance.instanceId}`,
     });
 
+    // SSH Command to connect to the EC2 Instance
     new CfnOutput(this, 'sshCommand', {
       value: `ssh ec2-user@${serverResources.instance.instancePublicDnsName}`,
     });

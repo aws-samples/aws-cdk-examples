@@ -45,6 +45,7 @@ export class ServerResources extends Construct {
   constructor(scope: Construct, id: string, props: ServerProps) {
     super(scope, id);
 
+    // Create an Asset Bucket for the Instance.  Assets in this bucket will be downloaded to the EC2 during deployment
     const assetBucket = new Bucket(this, 'assetBucket', {
       publicReadAccess: false,
       removalPolicy: RemovalPolicy.DESTROY,
@@ -52,6 +53,7 @@ export class ServerResources extends Construct {
       autoDeleteObjects: true,
     });
 
+    // Deploy the local assets to the Asset Bucket during the CDK deployment
     new BucketDeployment(this, 'assetBucketDeployment', {
       sources: [Source.asset('src/resources/server/assets')],
       destinationBucket: assetBucket,
@@ -60,6 +62,7 @@ export class ServerResources extends Construct {
       memoryLimit: 512,
     });
 
+    // Create a role for the EC2 instance to assume.  This role will allow the instance to put log events to CloudWatch Logs
     const serverRole = new Role(this, 'serverEc2Role', {
       assumedBy: new ServicePrincipal('ec2.amazonaws.com'),
       inlinePolicies: {
@@ -78,9 +81,12 @@ export class ServerResources extends Construct {
       ],
     });
 
+    // Grant the EC2 role access to the bucket
     assetBucket.grantReadWrite(serverRole);
 
     const userData = UserData.forLinux();
+
+    // Add user data that is used to configure the EC2 instance
     userData.addCommands(
       'yum update -y',
       'curl -sL https://dl.yarnpkg.com/rpm/yarn.repo | sudo tee /etc/yum.repos.d/yarn.repo',
@@ -94,12 +100,14 @@ export class ServerResources extends Construct {
         '/sample /home/ec2-user/sample --recursive',
     );
 
+    // Create a Security Group for the EC2 instance.  This group will allow SSH access to the EC2 instance
     const ec2InstanceSecurityGroup = new SecurityGroup(
       this,
       'ec2InstanceSecurityGroup',
       { vpc: props.vpc, allowAllOutbound: true },
     );
 
+    // Determine the correct CPUType and Instance Class based on the props passed in
     if (props.cpuType == 'ARM64') {
       cpuType = AmazonLinuxCpuType.ARM_64;
       instanceClass = InstanceClass.M7G;
@@ -108,6 +116,7 @@ export class ServerResources extends Construct {
       instanceClass = InstanceClass.M5;
     }
 
+    // Determine the correct InstanceSize based on the props passed in
     switch (props.instanceSize) {
       case 'large':
         instanceSize = InstanceSize.LARGE;
@@ -125,6 +134,7 @@ export class ServerResources extends Construct {
         instanceSize = InstanceSize.LARGE;
     }
 
+    // Create the EC2 instance
     this.instance = new Instance(this, 'Instance', {
       vpc: props.vpc,
       instanceType: InstanceType.of(instanceClass, instanceSize),
@@ -141,9 +151,11 @@ export class ServerResources extends Construct {
         configs: {
           config: new InitConfig([
             InitFile.fromObject('/etc/config.json', {
+              // Use CloudformationInit to create an object on the EC2 instance
               STACK_ID: Stack.of(this).artifactId,
             }),
             InitFile.fromFileInline(
+              // Use CloudformationInit to copy a file to the EC2 instance
               '/tmp/amazon-cloudwatch-agent.json',
               './src/resources/server/config/amazon-cloudwatch-agent.json',
             ),
@@ -152,10 +164,11 @@ export class ServerResources extends Construct {
               'src/resources/server/config/config.sh',
             ),
             InitFile.fromString(
+              // Use CloudformationInit to write a string to the EC2 instance
               '/home/ec2-user/.ssh/authorized_keys',
               props.sshPubKey + '\n',
             ),
-            InitCommand.shellCommand('chmod +x /etc/config.sh'),
+            InitCommand.shellCommand('chmod +x /etc/config.sh'), // Use CloudformationInit to run a shell command on the EC2 instance
             InitCommand.shellCommand('/etc/config.sh'),
           ]),
         },
@@ -170,6 +183,7 @@ export class ServerResources extends Construct {
       role: serverRole,
     });
 
+    // Add the SSH Security Group to the EC2 instance
     this.instance.addSecurityGroup(props.sshSecurityGroup);
   }
 }
