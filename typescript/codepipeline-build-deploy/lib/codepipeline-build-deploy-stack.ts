@@ -10,14 +10,13 @@ import * as ecs from "aws-cdk-lib/aws-ecs";
 import * as elb from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as lambda from "aws-cdk-lib/aws-lambda";
-import * as assets from "aws-cdk-lib/aws-s3-assets";
 import * as custom from "aws-cdk-lib/custom-resources";
 import { Construct } from "constructs";
 import * as path from "path";
 import * as fs from 'fs';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { IgnoreMode } from 'aws-cdk-lib';
-import { Code, Repository } from 'aws-cdk-lib/aws-codecommit';
+import { Code } from 'aws-cdk-lib/aws-codecommit';
 
 export class CodepipelineBuildDeployStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -228,7 +227,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
         new pipelineactions.CodeCommitSourceAction({
           actionName: "AppCodeCommit",
           branch: "main",
-          output: SourceArtifact,
+          output: sourceArtifact,
           repository: codeRepo,
         }),
       ],
