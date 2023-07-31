@@ -1,0 +1,25 @@
+{
+	"agent": {
+		"run_as_user": "root"
+	},
+	"logs": {
+		"logs_collected": {
+			"files": {
+				"collect_list": [
+					{
+						"file_path": "/var/log/cloud-init-output.log",
+						"log_group_name": "/ec2/log/ec2-example/",
+						"log_stream_name": "{instance_id}-cloud-init-output",
+						"retention_in_days": 7
+					},
+					{
+						"file_path": "/var/log/cloud-init.log",
+						"log_group_name": "/ec2/log/ec2-example/",
+						"log_stream_name": "{instance_id}-cloud-init",
+						"retention_in_days": 7
+					}
+				]
+			}
+		}
+	}
+}
