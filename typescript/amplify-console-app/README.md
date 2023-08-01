@@ -20,7 +20,7 @@ This example requires a github repo containing a static website.
 
 ## Build
 
-Before building this app, you must first edit `intex.ts` with information on your particular repo.
+Before building this app, you must first edit `index.ts` with information on your particular repo.
 
 To build this app, you need to be in this example's root folder. Then run the following:
 

@@ -4,13 +4,6 @@ recently added feature to Fargate.
 
 Is based on this blog post: https://aws.amazon.com/blogs/aws/amazon-ecs-supports-efs/
 
-Also gives examples of using the following:
-
-* AWS SDK Api call Custom resource to create Efs Access Point (not currently supported by cfn)
-* Lambda Custom Resource to create ECS TaskDefinition with EFS Mount (not currently supported by cfn) & initiate an update of the service
-* Cfn property override to set Fargate Service' PlatformVersion' to '1.4.0' (not currently tagged as Latest)
-
-
 ## Build
 
 To build this app, you need to be in this example's root folder. Then run the following:
