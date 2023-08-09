@@ -28,7 +28,7 @@ I'm using CDK==2.87 to run this example.
 
 ## Suppressed NAG Scenarios
 
-Using a lambda without a decoupled role (or using a self built by CDK) you can raise the following error.
+Using a lambda without a decoupled role (or using a role created by CDK) will cause the following cdk-nag error:
 
 ```
 [Error at /LambdaNagExampleStack/lambda-nag-func-example/ServiceRole/Resource] AwsSolutions-IAM4[Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole]: The IAM user, role, or group uses AWS managed policies. An AWS managed policy is a standalone policy that is created and administered by AWS. Currently, many AWS managed policies do not restrict resource scope. Replace AWS managed policies with system specific (customer) managed policies.This is a granular rule that returns individual findings that can be suppressed with 'appliesTo'. The findings are in the format 'Policy::<policy>' for AWS managed policies. Example: appliesTo: ['Policy::arn:<AWS::Partition>:iam::aws:policy/foo'].
