@@ -12,7 +12,7 @@
 
 * In order to have a CDK security oriented deployments you must use [CDK NAG](https://github.com/cdklabs/cdk-nag).
 
-* When you will use CDK-NAG, you probably going to face some security blocks whether you using default CDK behavior, at this example you will learn how you can deal with some scenarios using a IAM role and nag supressions.
+* When using CDK-NAG, you are likely to see some security warnings from default CDK behavior. In this example, you will learn how you can deal with a common scenario using an IAM role and nag suppressions.
 
 ## Build
 
