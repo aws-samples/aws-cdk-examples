@@ -39,7 +39,7 @@ Using a lambda without a decoupled role (or using a role created by CDK) will ca
 Found errors
 ```
 
-Using a wildcard policy statement, in some case, is necessary use a wildcard, for this, you can use a nag supression to give a reason.
+If using a wildcard in a policy statement is necessary, you can use a nag suppression and document a justification for it.
 
 ```
 [Error at /LambdaNagExampleStack/lambda-nag-func-role-policy-example/Resource] AwsSolutions-IAM5[Resource::*]: The IAM entity contains wildcard permissions and does not have a cdk-nag rule suppression with evidence for those permission. Metadata explaining the evidence (e.g. via supporting links) for wildcard permissions allows for transparency to operators. This is a granular rule that returns individual findings that can be suppressed with 'appliesTo'. The findings are in the format 'Action::<action>' for policy actions and 'Resource::<resource>' for resources. Example: appliesTo: ['Action::s3:*'].
