@@ -3,8 +3,6 @@ from aws_cdk import aws_ec2 as ec2
 from aws_cdk import aws_ecs as ecs
 from aws_cdk import aws_events as events
 from aws_cdk import aws_events_targets as targets
-from aws_cdk import aws_iam as iam
-from aws_cdk import aws_logs as logs
 from aws_cdk import aws_s3 as s3
 from constructs import Construct
 
@@ -37,7 +35,7 @@ class S3EventbridgeEcsStack(Stack):
         # create task definition
         task_definition = ecs.FargateTaskDefinition(self, id="taskdef", cpu=256)
         image = ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
-        container = task_definition.add_container(id="nginxcontainer", image=image)
+        container = task_definition.add_container(id="amazoncontainer", image=image)
         container.add_port_mappings(ecs.PortMapping(container_port=8080))
 
         # eventbridge rule to trigger stand alone task on ecs cluster when an objects gets added or deleted in s3 bucket
