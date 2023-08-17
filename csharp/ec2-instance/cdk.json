@@ -1,5 +1,5 @@
 {
-  "app": "dotnet run -p src/Ec2Instance/Ec2Instance.csproj",
+  "app": "dotnet run --project src/Ec2Instance/Ec2Instance.csproj",
   "watch": {
     "include": [
       "**"
