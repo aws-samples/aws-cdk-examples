@@ -3,6 +3,7 @@ version: 0.2
 phases:
   pre_build:
     commands:
+      - cd app
       - echo Logging in to Amazon ECR...
       - aws --version
       - aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com
@@ -22,6 +23,8 @@ phases:
       - sed -i "s|EXECUTION_ROLE_ARN|${EXECUTION_ROLE_ARN}|g" taskdef.json
       - sed -i "s|TASK_DEFINITION_ARN|${TASK_DEFINITION_ARN}|g" appspec.yaml
       - cat appspec.yaml && cat taskdef.json
+      - cp appspec.yaml ../
+      - cp taskdef.json ../
 artifacts:
   files:
     - "appspec.yaml"
