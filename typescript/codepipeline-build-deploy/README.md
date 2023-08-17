@@ -41,6 +41,7 @@ When working in fast-paced development environments, CI/CD (Continuous Integrati
 
 - Authenticate to an AWS account via a Command Line Interface (CLI).
 - Navigate to this `codepipeline-build-deploy` directory.
+- `npm install` to install required dependencies
 - `cdk synth` to generate and review the CloudFormation template.
 - `cdk diff` to compare local changes with what is currently deployed.
 - `npm run test` to run the tests we specify in `codepipeline-build-deploy.test.ts`.

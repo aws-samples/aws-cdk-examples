@@ -129,7 +129,6 @@ export class Oracle extends Stack {
 
     for (let subnetId of props.subnetIds!) {
       const subid = subnetId
-        .replace('-', '')
         .replace('_', '')
         .replace(' ', '');
       subnets.push(
@@ -184,7 +183,7 @@ export class Oracle extends Stack {
         excludeCharacters: "\"@/\\ '",
         generateStringKey: 'password',
         passwordLength: 30,
-        secretStringTemplate: `{"username":${oracleUsername}}`,
+        secretStringTemplate: JSON.stringify({username: oracleUsername}),
       },
     });
 
