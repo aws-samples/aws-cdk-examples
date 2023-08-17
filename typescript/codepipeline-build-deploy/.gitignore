@@ -1,0 +1,10 @@
+*.js
+!jest.config.js
+!*/trigger-build.js
+*.d.ts
+node_modules
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+report.xml
