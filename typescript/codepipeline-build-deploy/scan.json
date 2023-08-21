@@ -1,0 +1,345 @@
+{
+    "imageScanStatus": {
+        "status": "COMPLETE", 
+        "description": "The scan was completed successfully."
+    }, 
+    "repositoryName": "codepipelinebuilddeploystack-imagerepo1d8a68af-1d46t02aedsq", 
+    "registryId": "026356163217", 
+    "imageId": {
+        "imageTag": "latest", 
+        "imageDigest": "sha256:44bed34e64b0676934b5a9cf2915738c49c654609aa61872c355e879a920334e"
+    }, 
+    "imageScanFindings": {
+        "imageScanCompletedAt": 1692647551.0, 
+        "vulnerabilitySourceUpdatedAt": 1692612680.0, 
+        "findings": [
+            {
+                "severity": "HIGH", 
+                "attributes": [
+                    {
+                        "value": "7.5", 
+                        "key": "CVSS3_SCORE"
+                    }, 
+                    {
+                        "value": "7.88.1-r1", 
+                        "key": "package_version"
+                    }, 
+                    {
+                        "value": "curl", 
+                        "key": "package_name"
+                    }, 
+                    {
+                        "value": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N", 
+                        "key": "CVSS3_VECTOR"
+                    }
+                ], 
+                "name": "CVE-2023-28319", 
+                "uri": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-28319"
+            }, 
+            {
+                "severity": "HIGH", 
+                "attributes": [
+                    {
+                        "value": "7.5", 
+                        "key": "CVSS3_SCORE"
+                    }, 
+                    {
+                        "value": "1.2.4-r1", 
+                        "key": "package_version"
+                    }, 
+                    {
+                        "value": "libwebp", 
+                        "key": "package_name"
+                    }, 
+                    {
+                        "value": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H", 
+                        "key": "CVSS3_VECTOR"
+                    }
+                ], 
+                "name": "CVE-2023-1999", 
+                "uri": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-1999"
+            }, 
+            {
+                "severity": "HIGH", 
+                "attributes": [
+                    {
+                        "value": "7.5", 
+                        "key": "CVSS3_SCORE"
+                    }, 
+                    {
+                        "value": "1.8.4-r0", 
+                        "key": "package_version"
+                    }, 
+                    {
+                        "value": "libx11", 
+                        "key": "package_name"
+                    }, 
+                    {
+                        "value": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H", 
+                        "key": "CVSS3_VECTOR"
+                    }
+                ], 
+                "name": "CVE-2023-3138", 
+                "uri": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-3138"
+            }, 
+            {
+                "severity": "HIGH", 
+                "attributes": [
+                    {
+                        "value": "7.8", 
+                        "key": "CVSS3_SCORE"
+                    }, 
+                    {
+                        "value": "6.3_p20221119-r0", 
+                        "key": "package_version"
+                    }, 
+                    {
+                        "value": "ncurses", 
+                        "key": "package_name"
+                    }, 
+                    {
+                        "value": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H", 
+                        "key": "CVSS3_VECTOR"
+                    }
+                ], 
+                "name": "CVE-2023-29491", 
+                "uri": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-29491"
+            }, 
+            {
+                "severity": "HIGH", 
+                "attributes": [
+                    {
+                        "value": "7.5", 
+                        "key": "CVSS3_SCORE"
+                    }, 
+                    {
+                        "value": "1.51.0-r0", 
+                        "key": "package_version"
+                    }, 
+                    {
+                        "value": "nghttp2", 
+                        "key": "package_name"
+                    }, 
+                    {
+                        "value": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H", 
+                        "key": "CVSS3_VECTOR"
+                    }
+                ], 
+                "name": "CVE-2023-35945", 
+                "uri": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-35945"
+            }, 
+            {
+                "severity": "HIGH", 
+                "attributes": [
+                    {
+                        "value": "7.5", 
+                        "key": "CVSS3_SCORE"
+                    }, 
+                    {
+                        "value": "3.0.8-r3", 
+                        "key": "package_version"
+                    }, 
+                    {
+                        "value": "openssl", 
+                        "key": "package_name"
+                    }, 
+                    {
+                        "value": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H", 
+                        "key": "CVSS3_VECTOR"
+                    }
+                ], 
+                "name": "CVE-2023-2650", 
+                "uri": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-2650"
+            }, 
+            {
+                "severity": "MEDIUM", 
+                "attributes": [
+                    {
+                        "value": "5.9", 
+                        "key": "CVSS3_SCORE"
+                    }, 
+                    {
+                        "value": "7.88.1-r1", 
+                        "key": "package_version"
+                    }, 
+                    {
+                        "value": "curl", 
+                        "key": "package_name"
+                    }, 
+                    {
+                        "value": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H", 
+                        "key": "CVSS3_VECTOR"
+                    }
+                ], 
+                "name": "CVE-2023-28320", 
+                "uri": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-28320"
+            }, 
+            {
+                "severity": "MEDIUM", 
+                "attributes": [
+                    {
+                        "value": "5.9", 
+                        "key": "CVSS3_SCORE"
+                    }, 
+                    {
+                        "value": "7.88.1-r1", 
+                        "key": "package_version"
+                    }, 
+                    {
+                        "value": "curl", 
+                        "key": "package_name"
+                    }, 
+                    {
+                        "value": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:N", 
+                        "key": "CVSS3_VECTOR"
+                    }
+                ], 
+                "name": "CVE-2023-28321", 
+                "uri": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-28321"
+            }, 
+            {
+                "severity": "MEDIUM", 
+                "attributes": [
+                    {
+                        "value": "5.3", 
+                        "key": "CVSS3_SCORE"
+                    }, 
+                    {
+                        "value": "3.0.8-r3", 
+                        "key": "package_version"
+                    }, 
+                    {
+                        "value": "openssl", 
+                        "key": "package_name"
+                    }, 
+                    {
+                        "value": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L", 
+                        "key": "CVSS3_VECTOR"
+                    }
+                ], 
+                "name": "CVE-2023-3446", 
+                "uri": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-3446"
+            }, 
+            {
+                "severity": "MEDIUM", 
+                "attributes": [
+                    {
+                        "value": "5.3", 
+                        "key": "CVSS3_SCORE"
+                    }, 
+                    {
+                        "value": "3.0.8-r3", 
+                        "key": "package_version"
+                    }, 
+                    {
+                        "value": "openssl", 
+                        "key": "package_name"
+                    }, 
+                    {
+                        "value": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L", 
+                        "key": "CVSS3_VECTOR"
+                    }
+                ], 
+                "name": "CVE-2023-3817", 
+                "uri": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-3817"
+            }, 
+            {
+                "severity": "MEDIUM", 
+                "attributes": [
+                    {
+                        "value": "5.3", 
+                        "key": "CVSS3_SCORE"
+                    }, 
+                    {
+                        "value": "3.0.8-r3", 
+                        "key": "package_version"
+                    }, 
+                    {
+                        "value": "openssl", 
+                        "key": "package_name"
+                    }, 
+                    {
+                        "value": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N", 
+                        "key": "CVSS3_VECTOR"
+                    }
+                ], 
+                "name": "CVE-2023-2975", 
+                "uri": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-2975"
+            }, 
+            {
+                "severity": "MEDIUM", 
+                "attributes": [
+                    {
+                        "value": "5.9", 
+                        "key": "CVSS3_SCORE"
+                    }, 
+                    {
+                        "value": "3.0.8-r3", 
+                        "key": "package_version"
+                    }, 
+                    {
+                        "value": "openssl", 
+                        "key": "package_name"
+                    }, 
+                    {
+                        "value": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H", 
+                        "key": "CVSS3_VECTOR"
+                    }
+                ], 
+                "name": "CVE-2023-1255", 
+                "uri": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-1255"
+            }, 
+            {
+                "severity": "MEDIUM", 
+                "attributes": [
+                    {
+                        "value": "6.5", 
+                        "key": "CVSS3_SCORE"
+                    }, 
+                    {
+                        "value": "4.4.0-r3", 
+                        "key": "package_version"
+                    }, 
+                    {
+                        "value": "tiff", 
+                        "key": "package_name"
+                    }, 
+                    {
+                        "value": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:H", 
+                        "key": "CVSS3_VECTOR"
+                    }
+                ], 
+                "name": "CVE-2023-3316", 
+                "uri": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-3316"
+            }, 
+            {
+                "severity": "LOW", 
+                "attributes": [
+                    {
+                        "value": "3.7", 
+                        "key": "CVSS3_SCORE"
+                    }, 
+                    {
+                        "value": "7.88.1-r1", 
+                        "key": "package_version"
+                    }, 
+                    {
+                        "value": "curl", 
+                        "key": "package_name"
+                    }, 
+                    {
+                        "value": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N", 
+                        "key": "CVSS3_VECTOR"
+                    }
+                ], 
+                "name": "CVE-2023-28322", 
+                "uri": "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2023-28322"
+            }
+        ], 
+        "findingSeverityCounts": {
+            "HIGH": 6, 
+            "MEDIUM": 7, 
+            "LOW": 1
+        }
+    }
+}

@@ -90,7 +90,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
         buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_4,
         environmentVariables: {
           IMAGE_REPO_NAME: { value: imageRepo.repositoryName },
-          REPOSITORY_DIGEST: { value: imageRepo.repositoryUriForDigest() }
+          IMAGE_TAG: { value: "latest" }
         },
       },
     });
