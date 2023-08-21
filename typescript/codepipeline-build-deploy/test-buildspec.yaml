@@ -3,9 +3,12 @@ version: 0.2
 phases:
   build:
     commands:
+      - export outOfDate=0
       - aws ecr start-image-scan --repository-name $IMAGE_REPO_NAME --image-id imageTag=$IMAGE_TAG
       - aws ecr describe-image-scan-findings --repository-name $IMAGE_REPO_NAME --image-id imageTag=$IMAGE_TAG > scan.json
-      - while [ $(cat scan.json | jq -r .imageScanStatus.status) != 'COMPLETE' ]; do sleep 5 ; aws ecr describe-image-scan-findings --repository-name $IMAGE_REPO_NAME --image-id imageTag=$IMAGE_TAG > scan.json; done
+      - export scanDate=$(date --date @$(cat scan.json | jq -r .imageScanFindings.imageScanCompletedAt) +%d.%m.%y.)
+      - if [ $scanDate != $(date +%d.%m.%y.) ]; then export outOfDate=1 ; fi
+      - while [ $outOfDate -eq 1 ] || [ $(cat scan.json | jq -r .imageScanStatus.status) != 'COMPLETE' ]; do sleep 15 ; aws ecr describe-image-scan-findings --repository-name $IMAGE_REPO_NAME --image-id imageTag=$IMAGE_TAG > scan.json; done
       - export highSeverity=$(cat scan.json | jq -r .imageScanFindings.findingSeverityCounts.HIGH)
   post_build:
     commands:
