@@ -73,18 +73,6 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       },
     });
     
-    const scanImage = new codebuild.Project(this, "scanImage", {
-      buildSpec: codebuild.BuildSpec.fromSourceFilename("test-buildspec.yaml"),
-      source: codebuild.Source.codeCommit({ repository: codeRepo }),
-      environment: {
-        buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_4,
-        environmentVariables: {
-          IMAGE_REPO_NAME: { value: imageRepo.repositoryName },
-          REPOSITORY_DIGEST: { value: imageRepo.repositoryUriForDigest }
-        },
-      },
-    });
-    
     // CodeBuild project that builds the Docker image
     const buildTest = new codebuild.Project(this, "BuildTest", {
       buildSpec: codebuild.BuildSpec.fromSourceFilename("buildspec.yaml"),
@@ -92,6 +80,19 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       environment: {
         buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_4,  
       }
+    });
+    
+        // CodeBuild project that runs the ecr image scan
+    const scanImage = new codebuild.Project(this, "ScanImage", {
+      buildSpec: codebuild.BuildSpec.fromSourceFilename("test-buildspec.yaml"),
+      source: codebuild.Source.codeCommit({ repository: codeRepo }),
+      environment: {
+        buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_4,
+        environmentVariables: {
+          IMAGE_REPO_NAME: { value: imageRepo.repositoryName },
+          REPOSITORY_DIGEST: { value: imageRepo.repositoryUriForDigest() }
+        },
+      },
     });
 
     // Grants CodeBuild project access to pull/push images from/to ECR repo
@@ -252,7 +253,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       actions: [
         new pipelineactions.CodeBuildAction({
           actionName: "JestCDK",
-          input: new pipeline.Artifact("SourceArtifact"),
+          input: sourceArtifact,
           project: buildTest,
         }),
       ],
@@ -264,19 +265,20 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       actions: [
         new pipelineactions.CodeBuildAction({
           actionName: "DockerBuildPush",
-          input: new pipeline.Artifact("SourceArtifact"),
+          input: sourceArtifact,
           project: buildImage,
           outputs: [buildArtifact],
         }),
       ],
     };
     
+    // Creates the build stage that runs the ecr container image scan
     const securityTestStage = {
       stageName: "SecurityScan",
       actions: [
         new pipelineactions.CodeBuildAction({
           actionName: "ScanImage",
-          input: buildArtifact,
+          input: sourceArtifact,
           project: scanImage,
           outputs: [scanArtifact],
         }),
