@@ -1,0 +1,10 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - aws ecr start-image-scan --repository-name $IMAGE_REPO_NAME --image-id $REPOSITORY_DIGEST
+      - aws ecr describe-image-scan-findings $IMAGE_REPO_NAME --image-id $REPOSITORY_DIGEST > scan.json
+      - export highSeverity=$(cat scan.json | jq -r .imageScanFindings.findingSeverityCounts.HIGH)
+  post-build:
+      - if [ $highSeverity > 0 ]; then exit 1; fi

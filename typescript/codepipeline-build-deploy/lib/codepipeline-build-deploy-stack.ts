@@ -22,7 +22,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // modify gitignore file to remove unneeded files from the codecommit copy    
+    // Modify gitignore file to remove unneeded files from the codecommit copy    
     let gitignore = fs.readFileSync('.gitignore').toString().split(/\r?\n/);
     gitignore.push('.git/');
     gitignore = gitignore.filter(g => g != 'node_modules/');
@@ -69,6 +69,18 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
           TASK_DEFINITION_ARN: { value: fargateTaskDef.taskDefinitionArn },
           TASK_ROLE_ARN: { value: fargateTaskDef.taskRole.roleArn },
           EXECUTION_ROLE_ARN: { value: fargateTaskDef.executionRole?.roleArn },
+        },
+      },
+    });
+    
+    const scanImage = new codebuild.Project(this, "scanImage", {
+      buildSpec: codebuild.BuildSpec.fromSourceFilename("test-buildspec.yaml"),
+      source: codebuild.Source.codeCommit({ repository: codeRepo }),
+      environment: {
+        buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_4,
+        environmentVariables: {
+          IMAGE_REPO_NAME: { value: imageRepo.repositoryName },
+          REPOSITORY_DIGEST: { value: imageRepo.repositoryUriForDigest }
         },
       },
     });
@@ -219,6 +231,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     // Creates new pipeline artifacts
     const sourceArtifact = new pipeline.Artifact("SourceArtifact");
     const buildArtifact = new pipeline.Artifact("BuildArtifact");
+    const scanArtifact = new pipeline.Artifact("ScanArtifact");
 
     // Creates the source stage for CodePipeline
     const sourceStage = {
@@ -257,6 +270,18 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
         }),
       ],
     };
+    
+    const securityTestStage = {
+      stageName: "SecurityScan",
+      actions: [
+        new pipelineactions.CodeBuildAction({
+          actionName: "ScanImage",
+          input: buildArtifact,
+          project: scanImage,
+          outputs: [scanArtifact],
+        }),
+      ],
+    };
 
     // Creates a new CodeDeploy Deployment Group
     const deploymentGroup = new codedeploy.EcsDeploymentGroup(
@@ -289,7 +314,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     // Creates an AWS CodePipeline with source, build, and deploy stages
     new pipeline.Pipeline(this, "BuildDeployPipeline", {
       pipelineName: "ImageBuildDeployPipeline",
-      stages: [sourceStage, testStage, buildStage, deployStage],
+      stages: [sourceStage, testStage, buildStage, securityTestStage, deployStage],
     });
 
     // Outputs the ALB public endpoint
