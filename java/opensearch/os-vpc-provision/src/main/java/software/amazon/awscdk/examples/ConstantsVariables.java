@@ -8,7 +8,7 @@ public class ConstantsVariables {
     public static final String EC_INSTANCE_TYPE = "c5.large.search";
 
     // Fill this in with a valid email to receive an SNS notifications
-    public static final String SNS_NOTIFICATION_EMAIL = "sumyatkw@amazon.com";
+    public static final String SNS_NOTIFICATION_EMAIL = "someone@example.com";
 
     // OpenSearch specific constants
     public static final String DOMAIN_NAME = "opensearch_101";
