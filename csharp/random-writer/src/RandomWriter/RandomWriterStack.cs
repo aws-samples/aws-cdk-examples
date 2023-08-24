@@ -40,7 +40,7 @@ namespace RandomWriter
 
             Function = new Function(this, "Lambda", new FunctionProps
             {
-                Runtime = Runtime.NODEJS_18_X,
+                Runtime = Runtime.NODEJS_16_X,
                 Handler = "index.handler",
                 Code = Code.FromAsset("src/RandomWriter/resources"),
                 Environment = new Dictionary<string, string>
