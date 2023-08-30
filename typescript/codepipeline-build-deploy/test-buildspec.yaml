@@ -4,12 +4,15 @@ phases:
   build:
     commands:
       - export outOfDate=0
+      #- aws ecr start-image-scan --repository-name $IMAGE_REPO_NAME --image-id imageTag=$IMAGE_TAG || echo "Image already scanned today"
       - aws ecr describe-image-scan-findings --repository-name $IMAGE_REPO_NAME --image-id imageTag=$IMAGE_TAG > scan.json
-      - export scanDate=$(date --date @$(cat scan.json | jq -r .imageScanFindings.imageScanCompletedAt) +%d.%m.%y.)
-      - if [ $scanDate != $(date +%d.%m.%y.) ]; then export outOfDate=1; aws ecr start-image-scan --repository-name $IMAGE_REPO_NAME --image-id imageTag=$IMAGE_TAG; fi
-      - while [ $outOfDate -eq 1 ] || [ $(cat scan.json | jq -r .imageScanStatus.status) != 'COMPLETE' ]; do sleep 15; aws ecr describe-image-scan-findings --repository-name $IMAGE_REPO_NAME --image-id imageTag=$IMAGE_TAG > scan.json; done
+      - while [ $(cat scan.json | jq -r .imageScanStatus.status) != 'COMPLETE' ]; do sleep 15; aws ecr describe-image-scan-findings --repository-name $IMAGE_REPO_NAME --image-id imageTag=$IMAGE_TAG > scan.json; done
+      - cat scan.json
       - export highSeverity=$(cat scan.json | jq -r .imageScanFindings.findingSeverityCounts.HIGH)
+      - export findings=$(cat scan.json | jq -r .imageScanFindings.findings)
   post_build:
     commands:
+      - echo "Passing if there were no findings"
+      - if [ $findings == "[]" ]; then exit 0; fi
       - echo "Failing build if high severity vulnerabilities found by ECR Image Scan"
-      ## - if [ $highSeverity > 0 ]; then exit 1; fi ## Uncomment this to break build given high severity vulnerabilities
+      - if [ -z $highSeverity ] && [ $highSeverity > 0 ]; then exit 1; fi ## Uncomment this to break build given high severity vulnerabilities
