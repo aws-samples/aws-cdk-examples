@@ -1,7 +1,6 @@
 import { Construct } from 'constructs';
 import { Stack, StackProps, Fn, CfnOutput, CfnParameter } from 'aws-cdk-lib';
-import { aws_iam as iam, aws_ec2 as ec2, aws_sns as sns } from 'aws-cdk-lib';
-import * as sc from '@aws-cdk/aws-servicecatalog-alpha';
+import { aws_iam as iam, aws_ec2 as ec2, aws_sns as sns, aws_servicecatalog as sc } from 'aws-cdk-lib';
 
 class Ec2CdkProductStack extends sc.ProductStack {
   constructor(scope: Construct, id: string) {
