@@ -15,7 +15,7 @@ export class ApiGatewayParallelStepFunctionsStack extends cdk.Stack {
     const { vpc: vpcLambda } = new VpcNestedStack(this, 'nested-stack-lambda');
 
     const lambdaFunction1 = new lambda.Function(this, 'lambda-function-1', {
-      runtime: lambda.Runtime.NODEJS_14_X,
+      runtime: lambda.Runtime.NODEJS_16_X,
       vpc: vpcLambda,
       vpcSubnets: {
         subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
@@ -32,7 +32,7 @@ export class ApiGatewayParallelStepFunctionsStack extends cdk.Stack {
     })
 
     const lambdaFunction2 = new lambda.Function(this, 'lambda-function-2', {
-      runtime: lambda.Runtime.NODEJS_14_X,
+      runtime: lambda.Runtime.NODEJS_16_X,
       vpc: vpcLambda,
       vpcSubnets: {
         subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
