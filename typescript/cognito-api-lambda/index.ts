@@ -11,7 +11,7 @@ export class CognitoProtectedApi extends Stack {
     const helloWorldFunction = new Function(this, 'helloWorldFunction', {
       code: new AssetCode('src'),
       handler: 'helloworld.handler',
-      runtime: Runtime.NODEJS_12_X
+      runtime: Runtime.NODEJS_18_X
     });
 
     // Rest API backed by the helloWorldFunction

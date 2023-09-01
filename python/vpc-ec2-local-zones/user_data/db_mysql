@@ -1,0 +1,26 @@
+#cloud-config
+packages:
+ - docker
+write_files:
+- content: |
+    version: '3.1'
+    services:
+      db:
+        image: mysql
+        ports:
+          - 3306:3306
+        environment:
+          MYSQL_DATABASE: exampledb
+          MYSQL_USER: exampleuser
+          MYSQL_PASSWORD: examplepass
+          MYSQL_RANDOM_ROOT_PASSWORD: '1'
+        volumes:
+          - db:/var/lib/mysql
+    volumes:
+      db:
+  path: /home/ec-2user/stack.yml
+runcmd:
+ - [ yum, update, aws-cfn-bootstrap ]
+ - [ service, docker, start ]
+ - [ docker, swarm, init ]
+ - [ docker, stack, deploy, -c, '/home/ec-2user/stack.yml', db_mysql ]

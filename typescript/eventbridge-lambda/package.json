@@ -1,0 +1,28 @@
+{
+  "name": "eventbridge-lambda",
+  "version": "1.0.0",
+  "description": "Amazon EventBridge scheduled rule to execute an AWS Lambda function",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "author": {
+    "name": "Amazon Web Services",
+    "url": "https://aws.amazon.com",
+    "organization": true
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/node": "^10.17.0",
+    "@types/jest": "^26.0.24",
+    "aws-cdk": "*",
+    "jest": "^26.6.3",
+    "typescript": "~5.1.6"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.0.0",
+    "constructs": "^10.0.0"
+  }
+}

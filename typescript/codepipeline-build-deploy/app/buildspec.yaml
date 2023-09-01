@@ -1,0 +1,31 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - cd app
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com
+  build:
+    commands:
+      - echo Building the Docker image...
+      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+  post_build:
+    commands:
+      - echo Pushing the Docker image...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - echo Container image to be used $REPOSITORY_URI:$IMAGE_TAG
+      - sed -i "s|REPOSITORY_URI|${REPOSITORY_URI}|g" taskdef.json
+      - sed -i "s|IMAGE_TAG|${IMAGE_TAG}|g" taskdef.json
+      - sed -i "s|TASK_ROLE_ARN|${TASK_ROLE_ARN}|g" taskdef.json
+      - sed -i "s|EXECUTION_ROLE_ARN|${EXECUTION_ROLE_ARN}|g" taskdef.json
+      - sed -i "s|TASK_DEFINITION_ARN|${TASK_DEFINITION_ARN}|g" appspec.yaml
+      - cat appspec.yaml && cat taskdef.json
+      - cp appspec.yaml ../
+      - cp taskdef.json ../
+artifacts:
+  files:
+    - "appspec.yaml"
+    - "taskdef.json"

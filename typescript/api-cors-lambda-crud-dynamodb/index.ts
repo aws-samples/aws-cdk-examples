@@ -78,6 +78,8 @@ export class ApiLambdaCrudDynamoDBStack extends Stack {
     // Create an API Gateway resource for each of the CRUD operations
     const api = new RestApi(this, 'itemsApi', {
       restApiName: 'Items Service'
+      // In case you want to manage binary types, uncomment the following
+      // binaryMediaTypes: ["*/*"],
     });
 
     const items = api.root.addResource('items');
@@ -95,6 +97,8 @@ export class ApiLambdaCrudDynamoDBStack extends Stack {
 
 export function addCorsOptions(apiResource: IResource) {
   apiResource.addMethod('OPTIONS', new MockIntegration({
+    // In case you want to use binary media types, uncomment the following line
+    // contentHandling: ContentHandling.CONVERT_TO_TEXT,
     integrationResponses: [{
       statusCode: '200',
       responseParameters: {
@@ -104,6 +108,7 @@ export function addCorsOptions(apiResource: IResource) {
         'method.response.header.Access-Control-Allow-Methods': "'OPTIONS,GET,PUT,POST,DELETE'",
       },
     }],
+    // In case you want to use binary media types, comment out the following line
     passthroughBehavior: PassthroughBehavior.NEVER,
     requestTemplates: {
       "application/json": "{\"statusCode\": 200}"
