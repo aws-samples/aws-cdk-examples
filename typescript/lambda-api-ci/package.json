@@ -8,7 +8,6 @@
     "build": "npm run prettier && tsc && npm run build-lambda",
     "build-lambda": "cd src && npm run build",
     "watch": "tsc -w",
-    "test": "jest",
     "cdk": "cdk",
     "prettier": "prettier --write '**/{bin,lib,src,tst}/*.ts'"
   },
@@ -23,8 +22,8 @@
     "@aws-cdk/aws-codepipeline-actions": "*",
     "@aws-cdk/aws-cloudformation": "*",
     "@types/node": "^13.7.0",
-    "ts-node": "^8.1.0",
-    "typescript": "~4.6.0",
+    "ts-node": "^10.9.1",
+    "typescript": "~5.1.6",
     "prettier": "^2.0.4"
   },
   "dependencies": {
