@@ -37,7 +37,7 @@ jobs:
           fetch-depth: 0
       - name: Get changed files
         id: changed-files-specific
-        uses: tj-actions/changed-files@v38
+        uses: tj-actions/changed-files@v39
         with:
           files: ${{matrix.language}}/**
           files_ignore: "*.md"
