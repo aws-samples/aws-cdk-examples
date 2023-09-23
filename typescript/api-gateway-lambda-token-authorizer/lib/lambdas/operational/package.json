@@ -1,0 +1,14 @@
+{
+  "name": "operational",
+  "version": "1.0.0",
+  "description": "Service Lambda",
+  "main": "index.js",
+  "author": "Sunil",
+  "license": "MIT",
+  "dependencies": {
+    "typescript": "^5.2.2"
+  },
+  "scripts": {
+    "build": "tsc"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "authorizer",
+  "version": "1.0.0",
+  "description": "Lamdba Auth",
+  "main": "index.js",
+  "author": "Sunil",
+  "license": "MIT",
+  "dependencies": {
+    "typescript": "^5.2.2"
+  },
+  "scripts": {
+    "build": "tsc"
+  }
+}
