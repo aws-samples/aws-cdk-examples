@@ -6,7 +6,11 @@
   "author": "Sunil",
   "license": "Apache-2.0",
   "dependencies": {
+    "aws-lambda":"^1.0.7",
     "typescript": "^5.2.2"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.122"
   },
   "scripts": {
     "build": "tsc"

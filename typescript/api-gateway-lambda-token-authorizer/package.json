@@ -4,9 +4,11 @@
   "bin": {
     "main": "bin/main.js"
   },
+  "engines": {
+    "node": "18.0.0"
+  },
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
+    "build": "cd lib/lambdas/authorizer && yarn install && yarn build && cd - && cd lib/lambdas/operational && yarn install && yarn build && cd -",
     "test": "jest",
     "cdk": "cdk"
   },
