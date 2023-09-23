@@ -4,7 +4,7 @@
   "description": "Lamdba Auth",
   "main": "index.js",
   "author": "Sunil",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "dependencies": {
     "typescript": "^5.2.2"
   },
