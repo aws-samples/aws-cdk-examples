@@ -57,6 +57,6 @@ test('Lambda Function Created', () => {
   const stack = new S3SnsSqsLambdaChainStack(app, 'MyTestStack');
 
   const template = Template.fromStack(stack);
-  template.resourceCountIs('AWS::Lambda::Function', 2);
+  template.resourceCountIs('AWS::Lambda::Function', 3);
   template.resourceCountIs('AWS::Lambda::EventSourceMapping', 1);
 });
