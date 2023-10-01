@@ -12,11 +12,11 @@
     "name": "Aleksandar Simovic <alexander.simovic@gmail.com>",
     "url": "https://serverless.pub"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "devDependencies": {
     "@types/node": "^8.10.38",
     "aws-cdk": "*",
-    "typescript": "~3.9.7"
+    "typescript": "~5.1.6"
   },
   "dependencies": {
     "aws-cdk-lib": "^2.0.0",

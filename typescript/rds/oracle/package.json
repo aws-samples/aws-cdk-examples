@@ -1,0 +1,26 @@
+{
+  "name": "oracle",
+  "version": "0.1.0",
+  "bin": {
+    "cdk": "npx ts-node --prefer-ts-exts oracle.ts"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.10",
+    "@types/node": "*",
+    "jest": "^26.4.2",
+    "aws-cdk": "*",
+    "ts-jest": "^26.2.0",
+    "ts-node": "^10.9.1",
+    "typescript": "~5.1.6"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.0.0",
+    "constructs": "^10.0.0",
+    "source-map-support": "^0.5.16"
+  }
+}

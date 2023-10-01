@@ -1,0 +1,3 @@
+{
+  "app": "npx ts-node --prefer-ts-exts bin/s3-sns-sqs-lambda-chain.ts"
+}

@@ -69,7 +69,7 @@ Now you're ready to clone this repo and change to this sample directory:
 
 ```
 $ git clone https://github.com/aws-samples/aws-cdk-examples.git
-$ cd python/s3-trigger-lambda-rekognition-dynamodb
+$ cd python/rekognition-lambda-s3-trigger
 ```
 
 Install the required dependencies:

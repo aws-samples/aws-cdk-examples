@@ -1,0 +1,26 @@
+{
+  "name": "evidently-client-side-evaluation-lambda",
+  "version": "1.0.0",
+  "description": "Using Evidently Client-side Evaluation in a Lambda",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "author": {
+    "name": "Amazon Web Services",
+    "url": "https://aws.amazon.com",
+    "organization": true
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/node": "^20.5.7",
+    "aws-cdk": "^2.93.0",
+    "typescript": "~5.2.2"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.93.0",
+    "constructs": "^10.2.70"
+  }
+}

@@ -17,7 +17,6 @@ pull_request_rules:
       - "#approved-reviews-by>=1"
       - -approved-reviews-by~=author
       - "#changes-requested-reviews-by=0"
-      - status-success=Semantic Pull Request
       - status-success=build
 
   - name: remove stale reviews
@@ -25,9 +24,3 @@ pull_request_rules:
       dismiss_reviews: {}
     conditions:
       - base=master
-  - name: if fails conventional commits
-    actions:
-      comment:
-        message: Title does not follow the guidelines of [Conventional Commits](https://www.conventionalcommits.org). Please adjust title before merge.
-    conditions:
-      - -status-success=Semantic Pull Request
