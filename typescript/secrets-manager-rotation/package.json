@@ -1,0 +1,31 @@
+{
+  "name": "secrets-manager-secret-rotation",
+  "version": "1.0.0",
+  "description": "Demonstrates how to rotate custom secrets (in this case Redis auth) with Secrets Manager.",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "author": {
+    "name": "Amazon Web Services",
+    "url": "https://aws.amazon.com",
+    "organization": true
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/jest": "^26.0.10",
+    "@types/node": "10.17.27",
+    "aws-cdk": "*",
+    "jest": "^26.4.2",
+    "ts-jest": "^26.2.0",
+    "ts-node": "^9.0.0",
+    "typescript": "~3.9.7"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "*",
+    "@aws-cdk/aws-lambda-python-alpha": "*",
+    "constructs": "*"
+  }
+}
