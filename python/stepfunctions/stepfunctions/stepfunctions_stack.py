@@ -55,7 +55,7 @@ class JobPollerStack(Stack):
 
         # Create Chain
 
-        definition = submit_job.next(wait_job)\
+        chain = submit_job.next(wait_job)\
             .next(status_job)\
             .next(_aws_stepfunctions.Choice(self, 'Job Complete?')
                   .when(_aws_stepfunctions.Condition.string_equals('$.status', 'FAILED'), fail_job)
@@ -65,6 +65,6 @@ class JobPollerStack(Stack):
         # Create state machine
         sm = _aws_stepfunctions.StateMachine(
             self, "StateMachine",
-            definition=definition,
+            definition_body=_aws_stepfunctions.DefinitionBody.from_chainable(chain),
             timeout=Duration.minutes(5),
         )

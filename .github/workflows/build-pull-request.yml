@@ -5,63 +5,88 @@ on: [pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        language: ['csharp', 'go','python', 'java', 'typescript']
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        if: ${{ matrix.language == 'go' }}
         with:
-          fetch-depth: 2
-      - name: Runs docker builds with JSII superchain
+          go-version: '1.20'
+      - uses: actions/setup-node@v3
+        if: ${{matrix.language == 'typescript'}}
+        with:
+          node-version: 18
+      - uses: actions/setup-java@v3
+        if: ${{matrix.language == 'java'}}
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+      - uses: actions/setup-python@v4
+        if: ${{matrix.language == 'python'}}
+        with:
+          python-version: '3.10'
+      - uses: actions/setup-dotnet@v3
+        if: ${{matrix.language == 'csharp'}}
+        with:
+          dotnet-version: 8
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get changed files
+        id: changed-files-specific
+        uses: tj-actions/changed-files@v39
+        with:
+          files: ${{matrix.language}}/**
+          files_ignore: "*.md"
+      - name: list changed files
+        if: steps.changed-files-specific.outputs.any_changed == 'true'
         run: |
-            echo "========== categorization of changed files =========="
-            buildpath=""
-            for file in $(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }})
-            do
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
+      - name: Build changed files
+        if: steps.changed-files-specific.outputs.any_changed == 'true'
+        run: |
+          echo "::group::Build changes for ${{ matrix.language }}"
+          echo ""
+          buildlang="${{ matrix.language }}"
 
-              IFS="/" read path1 path2 path3 <<< $file
-              echo $path1 $path2 $path3
-              if [[ "$buildpath" == "$path1/$path2" ]]; then
-                continue
-              fi
-              buildpath=$path1/$path2
-              echo "Build Path ${buildpath}"
+          echo "# Build summary for ${buildlang}" >> $GITHUB_STEP_SUMMARY
+          buildpath=""
+          # For each file that is in the changed set
+          for file in ${{ steps.changed-files-specific.outputs.all_modified_files }}
+          do
+            echo "processing ${file}"
+            # Split the path into the language, example, and 
+            IFS="/" read path1 path2 extra <<<"$file"
+            # $path1 is the language name e.g. 'typescript'
+            # $path2 is the fist directory under the language
+            # $extra is everything else after path2
+            if [[ $path1 != $buildlang ]]; then
+              continue
+            fi 
+            if [[ "$buildpath" == "$path1/$path2" ]]; then
+              continue
+            fi
+            buildpath=$path1/$path2
+            echo "Build Path ${buildpath}"
+            
+            # make sure there's nothing funny left over.
+            git clean -dfx
 
-
-              echo -n "$file => "
-
-              case $path1 in
-              csharp)
-                echo "C#"
-                echo "::set-output name=has_csharp_changes::true"
-                docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node18 /bin/bash -c "scripts/build-csharp.sh $path2"
-                ;;
-
-              go)
-                echo "Go"
-                echo "::set-output name=has_go_changes::true"
-                docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node18 /bin/bash -c "scripts/build-go.sh $path2"
-                ;;
-
-              java)
-                echo "Java"
-                echo "::set-output name=has_java_changes::true"
-                docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node18 /bin/bash -c "scripts/build-java.sh $path2"
-                ;;
-
-              python)
-                echo "Python"
-                echo "::set-output name=has_python_changes::true"
-                docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node18 /bin/bash -c "scripts/build-python.sh $path2"
-                ;;
-
-              typescript)
-                echo "TypeScript"
-                echo "::set-output name=has_typescript_changes::true"
-                docker run --rm --net=host -t -v $PWD:$PWD -w $PWD jsii/superchain:1-buster-slim-node18 /bin/bash -c "scripts/build-typescript.sh $path2"
-                ;;
-
-              *)
-                echo "<unmatched>"
-                ;;
-              esac
-            done
-
+            # we should pass both $path2 and $extra to the build script
+            # for example:
+            # scripts/build-typescript.sh ecs example-name/index.ts for typescripts/ecs/example/index.ts 
+            # scripts/build-typescript.sh example index.ts for typescripts/example/index.ts 
+            scripts/build-${buildlang}.sh $path2 $extra
+            
+            if [[ $? == 0 ]]; then
+              echo "- :o: $buildpath" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "- :x: $buildpath" >> $GITHUB_STEP_SUMMARY
+            fi 
+          done
+          echo "::endgroup::"
