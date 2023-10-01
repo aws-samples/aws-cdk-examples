@@ -743,7 +743,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs10.x",
+        "Runtime": "nodejs16.x",
         "Environment": {
           "Variables": {
             "BUCKET": {
