@@ -49,6 +49,7 @@ test('S3 Bucket Created', () => {
 Test for Lambdas created:
   - Sample Lambda
   - Bucket Notification Handler (automatically provisioned)
+  - Bucket Auto Delete (automatically provisioned)
 */
 test('Lambda Function Created', () => {
   const app = new App();
