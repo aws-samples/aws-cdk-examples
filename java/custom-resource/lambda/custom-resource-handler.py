@@ -1,26 +1,42 @@
-def handler(event, context):
-    import logging as log
-    import cfnresponse
-    log.getLogger().setLevel(log.INFO)
+def on_event(event, context):
+  print(event)
+  request_type = event['RequestType']
+  if request_type == 'Create': return on_create(event)
+  if request_type == 'Update': return on_update(event)
+  if request_type == 'Delete': return on_delete(event)
+  raise Exception("Invalid request type: %s" % request_type)
 
-    # This needs to change if there are to be multiple resources in the same stack
-    physical_id = 'TheOnlyCustomResource'
+def on_create(event):
+  props = event["ResourceProperties"]
+  print("Create new resource with props %s" % props)
 
-    try:
-        log.info('Input event: %s', event)
+  message = event['ResourceProperties']['Message']
 
-        # Check if this is a Create and we're failing Creates
-        if event['RequestType'] == 'Create' and event['ResourceProperties'].get('FailCreate', False):
-            raise RuntimeError('Create failure requested')
+  attributes = {
+      'Response': 'Resource message "%s"' % message
+  }
+  return { 'Data': attributes }
 
-        # Do the thing
-        message = event['ResourceProperties']['Message']
-        attributes = {
-            'Response': 'Hello "%s"' % message
-        }
+def on_update(event):
+  physical_id = event["PhysicalResourceId"]
+  props = event["ResourceProperties"]
+  print("Update resource %s with props %s" % (physical_id, props))
+  # ...
 
-        cfnresponse.send(event, context, cfnresponse.SUCCESS, attributes, physical_id)
-    except Exception as e:
-        log.exception(e)
-        # cfnresponse's error message is always "see CloudWatch"
-        cfnresponse.send(event, context, cfnresponse.FAILED, {}, physical_id)
+  return { 'PhysicalResourceId': physical_id }
+
+def on_delete(event):
+  physical_id = event["PhysicalResourceId"]
+  print("Delete resource %s" % physical_id)
+  # ...
+
+  return { 'PhysicalResourceId': physical_id }
+
+def is_complete(event, context):
+  physical_id = event["PhysicalResourceId"]
+  request_type = event["RequestType"]
+
+  # check if resource is stable based on request_type... fill in the blank below
+  # is_ready = ...
+
+  return { 'IsComplete': True }
