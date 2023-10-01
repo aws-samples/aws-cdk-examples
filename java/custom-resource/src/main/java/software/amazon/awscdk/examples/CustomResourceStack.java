@@ -1,58 +1,37 @@
 package software.amazon.awscdk.examples;
 
 import java.nio.file.*;
-import java.util.HashMap;
+
 import java.util.Map;
+import java.util.HashMap;
 
 import software.constructs.Construct;
-import software.amazon.awscdk.CfnOutput;
 import software.amazon.awscdk.CustomResource;
-import software.amazon.awscdk.CustomResourceProvider;
-import software.amazon.awscdk.CustomResourceProviderProps;
-import software.amazon.awscdk.CustomResourceProviderRuntime;
+import software.amazon.awscdk.Duration;
 import software.amazon.awscdk.Stack;
+import software.amazon.awscdk.customresources.*;
+import software.amazon.awscdk.CfnOutput;
+
+import software.amazon.awscdk.services.logs.*;
+import software.amazon.awscdk.services.lambda.Runtime;
+import software.amazon.awscdk.services.lambda.InlineCode;
+import software.amazon.awscdk.services.lambda.SingletonFunction;
 
 public class CustomResourceStack extends Stack {
-
-  public CustomResourceStack(final Construct scope, final String id) {
+  public String response = "";
+  public CustomResourceStack(final Construct scope, final String id, final Map<String, ? extends Object> props) {
     super(scope, id);
 
     try {
+      MyCustomResource resource = new MyCustomResource(this, "DemoResource", props);
 
-      // Sample Property to send to Lambda Function
-      Map<String, Object> map = new HashMap<String, Object>();
-      map.put("Message", "AWS CDK");
-
-      String serviceToken = CustomResourceProvider.getOrCreate(this, "Custom::MyCustomResourceType", CustomResourceProviderProps.builder()
-        .codeDirectory("./lambda/custom-resource-handler.py")
-        .runtime(CustomResourceProviderRuntime.NODEJS_14_X)
-        .description("Lambda function created by the custom resource provider")
-        .build());
-
-      final CustomResource myCustomResource =  CustomResource.Builder.create(this, "MyResource")
-        .resourceType("Custom::MyCustomResourceType")
-        .serviceToken(serviceToken)
-        .properties(map)
-        .build();
-
-      // Publish the custom resource output
-      CfnOutput.Builder.create(this, "MyCustomResourceOutput")
+      CfnOutput.Builder.create(this, "ResponseMessage")
         .description("The message that came back from the Custom Resource")
-        .value(myCustomResource.getAtt("Response").toString())
+        .value((resource.response))
         .build();
 
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
-  // function to read the file content
-  public static String readFileAsString(String fileName) throws Exception {
-    String data = "";
-    try {
-      data = new String(Files.readAllBytes(Paths.get(fileName)), "UTF-8");
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    return data;
   }
 }
