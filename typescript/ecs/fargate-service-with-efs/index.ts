@@ -72,6 +72,7 @@ class FargateEfs extends cdk.Stack {
     albFargateService.targetGroup.setAttribute('deregistration_delay.timeout_seconds', '30');
 
     // Allow access to EFS from Fargate ECS
+    fileSystem.grantRootAccess(albFargateService.taskDefinition.taskRole.grantPrincipal);
     fileSystem.connections.allowDefaultPortFrom(albFargateService.service.connections);
   }
 }
