@@ -7,6 +7,7 @@ app = App()
 
 # Replace the account and region with your information
 # env = core.Environment(account="Your account information", region="cn-northwest-1")
+
 # Ec2CloudwatchStack(app, "ec2-cloudwatch", env=env)
 
 Ec2CloudwatchStack(app, "ec2-cloudwatch")

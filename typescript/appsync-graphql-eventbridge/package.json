@@ -11,11 +11,11 @@
     "watch": "tsc -w",
     "cdk": "cdk"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "devDependencies": {
     "@types/node": "10.17.0",
     "aws-cdk": "*",
-    "typescript": "~4.6.0",
+    "typescript": "~5.1.6",
     "ts-node": "^8.1.0"
   },
   "dependencies": {
