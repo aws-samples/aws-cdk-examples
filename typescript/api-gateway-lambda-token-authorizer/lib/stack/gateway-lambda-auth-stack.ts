@@ -13,8 +13,8 @@ export class GatewayLambdaAuth extends cdk.Stack {
   readonly operationalLambda: cdk.aws_lambda.IFunction;
   readonly lambdaIntegration: cdk.aws_apigateway.LambdaIntegration;
 
-  readonly operationalCodePath = path.join(__dirname + "/../lambdas/operational/dist")
-  readonly authLambdaCodePath = path.join(__dirname + "/../lambdas/authorizer/dist")
+  readonly operationalEntryPath = path.join(__dirname + "/../lambdas/operational/index.ts")
+  readonly authLambdaEntryPath = path.join(__dirname + "/../lambdas/authorizer/index.ts")
 
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -48,10 +48,21 @@ export class GatewayLambdaAuth extends cdk.Stack {
    * @memberof GatewayLambdaAuth
    */
   private getOperationalFunction(): cdk.aws_lambda.IFunction {
-    return new cdk.aws_lambda.Function(this, "operational-lambda", {
+    return new cdk.aws_lambda_nodejs.NodejsFunction(this, "operational-lambda", {
       runtime: cdk.aws_lambda.Runtime.NODEJS_18_X,
       handler: "index.handler",
-      code: cdk.aws_lambda.Code.fromAsset(this.operationalCodePath),
+      bundling: {
+        sourceMap: true,
+        minify: true,
+      },
+      description: 'Operational Lambda',
+      entry: this.operationalEntryPath,
+      environment: {
+        NODE_OPTIONS: '--enable-source-maps',
+      },
+      logRetention: cdk.aws_logs.RetentionDays.ONE_DAY,
+      memorySize: 512,
+      timeout: cdk.Duration.minutes(2),
     });
   }
 
@@ -64,10 +75,21 @@ export class GatewayLambdaAuth extends cdk.Stack {
    * @memberof GatewayLambdaAuth
    */
   private getLambdaAuthFunction(): cdk.aws_lambda.IFunction {
-    return new cdk.aws_lambda.Function(this, "authentication-lambda", {
+    return new cdk.aws_lambda_nodejs.NodejsFunction(this, "authentication-lambda", {
       runtime: cdk.aws_lambda.Runtime.NODEJS_18_X,
       handler: "index.handler",
-      code: cdk.aws_lambda.Code.fromAsset(this.authLambdaCodePath),
+      bundling: {
+        sourceMap: true,
+        minify: true,
+      },
+      description: 'Lambda Authorizer',
+      entry: this.authLambdaEntryPath,
+      environment: {
+        NODE_OPTIONS: '--enable-source-maps',
+      },
+      logRetention: cdk.aws_logs.RetentionDays.ONE_DAY,
+      memorySize: 512,
+      timeout: cdk.Duration.minutes(2),
     });
   }
 
