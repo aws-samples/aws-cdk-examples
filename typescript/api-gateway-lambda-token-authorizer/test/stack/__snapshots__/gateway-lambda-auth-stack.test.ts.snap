@@ -190,9 +190,17 @@ exports[`Snapshot Stack 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "18b733b14036f3381c97967581d8bc3fafbac46944a9b73bbc0100512eccb8fb.zip",
+          "S3Key": "222186feae8d155e7e40688a0a75cd45191215215b4da306deaccc798853f5c7.zip",
+        },
+        "Description": "Lambda Authorizer",
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
         },
         "Handler": "index.handler",
+        "MemorySize": 512,
         "Role": {
           "Fn::GetAtt": [
             "authenticationlambdaServiceRole9798A92B",
@@ -200,8 +208,32 @@ exports[`Snapshot Stack 1`] = `
           ],
         },
         "Runtime": "nodejs18.x",
+        "Timeout": 120,
       },
       "Type": "AWS::Lambda::Function",
+    },
+    "authenticationlambdaLogRetention32E73801": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "authenticationlambdaDD3A2252",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 1,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
     },
     "authenticationlambdaServiceRole9798A92B": {
       "Properties": {
@@ -343,9 +375,17 @@ exports[`Snapshot Stack 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "8fed24df13083d07e7d76afab7968714129ef607016ccfdc40d1ee16bc1d0fdf.zip",
+          "S3Key": "7ad7e5ff12ac175ce7125baf08d9daa4862e1f5f892fc8ccc01ba949870d2c5b.zip",
+        },
+        "Description": "Operational Lambda",
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "NODE_OPTIONS": "--enable-source-maps",
+          },
         },
         "Handler": "index.handler",
+        "MemorySize": 512,
         "Role": {
           "Fn::GetAtt": [
             "operationallambdaServiceRole14B56EA5",
@@ -353,8 +393,32 @@ exports[`Snapshot Stack 1`] = `
           ],
         },
         "Runtime": "nodejs18.x",
+        "Timeout": 120,
       },
       "Type": "AWS::Lambda::Function",
+    },
+    "operationallambdaLogRetention43961A26": {
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/lambda/",
+              {
+                "Ref": "operationallambdaFE43E13E",
+              },
+            ],
+          ],
+        },
+        "RetentionInDays": 1,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
     },
     "operationallambdaServiceRole14B56EA5": {
       "Properties": {
