@@ -1,7 +1,6 @@
-import path = require("path");
+import * as path from 'path'
 import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
-import { IFunction } from "aws-cdk-lib/aws-lambda";
 
 /**
  * Stack, which creates LambdaRestApi Gateway, with TokenAuthorizer
@@ -81,7 +80,7 @@ export class GatewayLambdaAuth extends cdk.Stack {
    * @return {*}  {cdk.aws_apigateway.TokenAuthorizer}
    * @memberof GatewayLambdaAuth
    */
-  private getTokenAuthorizer(authorizerLambda: IFunction): cdk.aws_apigateway.TokenAuthorizer {
+  private getTokenAuthorizer(authorizerLambda: cdk.aws_lambda.IFunction): cdk.aws_apigateway.TokenAuthorizer {
     return new cdk.aws_apigateway.TokenAuthorizer(
       this,
       "operationalAuthorizer",
