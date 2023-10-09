@@ -1,7 +1,7 @@
 # AWS CDK Examples
 
 This repository contains a set of example projects for the [AWS Cloud Development
-Kit](https://github.com/awslabs/aws-cdk).
+Kit](https://github.com/aws/aws-cdk).
 
 ## Table of Contents
 1. [About this Repo](#About)
@@ -35,8 +35,9 @@ While this is an excellent learning resource for the CDK, there are other resour
 ### Official Resources
 - [Developer Guide](https://docs.aws.amazon.com/cdk/latest/guide/home.html)
 - [API Reference](https://docs.aws.amazon.com/cdk/api/latest/docs/aws-construct-library.html)
-- [CDK Workshop](https://cdkworkshop.com/)
 - [CDK Repository](https://github.com/aws/aws-cdk)
+- [CDK Construct Hub](https://constructs.dev/)
+- [CDK Workshop](https://cdkworkshop.com/)
 
 ### Unofficial/Community Resources
 - [AwesomeCDK](https://github.com/kolomied/awesome-cdk)
