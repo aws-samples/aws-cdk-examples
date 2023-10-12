@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { RemovalPolicy, Duration, Stack } from 'aws-cdk-lib';
 import {
   Vpc,
