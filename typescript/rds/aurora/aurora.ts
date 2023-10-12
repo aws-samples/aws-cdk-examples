@@ -4,7 +4,6 @@ import {
   CfnOutput,
   Tags,
   App,
-  Fn,
   Duration,
   RemovalPolicy,
 } from 'aws-cdk-lib';
@@ -17,25 +16,6 @@ import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
 
 export interface AuroraProps extends StackProps {
-
-  /**
-   * the id of the VPC
-   *
-   * @type {string}
-   * @memberof AuroraProps
-   */
-  readonly vpcId: string;
-
-
-  /**
-   *
-   * this list of subnet ids
-   *
-   * @type {string []}
-   * @memberof AuroraProps
-   *
-   */
-  readonly subnetIds?:string [];
 
   /**
    * The name of the database
@@ -109,7 +89,7 @@ export interface AuroraProps extends StackProps {
    * @memberof AuroraProps
    */
   readonly engine?: string;
-  readonly enableBabelfish?:boolean;
+  readonly enableBabelfish?: boolean;
 
   /**
    * list of ingress sources
@@ -128,18 +108,17 @@ export interface AuroraProps extends StackProps {
    * @memberof AuroraProps
    *
    */
-  readonly description?:string;
+  readonly description?: string;
 
 }
 
 
 export class Aurora extends Stack {
-//export class Aurora extends Construct {
-  constructor(scope: Construct, id: string, props:AuroraProps) {
-  //constructor(scope: Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id);
+  //export class Aurora extends Construct {
+  constructor(scope: Construct, id: string, props: AuroraProps) {
+    //constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
 
-    let subnetIds = props.subnetIds;
     let instanceType = props.instanceType;
     let replicaInstances = props.replicaInstances ?? 1;
     let backupRetentionDays = props.backupRetentionDays ?? 14;
@@ -152,7 +131,6 @@ export class Aurora extends Stack {
     const dbs = ['mysql', 'postgresql'];
     if (!dbs.includes(props.engine!)) {
       throw new Error('Unknown Engine Please Use mysql or postgresql');
-      process.exit(1);
     }
     if (backupRetentionDays < 14) {
       backupRetentionDays = 14;
@@ -161,32 +139,12 @@ export class Aurora extends Stack {
       replicaInstances = 1;
     }
 
-    const azs = Fn.getAzs();
-
     // vpc
-    const vpc = ec2.Vpc.fromVpcAttributes(this, 'ExistingVPC', {
-      vpcId: props.vpcId,
-      availabilityZones: azs,
+    let vpc = new ec2.Vpc(this, "Vpc");
+
+    const vpcSubnets = vpc.selectSubnets({
+      subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS
     });
-
-    // Subnets
-    const subnets: any[] = [];
-
-    for (let subnetId of subnetIds!) {
-      const subid = subnetId
-        .replace('_', '')
-        .replace(' ', '');
-      subnets.push(
-        ec2.Subnet.fromSubnetAttributes(this, subid, {
-          subnetId: subid,
-        }),
-      );
-    }
-
-    // interface
-    const vpcSubnets: ec2.SubnetSelection = {
-      subnets: subnets,
-    };
 
     // all the ports
     const allAll = ec2.Port.allTraffic();
@@ -205,7 +163,6 @@ export class Aurora extends Stack {
       securityGroupName: id + 'Database',
     });
     dbsg.addIngressRule(dbsg, allAll, 'all from self');
-    dbsg.addEgressRule(ec2.Peer.ipv4('0.0.0.0/0'), allAll, 'all out');
 
     if (props.engine == 'mysql') {
       connectionPort = tcp3306;
@@ -260,13 +217,13 @@ export class Aurora extends Stack {
           excludeCharacters: "\"@/\\ '",
           generateStringKey: 'password',
           passwordLength: 30,
-          secretStringTemplate: JSON.stringify({username: props.auroraClusterUsername}),
+          secretStringTemplate: JSON.stringify({ username: props.auroraClusterUsername }),
         },
       },
     );
 
     // aurora credentials
-    const auroraClusterCrendentials= rds.Credentials.fromSecret(
+    const auroraClusterCrendentials = rds.Credentials.fromSecret(
       auroraClusterSecret,
       props.auroraClusterUsername,
     );
@@ -297,7 +254,6 @@ export class Aurora extends Stack {
         retention: Duration.days(backupRetentionDays),
       },
       parameterGroup: auroraParameterGroup,
-      instances: replicaInstances,
       iamAuthentication: true,
       storageEncrypted: true,
       storageEncryptionKey: kmsKey,
@@ -308,12 +264,12 @@ export class Aurora extends Stack {
       cloudwatchLogsRetention: logs.RetentionDays.ONE_MONTH,
       preferredMaintenanceWindow: props.preferredMaintenanceWindow,
       instanceIdentifierBase: props.dbName,
-      instanceProps: {
+      vpcSubnets: vpcSubnets,
+      vpc: vpc,
+      securityGroups: [dbsg],
+      writer: rds.ClusterInstance.provisioned('provisioned', {
         instanceType: props.instanceType,
-        vpcSubnets: vpcSubnets,
-        vpc: vpc,
-        securityGroups: [dbsg],
-      },
+      }),
     });
 
     aurora_cluster.applyRemovalPolicy(RemovalPolicy.RETAIN);
@@ -443,66 +399,66 @@ export class Aurora extends Stack {
     );
 
     new CfnOutput(this, 'OutputSecretName', {
-      exportName: aurora_cluster.stack.stackName+':SecretName',
+      exportName: aurora_cluster.stack.stackName + ':SecretName',
       value: aurora_cluster.secret?.secretArn!,
     });
 
     new CfnOutput(this, 'OutputSecretArn', {
-      exportName: aurora_cluster.stack.stackName+':SecretArn',
+      exportName: aurora_cluster.stack.stackName + ':SecretArn',
       value: aurora_cluster.secret?.secretArn!,
     });
 
 
     new CfnOutput(this, 'OutputGetSecretValue', {
-      exportName: aurora_cluster.stack.stackName+':GetSecretValue',
-      value: 'aws secretsmanager get-secret-value --secret-id '+ aurora_cluster.secret?.secretArn,
+      exportName: aurora_cluster.stack.stackName + ':GetSecretValue',
+      value: 'aws secretsmanager get-secret-value --secret-id ' + aurora_cluster.secret?.secretArn,
     });
 
 
     new CfnOutput(this, 'OutputInstanceIdentifiers', {
-      exportName: aurora_cluster.stack.stackName+'InstanceIdentifiers',
+      exportName: aurora_cluster.stack.stackName + 'InstanceIdentifiers',
       value: aurora_cluster.instanceIdentifiers.toString(),
     });
 
-    const instance_endpoints:any = [];
+    const instance_endpoints: any = [];
 
     for (let ie of aurora_cluster.instanceEndpoints) {
       instance_endpoints.push(ie.hostname);
     }
     new CfnOutput(this, 'OutputEndpoints', {
-      exportName: aurora_cluster.stack.stackName+':Endpoints',
+      exportName: aurora_cluster.stack.stackName + ':Endpoints',
       value: instance_endpoints.toString(),
     });
 
     new CfnOutput(this, 'OutputClusterEndpoint', {
-      exportName: aurora_cluster.stack.stackName+':Endpoint',
+      exportName: aurora_cluster.stack.stackName + ':Endpoint',
       value: aurora_cluster.clusterEndpoint.socketAddress,
     });
 
 
     // Outputs Cluster Engine
     new CfnOutput(this, 'OutputEngineFamily', {
-      exportName: aurora_cluster.stack.stackName+':EngineFamily',
+      exportName: aurora_cluster.stack.stackName + ':EngineFamily',
       value: aurora_cluster.engine?.engineFamily!,
     });
 
     new CfnOutput(this, 'OutputEngineType', {
-      exportName: aurora_cluster.stack.stackName+':EngineType',
+      exportName: aurora_cluster.stack.stackName + ':EngineType',
       value: aurora_cluster.engine?.engineType!,
     });
 
     new CfnOutput(this, 'OutputEngineFullVersion', {
-      exportName: aurora_cluster.stack.stackName+':EngineFullVersion',
+      exportName: aurora_cluster.stack.stackName + ':EngineFullVersion',
       value: aurora_cluster.engine?.engineVersion?.fullVersion!,
     });
 
     new CfnOutput(this, 'OutputEngineMajorVersion', {
-      exportName: aurora_cluster.stack.stackName+':EngineMajorVersion',
+      exportName: aurora_cluster.stack.stackName + ':EngineMajorVersion',
       value: aurora_cluster.engine?.engineVersion?.majorVersion!,
     });
 
     new CfnOutput(this, 'OutputParameterGroupFamily', {
-      exportName: aurora_cluster.stack.stackName+':ParameterGroupFamily',
+      exportName: aurora_cluster.stack.stackName + ':ParameterGroupFamily',
       value: aurora_cluster.engine?.parameterGroupFamily!,
     });
 
@@ -515,11 +471,10 @@ export class Aurora extends Stack {
 const app = new App();
 
 new Aurora(app, 'AuroraStack', {
-  env:{region:"us-east-2"}, description:"Aurora Stack",
-  vpcId:"vpc-xxx",
-  subnetIds:["subnet-xxx", "subnet-xxxxSS"],
-  dbName:"sampledb",
-  engine:"postgresql"
+  env: { region: 'us-east-2' },
+  description: "Aurora Stack",
+  dbName: "sampledb",
+  engine: "postgresql"
 });
 
 

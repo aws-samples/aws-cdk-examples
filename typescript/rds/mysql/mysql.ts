@@ -4,32 +4,15 @@ import {
   StackProps,
   Tags,
   App,
-  Fn,
   Duration,
   RemovalPolicy,
 } from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
-import * as logs from 'aws-cdk-lib/aws-logs';
 import * as rds from 'aws-cdk-lib/aws-rds';
 import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
 
 export interface MysqlProps extends StackProps {
-
-  /**
-   * VPC Id
-   * @type {string}
-   * @memberof MysqlProps
-   */
-  readonly vpcId?: string;
-
-  /**
-   * List of Subnet
-   * @type {string[]}
-   * @memberof MysqlProps
-   */
-  readonly subnetIds?: string[];
-
 
   /**
    * provide the name of the database
@@ -100,7 +83,7 @@ export interface MysqlProps extends StackProps {
 
 export class Mysql extends Stack {
   constructor(scope: Construct, id: string, props: MysqlProps) {
-    super(scope, id);
+    super(scope, id, props);
 
     // default database username
     var mysqlUsername = "dbadmin";
@@ -116,33 +99,12 @@ export class Mysql extends Stack {
       engineVersion = props.engineVersion;
     }
 
-
-
-    const azs = Fn.getAzs();
-
     // vpc
-    const vpc = ec2.Vpc.fromVpcAttributes(this, 'ExistingVPC', {
-      vpcId: props.vpcId!,
-      availabilityZones: azs,
+    let vpc = new ec2.Vpc(this, 'VPC');
+
+    const vpcSubnets = vpc.selectSubnets({
+      subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS
     });
-
-    // Subnets
-    const subnets: any[] = [];
-
-    for (let subnetId of props.subnetIds!) {
-      const subid = subnetId
-        .replace('_', '')
-        .replace(' ', '');
-      subnets.push(
-        ec2.Subnet.fromSubnetAttributes(this, subid, {
-          subnetId: subid,
-        }),
-      );
-    }
-
-    const vpcSubnets: ec2.SubnetSelection = {
-      subnets: subnets,
-    };
 
     const allAll = ec2.Port.allTraffic();
     const tcp3306 = ec2.Port.tcpRange(3306, 3306);
@@ -155,7 +117,6 @@ export class Mysql extends Stack {
     });
 
     dbsg.addIngressRule(dbsg, allAll, 'all from self');
-    dbsg.addEgressRule(ec2.Peer.ipv4('0.0.0.0/0'), allAll, 'all out');
 
     const mysqlConnectionPorts = [
       { port: tcp3306, description: 'tcp3306 Mysql' },
@@ -181,7 +142,7 @@ export class Mysql extends Stack {
         excludeCharacters: "\"@/\\ '",
         generateStringKey: 'password',
         passwordLength: 30,
-        secretStringTemplate: JSON.stringify({username: mysqlUsername}),
+        secretStringTemplate: JSON.stringify({ username: mysqlUsername }),
       },
     });
 
@@ -226,7 +187,7 @@ export class Mysql extends Stack {
 
     mysqlInstance.addRotationSingleUser();
 
-    // Tags
+    //Tags
     Tags.of(mysqlInstance).add('Name', 'MysqlDatabase', {
       priority: 300,
     });
@@ -253,9 +214,8 @@ export class Mysql extends Stack {
 const app = new App();
 
 new Mysql(app, 'MysqlStack', {
-  env:{region:"us-east-2"}, description:"Mysql Stack",
-  vpcId:"vpc-aaaaaaaa",
-  subnetIds:["subnet-xxxxxxxx", "subnet-yyyyyyyy", "subnet-zzzzzzzz"],
-  dbName:"sampledb"
+  env: { region: 'us-east-2' },
+  description: "Mysql Stack",
+  dbName: "sampledb"
 });
 

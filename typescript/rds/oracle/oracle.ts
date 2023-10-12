@@ -4,7 +4,6 @@ import {
   StackProps,
   Tags,
   App,
-  Fn,
   Duration,
   RemovalPolicy,
 } from 'aws-cdk-lib';
@@ -15,21 +14,6 @@ import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
 
 export interface OracleProps extends StackProps {
-
-  /**
-   * VPC Id
-   * @type {string}
-   * @memberof OracleProps
-   */
-  readonly vpcId?: string;
-
-  /**
-   * List of Subnet
-   * @type {string[]}
-   * @memberof OracleProps
-   */
-  readonly subnetIds?: string[];
-
 
   /**
    * provide the name of the database
@@ -116,31 +100,12 @@ export class Oracle extends Stack {
       engineVersion = props.engineVersion;
     }
 
-    const azs = Fn.getAzs();
-
     // vpc
-    const vpc = ec2.Vpc.fromVpcAttributes(this, 'ExistingVPC', {
-      vpcId: props.vpcId!,
-      availabilityZones: azs,
+    const vpc = new ec2.Vpc(this, 'Vpc');
+
+    const vpcSubnets = vpc.selectSubnets({
+      subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS
     });
-
-    // Subnets
-    const subnets: any[] = [];
-
-    for (let subnetId of props.subnetIds!) {
-      const subid = subnetId
-        .replace('_', '')
-        .replace(' ', '');
-      subnets.push(
-        ec2.Subnet.fromSubnetAttributes(this, subid, {
-          subnetId: subid,
-        }),
-      );
-    }
-
-    const vpcSubnets: ec2.SubnetSelection = {
-      subnets: subnets,
-    };
 
     const allAll = ec2.Port.allTraffic();
     const tcp1521 = ec2.Port.tcpRange(1521, 1521);
@@ -155,7 +120,6 @@ export class Oracle extends Stack {
     });
 
     dbsg.addIngressRule(dbsg, allAll, 'all from self');
-    dbsg.addEgressRule(ec2.Peer.ipv4('0.0.0.0/0'), allAll, 'all out');
 
     const oracleConnectionPorts = [
       { port: tcp1521, description: 'tcp1521 Oracle' },
@@ -257,8 +221,7 @@ export class Oracle extends Stack {
 const app = new App();
 
 new Oracle(app, 'OracleStack', {
-  env:{region:"us-east-2"}, description:"Oracle Stack",
-  vpcId:"vpc-aaaaaaaa",
-  subnetIds:["subnet-xxxxxxxx", "subnet-yyyyyyyy", "subnet-zzzzzzzz"],
+  env:{region:"us-east-2"},
+  description:"Oracle Stack",
   dbName:"sampledb"
 });

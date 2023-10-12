@@ -10,18 +10,18 @@
     "cdk": "cdk"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.10",
-    "@types/node": "*",
-    "jest": "^26.4.2",
-    "ts-jest": "^26.2.0",
+    "@types/jest": "^29.5.5",
+    "@types/node": "20.6.3",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
     "ts-node": "^10.9.1",
-    "aws-cdk": "*",
-    "typescript": "~5.1.6"
+    "aws-cdk": "2.99.1",
+    "typescript": "~5.2.2"
   },
   "esModuleInterop": true,
   "dependencies": {
-    "aws-cdk-lib": "^2.0.0",
+    "aws-cdk-lib": "2.99.1",
     "constructs": "^10.0.0",
-    "source-map-support": "^0.5.16"
+    "source-map-support": "^0.5.21"
   }
 }
