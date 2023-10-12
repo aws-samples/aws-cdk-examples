@@ -10,7 +10,7 @@ export class NeptuneWithVpcStack extends cdk.Stack {
 
     // Create VPC for use with Neptune
     const neptuneVpc = new ec2.Vpc(this, "NeptuneVpc", {
-      cidr: "10.192.0.0/16",
+      ipAddresses: ec2.IpAddresses.cidr("10.192.0.0/16"),
       maxAzs: 2,
       natGateways: 0,
       enableDnsHostnames: true,

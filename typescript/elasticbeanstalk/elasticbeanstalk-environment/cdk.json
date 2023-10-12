@@ -2,5 +2,5 @@
     "context": {
         "platform": "arn:aws:elasticbeanstalk:us-east-1::platform/Tomcat 8 with Java 8 running on 64bit Amazon Linux"
     },
-    "app": "node index"
+    "app": "npx ts-node --prefer-ts-exts index"
 }

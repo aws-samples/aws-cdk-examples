@@ -49,7 +49,7 @@ export class EvidentlyClientSideEvaluationEcsStack extends cdk.Stack {
         }
       ]
     })
-    feature.addDependsOn(project)
+    feature.addDependency(project)
 
     const launch = new evidently.CfnLaunch(this, 'EvidentlyLaunch', {
       project: project.name,
@@ -85,7 +85,7 @@ export class EvidentlyClientSideEvaluationEcsStack extends cdk.Stack {
         ]
       }]
     })
-    launch.addDependsOn(feature)
+    launch.addDependency(feature)
 
     // Create ECS resources
     const vpc = new ec2.Vpc(this, 'Vpc', { maxAzs: 2 });

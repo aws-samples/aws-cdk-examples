@@ -1,5 +1,5 @@
 {
-  "name": "@amazon/api-gateway-parallel-step-functions",
+  "name": "api-gateway-parallel-step-functions",
   "version": "0.1.0",
   "description": "Integrate API Gateway REST API with a Synchrounous Express State Machine",
   "private": true,
@@ -18,14 +18,14 @@
     "cdk": "cdk"
   },
   "devDependencies": {
-    "@types/node": "20.5.7",
-    "aws-cdk": "2.93.0",
+    "@types/node": "20.6.3",
+    "aws-cdk": "2.99.1",
     "ts-node": "^10.9.1",
-    "typescript": "^5.2.2"
+    "typescript": "~5.2.2"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.93.0",
-    "constructs": "^10.2.70",
+    "aws-cdk-lib": "2.99.1",
+    "constructs": "^10.0.0",
     "source-map-support": "^0.5.21"
   }
 }

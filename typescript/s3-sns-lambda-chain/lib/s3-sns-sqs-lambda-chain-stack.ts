@@ -62,6 +62,9 @@ export default class S3SnsSqsLambdaChainStack extends Stack {
     const lambdaFunction = new lambdaNodejs.NodejsFunction(this, 'CsvUploadEventLambda', {
       functionName: 'CsvUploadEventLambda',
       entry: join(__dirname, '..', 'lambda', 'lambda.ts'),
+      bundling: {
+        user: '1000:1000'
+      },
     });
 
     // Bind the Lambda to the SQS Queue.

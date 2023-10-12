@@ -61,6 +61,7 @@ export class CMKStack extends NestedStack {
     new cr.AwsCustomResource(this, `${replicaRegion}-custom-resource`, {
       onCreate: awsSdkCall,
       onUpdate: awsSdkCall,
+      installLatestAwsSdk: true,
       policy: cr.AwsCustomResourcePolicy.fromStatements([
         new iam.PolicyStatement({
           effect: iam.Effect.ALLOW,

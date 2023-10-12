@@ -67,7 +67,7 @@ class JobPollerStack extends cdk.Stack {
 
     // Create state machine
     const stateMachine = new sfn.StateMachine(this, 'CronStateMachine', {
-      definition,
+      definitionBody: sfn.DefinitionBody.fromChainable(definition),
       timeout: cdk.Duration.minutes(5),
     });
 

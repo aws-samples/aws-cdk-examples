@@ -25,7 +25,7 @@ export class CdkStack extends cdk.Stack {
     });
 
     // to ensure the application is created before the environment
-    env.addDependsOn(app);
+    env.addDependency(app);
   }
 }
 

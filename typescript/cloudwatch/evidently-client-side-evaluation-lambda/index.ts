@@ -78,7 +78,7 @@ export class EvidentlyClientSideEvaluationLambdaStack extends cdk.Stack {
         }
       ]
     })
-    feature.addDependsOn(project)
+    feature.addDependency(project)
 
     const launch = new evidently.CfnLaunch(this, 'EvidentlyLaunch', {
       project: project.name,
@@ -114,7 +114,7 @@ export class EvidentlyClientSideEvaluationLambdaStack extends cdk.Stack {
         ]
       }]
     })
-    launch.addDependsOn(feature)
+    launch.addDependency(feature)
 
     // Create Lambda resources
     const configuration = `applications/${application.ref}/environments/${environment.ref}/configurations/${project.name}`
