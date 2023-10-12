@@ -1,0 +1,11 @@
+# Dependencies
+/node_modules
+
+/cdk.out
+
+# Misc
+/.DS_Store
+
+package-lock.json
+
+layers/langchain-layer
