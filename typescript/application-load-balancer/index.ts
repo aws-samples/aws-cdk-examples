@@ -12,8 +12,10 @@ class LoadBalancerStack extends cdk.Stack {
 
     const asg = new autoscaling.AutoScalingGroup(this, 'ASG', {
       vpc,
-      instanceType: ec2.InstanceType.of(ec2.InstanceClass.T2, ec2.InstanceSize.MICRO),
-      machineImage: new ec2.AmazonLinuxImage(),
+      instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE4_GRAVITON, ec2.InstanceSize.MICRO),
+      machineImage: ec2.MachineImage.latestAmazonLinux2023({
+        cpuType: ec2.AmazonLinuxCpuType.ARM_64
+      })
     });
 
     const lb = new elbv2.ApplicationLoadBalancer(this, 'LB', {

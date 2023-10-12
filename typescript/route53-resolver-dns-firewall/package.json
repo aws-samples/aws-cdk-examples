@@ -1,0 +1,27 @@
+{
+  "name": "route53-resolver-dns-firewall",
+  "version": "1.0.0",
+  "description": "Route 53 Resolver DNS firewall with allowed and blocked domain lists",
+  "bin": {
+    "route53-resolver-dns-firewall": "bin/route53-resolver-dns-firewall.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "author": {
+    "name": "Ahmed Khan <ahmed.khan@shiftingleft.cloud>"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/node": "10.17.27",
+    "aws-cdk": "2.80.0",
+    "typescript": "^4.9.3"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "2.80.0",
+    "constructs": "^10.0.0",
+    "source-map-support": "^0.5.21"
+  }
+}

@@ -3,7 +3,7 @@ import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as ecs_patterns from 'aws-cdk-lib/aws-ecs-patterns';
 import * as efs from 'aws-cdk-lib/aws-efs';
-
+import * as iam from 'aws-cdk-lib/aws-iam';
 
 
 class FargateEfs extends cdk.Stack {
@@ -20,6 +20,18 @@ class FargateEfs extends cdk.Stack {
       performanceMode: efs.PerformanceMode.GENERAL_PURPOSE,
       throughputMode: efs.ThroughputMode.BURSTING
     });
+
+    fileSystem.addToResourcePolicy(
+      new iam.PolicyStatement({
+        actions: ['elasticfilesystem:ClientMount'],
+        principals: [new iam.AnyPrincipal()],
+        conditions: {
+          Bool: {
+            'elasticfilesystem:AccessedViaMountTarget': 'true'
+          }
+        }
+      })
+    )
 
     const taskDef = new ecs.FargateTaskDefinition(this, "MyTaskDefinition", {
         memoryLimitMiB: 512,
@@ -60,6 +72,7 @@ class FargateEfs extends cdk.Stack {
     albFargateService.targetGroup.setAttribute('deregistration_delay.timeout_seconds', '30');
 
     // Allow access to EFS from Fargate ECS
+    fileSystem.grantRootAccess(albFargateService.taskDefinition.taskRole.grantPrincipal);
     fileSystem.connections.allowDefaultPortFrom(albFargateService.service.connections);
   }
 }
