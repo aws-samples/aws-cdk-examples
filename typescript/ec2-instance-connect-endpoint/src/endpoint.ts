@@ -82,6 +82,9 @@ export class InstanceConnectEndpoint extends Construct {
       memorySize: 256,
       timeout: Duration.minutes(10),
       role,
+      bundling: {
+        user: '1000:1000'
+      },
     };
 
     const onEventHandler = new lambdaPython.PythonFunction(this, 'onEventHandler', {
