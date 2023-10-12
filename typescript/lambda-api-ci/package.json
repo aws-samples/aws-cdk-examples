@@ -12,25 +12,17 @@
     "prettier": "prettier --write '**/{bin,lib,src,tst}/*.ts'"
   },
   "devDependencies": {
-    "aws-cdk": "*",
-    "@aws-cdk/core": "*",
-    "@aws-cdk/assert": "*",
-    "@aws-cdk/aws-apigateway": "*",
-    "@aws-cdk/aws-codebuild": "*",
-    "@aws-cdk/aws-codecommit": "*",
-    "@aws-cdk/aws-codepipeline": "*",
-    "@aws-cdk/aws-codepipeline-actions": "*",
-    "@aws-cdk/aws-cloudformation": "*",
-    "@types/node": "^13.7.0",
+    "aws-cdk": "2.99.1",
+    "@types/node": "20.6.3",
     "ts-node": "^10.9.1",
-    "typescript": "~5.1.6",
+    "typescript": "~5.2.2",
     "prettier": "^2.0.4"
   },
   "dependencies": {
-    "aws-cdk-lib": "^2.0.0",
+    "aws-cdk-lib": "2.99.1",
     "constructs": "^10.0.0",
     "aws-sdk": "^2.617.0",
-    "source-map-support": "^0.5.9"
+    "source-map-support": "^0.5.21"
   },
   "description": "* `npm run build`   compile typescript to js  * `npm run watch`   watch for changes and compile  * `npm run test`    perform the jest unit tests  * `cdk deploy`      deploy this stack to your default AWS account/region  * `cdk diff`        compare deployed stack with current state  * `cdk synth`       emits the synthesized CloudFormation template",
   "main": "jest.config.js",
