@@ -11,6 +11,9 @@
 - [OpenAI API Key](https://platform.openai.com/account/api-keys)
 - [Amplify CLI](https://docs.amplify.aws/cli/start/install/) installed and configured
 
+## Architecture Overview
+![Alt text](./architecture_diagram.png?raw=true "Architecture")
+
 ## Deployment Instructions
 
 1. Create a new directory, navigate to that directory in a terminal and clone the repository:

@@ -15,7 +15,7 @@ def lambda_handler(event, context):
     chat = Chat(event)
     set_openai_api_key()
     user_message = get_user_message(event)
-    llm = ChatOpenAI(temperature=0)
+    llm = ChatOpenAI(temperature=0, model_name="gpt-4")
     langchain_agent = Agent(llm, chat.memory)
     message = langchain_agent.run(input=user_message)
     return chat.http_response(message)
