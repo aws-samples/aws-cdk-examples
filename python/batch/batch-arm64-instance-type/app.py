@@ -25,7 +25,8 @@ class BatchEC2Stack(Stack):
             batch_environment = batch.ManagedEc2EcsComputeEnvironment(self, name,
                 spot=True,
                 spot_bid_percentage=75,
-                instance_types=[ec2.InstanceType("a1.medium"),ec2.InstanceType("a1.large")],
+                instance_types=[ec2.InstanceType("c7g.medium"),ec2.InstanceType("c7g.large")],
+                use_optimal_instance_classes=False,
                 vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE_WITH_NAT),
                 vpc=vpc
             )
