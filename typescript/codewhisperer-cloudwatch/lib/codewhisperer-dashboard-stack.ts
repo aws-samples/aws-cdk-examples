@@ -7,8 +7,8 @@ export class CodewhispererDashboardStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // Set up a CloudWatch dashboard that shows CodeWhisperer metrics
-    const dashboard = new Dashboard(this, "cw-dashboard", {
+    // Set up a CloudWatch dashboard that shows CodeWhisperer accept rate metrics
+    const acceptDashboard = new Dashboard(this, "cw-dashboard", {
         dashboardName: "CodeWhisperer-AcceptRates"
     });
 
@@ -93,7 +93,60 @@ export class CodewhispererDashboardStack extends cdk.Stack {
             left: [ lineRate ]
         });
 
-        dashboard.addWidgets(w1, w2, w3, w4);
+        acceptDashboard.addWidgets(w1, w2, w3, w4);
     }
+
+    // Set up a CloudWatch dashboard that shows CodeWhisperer character counts
+    const charDashboard = new Dashboard(this, "cw-dashboard-char", {
+        dashboardName: "CodeWhisperer-WrittenBy"
+    });
+
+    function createCharMetric(language: string, total: boolean) {
+        return new Metric({
+            metricName: total ? "TotalCharacterCount" : "CodeWhispererCharacterCount", 
+            namespace: "AWS/CodeWhisperer", 
+            dimensionsMap: {
+                "ProgrammingLanguage": language.toLowerCase() 
+            },
+            statistic: "Sum", 
+            label: total ? "Total" : "CodeWhisperer", 
+            period: Duration.seconds(300)
+        });
+    }
+
+    for (const language of languages) {
+
+        // Written by CW
+        const m1 = createCharMetric(language, false);
+
+        // Total
+        const m2 = createCharMetric(language, true);
+
+        // Create an expression for percentage of code written by Cw 
+        const pct = new MathExpression({
+            label: "Pct written by CodeWhisperer", 
+            expression: "100*m1/m2",
+            usingMetrics: {
+                "m1": m1, 
+                "m2": m2
+            }
+        });
+
+        const w1 = new GraphWidget({
+            width: 6, 
+            title: language + " Characters Written", 
+            left: [ m1, m2 ]
+        });
+
+        const w2 = new GraphWidget({
+            width: 6, 
+            title: language + " Pct by CW", 
+            left: [ pct ]
+        });
+
+        charDashboard.addWidgets(w1, w2);
+
+    }
+
   }
 }

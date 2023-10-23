@@ -4,7 +4,7 @@ This AWS CDK application deploys a dashboard to Amazon CloudWatch to display met
 
 See [this blog post](https://aws.amazon.com/blogs/devops/codewhisperer-cloudwatch) for more information.
 
-(TODO - Fix the link)
+(TODO - Fix the link when the blog is published)
 
 
 
