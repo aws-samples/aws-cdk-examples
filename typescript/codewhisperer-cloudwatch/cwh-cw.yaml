@@ -1,0 +1,20 @@
+Description: |
+  This template is adapted from the synthesized CDK cloud assembly for direct deployment in the CloudFormation console.
+
+Resources:
+  Dashboard:
+    Type: AWS::CloudWatch::Dashboard
+    Properties:
+      DashboardBody:
+        Fn::Join:
+          - ""
+          - - '{"widgets":[{"type":"metric","width":6,"height":6,"x":0,"y":0,"properties":{"view":"timeSeries","title":"Python","region":"'
+            - Ref: AWS::Region
+            - '","metrics":[["AWS/CodeWhisperer","InvocationCount","CompletionType","BLOCK","ProgrammingLanguage","python","SuggestionState","ACCEPT",{"label":"Accept","stat":"Sum","id":"m1"}],["AWS/CodeWhisperer","InvocationCount","CompletionType","BLOCK","ProgrammingLanguage","python","SuggestionState","REJECT",{"label":"Reject","stat":"Sum","id":"m2"}],[{"label":"Block Accept Rate","expression":"100*m1/(m1+m2)"}]],"yAxis":{}}},{"type":"metric","width":6,"height":6,"x":0,"y":6,"properties":{"view":"timeSeries","title":"Java","region":"'
+            - Ref: AWS::Region
+            - '","metrics":[["AWS/CodeWhisperer","InvocationCount","CompletionType","BLOCK","ProgrammingLanguage","java","SuggestionState","ACCEPT",{"label":"Accept","stat":"Sum","id":"m1"}],["AWS/CodeWhisperer","InvocationCount","CompletionType","BLOCK","ProgrammingLanguage","java","SuggestionState","REJECT",{"label":"Reject","stat":"Sum","id":"m2"}],[{"label":"Block Accept Rate","expression":"100*m1/(m1+m2)"}]],"yAxis":{}}},{"type":"metric","width":6,"height":6,"x":0,"y":12,"properties":{"view":"timeSeries","title":"JavaScript","region":"'
+            - Ref: AWS::Region
+            - '","metrics":[["AWS/CodeWhisperer","InvocationCount","CompletionType","BLOCK","ProgrammingLanguage","javascript","SuggestionState","ACCEPT",{"label":"Accept","stat":"Sum","id":"m1"}],["AWS/CodeWhisperer","InvocationCount","CompletionType","BLOCK","ProgrammingLanguage","javascript","SuggestionState","REJECT",{"label":"Reject","stat":"Sum","id":"m2"}],[{"label":"Block Accept Rate","expression":"100*m1/(m1+m2)"}]],"yAxis":{}}},{"type":"metric","width":6,"height":6,"x":0,"y":18,"properties":{"view":"timeSeries","title":"TypeScript","region":"'
+            - Ref: AWS::Region
+            - '","metrics":[["AWS/CodeWhisperer","InvocationCount","CompletionType","BLOCK","ProgrammingLanguage","typescript","SuggestionState","ACCEPT",{"label":"Accept","stat":"Sum","id":"m1"}],["AWS/CodeWhisperer","InvocationCount","CompletionType","BLOCK","ProgrammingLanguage","typescript","SuggestionState","REJECT",{"label":"Reject","stat":"Sum","id":"m2"}],[{"label":"Block Accept Rate","expression":"100*m1/(m1+m2)"}]],"yAxis":{}}}]}'
+      DashboardName: CodeWhisperer-Metrics
