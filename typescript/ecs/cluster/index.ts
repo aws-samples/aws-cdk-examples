@@ -10,8 +10,10 @@ class ECSCluster extends cdk.Stack {
     const vpc = new ec2.Vpc(this, 'MyVpc', { maxAzs: 2 });
 
     const asg = new autoscaling.AutoScalingGroup(this, 'MyFleet', {
-      instanceType: ec2.InstanceType.of(ec2.InstanceClass.T2, ec2.InstanceSize.XLARGE),
-      machineImage: ecs.EcsOptimizedImage.amazonLinux2(),
+      instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE4_GRAVITON, ec2.InstanceSize.XLARGE),
+      machineImage: ec2.MachineImage.latestAmazonLinux2023({
+        cpuType: ec2.AmazonLinuxCpuType.ARM_64
+      }),
       desiredCapacity: 3,
       vpc,
     });
