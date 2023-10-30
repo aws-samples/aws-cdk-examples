@@ -10,7 +10,7 @@ const vpc = new ec2.Vpc(stack, 'Vpc', { maxAzs: 2 });
 
 const cluster = new ecs.Cluster(stack, 'EcsCluster', { vpc });
 cluster.addCapacity('DefaultAutoScalingGroup', {
-  instanceType: ec2.InstanceType.of(ec2.InstanceClass.T2, ec2.InstanceSize.MICRO)
+  instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3_AMD, ec2.InstanceSize.MICRO)
 });
 
 // Create Task Definition with placement constraint
@@ -39,7 +39,7 @@ const service = new ecs.Ec2Service(stack, 'Service', {
 // Specify binpack by memory and spread across availability zone as placement strategies.
 // To place randomly, call: service.placeRandomly()
 service.addPlacementStrategies(
-  ecs.PlacementStrategy.packedBy(ecs.BinPackResource.MEMORY), 
+  ecs.PlacementStrategy.packedBy(ecs.BinPackResource.MEMORY),
   ecs.PlacementStrategy.spreadAcross(ecs.BuiltInAttributes.AVAILABILITY_ZONE));
 
 app.synth();
