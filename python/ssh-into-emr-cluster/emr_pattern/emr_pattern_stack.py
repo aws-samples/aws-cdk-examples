@@ -1,4 +1,3 @@
-from uuid import uuid4
 from aws_cdk import (
     Stack,
     aws_ec2 as ec2,
@@ -97,7 +96,7 @@ class EmrPatternStack(Stack):
         s3_bucket = s3.Bucket(
             self,
             "s3_bucket",
-            bucket_name=f"emr-cdk-pattern-{Aws.ACCOUNT_ID}-{str(uuid4())[:5]}",
+            bucket_name=f"emr-cdk-pattern-{Aws.ACCOUNT_ID}",
             encryption=s3.BucketEncryption.S3_MANAGED
         )
 
