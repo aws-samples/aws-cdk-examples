@@ -198,9 +198,9 @@ export class OSCluster extends Construct {
     osDomainHost.overrideLogicalId('OpenSearchDomainHost');
 
 
-    const dashboardUrl = new CfnOutput(this, "DashboardNginxUrl", {
+    const dashboardUrl = new CfnOutput(this, "NginxOpensearchDashboardUrl", {
       value: "https://" + instance.instancePublicDnsName,
     });
-    dashboardUrl.overrideLogicalId('DashboardNginxUrl');
+    dashboardUrl.overrideLogicalId('NginxOpensearchDashboardUrl');
   }
 }
