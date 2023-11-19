@@ -11,10 +11,9 @@
 <!--END STABILITY BANNER-->
 Aspects is a CDK feature that allows developers to perform bulk operations across all constructs in a scope. They are useful for reporting, security scanning, and bulk customizations to resources.
 
-This project shows how to create a custom Aspect to perform bulk customizations against a stack.
-In this example, we will use as aspect to apply a default value for the ReservedConcurrentExecutions property of any lambda function in a construct.
+In this example, we will use an aspect to apply a default value for the ReservedConcurrentExecutions property of any lambda function in a construct. We will also log the construct paths visited and actions taken.
 
-While Aspects is a nice feature for the CDK, I would recommend that you use it as a last resort. Construct customizations should be applied via extension of existing constructs in TypeScript rather than escape hatches whenever possible.
+While we use Aspects for bulk customizations in this example, it is best practice to apply customizations to resources via extension/configuration of constructs directly whenever possible.
 
 The code in this project is not intended for production use.
 
