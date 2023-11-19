@@ -9,6 +9,8 @@
 > This example is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
 ---
 <!--END STABILITY BANNER-->
+Aspects is a CDK feature that allows developers to perform bulk operations across all constructs in a scope. They are useful for reporting, security scanning, and bulk customizations to resources.
+
 This project shows how to create a custom Aspect to perform bulk customizations against a stack.
 In this example, we will use as aspect to apply a default value for the ReservedConcurrentExecutions property of any lambda function in a construct.
 
