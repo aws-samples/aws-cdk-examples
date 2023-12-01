@@ -30,21 +30,10 @@ export class LambdaPCScalingScheduleStack extends Stack {
       timeout: Duration.seconds(6),
     });
     // Enable Provisioned Concurrency
-    const alias = new Alias(this, `LambdaFunctionAlias`, {
+    new Alias(this, `LambdaFunctionAlias`, {
       aliasName: 'provisioned',
       version: this.lambdaFunction.currentVersion,
       provisionedConcurrentExecutions: 1,
-    });
-    // Create Metric of Lambda Provisioned Concurrency 
-    const metrics = new Metric({
-      metricName: 'ProvisionedConcurrencyUtilization',
-      namespace: 'AWS/Lambda',
-      dimensionsMap: {
-        FunctionName: this.lambdaFunction.functionName,
-        Resource: `${this.lambdaFunction.functionName}:'provisioned`,
-      },
-      statistic: 'Maximum',
-      period: Duration.minutes(5),
     });
     // Enable AutoScaling Scalable Schedule
     const asg = new ScalableTarget(this, `${this.lambdaFunctionName}ScalableSchedule`, {

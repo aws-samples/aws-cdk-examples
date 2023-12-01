@@ -31,7 +31,7 @@ export class LambdaPCScalingTargetStack extends Stack {
       timeout: Duration.seconds(6),
     });
     // Enable Provisioned Concurrency
-    const alias = new Alias(this, `LambdaFunctionAlias`, {
+    new Alias(this, `LambdaFunctionAlias`, {
       aliasName: 'provisioned',
       version: this.lambdaFunction.currentVersion,
       provisionedConcurrentExecutions: 1,
