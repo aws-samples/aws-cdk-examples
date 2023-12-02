@@ -1,5 +1,4 @@
 package com.myorg;
-//package com.amazonaws.cdk;
 
 import software.constructs.Construct;
 
