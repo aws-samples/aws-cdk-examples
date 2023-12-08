@@ -9,7 +9,8 @@ from aws_cdk import (
     aws_lambda as _lambda,
     custom_resources as CustomResourceProvider,
     CustomResource,
-    Duration
+    Duration,
+    Aws
 )
 
 from constructs import Construct
@@ -21,8 +22,8 @@ class CdkIotThingStack(Stack):
         
         
         # Environment variables
-        account=os.environ["CDK_DEFAULT_ACCOUNT"]
-        region=os.environ["CDK_DEFAULT_REGION"]
+        account=Aws.ACCOUNT_ID
+        region=Aws.REGION
         iot_thing_name="CdkThing001"
 
         # Create an IoT Thing
