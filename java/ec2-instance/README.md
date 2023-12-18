@@ -35,4 +35,4 @@ to run the CDK toolkit commands as usual (Maven will recompile as needed):
 
 ## Useful commands
 
-  *`aws ssm start-session --target i-xxxxxxxxx` remote session for shell access
+  * `aws ssm start-session --target i-xxxxxxxxx` remote session for shell access
