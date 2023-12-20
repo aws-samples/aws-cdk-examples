@@ -27,7 +27,7 @@ jobs:
         if: ${{matrix.language == 'python'}}
         with:
           python-version: '3.10'
-      - uses: actions/setup-dotnet@v3
+      - uses: actions/setup-dotnet@v4
         if: ${{matrix.language == 'csharp'}}
         with:
           dotnet-version: 8
