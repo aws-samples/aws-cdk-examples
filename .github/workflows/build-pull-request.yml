@@ -23,7 +23,7 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: '17'
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         if: ${{matrix.language == 'python'}}
         with:
           python-version: '3.10'
