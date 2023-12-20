@@ -10,7 +10,7 @@ jobs:
         language: ['csharp', 'go','python', 'java', 'typescript']
     steps:
       - name: Set up Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         if: ${{ matrix.language == 'go' }}
         with:
           go-version: '1.20'
