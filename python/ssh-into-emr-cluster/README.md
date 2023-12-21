@@ -144,7 +144,7 @@ Also, insert your EC2 instance's public IPv4 DNS value in the command below! The
 
 Do **NOT** use the IPv4 for one of the EC2 instances that are core/ main nodes for the EMR cluster.
 
-You can find the IPv4 DNS value in the AWS console. For reference on where to find this value, see the image below:
+You can find the IPv4 DNS value in the EC2 AWS console. For reference on where to find this value, see the image below:
 
 <br/>
 
@@ -177,7 +177,7 @@ chmod 400 emr_test.pem
 
 #### 2. SSH to EMR cluster
 
-In the command below, be sure you enter your master EMR instance's public DNS that is found in the **EMR console** into the command below. 
+In the command below, be sure you enter your master/ main EMR instance's DNS that is found in the **EMR console** into the command below. 
 
 For an example on where to find this in the EMR cluster, see the image below:
 
@@ -227,6 +227,6 @@ Upon successful completion, the result should look like this in the "output" pat
 cdk destroy --profile <AWS_PROFILE_NAME>
 ```
 
-4. Delete the VPC named: "emr_cdk_vpc" in the VPC console. The VPC has dependency issues when deleting with CDK destroy, thus the CDK code retains it and we can delete it after the fact.
+4. If not already deleted, delete the VPC named: "emr_cdk_vpc" in the VPC console. The VPC can have a dependency issue when deleting with CDK destroy, thus the CDK code retains it and we can delete it after the fact.
 
 5. Finally, you may need to manually delete the cdk-created S3 bucket if cdk destroy did not delete it for you!
