@@ -144,7 +144,7 @@ Also, insert your EC2 instance's public IPv4 DNS value in the command below! The
 
 Do **NOT** use the IPv4 for one of the EC2 instances that are core/ main nodes for the EMR cluster.
 
-You can find the IPv4 DNS value in the AWS console. For reference on where to find this value, see the image below:
+You can find the IPv4 DNS value in the EC2 AWS console. For reference on where to find this value, see the image below:
 
 <br/>
 
@@ -177,7 +177,7 @@ chmod 400 emr_test.pem
 
 #### 2. SSH to EMR cluster
 
-In the command below, be sure you enter your master EMR instance's public DNS that is found in the **EMR console** into the command below. 
+In the command below, be sure you enter your master/ main EMR instance's DNS that is found in the **EMR console** into the command below. 
 
 For an example on where to find this in the EMR cluster, see the image below:
 
