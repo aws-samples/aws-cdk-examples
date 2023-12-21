@@ -1,0 +1,29 @@
+{
+  "S3_datasync_locations": [
+    {
+      "bucketName": "cdk-example-datasync-source-bucket",
+      "create": false,
+      "storage_lass": "STANDARD",
+      "subDirectory": "",
+      "tags": [
+        {
+          "key": "Project",
+          "value": "CDK-example"
+        }
+      ]
+    },
+    {
+      "create": false,
+      "bucketName": "cdk-example-datasync-dest-bucket",
+      "storageClass": "STANDARD",
+      "subDirectory": "",
+      "tags": []
+    }
+  ],
+  "S3_datasync_tasks": [
+    {
+      "source": "cdk-example-datasync-source-bucket",
+      "destination": "cdk-example-datasync-dest-bucket"
+    }
+  ]
+}
