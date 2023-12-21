@@ -227,6 +227,6 @@ Upon successful completion, the result should look like this in the "output" pat
 cdk destroy --profile <AWS_PROFILE_NAME>
 ```
 
-4. Delete the VPC named: "emr_cdk_vpc" in the VPC console. The VPC has dependency issues when deleting with CDK destroy, thus the CDK code retains it and we can delete it after the fact.
+4. If not already deleted, delete the VPC named: "emr_cdk_vpc" in the VPC console. The VPC can have a dependency issue when deleting with CDK destroy, thus the CDK code retains it and we can delete it after the fact.
 
 5. Finally, you may need to manually delete the cdk-created S3 bucket if cdk destroy did not delete it for you!
