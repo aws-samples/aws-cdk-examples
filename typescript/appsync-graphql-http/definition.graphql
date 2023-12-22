@@ -1,0 +1,27 @@
+type Post {
+  userId: Int
+  id: Int
+  title: String
+  body: String
+}
+
+input PostInput {
+  userId: Int!
+  title: String!
+  body: String!
+}
+
+type Mutation {
+  save(postInput: PostInput!): Post
+  delete(id: Int!): AWSJSON
+}
+
+type Query {
+  all: [Post]
+  getOne(id: Int!): Post
+}
+
+type Schema {
+  query: Query
+  mutation: Mutation
+}
