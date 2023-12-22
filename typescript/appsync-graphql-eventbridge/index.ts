@@ -118,7 +118,7 @@ export class AppSyncCdkStack extends cdk.Stack {
           $utils.appendError($ctx.result.body, $ctx.result.statusCode)
       #end`
     });
-    putEventResolver.addDependsOn(apiSchema);
+    putEventResolver.addDependency(apiSchema);
 
     const echoLambda = new lambda.Function(this, "echoFunction", {
       code: lambda.Code.fromInline(
