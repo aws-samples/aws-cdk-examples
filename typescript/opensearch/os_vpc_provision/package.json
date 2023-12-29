@@ -1,0 +1,28 @@
+{
+  "name": "os_vpc_provision",
+  "version": "0.1.0",
+  "bin": {
+    "os_vpc_provision": "bin/os_vpc_provision.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.4",
+    "@types/node": "20.5.9",
+    "jest": "^29.6.4",
+    "ts-jest": "^29.1.1",
+    "aws-cdk": "2.95.1",
+    "ts-node": "^10.9.1",
+    "typescript": "~5.2.2",
+    "constructs": "^10.2.43"
+  },
+  "dependencies": {
+    "aws-cdk": "^2.102.0",
+    "aws-cdk-lib": "2.90.0",
+    "constructs": "^10.0.0",
+    "source-map-support": "^0.5.21"
+  }
+}
