@@ -85,7 +85,7 @@ class Aurora(Stack):
     ## Supressed Warnings
     ##
     NagSuppressions.add_stack_suppressions(self, [{"id":"AwsSolutions-RDS16", "reason":"parameter referencing an intrinsic function"}])
-
+    NagSuppressions.add_stack_suppressions(self, [{"id":"AwsSolutions-SMG4", "reason":"Don't auto rotate secret. Remove for Prod"}])
 
 
     azs = Fn.get_azs()
@@ -175,13 +175,13 @@ class Aurora(Stack):
     if enable_babelfish and engine=="postgresql":
       aurora_parameters["rds.babelfish_status"] = "on"
 
-    aurora_parameter_group = rds.ParameterGroup(self, id="AuroraParameterGroup", 
-      engine =aurora_engine, 
-      description=id + " Parameter Group", 
+    aurora_parameter_group = rds.ParameterGroup(self, id="AuroraParameterGroup",
+      engine =aurora_engine,
+      description=id + " Parameter Group",
       parameters =aurora_parameters)
 
 
-    
+
     ##
     ## Secret username/password for the cluster.
     ##
@@ -238,7 +238,7 @@ class Aurora(Stack):
         cloudwatch_logs_retention=logs.RetentionDays.ONE_MONTH,
         preferred_maintenance_window=preferred_maintenance_window, # Should be specified as a range ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC).
                                                                    # Example: Sun:23:45-Mon:00:15
-                                                                   # Default: 30-minute window selected at random from an 8-hour block of time for each AWS Region, 
+                                                                   # Default: 30-minute window selected at random from an 8-hour block of time for each AWS Region,
                                                                    #          occurring on a random day of the week.
         #cluster_identifier=db_name,
         instance_identifier_base = db_name,

@@ -10,12 +10,13 @@ npm install
 # Find and build all Python projects
 for requirements in $(find $scriptdir/../python -name requirements.txt  -not -path "$scriptdir/../python/node_modules/*"); do
     (
+        echo "::group::$requirements"
         echo "=============================="
         echo "building project: $requirements"
         echo "=============================="
 
         cd $(dirname $requirements)
-        echo "Building project at $(dirname $requirements)"
+        echo "$(tput bold)Building project at $(dirname $requirements)$(tput sgr0)"
         [[ ! -f DO_NOT_AUTOTEST ]] || exit 0
 
         python3 -m venv /tmp/.venv
@@ -27,6 +28,6 @@ for requirements in $(find $scriptdir/../python -name requirements.txt  -not -pa
         # It is critical that we clean up the pip venv before we build the next python project
         # Otherwise, if anything gets pinned in a requirements.txt, you end up with a weird broken environment
         rm -rf /tmp/.venv
-
+        echo "::endgroup::"
     )
 done
