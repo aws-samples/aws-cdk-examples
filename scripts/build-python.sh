@@ -10,7 +10,7 @@ npm install
 # Find and build all Python projects
 for requirements in $(find $scriptdir/../python -name requirements.txt  -not -path "$scriptdir/../python/node_modules/*"); do
     (
-        echo "::group::$scriptdir"
+        echo "::group::$requirements"
         echo "=============================="
         echo "building project: $requirements"
         echo "=============================="
