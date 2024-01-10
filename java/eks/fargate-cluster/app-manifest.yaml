@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app-namespace
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: poc-app1
+  namespace: app-namespace
+spec:
+  containers:
+    - name: poc-app1
+      image: busybox
+      command: [ "/bin/sh" ]
+      args: [ "-c", "while true; do echo \"$(date -u) - PoC APP 1 \"; sleep 5; done" ]
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: poc-app2
+  namespace: app-namespace
+spec:
+  containers:
+    - name: poc-app1
+      image: busybox
+      command: [ "/bin/sh" ]
+      args: [ "-c", "while true; do echo \"$(date -u) - PoC APP 2 \"; sleep 5; done" ]
