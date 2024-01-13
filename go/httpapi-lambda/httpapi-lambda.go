@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/aws/aws-cdk-go/awscdk/v2"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awsapigatewayv2"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awsapigatewayv2integrations"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslambda"
-	"github.com/aws/aws-cdk-go/awscdkapigatewayv2alpha/v2"
-	"github.com/aws/aws-cdk-go/awscdkapigatewayv2integrationsalpha/v2"
 	"github.com/aws/aws-cdk-go/awscdklambdagoalpha/v2"
 	"github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
@@ -31,15 +31,15 @@ func NewHttpapiLambdaStack(scope constructs.Construct, id string, props *Httpapi
 	})
 
 	// create HTTP API
-	httpApi := awscdkapigatewayv2alpha.NewHttpApi(stack, jsii.String("myHttpApi"), &awscdkapigatewayv2alpha.HttpApiProps{
+	httpApi := awsapigatewayv2.NewHttpApi(stack, jsii.String("myHttpApi"), &awsapigatewayv2.HttpApiProps{
 		ApiName: jsii.String("myHttpApi"),
 	})
 
 	// add route to HTTP API
-	httpApi.AddRoutes(&awscdkapigatewayv2alpha.AddRoutesOptions{
+	httpApi.AddRoutes(&awsapigatewayv2.AddRoutesOptions{
 		Path:        jsii.String("/"),
-		Methods:     &[]awscdkapigatewayv2alpha.HttpMethod{awscdkapigatewayv2alpha.HttpMethod_GET},
-		Integration: awscdkapigatewayv2integrationsalpha.NewHttpLambdaIntegration(jsii.String("MyHttpLambdaIntegration"), getHandler, &awscdkapigatewayv2integrationsalpha.HttpLambdaIntegrationProps{}),
+		Methods:     &[]awsapigatewayv2.HttpMethod{awsapigatewayv2.HttpMethod_GET},
+		Integration: awsapigatewayv2integrations.NewHttpLambdaIntegration(jsii.String("MyHttpLambdaIntegration"), getHandler, &awsapigatewayv2integrations.HttpLambdaIntegrationProps{}),
 	})
 
 	// log HTTP API endpoint
