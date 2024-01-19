@@ -69,7 +69,7 @@ class Oracle(Stack):
     ## Supressed Warnings
     ##
     NagSuppressions.add_stack_suppressions(self, [{"id":"AwsSolutions-RDS16", "reason":"parameter referencing an intrinsic function"}])
-
+    NagSuppressions.add_stack_suppressions(self, [{"id":"AwsSolutions-SMG4", "reason":"Don't rotate secrets. Remove in prod"}])
 
 
     azs = Fn.get_azs()
@@ -202,14 +202,14 @@ class Oracle(Stack):
 
 
 
-    CfnOutput(self, "OracleEndpoint",   
-      export_name="OracleEndpoint",   
+    CfnOutput(self, "OracleEndpoint",
+      export_name="OracleEndpoint",
       value      =oracle_instance.db_instance_endpoint_address)
-    CfnOutput(self, "OracleUsername",   
-      export_name="OracleUsername",   
+    CfnOutput(self, "OracleUsername",
+      export_name="OracleUsername",
       value      =oracle_username)
-    CfnOutput(self, "OracleDbName",   
-      export_name="OracleDbName",   
+    CfnOutput(self, "OracleDbName",
+      export_name="OracleDbName",
       value      =db_name)
 
 
