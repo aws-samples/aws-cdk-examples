@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Amazon.CDK;
 using Amazon.CDK.CustomResources;
 
-namespace AwsCustomResourceCloudFrontInvalidate.Invalidation
+namespace CustomResourceCloudFrontInvalidate.Invalidation
 {
     public class CloudFrontInvalidate
     {

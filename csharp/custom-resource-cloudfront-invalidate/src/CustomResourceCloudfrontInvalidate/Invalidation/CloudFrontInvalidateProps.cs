@@ -1,6 +1,6 @@
 using Amazon.CDK;
 
-namespace AwsCustomResourceCloudFrontInvalidate.Invalidation
+namespace CustomResourceCloudFrontInvalidate.Invalidation
 {
   public class CloudFrontInvalidateProps
   {

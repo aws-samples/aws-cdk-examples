@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AwsCustomResourceCloudFrontInvalidate
+namespace CustomResourceCloudFrontInvalidate
 {
     sealed class Program
     {
@@ -12,7 +12,7 @@ namespace AwsCustomResourceCloudFrontInvalidate
         {
             var app = new App();
 
-            new AwsCustomResourceCloudFrontInvalidateStack(app, "AwsCustomResourceCloudFrontInvalidateStack",
+            new CustomResourceCloudFrontInvalidateStack(app, "CustomResourceCloudFrontInvalidateStack",
                 new StackProps()
                 {
                     Env = new Amazon.CDK.Environment{
