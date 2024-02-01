@@ -1,0 +1,24 @@
+{
+  "name": "apigw-lambda-cognito-authorizer",
+  "version": "0.1.0",
+  "bin": {
+    "apigw-lambda-cognito-authorizer": "bin/apigw-lambda-cognito-authorizer.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.8",
+    "@types/node": "20.9.0",
+    "aws-cdk": "2.110.0",
+    "ts-node": "^10.9.1",
+    "typescript": "~5.2.2"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "2.110.0",
+    "constructs": "^10.0.0",
+    "source-map-support": "^0.5.21"
+  }
+}
