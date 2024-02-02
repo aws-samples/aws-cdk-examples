@@ -193,7 +193,6 @@ public class EksPrivateClusterStack extends Stack {
             InterfaceVpcEndpointAwsService.ECR_DOCKER,
             InterfaceVpcEndpointAwsService.CLOUDWATCH_MONITORING,
             InterfaceVpcEndpointAwsService.CLOUDWATCH_LOGS,
-            InterfaceVpcEndpointAwsService.EVENTBRIDGE,
             InterfaceVpcEndpointAwsService.STS,
             InterfaceVpcEndpointAwsService.SSM,
             InterfaceVpcEndpointAwsService.SSM_MESSAGES,
@@ -201,7 +200,6 @@ public class EksPrivateClusterStack extends Stack {
             InterfaceVpcEndpointAwsService.EKS,
             InterfaceVpcEndpointAwsService.EC2,
             InterfaceVpcEndpointAwsService.EC2_MESSAGES,
-            InterfaceVpcEndpointAwsService.CLOUDFORMATION,
             InterfaceVpcEndpointAwsService.STEP_FUNCTIONS,
             InterfaceVpcEndpointAwsService.STEP_FUNCTIONS_SYNC);
 
