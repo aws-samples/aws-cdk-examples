@@ -20,7 +20,7 @@ namespace CustomResourceCloudFrontInvalidate
         // Create Example Bucket
         Bucket bucket = new Bucket(this, $"{id}-bucket", new BucketProps()
         {
-          BucketName = $"example-bucket-change-me-{DateTime.Now.Ticks.ToString()}"
+          BucketName = $"example-bucket-change-me-to-a-globally-unique-name"
         });
 
         // Change this string and re-deploy to test invalidation
