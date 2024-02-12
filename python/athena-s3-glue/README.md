@@ -82,6 +82,12 @@ To deploy the solution, we will need to request cdk to deploy the stack:
 $ cdk deploy --all
 ```
 
+Now that we have the infrastructure created, you will need to populate the Glue Database. Do that by going to the AWS
+console, _AWS Glue_, _Data Catalog_, _Crawlers_.
+
+Select `logs-crawler` and hit the button *Run*. When it finishes, you will be ready to test the solution.
+
+
 ## Testing the solution
 
 1. Head to _AWS_ console and then to _Amazon Athena_
