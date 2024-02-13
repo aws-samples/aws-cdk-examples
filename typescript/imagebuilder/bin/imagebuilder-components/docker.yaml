@@ -1,11 +1,11 @@
-name: GitInstallationDocument
-description: This document installs git.
+name: DockerInstallationDocument
+description: This document installs docker.
 schemaVersion: 1.0
 
 phases:
   - name: build
     steps:
-      - name: InstallGit
+      - name: InstallDocker
         action: ExecuteBash
         inputs:
           commands:
