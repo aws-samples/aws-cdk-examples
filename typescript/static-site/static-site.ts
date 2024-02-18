@@ -9,6 +9,7 @@ import * as cloudfront_origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import { CfnOutput, Duration, RemovalPolicy, Stack } from 'aws-cdk-lib';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
+import path = require('path');
 
 export interface StaticSiteProps {
   domainName: string;
@@ -68,7 +69,7 @@ export class StaticSite extends Construct {
     });
 
     new CfnOutput(this, 'Certificate', { value: certificate.certificateArn });
-    
+
     // CloudFront distribution
     const distribution = new cloudfront.Distribution(this, 'SiteDistribution', {
       certificate: certificate,
