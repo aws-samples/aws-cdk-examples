@@ -1,0 +1,20 @@
+name: GitInstallationDocument
+description: This document installs git.
+schemaVersion: 1.0
+
+phases:
+  - name: build
+    steps:
+      - name: InstallGit
+        action: ExecuteBash
+        inputs:
+          commands:
+            - yum update -y && yum install -y git
+
+  - name: validate
+    steps:
+      - name: CheckVersion
+        action: ExecuteBash
+        inputs:
+          commands:
+            - git version

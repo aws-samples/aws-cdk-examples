@@ -1,0 +1,20 @@
+name: DockerInstallationDocument
+description: This document installs docker.
+schemaVersion: 1.0
+
+phases:
+  - name: build
+    steps:
+      - name: InstallDocker
+        action: ExecuteBash
+        inputs:
+          commands:
+            - yum update -y && yum install -y docker
+
+  - name: validate
+    steps:
+      - name: CheckVersion
+        action: ExecuteBash
+        inputs:
+          commands:
+            - docker --version

@@ -1,0 +1,1 @@
+{"transactionId": "c413bd54-caef-482c-86a4-260b72742f52","userId": "000","userName": "test user 4","domain": "users","dateTime": "2024-01-22T09:13:33","action": "Change User","transactionResult": "Success", "data": {"changedFields": {"birthDate": "1970-01-01"}}}
