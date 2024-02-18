@@ -1,0 +1,1 @@
+{"transactionId": "425b59c1-0a4d-4776-a213-3d5853721fb2","userId": "123","userName": "test user","domain": "products","dateTime": "2024-01-19T13:45:09","action": "Change Product","transactionResult": "Success","data": {"productId": "04dad1d4-d88f-4db7-81e1-22fec3f202c5","changedFields": {"productName": "new product name","value": 50}}}
