@@ -7,7 +7,6 @@ import (
 	"github.com/aws/aws-cdk-go/awscdk/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/tidwall/gjson"
-	//"fmt"
 )
 
 func TestClusterStack(t *testing.T) {
@@ -26,13 +25,40 @@ func TestClusterStack(t *testing.T) {
 	template := gjson.ParseBytes(bytes)
 	assert.NotNil(t, template)
 
-	// Test for ALB
+	// Cluster
+	clusterVersion := template.Get("Resources.Cluster9EE0221C.Properties.Config.version").String()
+	assert.Equal(t, "1.28", clusterVersion)
+
+	ipFamily := template.Get("Resources.Cluster9EE0221C.Properties.Config.kubernetesNetworkConfig.ipFamily").String()
+	assert.Equal(t, "ipv4", ipFamily)
+
+	// Managed Node Group
+	maxSize := template.Get("Resources.ClusterNodegroupcustomnodegroupF798ADA7.Properties.ScalingConfig.MaxSize").Int()
+	assert.Equal(t, int64(2), maxSize)
+
+	minSize := template.Get("Resources.ClusterNodegroupcustomnodegroupF798ADA7.Properties.ScalingConfig.MinSize").Int()
+	assert.Equal(t, int64(2), minSize)
+
+	desiredSize := template.Get("Resources.ClusterNodegroupcustomnodegroupF798ADA7.Properties.ScalingConfig.DesiredSize").Int()
+	assert.Equal(t, int64(2), desiredSize)
+
+	diskSize := template.Get("Resources.ClusterNodegroupcustomnodegroupF798ADA7.Properties.DiskSize").Int()
+	assert.Equal(t, int64(100), diskSize)
+
+	amiType := template.Get("Resources.ClusterNodegroupcustomnodegroupF798ADA7.Properties.AmiType").String()
+	assert.Equal(t, "AL2_ARM_64", amiType)
+
+	// Addons
+	addonNameKubeProxy := template.Get("Resources.CfnAddonKubeProxy.Properties.AddonName").String()
+	assert.Equal(t, "kube-proxy", addonNameKubeProxy)
+
+	addonNameVpcCni := template.Get("Resources.CfnAddonVpcCni.Properties.AddonName").String()
+	assert.Equal(t, "vpc-cni", addonNameVpcCni)
+
+	addonNameCoreDns := template.Get("Resources.CfnAddonCoreDns.Properties.AddonName").String()
+	assert.Equal(t, "coredns", addonNameCoreDns)
+
+	// AWS Load Balancer Controller
 	albRelease := template.Get("Resources.TestStackCluster8E857178AlbController95870509.Properties.Release").String()
 	assert.Equal(t, "aws-load-balancer-controller", albRelease)
-
-	// Test for graviton instances
-	nodeGroupType := template.Get("Resources.ClusterNodegroupcustomnodegroupF798ADA7.Properties.AmiType").String()
-	assert.Equal(t, "AL2_ARM_64", nodeGroupType)
-	instanceType := template.Get("Resources.ClusterNodegroupcustomnodegroupF798ADA7.Properties.InstanceTypes").String()
-	assert.Equal(t, "[\"t4g.medium\"]", instanceType)
 }
