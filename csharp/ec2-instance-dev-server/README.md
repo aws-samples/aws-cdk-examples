@@ -10,7 +10,7 @@ This example will create:
 * EC2 instance with .NET SDK and Docker installed and configured, placed in a private subnet 
 * EC Instance Connect Endpoint for secure connection to the EC2 instance using SSH
 
-![](/Users/dhelper/Dev/aws-samples/aws-cdk-examples/csharp/ec2-instance-dev-server/Remote Dev Server.png)
+![Architectural diagram showing remote ec2 machine with client connecting using EC2 Instance connect](remote-dev-server.png)
 
 ## To Build and Deploy
 
