@@ -45,6 +45,12 @@ class EKSCluster extends cdk.Stack {
       }),
     });
 
+    // Fargate
+    const myProfile = new eks.FargateProfile(this, 'myProfile', {
+      cluster: eksCluster,
+      selectors: [ { namespace: 'default' } ],
+    });
+
     // Managed Addon: kube-proxy
     const kubeProxy = new eks.CfnAddon(this, "addonKubeProxy", {
       addonName: "kube-proxy",
