@@ -45,6 +45,16 @@ func NewClusterStack(scope constructs.Construct, id string, props *ClusterStackP
 			AmiType:  awseks.NodegroupAmiType_AL2_ARM_64,
 		})
 
+	// Fargate Profile
+	awseks.NewFargateProfile(stack, jsii.String("MyProfile"), &awseks.FargateProfileProps{
+		Cluster: eksCluster,
+		Selectors: &[]*awseks.Selector{
+			&awseks.Selector{
+				Namespace: jsii.String("default"),
+			},
+		},
+	})
+
 	// Managed Addon: kube-proxy
 	awseks.NewCfnAddon(stack, jsii.String("CfnAddonKubeProxy"), &awseks.CfnAddonProps{
 		AddonName:   jsii.String("kube-proxy"),

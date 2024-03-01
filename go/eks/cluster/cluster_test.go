@@ -48,6 +48,10 @@ func TestClusterStack(t *testing.T) {
 	amiType := template.Get("Resources.EKSClusterNodegroupcustomnodegroup2F3798CA.Properties.AmiType").String()
 	assert.Equal(t, "AL2_x86_64", amiType)
 
+	// Fargate
+	fargateProfileNamespace := template.Get("Resources.MyProfileC56205EE.Properties.Config.selectors.0.namespace").String()
+	assert.Equal(t, "default", fargateProfileNamespace)
+
 	// Addons
 	addonNameKubeProxy := template.Get("Resources.CfnAddonKubeProxy.Properties.AddonName").String()
 	assert.Equal(t, "kube-proxy", addonNameKubeProxy)
