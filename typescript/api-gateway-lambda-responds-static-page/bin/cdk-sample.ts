@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { App, Stack, StackProps } from 'aws-cdk-lib';
+import { App, Stack, StackProps, CfnOutput } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { LambdaRestApi } from 'aws-cdk-lib/aws-apigateway';
 import { Function, Runtime, Code, Tracing } from 'aws-cdk-lib/aws-lambda';
@@ -54,6 +54,9 @@ export class CdkSampleStack extends Stack {
       },
       policy: AwsCustomResourcePolicy.fromSdkCalls({ resources: AwsCustomResourcePolicy.ANY_RESOURCE }),
     });
+    
+    // create an output for api gateway url
+    new CfnOutput(this, 'Url', { value: api.url });
   }
 };
 
