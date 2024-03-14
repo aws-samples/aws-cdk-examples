@@ -5,7 +5,7 @@ import {App, Duration, RemovalPolicy, Stack, StackProps} from 'aws-cdk-lib';
 import {Effect, PolicyStatement, Role, ServicePrincipal} from "aws-cdk-lib/aws-iam";
 import { AttributeType, Table } from "aws-cdk-lib/aws-dynamodb";
 import { Construct } from 'constructs';
-
+import { CfnOutput } from "aws-cdk-lib";
 import config from './config.json';
 
 class ChatAppStack extends Stack {
@@ -149,9 +149,17 @@ class ChatAppStack extends Stack {
             stageName: "dev"
         });
 
-        deployment.node.addDependency(connectRoute)
-        deployment.node.addDependency(disconnectRoute)
-        deployment.node.addDependency(messageRoute)
+        deployment.node.addDependency(connectRoute);
+        deployment.node.addDependency(disconnectRoute);
+        deployment.node.addDependency(messageRoute);
+
+
+        // add the domain name of the ws api to the cloudformation outputs
+        new CfnOutput(this, "websocket-api-endpoint", {
+            description: "The endpoint for the websocket api",
+            value: "wss://" + api.attrApiEndpoint + "/dev",
+            exportName: "websocket-api-endpoint"
+        });
     }
 }
 const app = new App();
