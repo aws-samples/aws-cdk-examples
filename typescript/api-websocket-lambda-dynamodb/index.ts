@@ -55,7 +55,7 @@ class ChatAppStack extends Stack {
             }
         });
 
-        table.grantReadWriteData(disconnectFunc)
+        table.grantReadWriteData(disconnectFunc);
 
         const messageFunc = new Function(this, 'message-lambda', {
             code: new AssetCode('./sendmessage'),
@@ -79,7 +79,7 @@ class ChatAppStack extends Stack {
             }
         });
 
-        table.grantReadWriteData(messageFunc)
+        table.grantReadWriteData(messageFunc);
 
         // access role for the socket api to access the socket lambda
         const policy = new PolicyStatement({
@@ -157,7 +157,7 @@ class ChatAppStack extends Stack {
         // add the domain name of the ws api to the cloudformation outputs
         new CfnOutput(this, "websocket-api-endpoint", {
             description: "The endpoint for the websocket api",
-            value: "wss://" + api.attrApiEndpoint + "/dev",
+            value: api.attrApiEndpoint + "/dev",
             exportName: "websocket-api-endpoint"
         });
     }
