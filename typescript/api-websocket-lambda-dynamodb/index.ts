@@ -33,7 +33,7 @@ class ChatAppStack extends Stack {
 
         const connectFunc = new Function(this, 'connect-lambda', {
             code: new AssetCode('./onconnect'),
-            handler: 'app.handler',
+            handler: 'onconnectLambda.handler',
             runtime: Runtime.NODEJS_LATEST,
             timeout: Duration.seconds(300),
             memorySize: 256,
@@ -46,7 +46,7 @@ class ChatAppStack extends Stack {
 
         const disconnectFunc = new Function(this, 'disconnect-lambda', {
             code: new AssetCode('./ondisconnect'),
-            handler: 'app.handler',
+            handler: 'ondisconnectLambda.handler',
             runtime: Runtime.NODEJS_LATEST,
             timeout: Duration.seconds(300),
             memorySize: 256,
@@ -59,7 +59,7 @@ class ChatAppStack extends Stack {
 
         const messageFunc = new Function(this, 'message-lambda', {
             code: new AssetCode('./sendmessage'),
-            handler: 'app.handler',
+            handler: 'sendmessageLambda.handler',
             runtime: Runtime.NODEJS_LATEST,
             timeout: Duration.seconds(300),
             memorySize: 256,

@@ -2,7 +2,7 @@
   "name": "on-connect",
   "version": "1.0.0",
   "description": "onconnect example for WebSockets on API Gateway",
-  "main": "src/app.js",
+  "main": "src/onconnectLambda.js",
   "author": "SAM CLI",
   "license": "Apache-2.0",
   "dependencies": {
