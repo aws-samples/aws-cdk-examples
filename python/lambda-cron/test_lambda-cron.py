@@ -21,7 +21,7 @@ class TestLambda:
           'ZipFile': "def main(event, context):\n    print(\"I'm running!\")\n",
         },
         'Handler': 'index.main',
-        'Runtime': 'python3.7',
+        'Runtime': 'python3.12',
         'Timeout': 300,
       },
       'DependsOn':[dependency_capture]
