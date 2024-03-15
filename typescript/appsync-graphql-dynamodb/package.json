@@ -1,7 +1,7 @@
 {
   "name": "appsync-graphql-dynamodb",
-  "version": "1.0.0",
-  "description": "Running a GraphQL API with four resolvers to do CRUD operations on DynamoDB",
+  "version": "1.1.0",
+  "description": "Running a GraphQL API with five resolvers to do CRUD operations on DynamoDB",
   "private": true,
   "scripts": {
     "build": "tsc",
@@ -9,8 +9,8 @@
     "cdk": "cdk"
   },
   "author": {
-    "name": "Aleksandar Simovic <alexander.simovic@gmail.com>",
-    "url": "https://serverless.pub"
+    "name": "Camille Birbes <cbirbes@amazon.com>",
+    "url": "https://aws.amazon.com/"
   },
   "license": "Apache-2.0",
   "devDependencies": {
