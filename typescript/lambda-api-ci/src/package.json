@@ -9,14 +9,14 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@types/node": "^13.7.0",
-    "jest": "^24.9.0",
-    "ts-jest": "^24.0.2",
-    "ts-node": "^10.9.1",
-    "typescript": "~5.1.6"
+    "@types/node": "^20.11.25",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.4.2"
   },
   "dependencies": {
-    "aws-sdk": "^2.617.0"
+    "@aws-sdk/client-s3": "^3.525.0"
   },
   "repository": {
     "type": "git",

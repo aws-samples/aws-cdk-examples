@@ -4,14 +4,14 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 12
+      nodejs: 18
     commands:
       - npm install
 
   build:
     commands:
       - npm run build
-      - npm run -- cdk deploy --ci --require-approval never -a "npx ts-node bin/lambda.ts"
+      - npm run -- cdk deploy --ci --require-approval never -a "npx ts-node --prefer-ts-exts bin/lambda.ts"
 artifacts:
   files:
     - "cdk.out/**/*"
