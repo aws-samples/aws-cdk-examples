@@ -9,12 +9,12 @@ export class LambdaLayerStack extends cdk.Stack {
     const layer = new lambda.LayerVersion(this, 'HelperLayer', {
       code: lambda.Code.fromAsset('resources/layers/helper'),
       description: 'Common helper utility',
-      compatibleRuntimes: [lambda.Runtime.NODEJS_14_X],
+      compatibleRuntimes: [lambda.Runtime.NODEJS_LATEST],
       removalPolicy: cdk.RemovalPolicy.DESTROY
     });
 
     const fn = new lambda.Function(this, 'LambdaFunction', {
-        runtime: lambda.Runtime.NODEJS_14_X,
+        runtime: lambda.Runtime.NODEJS_LATEST,
         code: lambda.Code.fromAsset('resources/lambda'),
         handler: 'index.handler',
         layers: [layer]
