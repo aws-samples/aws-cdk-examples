@@ -1,5 +1,5 @@
-const aws = require('aws-sdk');
-const s3 = new aws.S3();
+const { S3 } = require('@aws-sdk/client-s3');
+const s3 = new S3();
 const crypto = require("crypto");
 const https = require('https');
 
@@ -52,7 +52,7 @@ const handler = async function (event, context) {
     RequestRoute: eventObjectContext.outputRoute,
     RequestToken: eventObjectContext.outputToken,
     Body: JSON.stringify(transformedObject)
-  }).promise();
+  });
 };
 
 
