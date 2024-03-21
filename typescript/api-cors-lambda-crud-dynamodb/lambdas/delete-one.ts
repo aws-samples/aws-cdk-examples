@@ -1,9 +1,10 @@
-import * as AWS from 'aws-sdk';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 
 const TABLE_NAME = process.env.TABLE_NAME || '';
 const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
 
-const db = new AWS.DynamoDB.DocumentClient();
+const db = DynamoDBDocument.from(new DynamoDB());
 
 export const handler = async (event: any = {}): Promise<any> => {
 
@@ -20,7 +21,7 @@ export const handler = async (event: any = {}): Promise<any> => {
   };
 
   try {
-    await db.delete(params).promise();
+    await db.delete(params);
     return { statusCode: 200, body: '' };
   } catch (dbError) {
     return { statusCode: 500, body: JSON.stringify(dbError) };
