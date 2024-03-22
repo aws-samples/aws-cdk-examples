@@ -1,5 +1,17 @@
 # AWS CDK AppSync DynamoDB Table Joining Demo
 
+## <!--BEGIN STABILITY BANNER-->
+
+![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
+
+> **This is a stable example. It should successfully build out of the box**
+>
+> This example is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
+
+---
+
+<!--END STABILITY BANNER-->
+
 This project demonstrates how to use AWS CDK (Cloud Development Kit) to create an AWS AppSync API backed by DynamoDB tables. The essence of this project lies in establishing a one-to-many relationship between two tables, where one table stores information about cars, and the other stores information about defects associated with cars. This allows querying both tables together as a sort of nested query.
 
 ## Table of Contents
