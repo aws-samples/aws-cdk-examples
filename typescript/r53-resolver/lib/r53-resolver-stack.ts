@@ -6,6 +6,10 @@ import * as route53resolver from "aws-cdk-lib/aws-route53resolver";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import { R53ResolverVPC } from "./vpc";
 
+// An example public IP CIDR, designated as not routable.
+// @see https://datatracker.ietf.org/doc/html/rfc5737#section-3
+const RFC5737_TEST_NET_3 = "203.0.113.0/24";
+
 export class R53ResolverStack extends cdk.Stack {
   protected targetVpc: Vpc;
 
@@ -20,7 +24,6 @@ export class R53ResolverStack extends cdk.Stack {
 
   createDnsFirewall() {
     // @see https://docs.aws.amazon.com/cdk/api/v2/docs/aws-route53resolver-alpha-readme.html
-
     // Example of directly including domains in a list.
     const directBlockList = new route53resolverAlpha.FirewallDomainList(
       this,
@@ -143,15 +146,15 @@ export class R53ResolverStack extends cdk.Stack {
 
     // This VPC is not enabled for traffic from outside, either public
     // or via a private VIF.
-    // We are using 1.2.3.4 here just as an example value; you might use an external
-    // IP or peered VPC.
+    // We are using 203.0.113.0/24 from RFC5737 here just as an example value;
+    // you might use an external IP or peered VPC.
     sgInboundEndpoint.addIngressRule(
-      ec2.Peer.ipv4("1.2.3.4/32"),
+      ec2.Peer.ipv4(RFC5737_TEST_NET_3),
       ec2.Port.tcp(53)
     );
 
     sgInboundEndpoint.addIngressRule(
-      ec2.Peer.ipv4("1.2.3.4/32"),
+      ec2.Peer.ipv4(RFC5737_TEST_NET_3),
       ec2.Port.udp(53)
     );
 
