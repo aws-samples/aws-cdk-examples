@@ -15,6 +15,7 @@ export class R53ResolverStack extends cdk.Stack {
     this.targetVpc = new R53ResolverVPC(this, "R53ResolverTestVPC").vpc;
     this.createDnsFirewall();
     this.createOutboundEndpoint();
+    this.createInboundEndpoint();
   }
 
   createDnsFirewall() {
@@ -77,7 +78,7 @@ export class R53ResolverStack extends cdk.Stack {
   createOutboundEndpoint() {
     const sgOutboundEndpoint = new ec2.SecurityGroup(
       this,
-      "outbound-endpoint-sg",
+      "sg-outbound-endpoint",
       {
         vpc: this.targetVpc,
         allowAllOutbound: true,
@@ -99,15 +100,12 @@ export class R53ResolverStack extends cdk.Stack {
       subnetType: cdk.aws_ec2.SubnetType.PRIVATE_ISOLATED,
     });
     let subnetList = [];
-    let ipAddresses = [];
     for (const subnet of subnets.subnets) {
       subnetList.push(subnet.subnetId);
-      ipAddresses.push(subnet);
     }
 
     // @see https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_route53resolver.CfnResolverEndpoint.html
     // @see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53resolver-resolverendpoint.html
-
     const outboundEndpoint = new route53resolver.CfnResolverEndpoint(
       this,
       "OutboundEndpoint",
@@ -126,6 +124,62 @@ export class R53ResolverStack extends cdk.Stack {
     const region = cdk.Stack.of(this).region;
     new cdk.CfnOutput(this, "OutboundEndpointLink", {
       value: `https://${region}.console.aws.amazon.com/route53resolver/home?region=${region}#/endpoint/${outboundEndpoint.attrResolverEndpointId}`,
+    });
+  }
+
+  /**
+   * Creates an inbound endpoint, for resources outside the VPC to use as a DNS server.
+   */
+  createInboundEndpoint() {
+    const sgInboundEndpoint = new ec2.SecurityGroup(
+      this,
+      "sg-inbound-endpoint",
+      {
+        vpc: this.targetVpc,
+        allowAllOutbound: true,
+        description: "Security group for inbound endpoint",
+      }
+    );
+
+    // This VPC is not enabled for traffic from outside, either public
+    // or via a private VIF.
+    // We are using 1.2.3.4 here just as an example value; you might use an external
+    // IP or peered VPC.
+    sgInboundEndpoint.addIngressRule(
+      ec2.Peer.ipv4("1.2.3.4/32"),
+      ec2.Port.tcp(53)
+    );
+
+    sgInboundEndpoint.addIngressRule(
+      ec2.Peer.ipv4("1.2.3.4/32"),
+      ec2.Port.udp(53)
+    );
+
+    const subnets = this.targetVpc.selectSubnets({
+      subnetType: cdk.aws_ec2.SubnetType.PRIVATE_ISOLATED,
+    });
+    let subnetList = [];
+    for (const subnet of subnets.subnets) {
+      subnetList.push(subnet.subnetId);
+    }
+
+    const inboundEndpoint = new route53resolver.CfnResolverEndpoint(
+      this,
+      "InboundEndpoint",
+      {
+        direction: "INBOUND",
+        ipAddresses: [{ subnetId: subnetList[0] }, { subnetId: subnetList[1] }],
+        securityGroupIds: [sgInboundEndpoint.securityGroupId],
+      }
+    );
+
+    new cdk.CfnOutput(this, "InboundEndpointId", {
+      value: inboundEndpoint.attrResolverEndpointId,
+    });
+
+    const region = cdk.Stack.of(this).region;
+    new cdk.CfnOutput(this, "InboundEndpointLink", {
+      value: `https://${region}.console.aws.amazon.com/route53resolver/home?region=${region}#/endpoint/${inboundEndpoint.attrResolverEndpointId}`,
     });
   }
 }
