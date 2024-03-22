@@ -1,0 +1,598 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "LexbotStack": {
+        "id": "LexbotStack",
+        "path": "LexbotStack",
+        "children": {
+          "BotRuntimeRole": {
+            "id": "BotRuntimeRole",
+            "path": "LexbotStack/BotRuntimeRole",
+            "children": {
+              "ImportBotRuntimeRole": {
+                "id": "ImportBotRuntimeRole",
+                "path": "LexbotStack/BotRuntimeRole/ImportBotRuntimeRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.93.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "LexbotStack/BotRuntimeRole/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                  "aws:cdk:cloudformation:props": {
+                    "assumeRolePolicyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "lexv2.amazonaws.com"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    },
+                    "managedPolicyArns": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":iam::aws:policy/AmazonLexFullAccess"
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                  "version": "2.93.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.Role",
+              "version": "2.93.0"
+            }
+          },
+          "BookTripTemplateBot": {
+            "id": "BookTripTemplateBot",
+            "path": "LexbotStack/BookTripTemplateBot",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::Lex::Bot",
+              "aws:cdk:cloudformation:props": {
+                "autoBuildBotLocales": false,
+                "botLocales": [
+                  {
+                    "localeId": "en_US",
+                    "description": "Book a trip bot Locale",
+                    "nluConfidenceThreshold": 0.4,
+                    "voiceSettings": {
+                      "voiceId": "Ivy"
+                    },
+                    "slotTypes": [
+                      {
+                        "name": "CarTypeValues",
+                        "description": "Slot Type description",
+                        "slotTypeValues": [
+                          {
+                            "sampleValue": {
+                              "value": "economy"
+                            }
+                          },
+                          {
+                            "sampleValue": {
+                              "value": "standard"
+                            }
+                          },
+                          {
+                            "sampleValue": {
+                              "value": "midsize"
+                            }
+                          },
+                          {
+                            "sampleValue": {
+                              "value": "full size"
+                            }
+                          },
+                          {
+                            "sampleValue": {
+                              "value": "luxury"
+                            }
+                          },
+                          {
+                            "sampleValue": {
+                              "value": "minivan"
+                            }
+                          }
+                        ],
+                        "valueSelectionSetting": {
+                          "resolutionStrategy": "ORIGINAL_VALUE"
+                        }
+                      },
+                      {
+                        "name": "RoomTypeValues",
+                        "description": "Slot Type description",
+                        "slotTypeValues": [
+                          {
+                            "sampleValue": {
+                              "value": "queen"
+                            }
+                          },
+                          {
+                            "sampleValue": {
+                              "value": "king"
+                            }
+                          },
+                          {
+                            "sampleValue": {
+                              "value": "deluxe"
+                            }
+                          }
+                        ],
+                        "valueSelectionSetting": {
+                          "resolutionStrategy": "ORIGINAL_VALUE"
+                        }
+                      }
+                    ],
+                    "intents": [
+                      {
+                        "name": "BookCar",
+                        "description": "Intent to book a car on StayBooker",
+                        "sampleUtterances": [
+                          {
+                            "utterance": "Book a car"
+                          },
+                          {
+                            "utterance": "Reserve a car"
+                          },
+                          {
+                            "utterance": "Make a car reservation"
+                          }
+                        ],
+                        "slotPriorities": [
+                          {
+                            "priority": 4,
+                            "slotName": "DriverAge"
+                          },
+                          {
+                            "priority": 1,
+                            "slotName": "PickUpCity"
+                          },
+                          {
+                            "priority": 3,
+                            "slotName": "ReturnDate"
+                          },
+                          {
+                            "priority": 5,
+                            "slotName": "CarType"
+                          },
+                          {
+                            "priority": 2,
+                            "slotName": "PickUpDate"
+                          }
+                        ],
+                        "intentConfirmationSetting": {
+                          "promptSpecification": {
+                            "messageGroupsList": [
+                              {
+                                "message": {
+                                  "plainTextMessage": {
+                                    "value": "Okay, I have you down for a {CarType} rental in {PickUpCity} from {PickUpDate} to {ReturnDate}.  Should I book the reservation?"
+                                  }
+                                }
+                              }
+                            ],
+                            "maxRetries": 3,
+                            "allowInterrupt": false
+                          },
+                          "declinationResponse": {
+                            "messageGroupsList": [
+                              {
+                                "message": {
+                                  "plainTextMessage": {
+                                    "value": "Okay, I have cancelled your reservation in progress."
+                                  }
+                                }
+                              }
+                            ],
+                            "allowInterrupt": false
+                          }
+                        },
+                        "slots": [
+                          {
+                            "name": "PickUpCity",
+                            "description": "something",
+                            "slotTypeName": "AMAZON.City",
+                            "valueElicitationSetting": {
+                              "slotConstraint": "Required",
+                              "promptSpecification": {
+                                "messageGroupsList": [
+                                  {
+                                    "message": {
+                                      "plainTextMessage": {
+                                        "value": "In what city do you need to rent a car?"
+                                      }
+                                    }
+                                  }
+                                ],
+                                "maxRetries": 3,
+                                "allowInterrupt": false
+                              }
+                            }
+                          },
+                          {
+                            "name": "PickUpDate",
+                            "description": "something",
+                            "slotTypeName": "AMAZON.Date",
+                            "valueElicitationSetting": {
+                              "slotConstraint": "Required",
+                              "promptSpecification": {
+                                "messageGroupsList": [
+                                  {
+                                    "message": {
+                                      "plainTextMessage": {
+                                        "value": "What day do you want to start your rental?"
+                                      }
+                                    }
+                                  }
+                                ],
+                                "maxRetries": 3,
+                                "allowInterrupt": false
+                              }
+                            }
+                          },
+                          {
+                            "name": "ReturnDate",
+                            "description": "something",
+                            "slotTypeName": "AMAZON.Date",
+                            "valueElicitationSetting": {
+                              "slotConstraint": "Required",
+                              "promptSpecification": {
+                                "messageGroupsList": [
+                                  {
+                                    "message": {
+                                      "plainTextMessage": {
+                                        "value": "What day do you want to return the car?"
+                                      }
+                                    }
+                                  }
+                                ],
+                                "maxRetries": 3,
+                                "allowInterrupt": false
+                              }
+                            }
+                          },
+                          {
+                            "name": "DriverAge",
+                            "description": "something",
+                            "slotTypeName": "AMAZON.Number",
+                            "valueElicitationSetting": {
+                              "slotConstraint": "Required",
+                              "promptSpecification": {
+                                "messageGroupsList": [
+                                  {
+                                    "message": {
+                                      "plainTextMessage": {
+                                        "value": "How old is the driver for this rental?"
+                                      }
+                                    }
+                                  }
+                                ],
+                                "maxRetries": 3,
+                                "allowInterrupt": false
+                              }
+                            }
+                          },
+                          {
+                            "name": "CarType",
+                            "description": "something",
+                            "slotTypeName": "CarTypeValues",
+                            "valueElicitationSetting": {
+                              "slotConstraint": "Required",
+                              "promptSpecification": {
+                                "messageGroupsList": [
+                                  {
+                                    "message": {
+                                      "plainTextMessage": {
+                                        "value": "What type of car would you like to rent?  Our most popular options are economy, midsize, and luxury"
+                                      }
+                                    }
+                                  }
+                                ],
+                                "maxRetries": 3,
+                                "allowInterrupt": false
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "name": "BookHotel",
+                        "description": "Intent to book a hotel on StayBooker",
+                        "sampleUtterances": [
+                          {
+                            "utterance": "Book a hotel"
+                          },
+                          {
+                            "utterance": "I want a make hotel reservations"
+                          },
+                          {
+                            "utterance": "Book a {Nights} night stay in {Location}"
+                          }
+                        ],
+                        "intentConfirmationSetting": {
+                          "promptSpecification": {
+                            "messageGroupsList": [
+                              {
+                                "message": {
+                                  "plainTextMessage": {
+                                    "value": "Okay, I have you down for a {Nights} night stay in {Location} starting {CheckInDate}.  Shall I book the reservation?"
+                                  }
+                                }
+                              }
+                            ],
+                            "maxRetries": 3,
+                            "allowInterrupt": false
+                          },
+                          "declinationResponse": {
+                            "messageGroupsList": [
+                              {
+                                "message": {
+                                  "plainTextMessage": {
+                                    "value": "Okay, I have cancelled your reservation in progress."
+                                  }
+                                }
+                              }
+                            ],
+                            "allowInterrupt": true
+                          }
+                        },
+                        "slotPriorities": [
+                          {
+                            "priority": 4,
+                            "slotName": "RoomType"
+                          },
+                          {
+                            "priority": 1,
+                            "slotName": "Location"
+                          },
+                          {
+                            "priority": 3,
+                            "slotName": "Nights"
+                          },
+                          {
+                            "priority": 2,
+                            "slotName": "CheckInDate"
+                          }
+                        ],
+                        "slots": [
+                          {
+                            "name": "Location",
+                            "description": "something",
+                            "slotTypeName": "AMAZON.City",
+                            "valueElicitationSetting": {
+                              "slotConstraint": "Required",
+                              "promptSpecification": {
+                                "messageGroupsList": [
+                                  {
+                                    "message": {
+                                      "plainTextMessage": {
+                                        "value": "What city will you be staying in?"
+                                      }
+                                    }
+                                  }
+                                ],
+                                "maxRetries": 3,
+                                "allowInterrupt": false
+                              }
+                            }
+                          },
+                          {
+                            "name": "CheckInDate",
+                            "description": "something",
+                            "slotTypeName": "AMAZON.Date",
+                            "valueElicitationSetting": {
+                              "slotConstraint": "Required",
+                              "promptSpecification": {
+                                "messageGroupsList": [
+                                  {
+                                    "message": {
+                                      "plainTextMessage": {
+                                        "value": "What day do you want to check in?"
+                                      }
+                                    }
+                                  }
+                                ],
+                                "maxRetries": 3,
+                                "allowInterrupt": false
+                              }
+                            }
+                          },
+                          {
+                            "name": "Nights",
+                            "description": "something",
+                            "slotTypeName": "AMAZON.Number",
+                            "valueElicitationSetting": {
+                              "slotConstraint": "Required",
+                              "promptSpecification": {
+                                "messageGroupsList": [
+                                  {
+                                    "message": {
+                                      "plainTextMessage": {
+                                        "value": "How many nights will you be staying?"
+                                      }
+                                    }
+                                  }
+                                ],
+                                "maxRetries": 3,
+                                "allowInterrupt": false
+                              }
+                            }
+                          },
+                          {
+                            "name": "RoomType",
+                            "description": "something",
+                            "slotTypeName": "RoomTypeValues",
+                            "valueElicitationSetting": {
+                              "slotConstraint": "Required",
+                              "promptSpecification": {
+                                "messageGroupsList": [
+                                  {
+                                    "message": {
+                                      "plainTextMessage": {
+                                        "value": "What type of room would you like, queen, king or deluxe?"
+                                      }
+                                    }
+                                  }
+                                ],
+                                "maxRetries": 3,
+                                "allowInterrupt": false
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "name": "FallbackIntent",
+                        "description": "Default intent when no other intent matches",
+                        "parentIntentSignature": "AMAZON.FallbackIntent"
+                      }
+                    ]
+                  }
+                ],
+                "dataPrivacy": {
+                  "ChildDirected": false
+                },
+                "description": "How to create a BookTrip bot with CDK",
+                "idleSessionTtlInSeconds": 300,
+                "name": "BookTripWithCFN",
+                "roleArn": {
+                  "Fn::GetAtt": [
+                    "BotRuntimeRoleA485A341",
+                    "Arn"
+                  ]
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lex.CfnBot",
+              "version": "2.93.0"
+            }
+          },
+          "BookTripBotVersionWithCFN": {
+            "id": "BookTripBotVersionWithCFN",
+            "path": "LexbotStack/BookTripBotVersionWithCFN",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::Lex::BotVersion",
+              "aws:cdk:cloudformation:props": {
+                "botId": {
+                  "Ref": "BookTripTemplateBot"
+                },
+                "botVersionLocaleSpecification": [
+                  {
+                    "localeId": "en_US",
+                    "botVersionLocaleDetails": {
+                      "sourceBotVersion": "DRAFT"
+                    }
+                  }
+                ],
+                "description": "BookTrip Version"
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lex.CfnBotVersion",
+              "version": "2.93.0"
+            }
+          },
+          "FirstBotAliasWithCFN": {
+            "id": "FirstBotAliasWithCFN",
+            "path": "LexbotStack/FirstBotAliasWithCFN",
+            "attributes": {
+              "aws:cdk:cloudformation:type": "AWS::Lex::BotAlias",
+              "aws:cdk:cloudformation:props": {
+                "botAliasName": "BookTripVersion1Alias",
+                "botId": {
+                  "Ref": "BookTripTemplateBot"
+                },
+                "botVersion": {
+                  "Fn::GetAtt": [
+                    "BookTripBotVersionWithCFN",
+                    "BotVersion"
+                  ]
+                },
+                "sentimentAnalysisSettings": {
+                  "DetectSentiment": true
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lex.CfnBotAlias",
+              "version": "2.93.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "LexbotStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "LexbotStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.93.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.2.69"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "LexbotStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.93.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "LexbotStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.93.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.93.0"
+        }
+      },
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.2.69"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.93.0"
+    }
+  }
+}

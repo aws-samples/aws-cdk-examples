@@ -1,0 +1,20 @@
+{
+  "version": "33.0.0",
+  "files": {
+    "4f7d1b7f9ffd05453781a604d2a864a0be6dee845c67c7a3439de1a56bc31951": {
+      "source": {
+        "path": "LexbotStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "913260853894-us-east-1": {
+          "bucketName": "cdk-hnb659fds-assets-913260853894-us-east-1",
+          "objectKey": "4f7d1b7f9ffd05453781a604d2a864a0be6dee845c67c7a3439de1a56bc31951.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::913260853894:role/cdk-hnb659fds-file-publishing-role-913260853894-us-east-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

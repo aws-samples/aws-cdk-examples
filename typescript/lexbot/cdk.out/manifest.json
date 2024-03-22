@@ -1,0 +1,88 @@
+{
+  "version": "33.0.0",
+  "artifacts": {
+    "LexbotStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "LexbotStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "LexbotStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://913260853894/us-east-1",
+      "properties": {
+        "templateFile": "LexbotStack.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::913260853894:role/cdk-hnb659fds-deploy-role-913260853894-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::913260853894:role/cdk-hnb659fds-cfn-exec-role-913260853894-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-913260853894-us-east-1/4f7d1b7f9ffd05453781a604d2a864a0be6dee845c67c7a3439de1a56bc31951.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "LexbotStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::913260853894:role/cdk-hnb659fds-lookup-role-913260853894-us-east-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "LexbotStack.assets"
+      ],
+      "metadata": {
+        "/LexbotStack/BotRuntimeRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BotRuntimeRoleA485A341"
+          }
+        ],
+        "/LexbotStack/BookTripTemplateBot": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BookTripTemplateBot"
+          }
+        ],
+        "/LexbotStack/BookTripBotVersionWithCFN": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BookTripBotVersionWithCFN"
+          }
+        ],
+        "/LexbotStack/FirstBotAliasWithCFN": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FirstBotAliasWithCFN"
+          }
+        ],
+        "/LexbotStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/LexbotStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/LexbotStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "LexbotStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}
