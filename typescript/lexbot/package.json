@@ -1,0 +1,27 @@
+{
+  "name": "lexbot",
+  "version": "0.1.0",
+  "bin": {
+    "lexbot": "bin/lexbot.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.11",
+    "@types/node": "20.11.14",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "aws-cdk": "2.126.0",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.3.3"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "2.126.0",
+    "constructs": "^10.0.0",
+    "source-map-support": "^0.5.21"
+  }
+}
