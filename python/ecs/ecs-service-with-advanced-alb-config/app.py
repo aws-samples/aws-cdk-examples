@@ -77,10 +77,12 @@ listener = lb.add_listener(
 asg.connections.allow_from(lb, port_range=ec2.Port.tcp_range(32768, 65535), description="allow incoming traffic from ALB")
 
 health_check = elbv2.HealthCheck(
-    interval=Duration.seconds(60),
-    path="/health",
-    timeout=Duration.seconds(5)
-)
+            interval=Duration.seconds(60),
+            path="/health",
+            healthy_http_codes = '200-499',
+            healthy_threshold_count = 2,
+            timeout=Duration.seconds(5)
+        )
 
 # Attach ALB to ECS Service
 listener.add_targets(
