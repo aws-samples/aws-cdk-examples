@@ -15,7 +15,7 @@ export class CdkAppsyncDemoStack extends cdk.Stack {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       billingMode: BillingMode.PROVISIONED,
       readCapacity: 2,
-      writeCapacity: 15
+      writeCapacity: 4
     });
 
     const defectsTable = new Table(this, 'DefectsTable', {
@@ -24,7 +24,7 @@ export class CdkAppsyncDemoStack extends cdk.Stack {
       tableName: 'cardata-defects',
       billingMode: BillingMode.PROVISIONED,
       readCapacity: 2,
-      writeCapacity: 15
+      writeCapacity: 4
     });
 
     defectsTable.addGlobalSecondaryIndex({
@@ -34,7 +34,7 @@ export class CdkAppsyncDemoStack extends cdk.Stack {
         type: AttributeType.STRING
       },
       readCapacity: 2,
-      writeCapacity: 15,
+      writeCapacity: 4,
     })
 
     const api = new GraphqlApi(this, 'CarApi', {

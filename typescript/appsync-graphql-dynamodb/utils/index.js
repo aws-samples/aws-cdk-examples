@@ -23,7 +23,7 @@ const executeWithDelay = async (command) => {
         setTimeout(async () => {
             await client.send(command);
             resolve();
-        }, 66.66); // Delay of 66,66ms second between each execution
+        }, 250); // Delay of 250ms second between each execution
     });
 };
 
@@ -49,9 +49,9 @@ const processDefectsData = async () => {
 
 // Execute the process
 processCarsData()
-    .then(() => console.log("Car Data pushed to DynamoDB with a rate of 20 records per second."))
+    .then(() => console.log("Car Data pushed to DynamoDB with a rate of 4 records per second."))
     .catch(err => console.error("Error:", err));
 
 processDefectsData()
-    .then(() => console.log("Defect Data pushed to DynamoDB with a rate of 20 records per second."))
+    .then(() => console.log("Defect Data pushed to DynamoDB with a rate of 4 records per second."))
     .catch(err => console.error("Error:", err));

@@ -1,17 +1,5 @@
 # AWS CDK AppSync DynamoDB Table Joining Demo
 
-## <!--BEGIN STABILITY BANNER-->
-
-![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
-
-> **This is a stable example. It should successfully build out of the box**
->
-> This example is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
-
----
-
-<!--END STABILITY BANNER-->
-
 This project demonstrates how to use AWS CDK (Cloud Development Kit) to create an AWS AppSync API backed by DynamoDB tables. The essence of this project lies in establishing a one-to-many relationship between two tables, where one table stores information about cars, and the other stores information about defects associated with cars. This allows querying both tables together as a sort of nested query.
 
 ## Table of Contents
@@ -54,7 +42,7 @@ To remove the deployed infrastructure, run:
 cdk destroy
 ```
 
-The data in the DynamoDB tables can be populated using the utilities provided in `utils/index.js`. It will take around 5 minutes to push all the data to DynamoDB. Execute the following command to populate the tables:
+The data in the DynamoDB tables can be populated using the utilities provided in `utils/index.js`. It will take a couple of seconds to push all the data to DynamoDB. Execute the following command to populate the tables:
 
 ```bash
 npm run push-data
@@ -64,7 +52,7 @@ Once the CDK stack is deployed and the data is ingested into the DynamoDB tables
 
 ```graphql
 query GetCar {
-  getCar(licenseplate: "23ZRBV") {
+  getCar(licenseplate: "BR794ZQ3") {
     expirydateapk
     cylindervolume
     catalogprice
