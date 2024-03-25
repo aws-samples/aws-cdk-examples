@@ -1,0 +1,28 @@
+type Car {
+	licenseplate: String!
+	brand: String!
+	tradename: String
+	expirydateapk: String
+	firstcolor: String!
+	cylindercount: String
+	cylindervolume: String
+	firstregistrationdate: String
+	catalogprice: String
+	length: String
+	width: String
+	defects: [Defect]
+}
+
+type Defect {
+	licenseplate: String!
+	defectstartdate: String
+	defectdescription: String
+}
+
+type Query {
+	getCar(licenseplate: String!): Car
+}
+
+schema {
+	query: Query
+}
