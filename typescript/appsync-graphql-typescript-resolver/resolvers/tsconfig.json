@@ -1,11 +1,10 @@
+// tsconfig.json
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "commonjs",
-    "lib": [
-      "es2020",
-      "dom"
-    ],
+    "target": "esnext",
+    "module": "esnext",
+    "noEmit": true,
+    "moduleResolution": "node",
     "declaration": true,
     "strict": true,
     "noImplicitAny": true,
@@ -25,7 +24,6 @@
     ]
   },
   "exclude": [
-    "node_modules",
-    "cdk.out"
+    "node_modules"
   ]
 }
