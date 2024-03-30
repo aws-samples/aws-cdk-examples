@@ -1,0 +1,127 @@
+[
+    {
+        "licenseplate": {
+            "S": "87FRABCE"
+        },
+        "brand": {
+            "S": "BMW"
+        },
+        "tradename": {
+            "S": "5ER REIHE"
+        },
+        "expirydateapk": {
+            "N": "20231019"
+        },
+        "firstcolor": {
+            "S": "GREEN"
+        },
+        "cylindercount": {
+            "N": "8"
+        },
+        "firstregistrationdate": {
+            "N": "19980414"
+        },
+        "length": {
+            "N": "0"
+        },
+        "width": {
+            "N": "0"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "93A5ZR2U"
+        },
+        "brand": {
+            "S": "BMW"
+        },
+        "tradename": {
+            "S": "1ER REIHE"
+        },
+        "expirydateapk": {
+            "N": "20241020"
+        },
+        "firstcolor": {
+            "S": "BLACK"
+        },
+        "cylindercount": {
+            "N": "4"
+        },
+        "cylindervolume": {
+            "N": "1596"
+        },
+        "firstregistrationdate": {
+            "N": "20041029"
+        },
+        "length": {
+            "N": "423"
+        },
+        "width": {
+            "N": "0"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "104RZAFB"
+        },
+        "brand": {
+            "S": "BMW"
+        },
+        "tradename": {
+            "S": "1ER REIHE"
+        },
+        "expirydateapk": {
+            "N": "20241004"
+        },
+        "firstcolor": {
+            "S": "GREY"
+        },
+        "cylindercount": {
+            "N": "4"
+        },
+        "cylindervolume": {
+            "N": "1995"
+        },
+        "firstregistrationdate": {
+            "N": "20050415"
+        },
+        "catalogprice": {
+            "N": "32826"
+        },
+        "length": {
+            "N": "423"
+        },
+        "width": {
+            "N": "0"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "BR794ZQ3"
+        },
+        "brand": {
+            "S": "BMW"
+        },
+        "tradename": {
+            "S": "5ER REIHE"
+        },
+        "expirydateapk": {
+            "N": "20231019"
+        },
+        "firstcolor": {
+            "S": "GREEN"
+        },
+        "cylindercount": {
+            "N": "8"
+        },
+        "firstregistrationdate": {
+            "N": "19980414"
+        },
+        "length": {
+            "N": "0"
+        },
+        "width": {
+            "N": "0"
+        }
+    }
+]
