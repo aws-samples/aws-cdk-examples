@@ -152,7 +152,6 @@ export class Aurora extends Stack {
     const dbs = ['mysql', 'postgresql'];
     if (!dbs.includes(props.engine!)) {
       throw new Error('Unknown Engine Please Use mysql or postgresql');
-      process.exit(1);
     }
     if (backupRetentionDays < 14) {
       backupRetentionDays = 14;
