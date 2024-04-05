@@ -15,7 +15,7 @@ export class ApiGatewayParallelStepFunctionsStack extends cdk.Stack {
     const { vpc: vpcLambda } = new VpcNestedStack(this, 'nested-stack-lambda');
 
     const lambdaFunction1 = new lambda.Function(this, 'lambda-function-1', {
-      runtime: lambda.Runtime.NODEJS_16_X,
+      runtime: lambda.Runtime.NODEJS_18_X,
       vpc: vpcLambda,
       vpcSubnets: {
         subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
@@ -32,7 +32,7 @@ export class ApiGatewayParallelStepFunctionsStack extends cdk.Stack {
     })
 
     const lambdaFunction2 = new lambda.Function(this, 'lambda-function-2', {
-      runtime: lambda.Runtime.NODEJS_16_X,
+      runtime: lambda.Runtime.NODEJS_18_X,
       vpc: vpcLambda,
       vpcSubnets: {
         subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
@@ -77,7 +77,7 @@ export class ApiGatewayParallelStepFunctionsStack extends cdk.Stack {
       this,
       'my-state-machine',
       {
-        definition: parallel,
+        definitionBody: stepFunctions.DefinitionBody.fromChainable(parallel),
         stateMachineType: stepFunctions.StateMachineType.EXPRESS,
         logs: {
           destination: stfLogGroup,
@@ -106,7 +106,7 @@ class VpcNestedStack extends cdk.NestedStack {
     super(scope, id, props);
 
     this.vpc = new ec2.Vpc(this, 'nested-stack-vpc', {
-      cidr: '10.0.0.0/16',
+      ipAddresses: ec2.IpAddresses.cidr('10.0.0.0/16'),
       natGateways: 0,
       maxAzs: 3,
       subnetConfiguration: [

@@ -44,7 +44,7 @@ export class S3ObjectLambdaStack extends Stack {
 
     // lambda to process our objects during retrieval
     const retrieveTransformedObjectLambda = new lambda.Function(this, 'retrieveTransformedObjectLambda', {
-      runtime: lambda.Runtime.NODEJS_14_X,
+      runtime: lambda.Runtime.NODEJS_20_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('resources/retrieve-transformed-object-lambda')
     }

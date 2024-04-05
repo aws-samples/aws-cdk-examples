@@ -1,0 +1,26 @@
+name: NodejsV18InstallationDocument
+description: This document installs Node.js v18.
+schemaVersion: 1.0
+
+phases:
+  - name: build
+    steps:
+      - name: NodeInstallation
+        action: ExecuteBash
+        inputs:
+          commands:
+            - yum update -y && yum install -y tar
+            - touch ~/.bashrc
+            - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+            - source ~/.bashrc
+            - nvm install --default 18.18.2
+            - nvm alias default 18.18.2
+
+  - name: validate
+    steps:
+      - name: NodeValidation
+        action: ExecuteBash
+        inputs:
+          commands:
+            - source ~/.bashrc
+            - node -v

@@ -2,10 +2,12 @@
   "name": "on-disconnect",
   "version": "1.0.0",
   "description": "ondisconnect example for WebSockets on API Gateway",
-  "main": "src/app.js",
+  "main": "src/ondisconnectLambda.js",
   "author": "SAM CLI",
   "license": "Apache-2.0",
   "dependencies": {
-    "aws-sdk": "^2.690.0"
-  }
+    "@aws-sdk/client-dynamodb": "^3.529.1",
+    "@aws-sdk/lib-dynamodb": "^3.533.0"
+  },
+  "type": "module"
 }

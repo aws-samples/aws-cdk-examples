@@ -1,4 +1,4 @@
-import { S3 } from "aws-sdk"
+import { S3 } from "@aws-sdk/client-s3"
 
 const bucketName = process.env.BUCKET!
 
@@ -11,7 +11,7 @@ const handler = async function (event: any, context: any) {
 
         if (method === "GET") {
             if (event.path === "/") {
-                const data = await S3Client.listObjectsV2({ Bucket: bucketName }).promise()
+                const data = await S3Client.listObjectsV2({ Bucket: bucketName })
                 var body = {
                     widgets: data.Contents!.map(function (e) {
                         return e.Key

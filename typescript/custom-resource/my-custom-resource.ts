@@ -23,7 +23,7 @@ export class MyCustomResource extends Construct {
       code: new lambda.InlineCode(fs.readFileSync('custom-resource-handler.py', { encoding: 'utf-8' })),
       handler: 'index.main',
       timeout: cdk.Duration.seconds(300),
-      runtime: lambda.Runtime.PYTHON_3_6,
+      runtime: lambda.Runtime.PYTHON_3_9,
     });
 
     const provider = new customResources.Provider(this, 'Provider', {
@@ -35,7 +35,7 @@ export class MyCustomResource extends Construct {
       properties: props,
     });
 
-    this.response = resource.getAtt('Response').toString();
+    this.response = resource.getAttString('Response');
   }
 }
 
