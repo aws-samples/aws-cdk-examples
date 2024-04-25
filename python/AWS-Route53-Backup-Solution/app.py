@@ -37,8 +37,7 @@ class R53BackupStack(core.Stack):
             actions=["route53:ListHostedZones", "route53:ListResourceRecordSets"],
             resources=["*"]
         ))
-
-        # EventBridge rule to trigger Lambda every day
+         # EventBridge rule to trigger Lambda every day at 1:00 AM UTC
         rule = events.Rule(
             self, "Rule",
             schedule=events.Schedule.cron(

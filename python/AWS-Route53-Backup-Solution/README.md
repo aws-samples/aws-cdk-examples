@@ -18,13 +18,14 @@ Before you can deploy this application, ensure you have the following installed:
 1. Clone the repository:
    ```bash
    git clone https://github.com/iut62elec/AWS-Route53-Backup-Solution.git
+   cd AWS-Route53-Backup-Solution
 
 2. Configure your AWS profile (replace xxx with your profile name):
     ```bash
     export AWS_PROFILE=xxx
 3. Set up a Python virtual environment and install AWS CDK and Node.js version 18 and the required Python libraries:
     ```bash
-    python -m venv .venv
+    python3.11 -m venv .venv
     source .venv/bin/activate
     npm install -g aws-cdk@latest
     npm update -g aws-cdk
@@ -45,4 +46,21 @@ Before you can deploy this application, ensure you have the following installed:
 4. EventBridge Rule: Triggers the Lambda function on a scheduled basis.
 
 
+
+    
+## Removing the Solution
+Run the following command in your terminal where the CDK project is initialized:
+
+```bash
+cdk destroy
+```
+
+## Contributing
 Feel free to contribute to this project by submitting pull requests or reporting issues. Your feedback is appreciated!
+
+
+## License
+This project is licensed under the MIT License.
+
+## Disclaimer
+This repository and its contents are not endorsed by or affiliated with Amazon Web Services (AWS) or any other third-party entities. It represents my personal viewpoints and not those of my past or current employers. All third-party libraries, modules, plugins, and SDKs are the property of their respective owners.
