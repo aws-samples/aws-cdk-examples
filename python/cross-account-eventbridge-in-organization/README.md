@@ -32,7 +32,7 @@ EventBridge is a key AWS Service in Event Driven Architectures, it allows separa
 
 In the consumer account, an EventBridge Event Bus is created to accept messages from producers.  Rules with accompanying IAM Permissions are created on this Event Bus that target the EventBridge Event Bus in the consumer account according to the following cdk.json structure:
 
-```aidl
+```json
     "rules": [
       {
         "id": "CrossAccount",
@@ -64,7 +64,7 @@ In the consumer account, an EventBridge Event Bus is created to receive messages
 
 #### Resource Based Policy
 
-```aidl
+```json
 {
   "Version": "2012-10-17",
   "Statement": [{
@@ -100,7 +100,7 @@ Update cdk.json:
 
 In the producer account:
 
-```aidl
+```sh
 cdk deploy ProducerStack
 ```
 
@@ -116,7 +116,7 @@ No additional changes are required.
 
 In the consumer account:
 
-```aidl
+```sh
 cdk deploy ConsumerStack
 ```
 
@@ -138,7 +138,7 @@ In the consumer account, inspect [Amazon CloudWatch Logs](https://docs.aws.amazo
 
 The include Event Pattern can be freely modified to meet your use case:
 
-```aidl
+```python
     rule = events.Rule(
         self,
         self.id + 'Rule' + rule_definition['id'],
