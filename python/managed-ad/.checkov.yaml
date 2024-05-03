@@ -1,0 +1,3 @@
+skip-path:
+  - 'cdk.out/'
+  - '.venv/'
