@@ -90,7 +90,7 @@ Especially important is to grant the `events:PutEvents` permission, because we w
 
 #### Context Values
 
-Update cdk.json:
+Update [cdk.json](./cdk.json):
 
 1. organization_id - The AWS Organization ID of the accounts involved in your deployment.
 1. event_bus_name - Can be renamed, or keep the default of "CrossAccount"
