@@ -71,7 +71,7 @@ jobs:
           export -f build_file
 
           # Create an array to store directories to be built
-          dirs_to_build=()
+          apps_to_build=()
 
           files=(${{ steps.changed-files.outputs.all_modified_files }})
 
@@ -86,15 +86,15 @@ jobs:
               continue
             fi
 
-            dirs_to_build+=("$(find "$dir" -name 'cdk.json')")
+            apps_to_build+=("$(find "$dir" -name 'cdk.json')")
           done
 
-          # Remove duplicate directories
-          dirs_to_build=($(printf "%s\n" "${dirs_to_build[@]}" | sort -u))
+          # Remove duplicate projects
+          apps_to_build=($(printf "%s\n" "${apps_to_build[@]}" | sort -u))
 
-          # Print the directories to be built
-          echo "Directories to build:"
-          for dir in "${dirs_to_build[@]}"; do
+          # Print the projects to be built
+          echo "projects to build:"
+          for dir in "${apps_to_build[@]}"; do
             echo "- $dir"
           done
 
@@ -102,6 +102,6 @@ jobs:
           cd ./${{ matrix.language }}
           npm install
 
-          # Run the build_file function in parallel for each directory to be built
+          # Run the build_file function in parallel for each project to be built
           # Halt the execution if any of the build_file invocations fail
-          parallel --keep-order --halt-on-error 2 build_file ::: "${dirs_to_build[@]}"
+          parallel --keep-order --halt-on-error 2 build_file ::: "${apps_to_build[@]}"
