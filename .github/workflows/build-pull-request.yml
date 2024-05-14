@@ -1,92 +1,107 @@
+# Name of the workflow
 name: Build Pull Request
 
-on: [pull_request]
+# Trigger the workflow on pull requests
+on:
+  pull_request:
+    # Only run the workflow when non-Markdown files are changed
+    paths:
+      - '**'
 
 jobs:
+
   build:
+    # Run the job on the latest Ubuntu runner
     runs-on: ubuntu-latest
+
+    # Define a matrix strategy to run the job for multiple languages
     strategy:
       matrix:
-        language: ['csharp', 'go','python', 'java', 'typescript']
+        language: ['csharp', 'go', 'python', 'java', 'typescript']
+
     steps:
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        if: ${{ matrix.language == 'go' }}
-        with:
-          go-version: '1.20'
-      - uses: actions/setup-node@v4
-        if: ${{matrix.language == 'typescript'}}
-        with:
-          node-version: 18
-      - uses: actions/setup-java@v4
-        if: ${{matrix.language == 'java'}}
-        with:
-          distribution: 'corretto'
-          java-version: '17'
-      - uses: actions/setup-python@v5
-        if: ${{matrix.language == 'python'}}
-        with:
-          python-version: '3.10'
-      - uses: actions/setup-dotnet@v4
-        if: ${{matrix.language == 'csharp'}}
-        with:
-          dotnet-version: 8
+      # Checkout the code from the repository
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Get changed files
-        id: changed-files-specific
-        uses: tj-actions/changed-files@v44
-        with:
-          files: ${{matrix.language}}/**
-          files_ignore: "*.md"
-      - name: list changed files
-        if: steps.changed-files-specific.outputs.any_changed == 'true'
-        run: |
-          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            echo "$file was changed"
-          done
-      - name: Build changed files
-        if: steps.changed-files-specific.outputs.any_changed == 'true'
-        run: |
-          echo "::group::Build changes for ${{ matrix.language }}"
-          echo ""
-          buildlang="${{ matrix.language }}"
 
-          echo "# Build summary for ${buildlang}" >> $GITHUB_STEP_SUMMARY
-          buildpath=""
-          # For each file that is in the changed set
-          for file in ${{ steps.changed-files-specific.outputs.all_modified_files }}
-          do
-            echo "processing ${file}"
-            # Split the path into the language, example, and 
-            IFS="/" read path1 path2 extra <<<"$file"
-            # $path1 is the language name e.g. 'typescript'
-            # $path2 is the fist directory under the language
-            # $extra is everything else after path2
-            if [[ $path1 != $buildlang ]]; then
-              continue
-            fi 
-            if [[ "$buildpath" == "$path1/$path2" ]]; then
+      # Set up the required environment for the specified language
+      - name: Setup Language
+        uses: ./.github/actions/setup-language
+        with:
+          language: ${{ matrix.language }}
+
+      # Get the list of changed files, excluding Markdown files
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v35
+        with:
+          files: ${{ matrix.language }}/**
+          files_ignore: '**/*.md'
+
+      # Build the changed files for the specified language
+      - name: Build changed files
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: |
+          # Function to build a single file
+          build_file() {
+            echo "Build File $1"
+            local file="$1"
+            IFS="/" read -ra path_parts <<< "$file"
+            language=${path_parts[0]}
+
+            # Skip files that don't belong to the current language
+            if [[ $language != ${{ matrix.language }} ]]; then
+              return 0
+            fi
+
+            echo "Build Path $file"
+
+            # Run the build script for the current language, passing the project directory and extra path
+            echo "::group::$file"
+            if ../scripts/build-${language}.sh "$file"; then
+              echo "::endgroup::"
+            else
+              echo "::endgroup::"
+              echo "::error::Build failed for $file"
+              return 1
+            fi
+          }
+
+          # Export the build_file function for use in parallel
+          export -f build_file
+
+          # Create an array to store directories to be built
+          apps_to_build=()
+
+          files=(${{ steps.changed-files.outputs.all_modified_files }})
+
+          # Check the directories of each changed file for cdk.json
+          for file in "${files[@]}"; do
+            IFS="/" read -ra path_parts <<< "$file"
+            language=${path_parts[0]}
+            dir="${path_parts[0]}/${path_parts[1]}"
+
+            # Skip files that don't belong to the current language
+            if [[ $language != ${{ matrix.language }} ]]; then
               continue
             fi
-            buildpath=$path1/$path2
-            echo "Build Path ${buildpath}"
-            
-            # make sure there's nothing funny left over.
-            git clean -dfx
 
-            # we should pass both $path2 and $extra to the build script
-            # for example:
-            # scripts/build-typescript.sh ecs example-name/index.ts for typescripts/ecs/example/index.ts 
-            # scripts/build-typescript.sh example index.ts for typescripts/example/index.ts 
-            scripts/build-${buildlang}.sh $path2 $extra
-            
-            if [[ $? == 0 ]]; then
-              echo "- :o: $buildpath" >> $GITHUB_STEP_SUMMARY
-            else
-              echo "- :x: $buildpath" >> $GITHUB_STEP_SUMMARY
-            fi 
+            apps_to_build+=("$(find "$dir" -name 'cdk.json')")
           done
-          echo "::endgroup::"
+
+          # Remove duplicate projects
+          apps_to_build=($(printf "%s\n" "${apps_to_build[@]}" | sort -u))
+
+          # Print the projects to be built
+          echo "projects to build:"
+          for dir in "${apps_to_build[@]}"; do
+            echo "- $dir"
+          done
+
+          # install CDK CLI from npm, so that npx can find it later
+          cd ./${{ matrix.language }}
+          npm install
+
+          # Run the build_file function in parallel for each project to be built
+          # Halt the execution if any of the build_file invocations fail
+          parallel --keep-order --halt-on-error 2 build_file ::: "${apps_to_build[@]}"
