@@ -30,7 +30,7 @@
       "aws",
       "aws-cn"
     ],
-    "organization_id": "o-tchnmqmnkr",
+    "organization_id": "o-XXXXXXXXX",
     "event_bus_name": "CrossAccount",
     "rules": [
       {
@@ -40,7 +40,7 @@
         "targets": [
           {
             "id": "ConsumerEventBus",
-            "arn": "arn:aws:events:us-east-2:052948153647:event-bus/CrossAccount"
+            "arn": "arn:aws:events:us-east-2:012345678901:event-bus/CrossAccount"
           }
         ]
       }

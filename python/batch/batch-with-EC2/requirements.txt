@@ -1,3 +1,2 @@
-aws-cdk-lib>=2.72.0
+aws-cdk-lib>=2.140.0
 constructs>=10.0.0
-aws_cdk.aws_batch_alpha>=2.72.0a
