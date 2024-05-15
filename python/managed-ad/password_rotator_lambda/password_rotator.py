@@ -2,6 +2,7 @@ import boto3
 import os
 from password_rotator_lambda.utils import generate_random_password
 
+
 def rotate_ad_password(event, context):
     directory_id = os.environ["DIRECTORY_ID"]
     secrets_manager_arn = os.environ["SECRETS_MANAGER_ARN"]

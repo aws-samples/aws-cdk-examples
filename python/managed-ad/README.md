@@ -1,18 +1,18 @@
-<!--BEGIN STABILITY BANNER-->
----
+## <!--BEGIN STABILITY BANNER-->
 
 ![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
 
 > **This is a stable example. It should successfully build out of the box**
 >
 > This example is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
+
 ---
+
 <!--END STABILITY BANNER-->
 
 # Managed Active Directory Solution
 
 This project provides a solution for deploying and managing an AWS Managed Microsoft Active Directory (AD) service using AWS Cloud Development Kit (CDK). The solution creates a Managed AD instance within a Virtual Private Cloud (VPC) and sets up the necessary infrastructure, including a Lambda function for periodically rotating the AD administrator password. The AD administrator password is securely stored in an AWS Secrets Manager secret, which is automatically updated during the password rotation process.
-
 
 ## Key Components
 
@@ -24,7 +24,6 @@ This project provides a solution for deploying and managing an AWS Managed Micro
 
 1. **EventBridge Rule**: An EventBridge rule triggers the Password Rotation Lambda function on a specified schedule (e.g., every 30 days).
 
-
 ## Architecture
 
 ![Architecture Diagram](assets/Architecture.jpg)
@@ -35,42 +34,45 @@ This project provides a solution for deploying and managing an AWS Managed Micro
 
 1. Bootstrap the CDK environment, if it has not already been bootstrapped, by running:
 
-    ```
-    $ cdk bootstrap aws://{{AWS-ACCOUNT-NUMBER}}/{{AWS-REGION}}
-    ```
-
+   ```
+   $ cdk bootstrap aws://{{AWS-ACCOUNT-NUMBER}}/{{AWS-REGION}}
+   ```
 
 1. Clone this repository or download the source code.
 
 1. Navigate to the project directory.
 
 1. Create and activate the python virtual environment.
-    ```
-    $ python3 -m venv .venv
-    $ source .venv/bin/activate
-    ```
+
+   ```
+   $ python3 -m venv .venv
+   $ source .venv/bin/activate
+   ```
 
 1. Activate the virtual environment.
-    ```
-    $ source .venv/bin/activate
-    ```
+
+   ```
+   $ source .venv/bin/activate
+   ```
 
 1. Install python requirements.
-    ```
-    $ python3 -m pip install -r requirements.txt
-    ```
+
+   ```
+   $ python3 -m pip install -r requirements.txt
+   ```
 
 1. Create or update the required context values.
-    ```
-    $ python3 set_context.py
-    ```
-    Respond to the script prompts.
+   ```
+   $ python3 set_context.py
+   ```
+   Respond to the script prompts.
 1. Deploy the solution.
-    ```
-    $ cdk deploy
-    ```
-    
-    **Note: Deploying a Managed AD instance can take a significant amount of time, typically around 30 minutes for Standard edition and 1-2 hours for Enterprise edition.**
+
+   ```
+   $ cdk deploy
+   ```
+
+   **Note: Deploying a Managed AD instance can take a significant amount of time, typically around 30 minutes for Standard edition and 1-2 hours for Enterprise edition.**
 
 1. Follow the prompts to provide any additional required information or confirmation.
 
@@ -96,7 +98,6 @@ The script validates the provided inputs and generates a random initial password
 
 **Note:** If an existing VPC is used, the internet access value will be ignored, and no changes will be made to the VPC.
 
-
 ### Password Rotation
 
 The solution includes a Lambda function responsible for periodically rotating the AD administrator password. The rotation is triggered by an EventBridge rule, scheduled to run every 30 days by default.
@@ -118,31 +119,33 @@ The `rotate_ad_password` function in `password_rotator.py` performs these steps,
 Follow these steps from the project directoy to delete the deployed resources. This will delete the Managed AD instance, VPC (if created by the solution), and all associated resources.
 
 1. Create and activate the python virtual environment.
-    ```
-    $ python3 -m venv .venv
-    $ source .venv/bin/activate
-    ```
+
+   ```
+   $ python3 -m venv .venv
+   $ source .venv/bin/activate
+   ```
 
 1. Activate the virtual environment.
-    ```
-    $ source .venv/bin/activate
-    ```
+
+   ```
+   $ source .venv/bin/activate
+   ```
 
 1. Install python requirements.
-    ```
-    $ python3 -m pip install -r requirements.txt
-    ```
+
+   ```
+   $ python3 -m pip install -r requirements.txt
+   ```
 
 1. At this point you can now destroy the CDK deployment for this code.
-    ```
-    $ cdk destroy
-    ```
+   ```
+   $ cdk destroy
+   ```
 
 ## Useful commands
 
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk docs`        open CDK documentation
-
+- `cdk ls` list all stacks in the app
+- `cdk synth` emits the synthesized CloudFormation template
+- `cdk deploy` deploy this stack to your default AWS account/region
+- `cdk diff` compare deployed stack with current state
+- `cdk docs` open CDK documentation

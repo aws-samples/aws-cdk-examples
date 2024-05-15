@@ -5,6 +5,7 @@ from botocore.exceptions import ClientError
 
 from password_rotator_lambda.password_rotator import rotate_ad_password
 
+
 class TestPasswordRotator(unittest.TestCase):
     @patch("boto3.client")
     def test_rotate_ad_password_success(self, mock_boto3_client):

@@ -16,6 +16,7 @@ from aws_cdk import (
 from constructs import Construct
 import json
 
+
 class ManagedAdStack(Stack):
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
@@ -47,8 +48,8 @@ class ManagedAdStack(Stack):
                 self,
                 "ManagedAdVPC",
                 max_azs=2,
-                create_internet_gateway = self.node.try_get_context("internet_access"),
-                subnet_configuration = subnet_configuration
+                create_internet_gateway=self.node.try_get_context("internet_access"),
+                subnet_configuration=subnet_configuration,
             )
         else:
             vpc = ec2.Vpc.from_lookup(self, id=vpc_id)
@@ -67,10 +68,16 @@ class ManagedAdStack(Stack):
 
         # Check if there are any private subnets available
         if vpc.private_subnets:
-            subnet_ids = [vpc.private_subnets[0].subnet_id, vpc.private_subnets[1].subnet_id]
+            subnet_ids = [
+                vpc.private_subnets[0].subnet_id,
+                vpc.private_subnets[1].subnet_id,
+            ]
         else:
-            subnet_ids = [vpc.isolated_subnets[0].subnet_id, vpc.isolated_subnets[1].subnet_id]
-        
+            subnet_ids = [
+                vpc.isolated_subnets[0].subnet_id,
+                vpc.isolated_subnets[1].subnet_id,
+            ]
+
         managed_ad = ds.CfnMicrosoftAD(
             self,
             "ManagedAD",
@@ -118,16 +125,15 @@ class ManagedAdStack(Stack):
 
         password_rotator_lambda.add_to_role_policy(
             iam.PolicyStatement(
-                actions=[
-                    "ds:DescribeDirectories", 
-                    "ds:ResetUserPassword"
-                ],
+                actions=["ds:DescribeDirectories", "ds:ResetUserPassword"],
                 effect=iam.Effect.ALLOW,
-                resources=[self.format_arn(
-                    resource="directory",
-                    service="ds",
-                    resource_name=managed_ad.ref,
-                )],
+                resources=[
+                    self.format_arn(
+                        resource="directory",
+                        service="ds",
+                        resource_name=managed_ad.ref,
+                    )
+                ],
             ),
         )
 
@@ -140,7 +146,9 @@ class ManagedAdStack(Stack):
                 parameters={
                     "FunctionName": password_rotator_lambda.function_name,
                 },
-                physical_resource_id=cr.PhysicalResourceId.of("InitialPasswordRotation"),
+                physical_resource_id=cr.PhysicalResourceId.of(
+                    "InitialPasswordRotation"
+                ),
             ),
             policy=cr.AwsCustomResourcePolicy.from_statements(
                 statements=[
@@ -154,9 +162,8 @@ class ManagedAdStack(Stack):
             resource_type="Custom::InitialPasswordRotation",
             timeout=Duration.minutes(15),
         )
-    
-        initial_password_rotation.node.add_dependency(managed_ad)
 
+        initial_password_rotation.node.add_dependency(managed_ad)
 
         password_rotation_rule = events.Rule(
             self,
@@ -167,4 +174,3 @@ class ManagedAdStack(Stack):
         password_rotation_rule.add_target(
             targets.LambdaFunction(password_rotator_lambda)
         )
-

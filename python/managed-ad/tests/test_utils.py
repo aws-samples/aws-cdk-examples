@@ -1,6 +1,7 @@
 import unittest
 from password_rotator_lambda.utils import generate_random_password
 
+
 class TestUtils(unittest.TestCase):
 
     def test_generate_random_password_length_8(self):
@@ -19,5 +20,6 @@ class TestUtils(unittest.TestCase):
         password = generate_random_password()
         self.assertEqual(len(password), 32)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

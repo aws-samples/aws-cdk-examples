@@ -2,6 +2,7 @@ import os
 import json
 import string
 
+
 def validate_ad_domain_name(ad_domain_name):
     """
     Validates the Active Directory (AD) domain name.
@@ -21,13 +22,38 @@ def validate_ad_domain_name(ad_domain_name):
     if ad_domain_name[-1] in ["-", "."]:
         return False
 
-    if any(c in [",", "~", ":", "!", "@", "#", "$", "%", "^", "&", "'", "(", ")", "{", "}", "_", " "] for c in ad_domain_name):
+    if any(
+        c
+        in [
+            ",",
+            "~",
+            ":",
+            "!",
+            "@",
+            "#",
+            "$",
+            "%",
+            "^",
+            "&",
+            "'",
+            "(",
+            ")",
+            "{",
+            "}",
+            "_",
+            " ",
+        ]
+        for c in ad_domain_name
+    ):
         return False
 
-    if not all(c in string.ascii_letters + string.digits + ".-" for c in ad_domain_name):
+    if not all(
+        c in string.ascii_letters + string.digits + ".-" for c in ad_domain_name
+    ):
         return False
 
     return True
+
 
 def validate_context():
     """
