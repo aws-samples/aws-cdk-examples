@@ -11,7 +11,7 @@ from aws_cdk import (
     aws_events as events,
     aws_events_targets as targets,
     aws_iam as iam,
-    custom_resources as cr,
+    custom_resources as cr
 )
 from constructs import Construct
 import json
@@ -21,6 +21,20 @@ class ManagedAdStack(Stack):
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
+
+        initial_password = self.node.try_get_context("initial_password")
+        if initial_password is None:
+            import boto3
+            client = boto3.client('secretsmanager')
+            response = client.get_random_password(PasswordLength=16)
+            initial_password = response['RandomPassword']
+            # update the context value in cdk.json with initial_password
+            with open('cdk.json', 'r') as f:
+                data = json.load(f)
+
+            with open('cdk.json', 'w') as f:
+                data['context']['initial_password'] = initial_password
+                json.dump(data, f, indent=4)
 
         vpc_id = self.node.try_get_context("vpc_id")
         internet_access = self.node.try_get_context("internet_access")
@@ -54,16 +68,20 @@ class ManagedAdStack(Stack):
         else:
             vpc = ec2.Vpc.from_lookup(self, id=vpc_id)
 
-        ad_password_secret = secretsmanager.Secret.from_secret_complete_arn(
+        ad_password_secret = secretsmanager.Secret(
             self,
             "ADPasswordSecret",
-            secret_complete_arn=self.node.try_get_context("secret_arn"),
+            secret_name="ad-password",
+            generate_secret_string=secretsmanager.SecretStringGenerator(
+                secret_string_template='{"password": ""}',
+                generate_string_key="password"
+            )
         )
 
         CfnOutput(
             self,
             "ADPasswordSecretArn",
-            value=self.node.try_get_context("secret_arn"),
+            value=ad_password_secret.secret_full_arn,
         )
 
         # Check if there are any private subnets available
@@ -86,7 +104,7 @@ class ManagedAdStack(Stack):
                 subnet_ids=subnet_ids,
                 vpc_id=vpc.vpc_id,
             ),
-            password=self.node.try_get_context("initial_password"),
+            password=initial_password,
             edition=self.node.try_get_context("ad_edition"),
         )
 
