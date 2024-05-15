@@ -41,7 +41,7 @@ In the consumer account, an EventBridge Event Bus is created to accept messages 
         "targets": [
           {
             "id": "ConsumerEventBus",
-            "arn": "arn:aws:events:us-east-2:052948153647:event-bus/CrossAccount"
+            "arn": "arn:aws:events:us-east-2:012345678901:event-bus/CrossAccount"
           }
         ]
       }
@@ -72,10 +72,10 @@ In the consumer account, an EventBridge Event Bus is created to receive messages
     "Effect": "Allow",
     "Principal": "*",
     "Action": "events:PutEvents",
-    "Resource": "arn:aws:events:us-east-2:052948153647:event-bus/CrossAccount",
+    "Resource": "arn:aws:events:us-east-2:012345678901:event-bus/CrossAccount",
     "Condition": {
       "StringEquals": {
-        "aws:PrincipalOrgID": "o-tchnmqmnkr"
+        "aws:PrincipalOrgID": "o-XXXXXXXXX"
       }
     }
   }]

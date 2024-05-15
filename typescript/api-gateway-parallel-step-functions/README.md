@@ -12,6 +12,11 @@
 <!--END STABILITY BANNER-->
 
 This an example of an APIGateway with Express Step Functions integrated. The Step Functions invokes two Lambda functions in parallel. The outcomes from these two Lambda functions are aggregated and returned as the response through APIGateway.
+## Design Diagram
+![Design Diagram](design.png)
+
+## State Machine
+![State Machine](state-machine.png)
 
 ## Sample response
 
