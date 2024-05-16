@@ -1,3 +1,0 @@
-{
-  "app": "dotnet publish -c Release CapitalizeStringHandler/src/CapitalizeStringHandler; dotnet run -p src/CapitalizeString"
-}

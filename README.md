@@ -1,59 +1,164 @@
-# AWS CDK Examples
+## <!--BEGIN STABILITY BANNER-->
 
-This repository contains a set of example projects for the [AWS Cloud Development
-Kit](https://github.com/aws/aws-cdk).
+![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
 
-## Table of Contents
-1. [About this Repo](#About)
-2. [Examples](#Examples)
-3. [Learning Resources](#Learning)
-4. [Additional Examples](#AddEx)
-4. [License](#License)
+> **This is a stable example. It should successfully build out of the box**
+>
+> This example is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
 
-## About this Repo <a name="About"></a>
-This repo is our official list of CDK example code. The repo is subdivided into sections for each language (see ["Examples"](#Examples)). Each language has its own subsection of examples with the ultimate aim of complete language parity (same subset of examples exist in each language). These examples each provide a demonstration of a common service implementation, or infrastructure pattern that could be useful in your use of the CDK for building your own infrastructure.
+---
 
-We welcome contributions to this repo in the form of fixes to existing examples or addition of new examples. For more information on contributing, please see the [CONTRIBUTING](https://github.com/aws-samples/aws-cdk-examples/blob/master/CONTRIBUTING.md) guide.
+<!--END STABILITY BANNER-->
 
-This is considered an intermediate learning resource and should typically be referenced after reading the Developer Guide or CDK Workshop (please see [Learning Resources](#Learning) for more information on these resources).
+# Managed Active Directory Solution
 
-## Examples <a name="Examples"></a>
-This repo contains examples in each language supported by the CDK. Some languages are fully supported by [JSII](https://github.com/aws/jsii), but as additional languages are added, you will see those marked as `Developer Preview`. You can find the examples for each of those languages at the following links:
+This project provides a solution for deploying and managing an AWS Managed Microsoft Active Directory (AD) service using AWS Cloud Development Kit (CDK). The solution creates a Managed AD instance within a Virtual Private Cloud (VPC) and sets up the necessary infrastructure, including a Lambda function for periodically rotating the AD administrator password. The AD administrator password is securely stored in an AWS Secrets Manager secret, which is automatically updated during the password rotation process.
 
-| Language | JSII Language-Stability |
-|----------|-------------------------|
-| [Typescript Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript) | _Stable_ |
-| [Python Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/python) | _Stable_ |
-| [.NET Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/csharp) | _Stable_ |
-| [Java Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/java) | _Stable_ |
-| [Go Examples](https://github.com/aws-samples/aws-cdk-examples/tree/master/go) | _Stable_ |
+## Key Components
 
+1. **Managed AD Instance**: The solution creates a Managed AD instance within a specified VPC. If no VPC is provided, a new VPC is created with public and private subnets.
 
-## Learning Resources <a name="Learning"></a>
-While this is an excellent learning resource for the CDK, there are other resources that can be referenced to assist with your learning/development process.
+1. **Secrets Manager Secret**: A Secrets Manager secret is used to store the AD administrator password. The password is updated and stored securely in this secret after each rotation.
 
-### Official Resources
-- [Developer Guide](https://docs.aws.amazon.com/cdk/latest/guide/home.html)
-- [API Reference](https://docs.aws.amazon.com/cdk/api/latest/docs/aws-construct-library.html)
-- [CDK Repository](https://github.com/aws/aws-cdk)
-- [CDK Construct Hub](https://constructs.dev/)
-- [CDK Workshop](https://cdkworkshop.com/)
+1. **Password Rotation Lambda**: A Lambda function is responsible for periodically rotating the AD administrator password. It retrieves the current password from Secrets Manager, generates a new random password, updates the Secrets Manager secret, and resets the AD administrator password with the new value.
 
-### Unofficial/Community Resources
-- [AwesomeCDK](https://github.com/kolomied/awesome-cdk)
+1. **EventBridge Rule**: An EventBridge rule triggers the Password Rotation Lambda function on a specified schedule (e.g., every 30 days).
 
-> If you have created a CDK learning resource and would like it to be listed here, please read the related [CONTRIBUTING](https://github.com/aws-samples/aws-cdk-examples/blob/master/CONTRIBUTING.md#Resources) section for more info.
+## Architecture
 
-## Additional Examples <a name="AddEx"></a>
+![Architecture Diagram](assets/Architecture.jpg)
 
-The examples listed below are larger examples hosted in their own repositories that demonstrate more complex or complete CDK applications. 
->If you would like your repo to be listed here, please read the [CONTRIBUTING](https://github.com/aws-samples/aws-cdk-examples/blob/master/CONTRIBUTING.md#Resources) guide for more details.
+## Deployment
 
-| Example | Description | Owner |
-|---------|-------------|-------|
-| [aws-cdk-changelogs-demo](https://github.com/aws-samples/aws-cdk-changelogs-demo) | A full serverless Node.js application stack deployed using CDK. It uses AWS Lambda, AWS Fargate, DynamoDB, Elasticache, S3, and CloudFront. | AWS |
+1. Ensure you have the AWS CDK Toolkit installed and configured with your AWS credentials.
 
+1. Bootstrap the CDK environment, if it has not already been bootstrapped, by running:
 
-# License <a name="License"></a>
+   ```
+   $ cdk bootstrap aws://{{AWS-ACCOUNT-NUMBER}}/{{AWS-REGION}}
+   ```
 
-This library is licensed under the Apache 2.0 License.
+1. Clone this repository or download the source code.
+
+1. Navigate to the project directory.
+
+1. Create and activate the python virtual environment.
+
+   ```
+   $ python3 -m venv .venv
+   $ source .venv/bin/activate
+   ```
+
+1. Activate the virtual environment.
+
+   ```
+   $ source .venv/bin/activate
+   ```
+
+1. Install python requirements.
+
+   ```
+   $ python3 -m pip install -r requirements.txt
+   ```
+
+1. Create or update the required context values.
+   ```
+   $ python3 context.py set
+   ```
+   Respond to the script prompts.
+1. Deploy the solution.
+
+   ```
+   $ cdk deploy
+   ```
+
+   **Note: Deploying a Managed AD instance can take a significant amount of time, typically around 30 minutes for Standard edition and 1-2 hours for Enterprise edition.**
+
+1. Follow the prompts to provide any additional required information or confirmation.
+
+1. After successful deployment, the Managed AD instance and associated resources will be created.
+
+**Note:** The password for the Admin account of the new Directory Service is stored in the AWS Secrets Manager secret referenced in the 'ADPasswordSecret' output of the CloudFormation stack.
+
+## Usage
+
+### `context.py` Script
+
+The `context.py` script is used to print, set or validate the required context values for the solution. It prompts you to provide the following information:
+
+1. **Active Directory (AD) Domain Name**: The desired name for the Managed AD domain.
+
+1. **AD Edition**: The edition of Active Directory to use (Standard or Enterprise).
+
+1. **VPC ID**: The ID of the existing VPC where the Managed AD instance should be deployed, or whether a new VPC should be created. If a new VPC is created, you will be prompted to specify whether internet access should be enabled or not.
+
+**Note:** If an existing VPC is used, the internet access value will be ignored, and no changes will be made to the VPC.
+
+### Password Rotation
+
+The solution includes a Lambda function responsible for periodically rotating the AD administrator password. The rotation is triggered by an EventBridge rule, scheduled to run every 30 days by default.
+
+The rotation process involves the following steps:
+
+1. Retrieve the current AD administrator password from the Secrets Manager secret.
+
+1. Generate a new random password.
+
+1. Update the Secrets Manager secret with the new password.
+
+1. Reset the AD administrator password using the AWS Directory Service API with the new password.
+
+The `rotate_ad_password` function in `password_rotator.py` performs these steps, using the necessary AWS SDK clients for Secrets Manager and Directory Service.
+
+## Cleanup
+
+Follow these steps from the project directoy to delete the deployed resources. This will delete the Managed AD instance, VPC (if created by the solution), and all associated resources.
+
+1. Create and activate the python virtual environment.
+
+   ```
+   $ python3 -m venv .venv
+   $ source .venv/bin/activate
+   ```
+
+1. Activate the virtual environment.
+
+   ```
+   $ source .venv/bin/activate
+   ```
+
+1. Install python requirements.
+
+   ```
+   $ python3 -m pip install -r requirements.txt
+   ```
+
+1. At this point you can now destroy the CDK deployment for this code.
+   ```
+   $ cdk destroy
+   ```
+
+## Setting Initial Context
+
+Before deploying the CDK app, you need to set the initial context values. The required context values are:
+
+- `ad_domain_name`: A valid Microsoft Active Directory domain name.
+- `ad_edition`: Must be either 'Standard' or 'Enterprise'.
+- `vpc_id`: A valid VPC ID, or `None` to create a new VPC.
+- `internet_access`: A boolean value, applicable only if creating a new VPC.
+
+To set the context values, run the `set_context.py` script:
+
+```
+$ python bin/set_context.py
+```
+
+The script will prompt you to enter valid values for each required context value. After setting the context values, you can proceed with `cdk synth` or `cdk deploy`.
+
+## Useful commands
+
+- `cdk ls` list all stacks in the app
+- `cdk synth` emits the synthesized CloudFormation template
+- `cdk deploy` deploy this stack to your default AWS account/region
+- `cdk diff` compare deployed stack with current state
+- `cdk docs` open CDK documentation

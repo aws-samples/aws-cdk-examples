@@ -1,3 +1,0 @@
-{
-  "app": "dotnet run --project src/CustomResourceCloudFrontInvalidate/CustomResourceCloudFrontInvalidate.csproj"
-}

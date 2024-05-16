@@ -1,5 +1,0 @@
-aws-cdk-lib>=2.0.0
-constructs>=10.0.0
-aws_lambda_powertools
-types-boto3
-types-setuptools

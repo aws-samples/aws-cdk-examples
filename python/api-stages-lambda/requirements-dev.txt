@@ -1,6 +1,0 @@
-requests
-aws_requests_auth
-argparse
-boto3
-botocore
-pytest

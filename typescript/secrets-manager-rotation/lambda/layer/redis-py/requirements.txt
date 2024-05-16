@@ -1,3 +1,0 @@
-redis>=4.1.4
-typing_extensions
-importlib-metadata

@@ -1,3 +1,0 @@
-{
-  "app": "go mod download && go run fargate-with-alb.go"
-}

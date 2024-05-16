@@ -1,6 +1,0 @@
-.env
-cdk.out
-.idea
-cdk.context.json
-*.egg-info
-__pycache__
