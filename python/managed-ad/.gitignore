@@ -380,5 +380,4 @@ yarn.lock
 .cdk.staging
 cdk.out/
 **/cdk.out/asset.*
-**/.venv/
 probeout/
