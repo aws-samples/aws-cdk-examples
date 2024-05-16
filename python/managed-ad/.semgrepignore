@@ -1,0 +1,1 @@
+cdk.json # Ignoring for false positives Rule ID: detected-generic-secret Message: Generic Secret detected
