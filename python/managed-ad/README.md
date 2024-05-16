@@ -63,7 +63,7 @@ This project provides a solution for deploying and managing an AWS Managed Micro
 
 1. Create or update the required context values.
    ```
-   $ python3 set_context.py
+   $ python3 context.py set
    ```
    Respond to the script prompts.
 1. Deploy the solution.
@@ -82,19 +82,15 @@ This project provides a solution for deploying and managing an AWS Managed Micro
 
 ## Usage
 
-### `set_context.py` Script
+### `context.py` Script
 
-The `set_context.py` script is used to set or update the required context values for the solution. It prompts you to provide the following information:
+The `context.py` script is used to print, set or validate the required context values for the solution. It prompts you to provide the following information:
 
 1. **Active Directory (AD) Domain Name**: The desired name for the Managed AD domain.
 
 1. **AD Edition**: The edition of Active Directory to use (Standard or Enterprise).
 
 1. **VPC ID**: The ID of the existing VPC where the Managed AD instance should be deployed, or whether a new VPC should be created. If a new VPC is created, you will be prompted to specify whether internet access should be enabled or not.
-
-1. **AD Password Secret ARN**: The Amazon Resource Name (ARN) of the Secrets Manager secret where the AD administrator password will be stored. If the secret does not exist, the script will create a new one.
-
-The script validates the provided inputs and generates a random initial password for the AD administrator. It then writes the context to the `cdk.context.json` file, which is used by the CDK application during deployment.
 
 **Note:** If an existing VPC is used, the internet access value will be ignored, and no changes will be made to the VPC.
 
@@ -141,6 +137,23 @@ Follow these steps from the project directoy to delete the deployed resources. T
    ```
    $ cdk destroy
    ```
+
+## Setting Initial Context
+
+Before deploying the CDK app, you need to set the initial context values. The required context values are:
+
+- `ad_domain_name`: A valid Microsoft Active Directory domain name.
+- `ad_edition`: Must be either 'Standard' or 'Enterprise'.
+- `vpc_id`: A valid VPC ID, or `None` to create a new VPC.
+- `internet_access`: A boolean value, applicable only if creating a new VPC.
+
+To set the context values, run the `set_context.py` script:
+
+```
+$ python bin/set_context.py
+```
+
+The script will prompt you to enter valid values for each required context value. After setting the context values, you can proceed with `cdk synth` or `cdk deploy`.
 
 ## Useful commands
 

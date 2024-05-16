@@ -15,6 +15,8 @@ from aws_cdk import (
 )
 from constructs import Construct
 import json
+import secrets
+import string
 
 
 class ManagedAdStack(Stack):
@@ -24,10 +26,8 @@ class ManagedAdStack(Stack):
 
         initial_password = self.node.try_get_context("initial_password")
         if initial_password is None:
-            import boto3
-            client = boto3.client('secretsmanager')
-            response = client.get_random_password(PasswordLength=16)
-            initial_password = response['RandomPassword']
+            characters = string.ascii_letters + string.digits + string.punctuation
+            initial_password = ''.join(secrets.choice(characters) for i in range(16))
             # update the context value in cdk.json with initial_password
             with open('cdk.json', 'r') as f:
                 data = json.load(f)
