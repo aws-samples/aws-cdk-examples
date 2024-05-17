@@ -22,8 +22,6 @@ This project provides a solution for deploying and managing an AWS Managed Micro
 
 1. **Password Rotation Lambda**: A Lambda function is responsible for periodically rotating the AD administrator password. It retrieves the current password from Secrets Manager, generates a new random password, updates the Secrets Manager secret, and resets the AD administrator password with the new value.
 
-1. **EventBridge Rule**: An EventBridge rule triggers the Password Rotation Lambda function on a specified schedule (e.g., every 30 days).
-
 ## Architecture
 
 ![Architecture Diagram](assets/Architecture.jpg)
@@ -147,10 +145,10 @@ Before deploying the CDK app, you need to set the initial context values. The re
 - `vpc_id`: A valid VPC ID, or `None` to create a new VPC.
 - `internet_access`: A boolean value, applicable only if creating a new VPC.
 
-To set the context values, run the `set_context.py` script:
+To set the context values, run the `context.py` script with the `set` argument:
 
 ```
-$ python bin/set_context.py
+$ python bin/context.py set
 ```
 
 The script will prompt you to enter valid values for each required context value. After setting the context values, you can proceed with `cdk synth` or `cdk deploy`.

@@ -71,20 +71,52 @@ class ManagedAdStack(Stack):
                 destination=ec2.FlowLogDestination.to_cloud_watch_logs(),
                 traffic_type=ec2.FlowLogTrafficType.ALL,
             )
+            if not internet_access:
+                endpoint_sg = ec2.SecurityGroup(
+                    self,
+                    "EndpointSG",
+                    vpc=vpc,
+                    description="Security Group for VPC Interface Endpoints",
+                    allow_all_outbound=False,
+                )
+                NagSuppressions.add_resource_suppressions_by_path(
+                    self,
+                    f"{self.stack_name}/EndpointSG/Resource",
+                    [
+                        {
+                            "id": "CdkNagValidationFailure",
+                            "reason": "AwsSolutions-EC23 errors on endpoint security groups.",
+                        }
+                    ],
+                    True,
+                )
+                endpoint_sg.add_ingress_rule(
+                    peer=ec2.Peer.ipv4(vpc.vpc_cidr_block), connection=ec2.Port.tcp(443)
+                )
+                vpc.add_interface_endpoint(
+                    "SSMEndpoint",
+                    service=ec2.InterfaceVpcEndpointAwsService.SSM,
+                    private_dns_enabled=True,
+                    security_groups=[endpoint_sg],
+                )
+                vpc.add_interface_endpoint(
+                    "EC2MessagesEndpoint",
+                    service=ec2.InterfaceVpcEndpointAwsService.EC2_MESSAGES,
+                    private_dns_enabled=True,
+                    security_groups=[endpoint_sg],
+                )
+                vpc.add_interface_endpoint(
+                    "SSMMessagesEndpoint",
+                    service=ec2.InterfaceVpcEndpointAwsService.SSM_MESSAGES,
+                    private_dns_enabled=True,
+                    security_groups=[endpoint_sg],
+                )
         else:
             vpc = ec2.Vpc.from_lookup(self, id=vpc_id)
 
         ad_password_secret = secretsmanager.Secret(
-            self,
-            "ADPasswordSecret",
-            secret_name="ad-password"
-        ) # nosec B106 #Password is dynamically generated and stored securely.
-
-        CfnOutput(
-            self,
-            "ADPasswordSecretArn",
-            value=ad_password_secret.secret_full_arn,
-        )
+            self, "ADPasswordSecret", secret_name="ad-password"
+        )  # nosec B106 #Password is dynamically generated and stored securely.
 
         # Check if there are any private subnets available
         if vpc.private_subnets:
@@ -110,11 +142,23 @@ class ManagedAdStack(Stack):
             edition=self.node.try_get_context("ad_edition"),
         )
 
+        # Create lambda layer from ldap3_layer.zip
+        ldap3_layer = lambda_.LayerVersion(
+            self,
+            "Ldap3Layer",
+            code=lambda_.Code.from_asset("ldap3_layer/ldap3_layer.zip"),
+            compatible_runtimes=[lambda_.Runtime.PYTHON_3_12],
+            compatible_architectures=[
+                lambda_.Architecture.X86_64,
+                lambda_.Architecture.ARM_64,
+            ],
+        )
+
         password_rotator_lambda = lambda_.Function(
             self,
             "PasswordRotatorLambda",
             code=lambda_.Code.from_asset("password_rotator_lambda"),
-            handler="password_rotator.rotate_ad_password",
+            handler="lambda_function.lambda_handler",
             runtime=lambda_.Runtime.PYTHON_3_12,
             role=iam.Role(
                 self,
@@ -122,11 +166,10 @@ class ManagedAdStack(Stack):
                 assumed_by=iam.ServicePrincipal("lambda.amazonaws.com"),
             ),
             timeout=Duration.seconds(60),
-            environment={
-                "DIRECTORY_ID": managed_ad.ref,
-                "SECRETS_MANAGER_ARN": ad_password_secret.secret_arn,
-            },
+            environment={"DIRECTORY_ID": managed_ad.ref},
         )
+
+        password_rotator_lambda.add_layers(ldap3_layer)
 
         password_rotator_lambda.add_to_role_policy(
             iam.PolicyStatement(
@@ -185,40 +228,8 @@ class ManagedAdStack(Stack):
             rotation_lambda=password_rotator_lambda,
         )
 
-        # initial_password_rotation = cr.AwsCustomResource(
-        #     self,
-        #     "InitialPasswordRotation",
-        #     on_create=cr.AwsSdkCall(
-        #         service="Lambda",
-        #         action="invoke",
-        #         parameters={
-        #             "FunctionName": password_rotator_lambda.function_name,
-        #         },
-        #         physical_resource_id=cr.PhysicalResourceId.of(
-        #             "InitialPasswordRotation"
-        #         ),
-        #     ),
-        #     policy=cr.AwsCustomResourcePolicy.from_statements(
-        #         statements=[
-        #             iam.PolicyStatement(
-        #                 actions=["lambda:InvokeFunction"],
-        #                 effect=iam.Effect.ALLOW,
-        #                 resources=[password_rotator_lambda.function_arn],
-        #             )
-        #         ]
-        #     ),
-        #     resource_type="Custom::InitialPasswordRotation",
-        #     timeout=Duration.minutes(15),
-        # )
-
-        # initial_password_rotation.node.add_dependency(managed_ad)
-
-        # password_rotation_rule = events.Rule(
-        #     self,
-        #     "PasswordRotationRule",
-        #     schedule=events.Schedule.rate(Duration.days(30)),
-        # )
-
-        # password_rotation_rule.add_target(
-        #     targets.LambdaFunction(password_rotator_lambda)
-        # )
+        CfnOutput(
+            self,
+            "ADPasswordSecretArn",
+            value=ad_password_secret.secret_full_arn,
+        )
