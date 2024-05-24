@@ -1,4 +1,4 @@
-const { DynamoDB } = require('aws-sdk');
+const { DynamoDB } = require('@aws-sdk/client-dynamodb');
 const crypto = require('crypto');
 
 /**
@@ -22,5 +22,5 @@ exports.handler = async function handler(event, context) {
     Item: {
       ID: { S: id }
     }
-  }).promise();
+  });
 };
