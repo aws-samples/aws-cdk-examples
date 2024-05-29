@@ -99,6 +99,7 @@ jobs:
           done
 
           # install CDK CLI from npm if not typescript, so that npx can find it later
+          # ts will use the one from the particular cdk app
           if [[ ${{ matrix.language }} != 'typescript' ]]; then
             cd ./${{ matrix.language }}
             npm install -g aws-cdk
