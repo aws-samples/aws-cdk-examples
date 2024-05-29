@@ -1,5 +1,5 @@
-const AWS = require('aws-sdk');
-const S3 = new AWS.S3();
+const { S3 } = require("@aws-sdk/client-s3");
+const s3 = new S3();
 
 const bucketName = process.env.BUCKET;
 
@@ -12,7 +12,7 @@ exports.main = async function(event, context) {
     if (method === "GET") {
       // GET / to get the names of all widgets
       if (event.path === "/") {
-        const data = await S3.listObjectsV2({ Bucket: bucketName }).promise();
+        const data = await s3.listObjectsV2({ Bucket: bucketName });
         var body = {
           widgets: data.Contents.map(function(e) { return e.Key })
         };
@@ -25,8 +25,8 @@ exports.main = async function(event, context) {
 
       if (widgetName) {
         // GET /name to get info on widget name
-        const data = await S3.getObject({ Bucket: bucketName, Key: widgetName}).promise();
-        var body = data.Body.toString('utf-8');
+        const data = await s3.getObject({ Bucket: bucketName, Key: widgetName});
+        var body = await data.Body.transformToString();
 
         return {
           statusCode: 200,
@@ -53,12 +53,12 @@ exports.main = async function(event, context) {
 
       var base64data = new Buffer(data, 'binary');
 
-      await S3.putObject({
+      await s3.putObject({
         Bucket: bucketName,
         Key: widgetName,
         Body: base64data,
         ContentType: 'application/json'
-      }).promise();
+      });
 
       return {
         statusCode: 200,
@@ -78,9 +78,9 @@ exports.main = async function(event, context) {
         };
       }
 
-      await S3.deleteObject({
+      await s3.deleteObject({
         Bucket: bucketName, Key: widgetName
-      }).promise();
+      });
 
       return {
         statusCode: 200,
