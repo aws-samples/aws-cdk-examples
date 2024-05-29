@@ -16,29 +16,30 @@ class FargateServiceWithEfs(Stack):
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, *kwargs)
 
-        DEFAULT_REGION  = os.getenv('CDK_DEFAULT_REGION')
-        DEFAULT_ACCOUNT = os.getenv('CDK_DEFAULT_ACCOUNT')
+        PREFIX      = 'My'
+        APP_PATH    = '/var/www/'
+        VOLUME_NAME = 'ecspattern-efs-volume'
 
         vpc = ec2.Vpc(
-            self, "MyVpc",
+            self, PREFIX+'Vpc',
             max_azs=2
         )
 
         cluster = ecs.Cluster(
-            self, 'MyCluster',
+            self, PREFIX+'Cluster',
             vpc=vpc,
         )
 
         # EFS File System
         file_system = efs.FileSystem(
-            self, 'MyEFS',
+            self, PREFIX+'EFS',
             vpc=vpc,
             lifecycle_policy=efs.LifecyclePolicy.AFTER_14_DAYS,
             performance_mode=efs.PerformanceMode.GENERAL_PURPOSE,
         )
 
         ap = efs.AccessPoint(
-            self, 'MyAccessPoint',
+            self, PREFIX+'AccessPoint',
             file_system=file_system,
         )
 
@@ -55,7 +56,7 @@ class FargateServiceWithEfs(Stack):
 
         # ECS Task Role:
         task_role = iam.Role (
-            self, 'MyEcsTaskRole',
+            self, PREFIX+'EcsTaskRole',
             assumed_by=iam.ServicePrincipal('ecs-tasks.amazonaws.com').with_conditions({
                 "StringEquals": {
                     "aws:SourceAccount": Stack.of(self).account
@@ -66,7 +67,7 @@ class FargateServiceWithEfs(Stack):
             }),
         )
         task_role.attach_inline_policy(
-            iam.Policy(self, 'MyPolicy',
+            iam.Policy(self, PREFIX+'Policy',
                 statements=[
                     iam.PolicyStatement(
                         effect=iam.Effect.ALLOW,
@@ -93,18 +94,18 @@ class FargateServiceWithEfs(Stack):
 
         # ECS Task Definition
         task_def = ecs.FargateTaskDefinition(
-            self, 'MyFargateTaskDef',
+            self, PREFIX+'FargateTaskDef',
             task_role=task_role,
         )
 
         task_def.add_volume(
-            name='ecspattern-efs-volume',
+            name=VOLUME_NAME,
             efs_volume_configuration=efs_volume_configuration,
         )
 
         mount_point = ecs.MountPoint(
-            container_path='/var/www/ecspattern-efs-volume',
-            source_volume='ecspattern-efs-volume',
+            container_path=APP_PATH+VOLUME_NAME,
+            source_volume=VOLUME_NAME,
             read_only=False,
         )
 
@@ -128,7 +129,7 @@ class FargateServiceWithEfs(Stack):
 
         # ECS Patterns - Application LB Fargate Service
         fargate_service = ecs_patterns.ApplicationLoadBalancedFargateService(
-            self, 'MyService',
+            self, PREFIX+'Service',
             cluster=cluster,
             desired_count=1,
             task_definition=task_def,
