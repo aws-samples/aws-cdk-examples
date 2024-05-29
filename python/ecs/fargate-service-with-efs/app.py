@@ -6,7 +6,7 @@ from aws_cdk import (
     aws_iam as iam,
     aws_logs as logs,
     aws_ecs_patterns as ecs_patterns,
-    App, CfnOutput, Duration, Stack, Environment
+    App, Stack
 )
 from constructs import Construct
 import os
@@ -16,10 +16,8 @@ class FargateServiceWithEfs(Stack):
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, *kwargs)
 
-        DEFAULT_REGION  = os.getenv('CDK_DEFAULT_REGION'),
-        DEFAULT_ACCOUNT = os.getenv('CDK_DEFAULT_ACCOUNT'),
-        APP_PATH        = '/var/www/'
-        VOLUME_NAME     = 'ecspattern-efs-volume',
+        DEFAULT_REGION  = os.getenv('CDK_DEFAULT_REGION')
+        DEFAULT_ACCOUNT = os.getenv('CDK_DEFAULT_ACCOUNT')
 
         vpc = ec2.Vpc(
             self, "MyVpc",
@@ -60,12 +58,10 @@ class FargateServiceWithEfs(Stack):
             self, 'MyEcsTaskRole',
             assumed_by=iam.ServicePrincipal('ecs-tasks.amazonaws.com').with_conditions({
                 "StringEquals": {
-                    # To do, use env variable
-                    "aws:SourceAccount":"<ACCOUNT_ID>"
+                    "aws:SourceAccount": Stack.of(self).account
                 },
                 "ArnLike":{
-                    # To do, use env variable
-                    "aws:SourceArn":"arn:aws:ecs:<REGION>:<ACCOUNT_ID>:*"
+                    "aws:SourceArn":"arn:aws:ecs:" + Stack.of(self).region + ":" + Stack.of(self).account + ":*"
                 },
             }),
         )
