@@ -6,15 +6,20 @@ from aws_cdk import (
     aws_iam as iam,
     aws_logs as logs,
     aws_ecs_patterns as ecs_patterns,
-    App, CfnOutput, Duration, Stack
+    App, CfnOutput, Duration, Stack, Environment
 )
 from constructs import Construct
+import os
 
-
-class FargateServiceWithEfsStack(Stack):
+class FargateServiceWithEfs(Stack):
 
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, *kwargs)
+
+        DEFAULT_REGION  = os.getenv('CDK_DEFAULT_REGION'),
+        DEFAULT_ACCOUNT = os.getenv('CDK_DEFAULT_ACCOUNT'),
+        APP_PATH        = '/var/www/'
+        VOLUME_NAME     = 'ecspattern-efs-volume',
 
         vpc = ec2.Vpc(
             self, "MyVpc",
@@ -52,36 +57,40 @@ class FargateServiceWithEfsStack(Stack):
 
         # ECS Task Role:
         task_role = iam.Role (
-            self, 'EcsTaskRole',
-            assumed_by=iam.ServicePrincipal('ecs-tasks.amazonaws.com'),
+            self, 'MyEcsTaskRole',
+            assumed_by=iam.ServicePrincipal('ecs-tasks.amazonaws.com').with_conditions({
+                "StringEquals": {
+                    # To do, use env variable
+                    "aws:SourceAccount":"<ACCOUNT_ID>"
+                },
+                "ArnLike":{
+                    # To do, use env variable
+                    "aws:SourceArn":"arn:aws:ecs:<REGION>:<ACCOUNT_ID>:*"
+                },
+            }),
         )
-        task_role.add_to_policy(
-            iam.PolicyStatement(
-                effect=iam.Effect.ALLOW,
-                resources=['*'],
-                actions=[
-                    "ecr:GetAuthorizationToken",
-                    "ec2:DescribeAvailabilityZones",
-                    "logs:CreateLogStream",
-                    "logs:DescribeLogGroups",
-                    "logs:DescribeLogStreams",
-                    "logs:PutLogEvents",
-                    "ssmmessages:CreateControlChannel",
-                    "ssmmessages:CreateDataChannel",
-                    "ssmmessages:OpenControlChannel",
-                    "ssmmessages:OpenDataChannel",
-                ]
-            )
-        )
-        task_role.add_to_policy(
-            iam.PolicyStatement(
-                effect=iam.Effect.ALLOW,
-                resources=['*'],
-                actions=[
-                    'elasticfilesystem:ClientRootAccess',
-                    'elasticfilesystem:ClientWrite',
-                    'elasticfilesystem:ClientMount',
-                    'elasticfilesystem:DescribeMountTargets'
+        task_role.attach_inline_policy(
+            iam.Policy(self, 'MyPolicy',
+                statements=[
+                    iam.PolicyStatement(
+                        effect=iam.Effect.ALLOW,
+                        resources=['*'],
+                        actions=[
+                            "ecr:GetAuthorizationToken",
+                            "ec2:DescribeAvailabilityZones"
+                        ]
+                    ),
+                    iam.PolicyStatement(
+                        sid='AllowEfsAccess',
+                        effect=iam.Effect.ALLOW,
+                        resources=['*'],
+                        actions=[
+                            'elasticfilesystem:ClientRootAccess',
+                            'elasticfilesystem:ClientWrite',
+                            'elasticfilesystem:ClientMount',
+                            'elasticfilesystem:DescribeMountTargets'
+                        ]
+                    )
                 ]
             )
         )
@@ -93,13 +102,13 @@ class FargateServiceWithEfsStack(Stack):
         )
 
         task_def.add_volume(
-            name='ecsPattern-Efs-Volume',
+            name='ecspattern-efs-volume',
             efs_volume_configuration=efs_volume_configuration,
         )
 
         mount_point = ecs.MountPoint(
-            container_path='/var/www/ecsPattern-Efs-Volume',
-            source_volume='ecsPattern-Efs-Volume',
+            container_path='/var/www/ecspattern-efs-volume',
+            source_volume='ecspattern-efs-volume',
             read_only=False,
         )
 
@@ -112,7 +121,7 @@ class FargateServiceWithEfsStack(Stack):
         container = ecs.ContainerDefinition(
             self, 'ecs-sample',
             task_definition=task_def,
-            image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
+            image=ecs.ContainerImage.from_registry('amazon/amazon-ecs-sample'),
             logging=ecs.LogDrivers.aws_logs(
                 stream_prefix='myecs', 
                 log_retention=logs.RetentionDays.ONE_MONTH,
@@ -140,17 +149,17 @@ class FargateServiceWithEfsStack(Stack):
 
         scalable_target = fargate_service.service.auto_scale_task_count(
             min_capacity=1,
-            max_capacity=20
+            max_capacity=20,
         )
 
         scalable_target.scale_on_cpu_utilization("CpuScaling",
-            target_utilization_percent=50
+            target_utilization_percent=50,
         )
 
         scalable_target.scale_on_memory_utilization("MemoryScaling",
-            target_utilization_percent=50
+            target_utilization_percent=50,
         )
 
 app = App()
-FargateServiceWithEfsStack(app, "FargateECSServiceWithEfs")
+FargateServiceWithEfs(app, "aws-fargate-service-with-efs")
 app.synth()
