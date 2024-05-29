@@ -4,6 +4,7 @@ from aws_cdk import (
     aws_ecs as ecs,
     aws_efs as efs,
     aws_iam as iam,
+    aws_logs as logs,
     aws_ecs_patterns as ecs_patterns,
     App, CfnOutput, Stack
 )
@@ -30,6 +31,22 @@ class FargateServiceWithEfsStack(Stack):
             vpc=vpc,
             lifecycle_policy=efs.LifecyclePolicy.AFTER_14_DAYS,
             performance_mode=efs.PerformanceMode.GENERAL_PURPOSE,
+        )
+
+        ap = efs.AccessPoint(
+            self, 'MyAccessPoint',
+            file_system=file_system,
+        )
+
+        efs_volume_configuration = ecs.EfsVolumeConfiguration(
+            file_system_id=file_system.file_system_id,
+
+            # the properties below are optional
+            authorization_config=ecs.AuthorizationConfig(
+                access_point_id=ap.access_point_id,
+                iam='ENABLED',
+            ),
+            transit_encryption='ENABLED',
         )
 
         # Role:
@@ -65,6 +82,21 @@ class FargateServiceWithEfsStack(Stack):
                     'elasticfilesystem:ClientMount',
                     'elasticfilesystem:DescribeMountTargets'
                 ]
+            )
+        )
+
+        task_def = ecs.FargateTaskDefinition(
+            self, 'MyFargateTaskDef',
+            task_role=task_role,
+        )
+
+        container = ecs.ContainerDefinition(
+            self, 'ecs-sample',
+            task_definition=task_def,
+            image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
+            logging=ecs.LogDrivers.aws_logs(
+                stream_prefix='myecs', 
+                log_retention=logs.RetentionDays.ONE_MONTH,
             )
         )
 
