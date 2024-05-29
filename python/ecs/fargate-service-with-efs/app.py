@@ -6,7 +6,7 @@ from aws_cdk import (
     aws_iam as iam,
     aws_logs as logs,
     aws_ecs_patterns as ecs_patterns,
-    App, CfnOutput, Stack
+    App, CfnOutput, Duration, Stack
 )
 from constructs import Construct
 
@@ -26,6 +26,7 @@ class FargateServiceWithEfsStack(Stack):
             vpc=vpc,
         )
 
+        # EFS File System
         file_system = efs.FileSystem(
             self, 'MyEFS',
             vpc=vpc,
@@ -49,7 +50,7 @@ class FargateServiceWithEfsStack(Stack):
             transit_encryption='ENABLED',
         )
 
-        # Role:
+        # ECS Task Role:
         task_role = iam.Role (
             self, 'EcsTaskRole',
             assumed_by=iam.ServicePrincipal('ecs-tasks.amazonaws.com'),
@@ -85,6 +86,7 @@ class FargateServiceWithEfsStack(Stack):
             )
         )
 
+        # ECS Task Definition
         task_def = ecs.FargateTaskDefinition(
             self, 'MyFargateTaskDef',
             task_role=task_role,
@@ -101,6 +103,12 @@ class FargateServiceWithEfsStack(Stack):
             read_only=False,
         )
 
+        port_mapping = ecs.PortMapping(
+            container_port=80,
+            host_port=80,
+            protocol=ecs.Protocol.TCP,
+        )
+
         container = ecs.ContainerDefinition(
             self, 'ecs-sample',
             task_definition=task_def,
@@ -111,6 +119,39 @@ class FargateServiceWithEfsStack(Stack):
             )
         )
         container.add_mount_points(mount_point),
+        container.add_port_mappings(port_mapping),
+
+        # ECS Patterns - Application LB Fargate Service
+        fargate_service = ecs_patterns.ApplicationLoadBalancedFargateService(
+            self, 'MyService',
+            cluster=cluster,
+            desired_count=1,
+            task_definition=task_def,
+            task_subnets=ec2.SubnetSelection(
+                subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS,
+            ),
+            platform_version=ecs.FargatePlatformVersion.LATEST,
+            public_load_balancer=True,
+            enable_execute_command=True,
+            enable_ecs_managed_tags=True,
+        )
+        fargate_service.service.connections.allow_from(file_system, ec2.Port.tcp(2049)),
+        fargate_service.service.connections.allow_to(file_system, ec2.Port.tcp(2049)),
+
+        scalable_target = fargate_service.service.auto_scale_task_count(
+            min_capacity=1,
+            max_capacity=20
+        )
+
+        scalable_target.scale_on_cpu_utilization("CpuScaling",
+            target_utilization_percent=50
+        )
+
+        scalable_target.scale_on_memory_utilization("MemoryScaling",
+            target_utilization_percent=50
+        )
+
+
 
 app = App()
 FargateServiceWithEfsStack(app, "FargateECSServiceWithEfs")
