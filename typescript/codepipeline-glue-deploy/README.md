@@ -7,7 +7,6 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 ### Useful commands
 
 * `aws configure`   configure access to your AWS account
-* `npm run build`   compile typescript to js
 * `npm run watch`   watch for changes and compile
 * `npm run test`    perform the jest unit tests
 * `cdk deploy --parameters glueJob="Glue Job Name"`      deploy this stack to your default AWS account/region
