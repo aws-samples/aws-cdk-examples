@@ -51,7 +51,7 @@ class LambdaNagExampleStack(Stack):
             handler="index.handler",
             timeout=Duration.seconds(30),
             role=lambda_func_role,
-            runtime=lambda_.Runtime.PYTHON_3_10,
+            runtime=lambda_.Runtime.PYTHON_3_12,
         )
 
 app = App()
