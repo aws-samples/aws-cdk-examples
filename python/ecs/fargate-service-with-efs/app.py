@@ -98,7 +98,7 @@ class FargateServiceWithEfsStack(Stack):
         )
 
         mount_point = ecs.MountPoint(
-            container_path='/',
+            container_path='/var/www/ecsPattern-Efs-Volume',
             source_volume='ecsPattern-Efs-Volume',
             read_only=False,
         )
@@ -150,8 +150,6 @@ class FargateServiceWithEfsStack(Stack):
         scalable_target.scale_on_memory_utilization("MemoryScaling",
             target_utilization_percent=50
         )
-
-
 
 app = App()
 FargateServiceWithEfsStack(app, "FargateECSServiceWithEfs")
