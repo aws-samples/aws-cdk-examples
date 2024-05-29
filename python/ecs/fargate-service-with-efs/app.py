@@ -90,6 +90,17 @@ class FargateServiceWithEfsStack(Stack):
             task_role=task_role,
         )
 
+        task_def.add_volume(
+            name='ecsPattern-Efs-Volume',
+            efs_volume_configuration=efs_volume_configuration,
+        )
+
+        mount_point = ecs.MountPoint(
+            container_path='/',
+            source_volume='ecsPattern-Efs-Volume',
+            read_only=False,
+        )
+
         container = ecs.ContainerDefinition(
             self, 'ecs-sample',
             task_definition=task_def,
@@ -99,6 +110,7 @@ class FargateServiceWithEfsStack(Stack):
                 log_retention=logs.RetentionDays.ONE_MONTH,
             )
         )
+        container.add_mount_points(mount_point),
 
 app = App()
 FargateServiceWithEfsStack(app, "FargateECSServiceWithEfs")
