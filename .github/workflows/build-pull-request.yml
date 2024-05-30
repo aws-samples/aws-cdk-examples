@@ -105,6 +105,7 @@ jobs:
           # ts will use the one from the particular cdk app
           if [[ ${{ matrix.language }} != 'typescript' ]]; then
             npm install -g aws-cdk
+            npx cdk --version
           fi
 
           # Run the build_file function in parallel for each project to be built
