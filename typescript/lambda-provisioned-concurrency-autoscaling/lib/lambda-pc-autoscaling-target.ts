@@ -26,7 +26,7 @@ export class LambdaPCScalingTargetStack extends Stack {
     this.lambdaFunction = new NodejsFunction(this, 'LambdaFunction', {
       functionName: this.lambdaFunctionName,
       entry: `./lambda/lambda-handler.ts`,
-      runtime: Runtime.NODEJS_18_X,
+      runtime: Runtime.NODEJS_20_X,
       memorySize: 512,
       timeout: Duration.seconds(6),
     });
@@ -36,7 +36,7 @@ export class LambdaPCScalingTargetStack extends Stack {
       version: this.lambdaFunction.currentVersion,
       provisionedConcurrentExecutions: 1,
     });
-    // Create Metric of Lambda Provisioned Concurrency 
+    // Create Metric of Lambda Provisioned Concurrency
     const metrics = new Metric({
       metricName: 'ProvisionedConcurrencyUtilization',
       namespace: 'AWS/Lambda',

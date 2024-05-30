@@ -11,7 +11,7 @@ export class CognitoProtectedApi extends Stack {
     const helloWorldFunction = new Function(this, 'helloWorldFunction', {
       code: new AssetCode('src'),
       handler: 'helloworld.handler',
-      runtime: Runtime.NODEJS_18_X
+      runtime: Runtime.NODEJS_20_X
     });
 
     // Rest API backed by the helloWorldFunction
@@ -38,7 +38,7 @@ export class CognitoProtectedApi extends Stack {
       providerArns: [userPool.userPoolArn],
     })
 
-    // Hello Resource API for the REST API. 
+    // Hello Resource API for the REST API.
     const hello = helloWorldLambdaRestApi.root.addResource('HELLO');
 
     // GET method for the HELLO API resource. It uses Cognito for
@@ -48,9 +48,9 @@ export class CognitoProtectedApi extends Stack {
       authorizer: {
         authorizerId: authorizer.ref
       }
-      
+
     })
-    
+
   }
 }
 
