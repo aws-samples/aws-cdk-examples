@@ -22,24 +22,24 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // modify gitignore file to remove unneeded files from the codecommit copy    
+    // modify gitignore file to remove unneeded files from the codecommit copy
     let gitignore = fs.readFileSync('.gitignore').toString().split(/\r?\n/);
     gitignore.push('.git/');
     gitignore = gitignore.filter(g => g != 'node_modules/');
     gitignore.push('/node_modules/');
-    
+
     const codeAsset = new Asset(this, 'SourceAsset', {
       path: path.join(__dirname, "../"),
       ignoreMode: IgnoreMode.GIT,
       exclude: gitignore,
     });
-    
+
     const codeRepo = new codecommit.Repository(this, "repo", {
       repositoryName: "simple-code-repo",
       // Copies files from codepipeline-build-deploy directory to the repo as the initial commit
       code: Code.fromAsset(codeAsset, 'main'),
     });
-    
+
     // Creates an Elastic Container Registry (ECR) image repository
     const imageRepo = new ecr.Repository(this, "imageRepo");
 
@@ -72,13 +72,13 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
         },
       },
     });
-    
+
     // CodeBuild project that builds the Docker image
     const buildTest = new codebuild.Project(this, "BuildTest", {
       buildSpec: codebuild.BuildSpec.fromSourceFilename("buildspec.yaml"),
       source: codebuild.Source.codeCommit({ repository: codeRepo }),
       environment: {
-        buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_4,  
+        buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_4,
       }
     });
 
@@ -90,7 +90,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       architecture: lambda.Architecture.ARM_64,
       code: lambda.Code.fromAsset("./lambda"),
       handler: "trigger-build.handler",
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_20_X,
       environment: {
         REGION: process.env.CDK_DEFAULT_REGION!,
         CODEBUILD_PROJECT_NAME: buildImage.projectName,
@@ -233,7 +233,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       ],
     };
 
-    // Run jest test and send result to CodeBuild    
+    // Run jest test and send result to CodeBuild
     const testStage = {
       stageName: "Test",
       actions: [

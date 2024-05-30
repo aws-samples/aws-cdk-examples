@@ -15,7 +15,7 @@
     "@types/jest": "^29.5.8",
     "@types/node": "20.9.0",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
-    "aws-cdk": "2.106.1",
+    "aws-cdk": "^2.143.0",
     "eslint": "^8.54.0",
     "eslint-config-standard-with-typescript": "^40.0.0",
     "eslint-plugin-import": "^2.29.0",
@@ -27,7 +27,7 @@
     "typescript": "~5.2.2"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.106.1",
+    "aws-cdk-lib": "^2.143.0",
     "constructs": "^10.0.0",
     "source-map-support": "^0.5.21"
   }
