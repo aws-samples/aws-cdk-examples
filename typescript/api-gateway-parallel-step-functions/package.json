@@ -19,13 +19,14 @@
   },
   "devDependencies": {
     "@types/node": "20.5.7",
-    "aws-cdk": "2.93.0",
+    "aws-cdk": "^2.143.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.93.0",
+    "aws-cdk-lib": "^2.143.0",
     "constructs": "^10.2.70",
     "source-map-support": "^0.5.21"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha256.c17d3797fb9a9115bf375e31bfd30058cac6bc9c3b8807a3d8cb2094794b51ca"
 }
