@@ -180,5 +180,5 @@ class FargateServiceWithEfs(Stack):
 
 # Create the new CDK Application
 cdk_application = App()
-FargateServiceWithEfs(cdk_application, "AWS-CDK-Fargate-")
+FargateServiceWithEfs(cdk_application, "AWS-CDK-Fargate")
 cdk_application.synth()

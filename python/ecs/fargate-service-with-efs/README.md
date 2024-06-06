@@ -47,4 +47,4 @@ $ cdk deploy
 ```
 
 ## Testing the app
-Upon successful deployment, you should see a new Amazon Elastic Container Service cluster deployed with the name "aws-fargate-service-with-efs-CDK-efs-sample-Cluster<Unique ID>". Similarly you should see an Amazon EFS service deployed with the name "aws-fargate-service-with-efs/MyEFS(<Unique ID>)", and an Application Load Balancer "aws-fa-MySer-<Unique ID>"
+Upon successful deployment, you should see a new Amazon Elastic Container Service cluster deployed with the name "AWS-CDK-Fargate-efssampleCluster<Unique ID>". Similarly you should see an Amazon EFS Volume deployed with the name "AWS-CDK-Fargate-/efs-sample-EFS(<Unique ID>)", and an Application Load Balancer "AWS-CD-efssa--<Unique ID>"
