@@ -55,5 +55,5 @@ class AutoScalingFargateService(Stack):
         )
 
 app = App()
-AutoScalingFargateService(app, "aws-fargate-service-with-efs")
+AutoScalingFargateService(app, "aws-fargate-application-autoscaling")
 app.synth()
