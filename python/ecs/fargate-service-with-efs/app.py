@@ -140,7 +140,7 @@ class FargateServiceWithEfs(Stack):
         # Add a new port mapping to the Fargate Task Definition
         container.add_port_mappings(port_mapping),
 
-        # Create a new Fargate Service
+        # Create a new Fargate Service with ALB
         fargate_service = ecs_patterns.ApplicationLoadBalancedFargateService(
             self, PREFIX + 'Service',
             cluster=ecs_cluster,
@@ -180,5 +180,5 @@ class FargateServiceWithEfs(Stack):
 
 # Create the new CDK Application
 cdk_application = App()
-FargateServiceWithEfs(cdk_application, "AWS-CDK-Fargate")
+FargateServiceWithEfs(cdk_application, "aws-fargate-service-with-efs")
 cdk_application.synth()
