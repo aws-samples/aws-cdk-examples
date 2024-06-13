@@ -43,5 +43,33 @@ class FargateEFS(Stack):
         )
         
         # Create Access point
-        my_file_system.add_access_point("AccessPoint", "path=/uploads")        
-        
+        my_file_system.add_access_point("AccessPoint", "path=/uploads")    
+
+        image=ecs.ContainerImage.fromRegistry("coderaiser/cloudcmd"),
+
+        # Create ECS cluster with fargate service  
+        fargate_service = ecs_patterns.NetworkLoadBalancedFargateService(self, "MyFargateService",
+            cluster=ecs.Cluster(
+                self, "ECS-EFS-Cluster",
+                vpc=vpc
+            ),
+            task_image_options=ecs_patterns.NetworkLoadBalancedTaskImageOptions(
+                image=ecs.ContainerImage.from_registry("coderaiser/cloudcmd"),
+                container_port=8080,
+                enable_logging=True,
+                environment={
+                    "PORT": "8080",
+                    "VIRTUAL_HOST": "cloudcmd.local"
+                },
+                file_system_configs=[
+                    ecs.FileSystemConfig(
+                        file_system=my_file_system,
+                        mount_path="/uploads",
+                        read_only=False
+                    )
+                ]
+            ),
+            memory_limit_mib=1024,
+            cpu=512,
+            desired_count=2
+        )
