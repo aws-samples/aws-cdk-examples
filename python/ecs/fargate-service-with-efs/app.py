@@ -12,12 +12,14 @@ class FargateEfs(Stack):
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
+        #VPC
         # Create VPC with 2 AZ and a Fargate Cluster
         my_fargate_vpc = ec2.Vpc(
             self, "my_fargate_vpc",
             max_azs=2
         )
 
+        # EFS
         # File System Policy
         my_file_system_policy = iam.PolicyDocument(
             statements=[iam.PolicyStatement(
@@ -46,15 +48,7 @@ class FargateEfs(Stack):
         access_point = my_file_system.add_access_point(
             "MyAccessPoint",
             path="/uploads",
-            create_acl=efs.Acl(
-                owner_uid="1001",
-                owner_gid="1001",
-                permissions="0755"
-            ),
-            posix_user=efs.PosixUser(
-                uid="1001",
-                gid="1001"
-            )
+            transit_encryption='ENABLED'
         )
 
         # Output the access point ID and ARN
@@ -71,39 +65,47 @@ class FargateEfs(Stack):
             description="Access Point ARN"
         )
 
-        # Create an ECS cluster with Fargate launch type
+        # ECS
+
+        # Task Definition
+        task_definition = ecs.FargateTaskDefinition(self, "MyTaskDefinition")
+
+        # Permissions
+        my_task_role = iam.Role(self, "TaskRole", assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com")) 
+        my_task_execution_role = iam.Role(self, "TaskExecutionRole", assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"))
+        my_file_system.grant_root_access(my_task_execution_role)
+
+        # Add container to the task definition
+        container = task_definition.add_container(
+            "WebContainer",
+            image=ecs.ContainerImage.from_registry("coderaiser/cloudcmd"),
+            port_mappings=[
+                ecs.PortMapping(container_port=8000)
+                ],
+            memory_limit_mib=512,
+            cpu=1,
+        )
+        
+        # ECS cluster
         cluster = ecs.Cluster(
             self, "ECS-EFS-Cluster",
             vpc=my_fargate_vpc,
             cluster_name="my_ecs_fargate_efs_cluster"
         )
-        
-        # Define the task definition
-        task_definition = ecs.FargateTaskDefinition(self, "MyTaskDefinition")
-        
-        # Create a task execution role with EFS permissions
-        my_task_execution_role = iam.Role(self, "TaskExecutionRole", assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"))
-        my_file_system.grant_root_access(my_task_execution_role)
 
-        # Add a container to the task definition
-        container = task_definition.add_container(
-            "WebContainer",
-            image=ecs.ContainerImage.from_registry("coderaiser/cloudcmd"),
-            port_mappings=[ecs.PortMapping(container_port=8000)],
-            memory_limit_mib=512,
-            cpu=1,
-        )
-        
-
-        # Create a Fargate service within the cluster
-        fargate_service = ecs_patterns.NetworkLoadBalancedFargateService(
+        # Create a Fargate service with application load balanced fargte
+        fargate_service = ecs_patterns.ApplicationLoadBalancedFargateService(
             self, "MyFargateService",
             cluster=cluster,
             task_definition=task_definition,
-            desired_count=2
+            desired_count=2,
+            task_subnets=ec2.SubnetSelection(
+                subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS),
+            assign_public_ip=False,
+            platform_version=ecs.FargatePlatformVersion.VERSION1_4
         )
 
-        # Mount the EFS filesystem to the containers
+        # Mount the EFS filesystem to the fargate service
         fargate_service.service.task_definition.default_container.add_mount_points(
             ecs.MountPoint(
                 container_path="/uploads",
