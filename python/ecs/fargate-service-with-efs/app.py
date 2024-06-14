@@ -47,8 +47,7 @@ class FargateEfs(Stack):
         # Create an access point for the file system
         access_point = my_file_system.add_access_point(
             "MyAccessPoint",
-            path="/uploads",
-            transit_encryption='ENABLED'
+            path="/uploads"
         )
 
         # Output the access point ID and ARN
