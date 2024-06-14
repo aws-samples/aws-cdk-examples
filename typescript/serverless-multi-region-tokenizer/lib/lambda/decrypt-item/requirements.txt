@@ -1,0 +1,2 @@
+dynamodb-encryption-sdk
+cryptography

@@ -1,0 +1,11 @@
+*.js
+!jest.config.js
+*.d.ts
+node_modules
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+serverless-multi-region-tokenizer.zip
+aggregated_results-without-deployment.txt
+cdk.context.json
