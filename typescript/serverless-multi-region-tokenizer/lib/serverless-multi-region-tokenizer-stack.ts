@@ -393,12 +393,6 @@ export class TokenizerStackDNSStack extends Stack {
 
     const api1 = props.api1;
     const api2 = props.api2;
-
-    //define health checks for each api
-    var region = Constants.homeRegion;  //default region
-    if (props && props.env && props.env.region) {
-      region = props.env.region;
-    }
   
     //add latency-based routing to DNS
 

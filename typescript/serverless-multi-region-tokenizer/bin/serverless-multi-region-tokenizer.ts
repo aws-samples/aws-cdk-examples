@@ -21,7 +21,7 @@ import { Aspects } from 'aws-cdk-lib';
 
 const env  = { 
     account: process.env.CDK_DEFAULT_ACCOUNT,
-    region: Constants.homeRegion 
+    region: process.env.CDK_DEFAULT_REGION
   };
   
   
@@ -33,7 +33,7 @@ const app = new cdk.App();
 
 //create a VPC in both regions, as all DDB and Lambdas will be put into it
 const VpcSydney = new VpcStack(app, 'Tokenizer-VPC-Sydney', {
-  env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: Constants.homeRegion }
+  env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION }
 });
 const VpcSingapore = new VpcStack(app, 'Tokenizer-VPC-Singapore', {
   env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: Constants.replicaRegion }
@@ -50,7 +50,7 @@ const SensitiveDataStoreStack = new MultiRegionStore(app, 'TokenizerStack-data',
 
 
 const SydneyStack = new TokenizerStack(app, 'Tokenizer-Sydney', {
-  env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: Constants.homeRegion },  //Sydney
+  env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION },  //Sydney
   vpc: VpcSydney.vpc,
   kmsSecurityGroup: VpcSydney.kmsSecurityGroup,
   tokenStore: SensitiveDataStoreStack.dynamodb,
@@ -68,10 +68,13 @@ const SingaporeStack = new TokenizerStack(app, 'Tokenizer-Singapore', {
 
 
 //if you're not deploying Route53 and APIGW, don't deploy this stack
-const DNSStack = new TokenizerStackDNSStack(app, 'Tokenizer-DNS', {
-  env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: Constants.homeRegion },  //Global
-  api1: SydneyStack.api,
-  api2: SingaporeStack.api
-});
-  
+var DNSStack;
+if ((Constants.myApiSubdomain != '') && (Constants.myDomainName != '' )) {
+  console.log("Generating");
+    DNSStack = new TokenizerStackDNSStack(app, 'Tokenizer-DNS', {
+      env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION },  //R53 is Global
+      api1: SydneyStack.api,
+      api2: SingaporeStack.api
+    });
+}  
   
