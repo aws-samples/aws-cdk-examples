@@ -14,6 +14,6 @@ export namespace Constants {
     export const replicaRegion = 'ap-southeast-1';  //Singapore, note that primary region is set by CDK default
 
     //if you don't have a Route53 subdomain to use, don't deploy the Tokenizer-DNS
-    export const myApiSubdomain = "api";  //usually 'api'
-    export const myDomainName = "sicart.people.aws.dev";
+    export const myApiSubdomain : string = "";  //usually 'api'
+    export const myDomainName : string = "";
 }
