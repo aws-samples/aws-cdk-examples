@@ -354,21 +354,24 @@ export class TokenizerStack extends Stack {
     });    
 */
 
+    //only add API if the subdomain and domain are specified
+    if ((Constants.myApiSubdomain != '') && (Constants.myDomainName != '' ))
+    {
+      //attach APIGW to a DNS name with a https cert
+      const myHostedZone = new route53.HostedZone(this, 'HostedZone', {
+        zoneName: Constants.myApiSubdomain + '.' + Constants.myDomainName,
+      });
 
-    //attach APIGW to a DNS name with a https cert
-    const myHostedZone = new route53.HostedZone(this, 'HostedZone', {
-      zoneName: Constants.myApiSubdomain + '.' + Constants.myDomainName,
-    });
-
-    const certificate = new Certificate(this, 'api-certificate', {
-      domainName: Constants.myApiSubdomain + '.' + Constants.myDomainName,
-      validation: CertificateValidation.fromDns(myHostedZone)
-    });
-    
-    api.addDomainName( Constants.myApiSubdomain + '.' + Constants.myDomainName, {
-      domainName: Constants.myApiSubdomain + '.' + Constants.myDomainName,
-      certificate
-    });
+      const certificate = new Certificate(this, 'api-certificate', {
+        domainName: Constants.myApiSubdomain + '.' + Constants.myDomainName,
+        validation: CertificateValidation.fromDns(myHostedZone)
+      });
+      
+      api.addDomainName( Constants.myApiSubdomain + '.' + Constants.myDomainName, {
+        domainName: Constants.myApiSubdomain + '.' + Constants.myDomainName,
+        certificate
+      });
+    }
 
 
     Tags.of(this).add('Application', "Tokenizer" );
