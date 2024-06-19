@@ -17,26 +17,29 @@ import { AwsSolutionsChecks, HIPAASecurityChecks, NIST80053R4Checks, NIST80053R5
 import { Aspects } from 'aws-cdk-lib';
 
 
-
-
-const env  = { 
-    account: process.env.CDK_DEFAULT_ACCOUNT,
-    region: process.env.CDK_DEFAULT_REGION
-  };
-  
   
 const app = new cdk.App();
 
 // Add the cdk-nag AwsSolutions Pack with extra verbose logging enabled.
 //Aspects.of(app).add(new AwsSolutionsChecks({ verbose: false }));
 
+const PrimaryEnvironment : cdk.Environment = {
+  account: process.env.CDK_DEFAULT_ACCOUNT, 
+  region: process.env.CDK_DEFAULT_REGION
+};
+
+const ReplicaEnvironment : cdk.Environment = {
+  account: process.env.CDK_DEFAULT_ACCOUNT, 
+  region: Constants.replicaRegion
+};
+
 
 //create a VPC in both regions, as all DDB and Lambdas will be put into it
 const VpcSydney = new VpcStack(app, 'Tokenizer-VPC-Sydney', {
-  env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION }
+  env: PrimaryEnvironment
 });
 const VpcSingapore = new VpcStack(app, 'Tokenizer-VPC-Singapore', {
-  env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: Constants.replicaRegion }
+  env: ReplicaEnvironment
 });
 
 
@@ -45,12 +48,12 @@ const VpcSingapore = new VpcStack(app, 'Tokenizer-VPC-Singapore', {
 //DDB tables are regional so we don't have to provide a Vpc
 //The stack takes care of deploying to the primary and replica region
 const SensitiveDataStoreStack = new MultiRegionStore(app, 'TokenizerStack-data', {
-    env: env
+    env: PrimaryEnvironment
   });
 
 
 const SydneyStack = new TokenizerStack(app, 'Tokenizer-Sydney', {
-  env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION },  //Sydney
+  env: PrimaryEnvironment,
   vpc: VpcSydney.vpc,
   kmsSecurityGroup: VpcSydney.kmsSecurityGroup,
   tokenStore: SensitiveDataStoreStack.dynamodb,
@@ -59,7 +62,7 @@ const SydneyStack = new TokenizerStack(app, 'Tokenizer-Sydney', {
 
 
 const SingaporeStack = new TokenizerStack(app, 'Tokenizer-Singapore', {
-    env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: Constants.replicaRegion },  //Singapore
+    env: ReplicaEnvironment,
     vpc: VpcSingapore.vpc,
     kmsSecurityGroup: VpcSingapore.kmsSecurityGroup,
     tokenStore: SensitiveDataStoreStack.dynamodb,
