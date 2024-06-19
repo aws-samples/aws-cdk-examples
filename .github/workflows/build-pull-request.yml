@@ -33,7 +33,7 @@ jobs:
       # Get the list of changed files, excluding Markdown files
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v41
+        uses: tj-actions/changed-files@v44
         with:
           files: ${{ matrix.language }}/**
           files_ignore: '**/*.md'
@@ -98,9 +98,15 @@ jobs:
             echo "- $dir"
           done
 
-          # install CDK CLI from npm, so that npx can find it later
+          # Change to language directory
           cd ./${{ matrix.language }}
-          npm install
+
+          # install CDK CLI from npm if not typescript, so that npx can find it later
+          # ts will use the one from the particular cdk app
+          if [[ ${{ matrix.language }} != 'typescript' ]]; then
+            npm install -g aws-cdk
+            npx cdk --version
+          fi
 
           # Run the build_file function in parallel for each project to be built
           # Halt the execution if any of the build_file invocations fail
