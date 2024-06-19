@@ -9,6 +9,7 @@ export class pipelineStack extends cdk.Stack {
 
     const githubOrg       = process.env.GITHUB_ORG       || "jfan9";
     const githubRepo      = process.env.GITHUB_REPO      || "jfan9-aws-cdk-examples";
+    const githubProject   = process.env.GITHUB_PROJECT   || "typescript/aws-codepipeline-ecs-lambda";
     const githubBranch    = process.env.GITHUB_BRANCH    || "issue#820";
     const devEnv          = process.env.DEV_ENV          || "dev";
 
@@ -17,8 +18,8 @@ export class pipelineStack extends cdk.Stack {
       crossAccountKeys: true,
       reuseCrossRegionSupportStacks: true,
       synth: new ShellStep('Synth', {
-        input: CodePipelineSource.connection(`${githubOrg}/${githubRepo}`, `${githubBranch}`,{
-          // You need to replace the below code connection:
+        input: CodePipelineSource.connection(`${githubOrg}/${githubRepo}/${githubProject}`, `${githubBranch}`,{
+          // You need to replace the below code connection arn:
           connectionArn: `arn:aws:codestar-connections:ap-southeast-2:${props?.env?.account}:connection/0ce75950-a29b-4ee4-a9d3-b0bad3b2c0a6`
         }),
         commands: [
