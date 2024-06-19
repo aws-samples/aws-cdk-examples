@@ -1,8 +1,8 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from "constructs";
-import { lambdaApiStack } from './pipeline-app-lambda-api-stack';
-import { ecsFargateStack } from './pipeline-app-ecs-fargate-stack';
-import { asyncLambdaStack } from './pipeline-app-async-lambda-stack';
+import { lambdaApiStack } from './stage-app-lambda-api-stack';
+import { ecsFargateStack } from './stage-app-ecs-fargate-stack';
+import { asyncLambdaStack } from './stage-app-async-lambda-stack';
 
 export class pipelineAppStage extends cdk.Stage {
 
