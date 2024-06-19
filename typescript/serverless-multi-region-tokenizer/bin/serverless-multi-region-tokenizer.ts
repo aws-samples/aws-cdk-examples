@@ -30,7 +30,7 @@ const PrimaryEnvironment : cdk.Environment = {
 
 const ReplicaEnvironment : cdk.Environment = {
   account: process.env.CDK_DEFAULT_ACCOUNT, 
-  region:  process.env.CDK_DEFAULT_REGION //Constants.replicaRegion
+  region:  Constants.replicaRegion
 };
 
 
@@ -75,7 +75,7 @@ var DNSStack;
 if ((Constants.myApiSubdomain != '') && (Constants.myDomainName != '' )) {
   console.log("Generating");
     DNSStack = new TokenizerStackDNSStack(app, 'Tokenizer-DNS', {
-      env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION },  //R53 is Global
+      env: PrimaryEnvironment,  //R53 is Global
       api1: SydneyStack.api,
       api2: SingaporeStack.api
     });
