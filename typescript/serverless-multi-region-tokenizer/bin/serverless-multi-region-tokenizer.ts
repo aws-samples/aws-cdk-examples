@@ -30,7 +30,7 @@ const PrimaryEnvironment : cdk.Environment = {
 
 const ReplicaEnvironment : cdk.Environment = {
   account: process.env.CDK_DEFAULT_ACCOUNT, 
-  region: Constants.replicaRegion
+  region:  process.env.CDK_DEFAULT_REGION //Constants.replicaRegion
 };
 
 
