@@ -219,12 +219,16 @@ export class TokenizerStack extends Stack {
         { id: 'AwsSolutions-SQS3', reason: 'Failed encryption calls should be followed up, and use SSL to send failed messages.' } ]);
 
 
-    const kmsMultiRegionCMK = kms.Key.fromLookup(this, "kmsMultiRegionCMK", {
-      aliasName: 'alias/' + Constants.kmsMultiRegionKeyAlias
-    });
-    kmsMultiRegionCMK.grantEncrypt( lambdaEncrypt ); 
-    kmsMultiRegionCMK.grantDecrypt( lambdaDecrypt );
-
+    if (Constants.kmsMultiRegionKeyAlias != '')
+      {
+        //allow the lambdas access to the KMS key for encryption and decryption
+        const kmsMultiRegionCMK = kms.Key.fromLookup(this, "kmsMultiRegionCMK", {
+          aliasName: 'alias/' + Constants.kmsMultiRegionKeyAlias
+        });
+        kmsMultiRegionCMK.grantEncrypt( lambdaEncrypt ); 
+        kmsMultiRegionCMK.grantDecrypt( lambdaDecrypt );
+      }
+      
 
     //security for DDB - minimum privilege
     tokenStore.grantReadData(lambdaDecrypt);

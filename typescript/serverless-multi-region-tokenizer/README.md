@@ -237,10 +237,10 @@ Change constants.ts to set
 * ddbTokenTable - the name of the DynamoDB table to create - default sensitive-data
 * homeRegion - the AWS region where the primary architecture is deployed - default Sydney
 * replicaRegion - the AWS region where the secondary architecture is deployed - default Singapore
-* myDomainName - the root domain name
-* myApiSubdomain - the subdomain used by the api e.g. 'api'
+* myDomainName - the root domain name - if not provided the APIGW will not be created
+* myApiSubdomain - the subdomain used by the api e.g. 'api' - if not provided the APIGW will not be created
+* kmsMultiRegionKeyAlias - the alias of the multi-region customer master key. If you don't provide the alias, the Lambdas won't be able to access the key for encryption or decryption
 * kmsMultiRegionKeyId - the id (not ARN) of the multi-region customer master key
-* kmsMultiRegionKeyAlias - the alias of the multi-region customer master key
 
 
 # Installation
