@@ -1,0 +1,73 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: MIT-0
+
+You can create a row of test data directly in DDB table: sensitive-data.
+For TTL, you can use https://www.epochconverter.com/ to find an Unix epoch date in the future.
+
+DDB data cleanup of old data will happen within 48 hours, and this is divided into 'marked for deletion'
+and 'deleting' phases, so it is possible for a query to return expired data. You need to filter this
+data from your results by comparing the TTL to the now() unix epoch time.
+
+You can insert the sample data below into the table here:
+  https://ap-southeast-2.console.aws.amazon.com/dynamodbv2/home?region=ap-southeast-2#item-explorer?table=sensitive-data
+
+Sample data to put into DDB table:
+{
+ "tokenId": "4423423-4234233-235235",
+ "data": "simon is here",
+ "TTL": 1702360838
+}
+
+
+Test data to use via Lambda console
+
+Encryption:
+{
+	"data": {
+		"drivers_license": "987654321",
+        "medicare_card": "1234 56789 0",
+        "tax_file_number": "111 111 111",
+		"TTL": 1702360838
+		}
+}
+Should get a GUI as the response, which 
+
+Decryption:
+{
+	"tokenId": "TKN-SIN-4b30f90b-d478-4e4d-8b8d-96e34522f553"
+}
+
+
+# an existing record
+{
+	"tokenId": "TKN-SIN-e59b30ac-4616-4c09-a91c-d634155fa1ba"
+}
+
+# a non-existent record
+{
+	"tokenId": "zzzz"
+}
+
+
+aws lambda invoke \
+--function-name decrypt-item \
+--cli-binary-format raw-in-base64-out \
+--payload '{ "tokenId": "TKNccf079c1-91f0-4f3c-93a8-4851bef7fdbb" }' \
+--output json \
+outfile.json; cat outfile.json
+
+
+# run in a loop - request known record
+for i in {1..100}; do echo -n "This is a GET of known data in loop $i "; date ; aws lambda invoke \
+--function-name decrypt-item \
+--cli-binary-format raw-in-base64-out \
+--payload '{ "tokenId": "TKNccf079c1-91f0-4f3c-93a8-4851bef7fdbb" }' \
+outfile.json; cat outfile.json; done
+
+# ask for a non-existent tokenId to raise errors
+for i in {1..100}; do echo -n "This is a GET on non-existent data in loop $i "; date ; aws lambda invoke \
+--function-name decrypt-item \
+--cli-binary-format raw-in-base64-out \
+--payload '{ "tokenId": "zzzz" }' \
+outfile.json; cat outfile.json;  done
+

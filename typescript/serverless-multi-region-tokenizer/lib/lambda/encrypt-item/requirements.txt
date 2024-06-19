@@ -1,0 +1,3 @@
+dynamodb-encryption-sdk
+cryptography
+uuid
