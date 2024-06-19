@@ -22,7 +22,6 @@ export class pipelineStack extends cdk.Stack {
           connectionArn: `arn:aws:codestar-connections:ap-southeast-2:${props?.env?.account}:connection/0ce75950-a29b-4ee4-a9d3-b0bad3b2c0a6`
         }),
         commands: [
-          'cd typescript/aws-codepipeline-ecs-lambda',
           'npm ci',
           'npm run build',
           'npx cdk synth'
