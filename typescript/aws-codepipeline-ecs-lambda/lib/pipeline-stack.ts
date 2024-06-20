@@ -26,7 +26,14 @@ export class pipelineStack extends cdk.Stack {
           'npm run build',
           'npx cdk synth'
         ]
-      })
+      }),
+      synthCodeBuildDefaults: {
+        rolePolicy: [
+          new PolicyStatement({
+            resources: [ '*' ],
+            actions: [ 'ec2:DescribeAvailabilityZones' ],
+          }),
+      ]}
     });
 
     const devStage = pipeline.addStage(new pipelineAppStage(this, `${devEnv}`, {
