@@ -4,23 +4,22 @@ import { ApplicationLoadBalancedFargateService } from 'aws-cdk-lib/aws-ecs-patte
 import { IVpc, SubnetType, Vpc } from 'aws-cdk-lib/aws-ec2';
 import { Cluster, ContainerImage } from 'aws-cdk-lib/aws-ecs';
 
-export class ecsFargateStack extends cdk.Stack {
-    public readonly vpc:   IVpc;
-    constructor(scope: Construct, id: string, props?: cdk.StackProps) {
-      super(scope, id, props);
+interface vpcStackProps extends cdk.StackProps {
+    readonly vpc: Vpc;
+}
 
-    this.vpc = new Vpc (this, "ecsVpc", {
-        natGateways: 1,
-    });
+export class ecsFargateStack extends cdk.Stack {
+    constructor(scope: Construct, id: string, props: vpcStackProps) {
+        super(scope, id, props);
 
     const cluster = new Cluster(this, 'ecsCluster', {
-        vpc: this.vpc,
+        vpc: props.vpc,
         containerInsights: true,
     });
     
     // 👇 create a new ecs pattern with an alb 👇
     const loadBalancedFargateService = new ApplicationLoadBalancedFargateService (this, 'ecsPattern', {
-        cluster: cluster,
+        cluster,
         cpu: 256,
         memoryLimitMiB: 512,
         desiredCount: 1,
