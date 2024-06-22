@@ -1,14 +1,4 @@
-# Welcome to your CDK TypeScript project
+# AWS Codepipeline CI/CD Solution for ECS Fargate and Lambda
 
-This is a blank project for CDK development with TypeScript.
-
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
-
-## Useful commands
-
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `npx cdk deploy`  deploy this stack to your default AWS account/region
-* `npx cdk diff`    compare deployed stack with current state
-* `npx cdk synth`   emits the synthesized CloudFormation template
+## Architect Design:
+<img width="900" alt="image" src="https://github.com/jfan9/jfan9-aws-cdk-examples/blob/e81e690cd4fcf0470f92cf63609907f992d9cbcd/typescript/aws-codepipeline-ecs-lambda/static_images/Architecture_diagram.png">
