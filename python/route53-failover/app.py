@@ -3,17 +3,41 @@ import os
 
 import aws_cdk as cdk
 
-from route53_failover_stack import Route53FailoverStack
-
+from fargate_app_stack import FargateAppStack
+from healthcheck_alarm_stack import HealthcheckAlarmStack
 
 app = cdk.App()
-Route53FailoverStack(app, 
-                     "Route53FailoverStack",
-                     domain="aws-partner.io",
-                     email="kihoonk@amazon.com",
-                     env=cdk.Environment(
-                        account=os.getenv('CDK_DEFAULT_ACCOUNT'),
-                        region=os.getenv('CDK_DEFAULT_REGION')
-                        )
-                    )
+
+domain=app.node.try_get_context('domain')
+email=app.node.try_get_context('email')
+primaryRegion=app.node.try_get_context('primaryRegion')
+secondaryRegion=app.node.try_get_context('secondaryRegion')
+account=os.getenv('CDK_DEFAULT_ACCOUNT')
+region=os.getenv('CDK_DEFAULT_REGION')
+
+# Sample app 1
+app1 = FargateAppStack(app, "PrimaryFargateApp", env=cdk.Environment(
+    account=account,
+    region=primaryRegion
+))
+
+# Sample app 2
+app2 = FargateAppStack(app, "SecondaryFargateApp", env=cdk.Environment(
+    account=account,
+    region=secondaryRegion
+))
+
+HealthcheckAlarmStack(
+    app, "HealthCheckAlarm",
+    domain=domain,
+    primaryLoadBalancer=app1.fargate_service.load_balancer,
+    secondaryLoadBalancer=app2.fargate_service.load_balancer,
+    email=email,
+    env=cdk.Environment(
+        account=account,
+        region="us-east-1"
+    ),
+    cross_region_references=True
+)
+
 app.synth()
