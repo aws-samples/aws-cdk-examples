@@ -1,7 +1,44 @@
 
-# Welcome to your CDK Python project!
+# CDK Example for Self Managed and Service Managed StackSets
+<!--BEGIN STABILITY BANNER-->
 
-This is a blank project for CDK development with Python.
+---
+
+![cdk-constructs: Experimental](https://img.shields.io/badge/cdk--constructs-experimental-important.svg?style=for-the-badge)
+
+> The APIs of higher level constructs in this module are experimental and under active development.
+> They are subject to non-backward compatible changes or removal in any future version. These are
+> not subject to the [Semantic Versioning](https://semver.org/) model and breaking changes will be
+> announced in the release notes. This means that while you may use them, you may need to update
+> your source code when upgrading to a newer version of this package.
+
+---
+
+This is a CDK Example for Self Managed and Service Managed StackSets with Python using [cdk-stacksets](https://github.com/cdklabs/cdk-stacksets/tree/main) L2 Construct. This contruct is experimental and under active development.
+
+Cloudformation StackSets allow you to deploy a single CloudFormation template across multiple AWS accounts and regions. 
+
+The example uses a context file(cdk.context.json) to store list of the OU Ids and Account IDs. This list in the context file can be then passed to the StackSet Construct.
+
+## About cdk.context.json
+
+```
+{
+      "OUIDs": [
+        "ou-pv6z-xxxxxxxx",
+        "ou-pv6z-aaaaaaaa"
+      ]
+}
+```
+[Explain above file]
+
+In CDK Code, we are fetching the OU Ids using try_get_context() method as shown:
+
+```
+        ou_ids = self.node.try_get_context('OUIDs')
+```
+
+## Running the CDK Code
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
