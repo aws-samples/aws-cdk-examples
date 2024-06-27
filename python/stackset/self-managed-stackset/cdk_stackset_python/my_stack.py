@@ -14,4 +14,3 @@ class MyStackSet(StackSetStack):
         queue = sqs.Queue(self, 'MyQueue',
             visibility_timeout=Duration.seconds(300)
         )
-        #Cloudtrail/LogGroup/S3Bucket
