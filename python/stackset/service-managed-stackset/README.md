@@ -19,25 +19,22 @@ This is a CDK Example for Service Managed StackSets with Python using [cdk-stack
 ## Overview
 This CDK Example allows you to:
 
-* Define a sample resource (MyStackSet) to be deployed.
+* Define a sample resource (my_stack.py) to be deployed across accounts. 
 
-* Read a list of target OUs from a configuration file.
+* Read a list of target OUs from a configuration file. (cdk.context.json)
 
 * Create a StackSet that deploys the resource to the specified OUs.
 
 ---
 
 ## Prerequisites
-Before you create a stack set with self-managed permissions,
 
-https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-activate-trusted-access.html
+To set up the required permissions for creating a stack set with service-managed permissions, see [Performing stack set operations involving Regions that are disabled by default](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs.html#stacksets-opt-in-regions) and [Activate trusted access with AWS Organizations](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-activate-trusted-access.html).
 
 
 ---
-
-The example uses a context file(cdk.context.json) to store list of the OU Ids and Account IDs. This list in the context file can be then passed to the StackSet Construct.
-
 ## About cdk.context.json
+The example uses a context file(cdk.context.json) to store list of the OU Ids. This list in the context file can be then passed to the StackSet Construct.
 
 ```
 {
@@ -47,21 +44,19 @@ The example uses a context file(cdk.context.json) to store list of the OU Ids an
       ]
 }
 ```
-[Explain above file]
-
-
-## Project Structure
-* cdk_stackset_python_stack.py: Main CDK stack definition
-* my_stack.py: Definition of the sample resource to be deployed.
-* cdk.context.json: Configuration file for specifying target OUs
-
----          
-
-In CDK Code, we are fetching the OU Ids using try_get_context() method as shown:
+You can add multiple OU IDs in the above list. In CDK Code, we are fetching the OU Ids using try_get_context() method as shown:
 
 ```
         ou_ids = self.node.try_get_context('OUIDs')
 ```
+---
+
+## Project Structure
+* cdk_stackset_python_stack.py: Main CDK stackset definition with L2 Construct
+* my_stack.py: Definition of the sample resource to be deployed across accounts and regions.
+* cdk.context.json: Configuration file for specifying list of target OUs
+
+---          
 
 ## Running the CDK Code
 
