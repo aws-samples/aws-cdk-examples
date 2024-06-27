@@ -4,6 +4,7 @@ import { vpcStack } from './stage-app-vpc-stack';
 import { lambdaApiStack } from './stage-app-lambda-api-stack';
 import { ecsFargateStack } from './stage-app-ecs-fargate-stack';
 import { asyncLambdaStack } from './stage-app-async-lambda-stack';
+import { rdsAuroraStack } from './stage-app-datastore-stack';
 
 export class pipelineAppStage extends cdk.Stage {
 
@@ -31,5 +32,11 @@ export class pipelineAppStage extends cdk.Stage {
     const async_lambda_stack = new asyncLambdaStack(this, 'AsyncLambdasStack');
     cdk.Tags.of(async_lambda_stack).add('managedBy',   'cdk');
     cdk.Tags.of(async_lambda_stack).add('environment', 'dev');
+    
+    const rds_aurora_stack = new rdsAuroraStack(this, 'rdsAuroraStack', {
+      vpc: vpc_stack.vpc,
+    });
+    cdk.Tags.of(rds_aurora_stack).add('managedBy',   'cdk');
+    cdk.Tags.of(rds_aurora_stack).add('environment', 'dev');
     }
 }
