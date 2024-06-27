@@ -66,9 +66,9 @@
     "@aws-cdk/aws-ec2:ebsDefaultGp3Volume": true,
     "@aws-cdk/aws-ecs:removeDefaultDeploymentAlarm": true,
     "@aws-cdk/custom-resources:logApiResponseDataPropertyTrueDefault": false,
-    "domain": "junsjang.link",
-    "email": "junsjang@amazon.com",
-    "primaryRegion": "ap-northeast-1",
-    "secondaryRegion": "ap-northeast-2"
+    "domain": "example.com",
+    "email": "user@example.com",
+    "primaryRegion": "us-east-1",
+    "secondaryRegion": "us-west-2"
   }
 }
