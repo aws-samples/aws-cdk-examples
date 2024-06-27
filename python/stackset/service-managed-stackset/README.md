@@ -14,7 +14,7 @@
 
 ---
 
-This is a CDK Example for Service Managed StackSets with Python using [cdk-stacksets](https://github.com/cdklabs/cdk-stacksets/tree/main) L2 Construct. This contruct is experimental and under active development.Cloudformation StackSets allow you to deploy a single CloudFormation template across multiple AWS accounts and regions. 
+This is a CDK Example for Service Managed StackSets with Python using [cdk-stacksets](https://github.com/cdklabs/cdk-stacksets/tree/main) L2 Construct. This example uses a contruct which is experimental and under active development. Cloudformation StackSets allow you to deploy a single CloudFormation template across multiple AWS accounts and regions. 
 
 ## Overview
 This CDK Example allows you to:
