@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from waitress import serve
+
 import datetime
 import os
 
@@ -15,4 +15,4 @@ def index():
 
 
 if __name__ == "__main__":
-    serve(app, host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=80)
