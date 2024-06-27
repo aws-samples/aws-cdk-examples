@@ -5,6 +5,7 @@ import aws_cdk as cdk
 
 from fargate_app_stack import FargateAppStack
 from healthcheck_alarm_stack import HealthcheckAlarmStack
+from alias_healthcheck_record_stack import AliasHealthcheckRecordStack
 
 app = cdk.App()
 
@@ -33,6 +34,18 @@ HealthcheckAlarmStack(
     primaryLoadBalancer=app1.fargate_service.load_balancer,
     secondaryLoadBalancer=app2.fargate_service.load_balancer,
     email=email,
+    env=cdk.Environment(
+        account=account,
+        region="us-east-1"
+    ),
+    cross_region_references=True
+)
+
+AliasHealthcheckRecordStack(
+    app, "AliasHealthCheckRecord",
+    domain=domain,
+    primaryLoadBalancer=app1.fargate_service.load_balancer,
+    secondaryLoadBalancer=app2.fargate_service.load_balancer,
     env=cdk.Environment(
         account=account,
         region="us-east-1"
