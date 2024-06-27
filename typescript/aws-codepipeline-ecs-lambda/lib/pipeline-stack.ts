@@ -12,6 +12,9 @@ export class pipelineStack extends cdk.Stack {
     const githubRepo      = process.env.GITHUB_REPO      || "aws-codepipeline-ecs-lambda";
     const githubBranch    = process.env.GITHUB_BRANCH    || "main";
     const devEnv          = process.env.DEV_ENV          || "dev";
+    const devAccountId    = process.env.DEV_ACCOUNT_ID   || "117645918752"; // replace with your dev account id
+    const primaryRegion   = process.env.PRIMARY_REGION   || "us-west-2";
+    const secondaryRegion = process.env.SECONDARY_REGION || "eu-west-1";
 
     const pipeline = new CodePipeline(this, 'pipeline', {
       selfMutation:     true,
@@ -41,5 +44,16 @@ export class pipelineStack extends cdk.Stack {
       env: { account: props?.env?.account, region: props?.env?.region}
     }));
     devStage.addPost(new ManualApprovalStep('approval'));
+
+    // add waves:
+    const devWave = pipeline.addWave(`${devEnv}Wave`);
+
+    devWave.addStage(new pipelineAppStage(this, `${devEnv}-${primaryRegion}`, {
+      env: { account: `${devAccountId}`, region: `${primaryRegion}`}
+    }));
+
+    devWave.addStage(new pipelineAppStage(this, `${devEnv}-${secondaryRegion}`, {
+      env: { account: `${devAccountId}`, region: `${secondaryRegion}`}
+    }));
   }
 }
