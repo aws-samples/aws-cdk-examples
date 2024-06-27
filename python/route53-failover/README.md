@@ -1,58 +1,31 @@
+# CDK Failover DNS with Route 53 Health Check
 
-# Welcome to your CDK Python project!
+This sample project demonstrates how to create a Failover DNS record in Route 53 using a CDK application. It leverages the Route 53 Health Check feature to monitor the status of endpoints and automatically fail over to a backup endpoint in case of failure. Additionally, it configures SNS notifications to alert administrators when a failover event occurs, ensuring prompt awareness and response.
 
-This is a blank project for CDK development with Python.
+## Architecture
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+The architecture of this solution is illustrated in the following diagram:
 
-This project is set up like a standard Python project.  The initialization
-process also creates a virtualenv within this project, stored under the `.venv`
-directory.  To create the virtualenv it assumes that there is a `python3`
-(or `python` for Windows) executable in your path with access to the `venv`
-package. If for any reason the automatic creation of the virtualenv fails,
-you can create the virtualenv manually.
+![Architecture Diagram](images/architecture.png)
 
-To manually create a virtualenv on MacOS and Linux:
+The key components of the architecture are:
 
-```
-$ python3 -m venv .venv
-```
+1. **Primary Endpoint**: The main endpoint that serves traffic under normal circumstances.
+2. **Secondary Endpoint**: The backup endpoint that takes over traffic when the primary endpoint fails.
+3. **Route 53 Hosted Zone**: The DNS hosted zone where the Failover DNS record is created.
+4. **Route 53 Health Checks**: Health checks that monitor the availability of the primary and secondary endpoints.
+5. **Route 53 Failover DNS Record**: The DNS record that routes traffic to the primary endpoint by default, but automatically switches to the secondary endpoint when the primary endpoint fails the health check.
+6. **SNS Topic**: The Simple Notification Service (SNS) topic that publishes notifications when a failover event occurs.
+7. **SNS Subscription**: The subscription to the SNS topic, which can be configured to deliver notifications via email or other channels.
 
-After the init process completes and the virtualenv is created, you can use the following
-step to activate your virtualenv.
+## Getting Started
 
-```
-$ source .venv/bin/activate
-```
+To get started with this project, follow these steps:
 
-If you are a Windows platform, you would activate the virtualenv like this:
+1. Clone the repository.
+2. Install the required dependencies using `npm install`.
+3. Configure the necessary AWS credentials and environment variables.
+4. **Provide the required context values in the `cdk.json` file, including `domain`, `email`, `primaryRegion`, and `secondaryRegion`.**
+5. Deploy the CDK application using `cdk deploy`.
 
-```
-% .venv\Scripts\activate.bat
-```
-
-Once the virtualenv is activated, you can install the required dependencies.
-
-```
-$ pip install -r requirements.txt
-```
-
-At this point you can now synthesize the CloudFormation template for this code.
-
-```
-$ cdk synth
-```
-
-To add additional dependencies, for example other CDK libraries, just add
-them to your `setup.py` file and rerun the `pip install -r requirements.txt`
-command.
-
-## Useful commands
-
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk docs`        open CDK documentation
-
-Enjoy!
+Refer to the project's documentation for more detailed instructions and configuration options.
