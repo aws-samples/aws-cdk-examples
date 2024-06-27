@@ -25,7 +25,8 @@ To get started with this project, follow these steps:
 1. Clone the repository.
 2. Install the required dependencies using `npm install`.
 3. Configure the necessary AWS credentials and environment variables.
-4. **Provide the required context values in the `cdk.json` file, including `domain`, `email`, `primaryRegion`, and `secondaryRegion`.**
-5. Deploy the CDK application using `cdk deploy`.
+4. Select a Route 53 HostedZone that can be used for this project.
+5. **Provide the required context values in the `cdk.json` file, including `domain` refering the HostedZone, `email` to get notifications, `primaryRegion`, and `secondaryRegion` to deploy the sample application.**
+6. Deploy the CDK application using `cdk deploy`.
 
 Refer to the project's documentation for more detailed instructions and configuration options.
