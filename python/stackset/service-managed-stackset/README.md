@@ -1,5 +1,5 @@
 
-# CDK Example for Self Managed and Service Managed StackSets
+# CDK Example for Service Managed StackSets
 <!--BEGIN STABILITY BANNER-->
 
 ---
@@ -14,9 +14,26 @@
 
 ---
 
-This is a CDK Example for Self Managed and Service Managed StackSets with Python using [cdk-stacksets](https://github.com/cdklabs/cdk-stacksets/tree/main) L2 Construct. This contruct is experimental and under active development.
+This is a CDK Example for Service Managed StackSets with Python using [cdk-stacksets](https://github.com/cdklabs/cdk-stacksets/tree/main) L2 Construct. This contruct is experimental and under active development.Cloudformation StackSets allow you to deploy a single CloudFormation template across multiple AWS accounts and regions. 
 
-Cloudformation StackSets allow you to deploy a single CloudFormation template across multiple AWS accounts and regions. 
+## Overview
+This CDK Example allows you to:
+
+* Define a sample resource (MyStackSet) to be deployed.
+
+* Read a list of target OUs from a configuration file.
+
+* Create a StackSet that deploys the resource to the specified OUs.
+
+---
+
+## Prerequisites
+Before you create a stack set with self-managed permissions,
+
+https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-activate-trusted-access.html
+
+
+---
 
 The example uses a context file(cdk.context.json) to store list of the OU Ids and Account IDs. This list in the context file can be then passed to the StackSet Construct.
 
@@ -31,6 +48,14 @@ The example uses a context file(cdk.context.json) to store list of the OU Ids an
 }
 ```
 [Explain above file]
+
+
+## Project Structure
+* cdk_stackset_python_stack.py: Main CDK stack definition
+* my_stack.py: Definition of the sample resource to be deployed.
+* cdk.context.json: Configuration file for specifying target OUs
+
+---          
 
 In CDK Code, we are fetching the OU Ids using try_get_context() method as shown:
 
