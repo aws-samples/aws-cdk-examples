@@ -28,7 +28,7 @@ class FargateAppStack(Stack):
             self, "FargateService",
             cluster=cluster,
             task_image_options=ecs_patterns.NetworkLoadBalancedTaskImageOptions(
-                image=ecs.ContainerImage.from_registry("public.ecr.aws/d9c1g7f8/fargate-demo:latest")
+                image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample")
             )
         )
 
