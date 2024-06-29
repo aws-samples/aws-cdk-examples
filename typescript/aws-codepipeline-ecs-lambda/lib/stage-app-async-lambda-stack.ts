@@ -20,7 +20,7 @@ export class asyncLambdaStack extends cdk.Stack {
         });
 
         // Shared code asset
-        const code = Code.fromAsset(path.join(__dirname, 'lambda-functions'));
+        const code = Code.fromAsset(path.join(__dirname, '../assets/lambda-functions'));
 
         // Lambda Function that will be invoked asynchronously when there is any event that matches the rule
         const eventsFunction = new Function(this, 'EventFunction', {
