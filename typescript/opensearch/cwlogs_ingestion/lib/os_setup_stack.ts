@@ -6,9 +6,10 @@ import { CfnPipeline } from 'aws-cdk-lib/aws-osis';
 import { Construct } from 'constructs';
 import { readFileSync } from "fs";
 
-export class OsisOpenSearchSetupStack extends Stack {
+export class OpenSearchSetupStack extends Stack {
     
-    private readonly STACK_NAMING_PREFIX: string = 'osis-os-setup';
+    private readonly STACK_NAMING_PREFIX: string = 'cw-to-os';
+    private readonly STACK_RESOURCE_NAMING_PREFIX: string = 'OpenSearchSetup';
     private readonly COLLECTION_NAME: string = `${this.STACK_NAMING_PREFIX}-col`;
     private readonly DATA_ACCESS_POLICY_NAME: string = `${this.STACK_NAMING_PREFIX}-data-pol`;
     private readonly NETWORK_POLICY_NAME: string = `${this.STACK_NAMING_PREFIX}-net-pol`;
@@ -22,10 +23,10 @@ export class OsisOpenSearchSetupStack extends Stack {
         super(scope, id, props);
 
         // Create VPC
-        const vpc = new Vpc(this, `${this.STACK_NAMING_PREFIX}-vpc`);
+        const vpc = new Vpc(this, `${this.STACK_RESOURCE_NAMING_PREFIX}-vpc`);
 
         // Create Security Group
-        const securityGroup = new SecurityGroup(this, `${this.STACK_NAMING_PREFIX}-security-group`, {
+        const securityGroup = new SecurityGroup(this, `${this.STACK_RESOURCE_NAMING_PREFIX}-security-group`, {
             description: 'Security group for OpenSearch',
             vpc: vpc,
             allowAllOutbound: true,
@@ -39,7 +40,7 @@ export class OsisOpenSearchSetupStack extends Stack {
         );
         
         // Create VPC Endpoint
-        const vpcEndpoint = new CfnVpcEndpoint(this, `${this.STACK_NAMING_PREFIX}VpcEndpoint`, {
+        const vpcEndpoint = new CfnVpcEndpoint(this, `${this.STACK_RESOURCE_NAMING_PREFIX}VpcEndpoint`, {
             name: this.VPC_ENDPOINT_NAME,
             vpcId: vpc.vpcId,
             subnetIds: vpc.privateSubnets.map((subnet) => subnet.subnetId),
@@ -47,7 +48,7 @@ export class OsisOpenSearchSetupStack extends Stack {
         });
         
         // Create OpenSearch Serverless network security policy
-        const cfnNetworkAccessPolicy = new CfnSecurityPolicy(this, `${this.STACK_NAMING_PREFIX}NetworkPolicy`, {
+        const cfnNetworkAccessPolicy = new CfnSecurityPolicy(this, `${this.STACK_RESOURCE_NAMING_PREFIX}NetworkPolicy`, {
           name: this.NETWORK_POLICY_NAME,
           type: 'network',
           policy: JSON.stringify([
@@ -74,7 +75,7 @@ export class OsisOpenSearchSetupStack extends Stack {
       });
 
       // Create OpenSearch Serverless encryption policy
-      const cfnEncryptionPolicy = new CfnSecurityPolicy(this, `${this.STACK_NAMING_PREFIX}EncryptionPolicy`, {
+      const cfnEncryptionPolicy = new CfnSecurityPolicy(this, `${this.STACK_RESOURCE_NAMING_PREFIX}EncryptionPolicy`, {
             name: this.ENCRYPTION_POLICY_NAME,
             type: 'encryption',
             policy: JSON.stringify({
@@ -103,8 +104,8 @@ export class OsisOpenSearchSetupStack extends Stack {
         cfnCollection.addDependency(cfnNetworkAccessPolicy);
 
         // Create IAM role for OpenSearch Ingestion pipeline
-        const pipelineRole = new Role(this, `${this.STACK_NAMING_PREFIX}PipelineRole`, {
-            roleName: `${this.STACK_NAMING_PREFIX}PipelineRole`,
+        const pipelineRole = new Role(this, `${this.STACK_RESOURCE_NAMING_PREFIX}PipelineRole`, {
+            roleName: `${this.STACK_RESOURCE_NAMING_PREFIX}PipelineRole`,
             assumedBy: new ServicePrincipal('osis-pipelines.amazonaws.com'),
             inlinePolicies: {
             'OSISPipelineRolePolicy': this.pipelinePolicies(cfnCollection.attrArn)
@@ -112,9 +113,12 @@ export class OsisOpenSearchSetupStack extends Stack {
         });   
 
         // Create OpenSearch Ingestion pipeline        
-        const cfnPipeline = new CfnPipeline(this, `${this.STACK_NAMING_PREFIX}Pipeline`, {
+        const cfnPipeline = new CfnPipeline(this, `${this.STACK_RESOURCE_NAMING_PREFIX}Pipeline`, {
             maxUnits: 4,
-            minUnits: 1,
+            minUnits: 2,
+            bufferOptions: {
+              persistentBufferEnabled: true
+            },
             pipelineConfigurationBody: this.getPipelineConfiguration(pipelineRole.roleArn, cfnCollection.attrCollectionEndpoint),
             pipelineName: this.PIPELINE_NAME,
         });
@@ -124,12 +128,12 @@ export class OsisOpenSearchSetupStack extends Stack {
         cfnPipeline.addDependency(cfnCollection);
 
         // Create a dashboard access role
-        const dashboardAccessRole = new Role(this, `${this.STACK_NAMING_PREFIX}DashboardAccessRole`, {
+        const dashboardAccessRole = new Role(this, `${this.STACK_RESOURCE_NAMING_PREFIX}DashboardAccessRole`, {
           assumedBy: new ServicePrincipal('ec2.amazonaws.com'),
         });
     
         dashboardAccessRole.attachInlinePolicy(
-          new Policy(this, `${this.STACK_NAMING_PREFIX}DashboardAccessPolicy`, {
+          new Policy(this, `${this.STACK_RESOURCE_NAMING_PREFIX}DashboardAccessPolicy`, {
             statements: [
               new PolicyStatement({
                 effect: Effect.ALLOW,

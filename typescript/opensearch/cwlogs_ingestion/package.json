@@ -1,11 +1,11 @@
 {
-  "name": "osis_cwlogs_ingestion",
+  "name": "cwlogs_ingestion",
   "version": "0.1.0",
   "bin": {
-    "osis_cwlogs_ingestion": "bin/osis_cwlogs_ingestion.js"
+    "cwlogs_ingestion": "bin/cwlogs_ingestion.js"
   },
   "scripts": {
-    "clean": "rm -rf build dist cdk.out node_modules",
+    "clean": "rm -rf build dist cdk.out node_modules && find . -name \"*.js\" -type f -delete && find . -name \"*.d.ts\" -type f -delete",
     "build": "tsc",
     "watch": "tsc -w",
     "cdk": "cdk"

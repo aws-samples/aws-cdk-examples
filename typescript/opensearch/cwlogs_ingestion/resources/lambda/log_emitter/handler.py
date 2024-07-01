@@ -6,7 +6,7 @@ def log_emitter(event, context):
     source = {}
     id = str(randrange(10000))
     source['id'] = id
-    source['timestamp'] = datetime.now()
+    source['timestamp'] = str(datetime.now())
     source['message'] = 'Hello world'
     source['owner'] = 'aws-osi'
     
