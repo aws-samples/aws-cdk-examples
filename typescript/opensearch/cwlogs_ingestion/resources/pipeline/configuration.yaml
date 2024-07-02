@@ -1,0 +1,15 @@
+version: "2"
+cwlogs-ingestion-http-pipeline:
+  source:
+    http:
+      path: /logs/ingest
+  sink:
+    - opensearch:
+        hosts: ["<COLLECTION_ENDPOINT>"]
+        aws:
+          sts_role_arn: "<ROLE_ARN>"
+          region: "<REGION>"
+          serverless: true
+          serverless_options:
+            network_policy_name: "<NETWORK_POLICY_NAME>"
+        index: "cwl-%{yyyy-MM-dd}"
