@@ -1,26 +1,18 @@
 from constructs import Construct
 from aws_cdk import (
     Stack,
-    Duration,
     aws_route53 as route53,
     aws_elasticloadbalancingv2 as elbv2,
     aws_route53_targets as route53_targets,
-    aws_cloudwatch as cloudwatch,
-    aws_sns as sns
 )
-from aws_cdk.aws_cloudwatch_actions import SnsAction
-from aws_cdk.aws_sns_subscriptions import EmailSubscription
 
 class AliasHealthcheckRecordStack(Stack):
-  def __init__(self, scope: Construct, construct_id: str, domain: str, primaryLoadBalancer: elbv2.ILoadBalancerV2, secondaryLoadBalancer: elbv2.ILoadBalancerV2, **kwargs) -> None:
+  def __init__(self, scope: Construct, construct_id: str, zone: route53.HostedZone, primaryLoadBalancer: elbv2.ILoadBalancerV2, secondaryLoadBalancer: elbv2.ILoadBalancerV2, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
-
-        # Test Env
-        hostzone = route53.HostedZone.from_lookup(self, "HostedZone", domain_name=domain)
 
         # primary record
         primary = route53.ARecord(self, "PrimaryRecordSet",
-            zone = hostzone,
+            zone = zone,
             record_name="alias",
             target = route53.RecordTarget.from_alias(route53_targets.LoadBalancerTarget(primaryLoadBalancer)),
         )
@@ -31,7 +23,7 @@ class AliasHealthcheckRecordStack(Stack):
 
         # secondary record
         secondary = route53.ARecord(self, "SecondaryRecordSet",
-            zone = hostzone,
+            zone = zone,
             record_name="alias",
             target= route53.RecordTarget.from_alias(route53_targets.LoadBalancerTarget(secondaryLoadBalancer)),
         )

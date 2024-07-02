@@ -12,11 +12,8 @@ from aws_cdk.aws_cloudwatch_actions import SnsAction
 from aws_cdk.aws_sns_subscriptions import EmailSubscription
 
 class HealthcheckAlarmStack(Stack):
-  def __init__(self, scope: Construct, construct_id: str, domain: str, primaryLoadBalancer: elbv2.ILoadBalancerV2, secondaryLoadBalancer: elbv2.ILoadBalancerV2, email: str, **kwargs) -> None:
+  def __init__(self, scope: Construct, construct_id: str, zone: route53.HostedZone, primaryLoadBalancer: elbv2.ILoadBalancerV2, secondaryLoadBalancer: elbv2.ILoadBalancerV2, email: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
-
-        # Test Env
-        hostzone = route53.HostedZone.from_lookup(self, "HostedZone", domain_name=domain)
 
         # primary record
         primaryHealthCheck = route53.CfnHealthCheck(self, "DNSPrimaryHealthCheck", health_check_config=route53.CfnHealthCheck.HealthCheckConfigProperty(
@@ -25,7 +22,7 @@ class HealthcheckAlarmStack(Stack):
             port=80
         ))
         primary = route53.ARecord(self, "PrimaryRecordSet",
-            zone = hostzone,
+            zone = zone,
             record_name="failover",
             target = route53.RecordTarget.from_alias(route53_targets.LoadBalancerTarget(primaryLoadBalancer)),
         )
@@ -41,7 +38,7 @@ class HealthcheckAlarmStack(Stack):
             port=80,
         ))
         secondary = route53.ARecord(self, "SecondaryRecordSet",
-            zone = hostzone,
+            zone = zone,
             record_name="failover",
             target= route53.RecordTarget.from_alias(route53_targets.LoadBalancerTarget(secondaryLoadBalancer)),
         )
