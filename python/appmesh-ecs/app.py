@@ -20,7 +20,6 @@ color_app_stack = ColorAppStack(app, "ColorAppStack")
 appmesh_colorapp_stack = ServiceMeshColorAppStack(app, "AppmeshColorappStack")
 colorapp_task_definition_stack = ColorAppTaskDefinitionStack(app, "ColorAppTaskDefinitionStack")
 
-
 ecs_stack.add_dependency(vpc_stack)
 appmesh_stack.add_dependency(ecs_stack)
 appmesh_colorapp_stack.add_dependency(appmesh_stack)
