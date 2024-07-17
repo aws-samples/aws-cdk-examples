@@ -228,6 +228,26 @@ class ColorAppStack(Stack):
                 failure_threshold=1
             )
         )
+        WebTargetGroup = elbv2.CfnTargetGroup(
+            self, "WebTargetGroup",
+            health_check_interval_seconds=6,
+            health_check_path="/ping",
+            health_check_protocol="HTTP",
+            health_check_timeout_seconds=5,
+            healthy_threshold_count=2,
+            target_type="ip",
+            unhealthy_threshold_count=2,
+            vpc_id=core.Fn.import_value(f"{environment_name}:VPCID"),
+            port=80,
+            protocol="HTTP",
+            target_group_attributes=[elbv2.CfnTargetGroup.TargetGroupAttributeProperty(
+                key="deregistration_delay.timeout_seconds",
+                value="120",
+            )],
+            
+        
+           tags=[{"key": "Name", "value": "WebTargetGroup"}],
+        )
         ColorGatewayService = ecs.CfnService(
             self, "ColorGatewayService",
             cluster=core.Fn.import_value(f"{environment_name}:ECSCluster"),
@@ -412,26 +432,7 @@ class ColorAppStack(Stack):
             ]
             
         )
-        WebTargetGroup = elbv2.CfnTargetGroup(
-            self, "WebTargetGroup",
-            health_check_interval_seconds=6,
-            health_check_path="/ping",
-            health_check_protocol="HTTP",
-            health_check_timeout_seconds=5,
-            healthy_threshold_count=2,
-            target_type="ip",
-            unhealthy_threshold_count=2,
-            vpc_id=core.Fn.import_value(f"{environment_name}:VPCID"),
-            port=80,
-            protocol="HTTP",
-            target_group_attributes=[elbv2.CfnTargetGroup.TargetGroupAttributeProperty(
-                key="deregistration_delay.timeout_seconds",
-                value="120",
-            )],
-            
-        
-           tags=[{"key": "Name", "value": "WebTargetGroup"}],
-        )
+
         PublicLoadBalancerListener = elbv2.CfnListener(
             self, "PublicLoadBalancerListener",
             load_balancer_arn=PublicLoadBalancer.ref,
