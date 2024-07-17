@@ -2,7 +2,7 @@
 # App Mesh + ECS Fargate
 
 This stack will create core infrastructure resources and then create ECS services and tasks along with
-the appropriate app mesh resources. You can view the traces of the application in AWS X-Ray.
+the appropriate app mesh resources. You can view the traces of the application in AWS X-Ray. This is based off of the ColorTeller CloudFormation Example.
 
 ![Detailed diagram](appmesh_diagram.png)
 
