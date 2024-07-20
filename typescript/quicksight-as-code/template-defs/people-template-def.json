@@ -1,0 +1,716 @@
+{
+    "Status": 200,
+    "TemplateId": "people-template",
+    "ResourceStatus": "CREATION_SUCCESSFUL",
+    "Definition": {
+        "DataSetConfigurations": [
+            {
+                "Placeholder": "People Overview",
+                "DataSetSchema": {
+                    "ColumnSchemaList": [
+                        {
+                            "Name": "Monthly Compensation",
+                            "DataType": "DECIMAL"
+                        },
+                        {
+                            "Name": "Gender",
+                            "DataType": "STRING"
+                        },
+                        {
+                            "Name": "Date",
+                            "DataType": "DATETIME"
+                        },
+                        {
+                            "Name": "Tenure",
+                            "DataType": "INTEGER"
+                        },
+                        {
+                            "Name": "Education",
+                            "DataType": "STRING"
+                        },
+                        {
+                            "Name": "Notes",
+                            "DataType": "STRING"
+                        },
+                        {
+                            "Name": "Region",
+                            "DataType": "STRING",
+                            "GeographicRole": "STATE"
+                        },
+                        {
+                            "Name": "Business Function",
+                            "DataType": "STRING"
+                        }
+                    ]
+                },
+                "ColumnGroupSchemaList": []
+            }
+        ],
+        "Sheets": [
+            {
+                "SheetId": "59c7ddef-c5e8-41f4-b300-80f0c26d0b14",
+                "Name": "Sheet 1",
+                "Visuals": [
+                    {
+                        "PieChartVisual": {
+                            "VisualId": "7d4e9e0e-ae0a-4369-925a-8f8bea82440c",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "Employees by Region"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "PieChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "People Overview",
+                                                        "ColumnName": "Region"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Values": []
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategoryItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "DonutOptions": {
+                                    "ArcOptions": {
+                                        "ArcThickness": "WHOLE"
+                                    }
+                                }
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": []
+                        }
+                    },
+                    {
+                        "LineChartVisual": {
+                            "VisualId": "aaef7d2a-bf9a-496c-95bb-692a7eedb201",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "Hiring by Region"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "LineChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "DateDimensionField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "People Overview",
+                                                        "ColumnName": "Date"
+                                                    },
+                                                    "HierarchyId": "FieldId2"
+                                                }
+                                            }
+                                        ],
+                                        "Values": [],
+                                        "Colors": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "People Overview",
+                                                        "ColumnName": "Region"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategoryItemsLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "ColorItemsLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "Type": "LINE"
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": [
+                                {
+                                    "DateTimeHierarchy": {
+                                        "HierarchyId": "FieldId2"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "BarChartVisual": {
+                            "VisualId": "4534d043-a584-42a8-bb65-235a2f08a091",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "Hiring by Business Function"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "BarChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "People Overview",
+                                                        "ColumnName": "Business Function"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Values": [],
+                                        "Colors": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "People Overview",
+                                                        "ColumnName": "Region"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategoryItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "ColorSort": [
+                                        {
+                                            "FieldSort": {
+                                                "FieldId": "FieldId1",
+                                                "Direction": "DESC"
+                                            }
+                                        }
+                                    ],
+                                    "ColorItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "Orientation": "HORIZONTAL",
+                                "BarsArrangement": "STACKED"
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": []
+                        }
+                    },
+                    {
+                        "LineChartVisual": {
+                            "VisualId": "0100ac4a-2165-4a37-ac08-210a87bfbc53",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "Gender diversity"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "LineChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "DateDimensionField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "People Overview",
+                                                        "ColumnName": "Date"
+                                                    },
+                                                    "HierarchyId": "FieldId1"
+                                                }
+                                            }
+                                        ],
+                                        "Values": [],
+                                        "Colors": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "People Overview",
+                                                        "ColumnName": "Gender"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategoryItemsLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "ColorItemsLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "Type": "LINE"
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": [
+                                {
+                                    "DateTimeHierarchy": {
+                                        "HierarchyId": "FieldId1"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "LineChartVisual": {
+                            "VisualId": "6b78ca23-62f7-423c-beb7-fa88d458a278",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "Separation by region"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "LineChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "DateDimensionField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "People Overview",
+                                                        "ColumnName": "Date"
+                                                    },
+                                                    "HierarchyId": "FieldId2"
+                                                }
+                                            }
+                                        ],
+                                        "Values": [],
+                                        "Colors": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "People Overview",
+                                                        "ColumnName": "Region"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategoryItemsLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "ColorItemsLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "Type": "LINE"
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": [
+                                {
+                                    "DateTimeHierarchy": {
+                                        "HierarchyId": "FieldId2"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "LineChartVisual": {
+                            "VisualId": "880a57e3-0838-4b78-867e-245761db99a8",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "Separation by Business Function"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "LineChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "DateDimensionField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "People Overview",
+                                                        "ColumnName": "Date"
+                                                    },
+                                                    "HierarchyId": "FieldId2"
+                                                }
+                                            }
+                                        ],
+                                        "Values": [],
+                                        "Colors": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "People Overview",
+                                                        "ColumnName": "Business Function"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategoryItemsLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "ColorItemsLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "Type": "LINE"
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": [
+                                {
+                                    "DateTimeHierarchy": {
+                                        "HierarchyId": "FieldId2"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "BarChartVisual": {
+                            "VisualId": "ac0d0495-2543-4cc1-a2e3-db423be6991b",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "Top Reasons for Separation"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "BarChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "People Overview",
+                                                        "ColumnName": "Notes"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Values": [],
+                                        "Colors": []
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategorySort": [
+                                        {
+                                            "FieldSort": {
+                                                "FieldId": "FieldId1",
+                                                "Direction": "DESC"
+                                            }
+                                        }
+                                    ],
+                                    "CategoryItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "ColorItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "Orientation": "HORIZONTAL",
+                                "BarsArrangement": "CLUSTERED"
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": []
+                        }
+                    },
+                    {
+                        "TreeMapVisual": {
+                            "VisualId": "6b3d03be-80f9-4f51-96b3-05de64bd4883",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "Average Tenure and Monthly Compensation"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "TreeMapAggregatedFieldWells": {
+                                        "Groups": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "People Overview",
+                                                        "ColumnName": "Business Function"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Sizes": [
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "People Overview",
+                                                        "ColumnName": "Tenure"
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "AVERAGE"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Colors": [
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId3",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "People Overview",
+                                                        "ColumnName": "Monthly Compensation"
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "AVERAGE"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "TreeMapGroupItemsLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                }
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": []
+                        }
+                    },
+                    {
+                        "BarChartVisual": {
+                            "VisualId": "3cd5b576-059c-4d8a-b79c-4982bc198084",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "Education profile by Business function"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "BarChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "People Overview",
+                                                        "ColumnName": "Education"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Values": [],
+                                        "Colors": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "Field2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "People Overview",
+                                                        "ColumnName": "Business Function"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategoryItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "ColorSort": [
+                                        {
+                                            "FieldSort": {
+                                                "FieldId": "Field2",
+                                                "Direction": "DESC"
+                                            }
+                                        }
+                                    ],
+                                    "ColorItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "Orientation": "VERTICAL",
+                                "BarsArrangement": "STACKED"
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": []
+                        }
+                    }
+                ],
+                "Layouts": [
+                    {
+                        "Configuration": {
+                            "GridLayout": {
+                                "Elements": [
+                                    {
+                                        "ElementId": "7d4e9e0e-ae0a-4369-925a-8f8bea82440c",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 0,
+                                        "ColumnSpan": 12,
+                                        "RowIndex": 0,
+                                        "RowSpan": 4
+                                    },
+                                    {
+                                        "ElementId": "aaef7d2a-bf9a-496c-95bb-692a7eedb201",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 0,
+                                        "ColumnSpan": 4,
+                                        "RowIndex": 4,
+                                        "RowSpan": 4
+                                    },
+                                    {
+                                        "ElementId": "4534d043-a584-42a8-bb65-235a2f08a091",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 4,
+                                        "ColumnSpan": 4,
+                                        "RowIndex": 4,
+                                        "RowSpan": 4
+                                    },
+                                    {
+                                        "ElementId": "0100ac4a-2165-4a37-ac08-210a87bfbc53",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 8,
+                                        "ColumnSpan": 4,
+                                        "RowIndex": 4,
+                                        "RowSpan": 4
+                                    },
+                                    {
+                                        "ElementId": "6b78ca23-62f7-423c-beb7-fa88d458a278",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 0,
+                                        "ColumnSpan": 4,
+                                        "RowIndex": 8,
+                                        "RowSpan": 4
+                                    },
+                                    {
+                                        "ElementId": "880a57e3-0838-4b78-867e-245761db99a8",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 4,
+                                        "ColumnSpan": 4,
+                                        "RowIndex": 8,
+                                        "RowSpan": 4
+                                    },
+                                    {
+                                        "ElementId": "ac0d0495-2543-4cc1-a2e3-db423be6991b",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 8,
+                                        "ColumnSpan": 4,
+                                        "RowIndex": 8,
+                                        "RowSpan": 4
+                                    },
+                                    {
+                                        "ElementId": "6b3d03be-80f9-4f51-96b3-05de64bd4883",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 0,
+                                        "ColumnSpan": 6,
+                                        "RowIndex": 12,
+                                        "RowSpan": 4
+                                    },
+                                    {
+                                        "ElementId": "3cd5b576-059c-4d8a-b79c-4982bc198084",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 6,
+                                        "ColumnSpan": 6,
+                                        "RowIndex": 12,
+                                        "RowSpan": 4
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "ContentType": "INTERACTIVE"
+            }
+        ],
+        "CalculatedFields": [],
+        "ParameterDeclarations": [],
+        "FilterGroups": [],
+        "AnalysisDefaults": {
+            "DefaultNewSheetConfiguration": {
+                "InteractiveLayoutConfiguration": {
+                    "Grid": {
+                        "CanvasSizeOptions": {
+                            "ScreenCanvasSizeOptions": {
+                                "ResizeOption": "RESPONSIVE"
+                            }
+                        }
+                    }
+                },
+                "SheetContentType": "INTERACTIVE"
+            }
+        }
+    },
+    "RequestId": "a7e7e64b-57fe-4663-b7c8-adae2c1343be"
+}

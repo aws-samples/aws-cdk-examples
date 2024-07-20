@@ -1,0 +1,665 @@
+{
+    "Status": 200,
+    "TemplateId": "business-template",
+    "ResourceStatus": "CREATION_SUCCESSFUL",
+    "Definition": {
+        "DataSetConfigurations": [
+            {
+                "Placeholder": "Business Review",
+                "DataSetSchema": {
+                    "ColumnSchemaList": [
+                        {
+                            "Name": "Billed Amount",
+                            "DataType": "DECIMAL"
+                        },
+                        {
+                            "Name": "Cost",
+                            "DataType": "DECIMAL"
+                        },
+                        {
+                            "Name": "Channel",
+                            "DataType": "STRING"
+                        },
+                        {
+                            "Name": "Customer ID",
+                            "DataType": "STRING"
+                        },
+                        {
+                            "Name": "Customer Region",
+                            "DataType": "STRING",
+                            "GeographicRole": "STATE"
+                        },
+                        {
+                            "Name": "Date",
+                            "DataType": "DATETIME"
+                        },
+                        {
+                            "Name": "Segment",
+                            "DataType": "STRING"
+                        },
+                        {
+                            "Name": "Service Line",
+                            "DataType": "STRING"
+                        }
+                    ]
+                },
+                "ColumnGroupSchemaList": []
+            }
+        ],
+        "Sheets": [
+            {
+                "SheetId": "8b9cf5c0-fac6-4f25-b131-fa4c30aefa21",
+                "Name": "Sheet 1",
+                "Visuals": [
+                    {
+                        "PivotTableVisual": {
+                            "VisualId": "47123950-f5f4-4b8b-a0c5-3cc3aca87cfb",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "YTD Revenues by Service Line and Segment"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "PivotTableAggregatedFieldWells": {
+                                        "Rows": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Business Review",
+                                                        "ColumnName": "Service Line"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Columns": [],
+                                        "Values": [
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Business Review",
+                                                        "ColumnName": "Billed Amount"
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "SUM"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "CategoricalMeasureField": {
+                                                    "FieldId": "FieldId3",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Business Review",
+                                                        "ColumnName": "Customer ID"
+                                                    },
+                                                    "AggregationFunction": "COUNT"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "FieldSortOptions": []
+                                },
+                                "FieldOptions": {
+                                    "SelectedFieldOptions": [
+                                        {
+                                            "FieldId": "FieldId2",
+                                            "Visibility": "VISIBLE"
+                                        },
+                                        {
+                                            "FieldId": "FieldId1",
+                                            "Visibility": "VISIBLE"
+                                        },
+                                        {
+                                            "FieldId": "FieldId3",
+                                            "Visibility": "VISIBLE"
+                                        }
+                                    ]
+                                }
+                            },
+                            "Actions": []
+                        }
+                    },
+                    {
+                        "BarChartVisual": {
+                            "VisualId": "39b73a9f-2d5d-4fd7-950a-c06f4c2322d6",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "Revenues by Customer Segment"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "BarChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "DateDimensionField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Business Review",
+                                                        "ColumnName": "Date"
+                                                    },
+                                                    "HierarchyId": "FieldId2"
+                                                }
+                                            }
+                                        ],
+                                        "Values": [
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Business Review",
+                                                        "ColumnName": "Billed Amount"
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "SUM"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Colors": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId3",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Business Review",
+                                                        "ColumnName": "Segment"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategoryItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "ColorItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "Orientation": "VERTICAL",
+                                "BarsArrangement": "CLUSTERED"
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": [
+                                {
+                                    "DateTimeHierarchy": {
+                                        "HierarchyId": "FieldId2"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "BarChartVisual": {
+                            "VisualId": "a4a8d1c0-a74e-4d8d-8831-50749b80e787",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "Revenues by Region"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "BarChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "DateDimensionField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Business Review",
+                                                        "ColumnName": "Date"
+                                                    },
+                                                    "HierarchyId": "FieldId2"
+                                                }
+                                            }
+                                        ],
+                                        "Values": [
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Business Review",
+                                                        "ColumnName": "Billed Amount"
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "SUM"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Colors": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId3",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Business Review",
+                                                        "ColumnName": "Customer Region"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategoryItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "ColorItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "Orientation": "VERTICAL",
+                                "BarsArrangement": "STACKED"
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": [
+                                {
+                                    "DateTimeHierarchy": {
+                                        "HierarchyId": "FieldId2"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "LineChartVisual": {
+                            "VisualId": "b72f4875-b8e4-401f-a5cf-21fdb55d7d18",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "Channel adoption across Time"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "LineChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "DateDimensionField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Business Review",
+                                                        "ColumnName": "Date"
+                                                    },
+                                                    "DateGranularity": "YEAR",
+                                                    "HierarchyId": "FieldId2"
+                                                }
+                                            }
+                                        ],
+                                        "Values": [
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Business Review",
+                                                        "ColumnName": "Billed Amount"
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "SUM"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Colors": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId3",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Business Review",
+                                                        "ColumnName": "Channel"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategoryItemsLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "ColorItemsLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "Type": "AREA"
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": [
+                                {
+                                    "DateTimeHierarchy": {
+                                        "HierarchyId": "FieldId2"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "BarChartVisual": {
+                            "VisualId": "a730164d-ddc0-4c90-a43d-9e91cab763b1",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "Average Revenues vs Costs by Segment"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "BarChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Business Review",
+                                                        "ColumnName": "Segment"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Values": [
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Business Review",
+                                                        "ColumnName": "Cost"
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "AVERAGE"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId3",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Business Review",
+                                                        "ColumnName": "Billed Amount"
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "AVERAGE"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Colors": []
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategorySort": [
+                                        {
+                                            "FieldSort": {
+                                                "FieldId": "FieldId1",
+                                                "Direction": "DESC"
+                                            }
+                                        }
+                                    ],
+                                    "CategoryItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "ColorItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "Orientation": "HORIZONTAL",
+                                "BarsArrangement": "CLUSTERED"
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": []
+                        }
+                    },
+                    {
+                        "PieChartVisual": {
+                            "VisualId": "4bccd6c5-4719-4878-84dc-6e5a418af15e",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "Revenues by segment"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "PieChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Business Review",
+                                                        "ColumnName": "Segment"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Values": [
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Business Review",
+                                                        "ColumnName": "Billed Amount"
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "SUM"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategoryItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "DonutOptions": {
+                                    "ArcOptions": {
+                                        "ArcThickness": "WHOLE"
+                                    }
+                                }
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": []
+                        }
+                    },
+                    {
+                        "BarChartVisual": {
+                            "VisualId": "5e10b718-7472-4bfa-9502-0c8085802d16",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "YTD Revenue by Service Category and Segment"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "BarChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Business Review",
+                                                        "ColumnName": "Segment"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Values": [
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Business Review",
+                                                        "ColumnName": "Billed Amount"
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "SUM"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Colors": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId3",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Business Review",
+                                                        "ColumnName": "Service Line"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategoryItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "ColorItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "Orientation": "HORIZONTAL",
+                                "BarsArrangement": "CLUSTERED"
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": []
+                        }
+                    }
+                ],
+                "Layouts": [
+                    {
+                        "Configuration": {
+                            "GridLayout": {
+                                "Elements": [
+                                    {
+                                        "ElementId": "47123950-f5f4-4b8b-a0c5-3cc3aca87cfb",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 18,
+                                        "ColumnSpan": 18,
+                                        "RowIndex": 0,
+                                        "RowSpan": 9
+                                    },
+                                    {
+                                        "ElementId": "39b73a9f-2d5d-4fd7-950a-c06f4c2322d6",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 0,
+                                        "ColumnSpan": 18,
+                                        "RowIndex": 9,
+                                        "RowSpan": 12
+                                    },
+                                    {
+                                        "ElementId": "a4a8d1c0-a74e-4d8d-8831-50749b80e787",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 18,
+                                        "ColumnSpan": 18,
+                                        "RowIndex": 9,
+                                        "RowSpan": 12
+                                    },
+                                    {
+                                        "ElementId": "b72f4875-b8e4-401f-a5cf-21fdb55d7d18",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 0,
+                                        "ColumnSpan": 18,
+                                        "RowIndex": 21,
+                                        "RowSpan": 12
+                                    },
+                                    {
+                                        "ElementId": "a730164d-ddc0-4c90-a43d-9e91cab763b1",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 18,
+                                        "ColumnSpan": 18,
+                                        "RowIndex": 21,
+                                        "RowSpan": 12
+                                    },
+                                    {
+                                        "ElementId": "4bccd6c5-4719-4878-84dc-6e5a418af15e",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 0,
+                                        "ColumnSpan": 18,
+                                        "RowIndex": 33,
+                                        "RowSpan": 12
+                                    },
+                                    {
+                                        "ElementId": "5e10b718-7472-4bfa-9502-0c8085802d16",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 18,
+                                        "ColumnSpan": 18,
+                                        "RowIndex": 33,
+                                        "RowSpan": 12
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "ContentType": "INTERACTIVE"
+            }
+        ],
+        "CalculatedFields": [],
+        "ParameterDeclarations": [],
+        "FilterGroups": [],
+        "AnalysisDefaults": {
+            "DefaultNewSheetConfiguration": {
+                "InteractiveLayoutConfiguration": {
+                    "Grid": {
+                        "CanvasSizeOptions": {
+                            "ScreenCanvasSizeOptions": {
+                                "ResizeOption": "RESPONSIVE"
+                            }
+                        }
+                    }
+                },
+                "SheetContentType": "INTERACTIVE"
+            }
+        }
+    },
+    "RequestId": "43494172-1c44-40d6-9721-d42442c4b271"
+}

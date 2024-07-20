@@ -1,0 +1,439 @@
+{
+    "Status": 200,
+    "TemplateId": "sales-template",
+    "ResourceStatus": "CREATION_SUCCESSFUL",
+    "Definition": {
+        "DataSetConfigurations": [
+            {
+                "Placeholder": "Sales Pipeline",
+                "DataSetSchema": {
+                    "ColumnSchemaList": [
+                        {
+                            "Name": "Date",
+                            "DataType": "DATETIME"
+                        },
+                        {
+                            "Name": "Opportunity Stage",
+                            "DataType": "STRING"
+                        },
+                        {
+                            "Name": "Segment",
+                            "DataType": "STRING"
+                        },
+                        {
+                            "Name": "Region",
+                            "DataType": "STRING",
+                            "GeographicRole": "STATE"
+                        },
+                        {
+                            "Name": "Weighted Revenue",
+                            "DataType": "INTEGER"
+                        }
+                    ]
+                },
+                "ColumnGroupSchemaList": []
+            }
+        ],
+        "Sheets": [
+            {
+                "SheetId": "85a0a54a-d3f9-4973-9a0f-1db21ffb3d40",
+                "Name": "Sheet 1",
+                "Visuals": [
+                    {
+                        "LineChartVisual": {
+                            "VisualId": "acf8088a-60c2-49ad-aac0-64d9228514cb",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "Historical  opportunity pipeline"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "LineChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "DateDimensionField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Sales Pipeline",
+                                                        "ColumnName": "Date"
+                                                    },
+                                                    "HierarchyId": "FieldId2"
+                                                }
+                                            }
+                                        ],
+                                        "Values": [],
+                                        "Colors": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Sales Pipeline",
+                                                        "ColumnName": "Opportunity Stage"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategoryItemsLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "ColorItemsLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "Type": "LINE"
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": [
+                                {
+                                    "DateTimeHierarchy": {
+                                        "HierarchyId": "FieldId2"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "PieChartVisual": {
+                            "VisualId": "5299943b-38a0-4f15-8144-254c9103584e",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "Current open pipeline by weighted revenue"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "PieChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Sales Pipeline",
+                                                        "ColumnName": "Opportunity Stage"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Values": [
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Sales Pipeline",
+                                                        "ColumnName": "Weighted Revenue"
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "SUM"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategorySort": [
+                                        {
+                                            "FieldSort": {
+                                                "FieldId": "FieldId1",
+                                                "Direction": "DESC"
+                                            }
+                                        }
+                                    ],
+                                    "CategoryItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "DonutOptions": {
+                                    "ArcOptions": {
+                                        "ArcThickness": "WHOLE"
+                                    }
+                                }
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": []
+                        }
+                    },
+                    {
+                        "BarChartVisual": {
+                            "VisualId": "8d946f88-c73c-458f-b3bd-dcb1d8a720b1",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "YTD Opportunities by Stage and Segment"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "BarChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Sales Pipeline",
+                                                        "ColumnName": "Segment"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Values": [],
+                                        "Colors": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Sales Pipeline",
+                                                        "ColumnName": "Opportunity Stage"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategorySort": [
+                                        {
+                                            "FieldSort": {
+                                                "FieldId": "FieldId2",
+                                                "Direction": "DESC"
+                                            }
+                                        }
+                                    ],
+                                    "CategoryItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "ColorItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "Orientation": "HORIZONTAL",
+                                "BarsArrangement": "CLUSTERED"
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": []
+                        }
+                    },
+                    {
+                        "BarChartVisual": {
+                            "VisualId": "520da2ef-9dd8-4d45-8b10-f45b8da3f5a6",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "YTD Count of Wins vs Losses by Region"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "BarChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Sales Pipeline",
+                                                        "ColumnName": "Region"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Values": [],
+                                        "Colors": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Sales Pipeline",
+                                                        "ColumnName": "Opportunity Stage"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategorySort": [
+                                        {
+                                            "FieldSort": {
+                                                "FieldId": "FieldId2",
+                                                "Direction": "DESC"
+                                            }
+                                        }
+                                    ],
+                                    "CategoryItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "ColorItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "Orientation": "HORIZONTAL",
+                                "BarsArrangement": "CLUSTERED"
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": []
+                        }
+                    },
+                    {
+                        "PieChartVisual": {
+                            "VisualId": "3e40b471-e65f-4ab0-8ec4-cef4171beaaf",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "YTD Revenue realized by Region"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "PieChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "CategoricalDimensionField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Sales Pipeline",
+                                                        "ColumnName": "Region"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Values": [
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Sales Pipeline",
+                                                        "ColumnName": "Weighted Revenue"
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "SUM"
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategoryItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "DonutOptions": {
+                                    "ArcOptions": {
+                                        "ArcThickness": "WHOLE"
+                                    }
+                                }
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": []
+                        }
+                    }
+                ],
+                "Layouts": [
+                    {
+                        "Configuration": {
+                            "GridLayout": {
+                                "Elements": [
+                                    {
+                                        "ElementId": "acf8088a-60c2-49ad-aac0-64d9228514cb",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 0,
+                                        "ColumnSpan": 12,
+                                        "RowIndex": 0,
+                                        "RowSpan": 4
+                                    },
+                                    {
+                                        "ElementId": "5299943b-38a0-4f15-8144-254c9103584e",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 0,
+                                        "ColumnSpan": 6,
+                                        "RowIndex": 4,
+                                        "RowSpan": 4
+                                    },
+                                    {
+                                        "ElementId": "8d946f88-c73c-458f-b3bd-dcb1d8a720b1",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 6,
+                                        "ColumnSpan": 6,
+                                        "RowIndex": 4,
+                                        "RowSpan": 4
+                                    },
+                                    {
+                                        "ElementId": "520da2ef-9dd8-4d45-8b10-f45b8da3f5a6",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 0,
+                                        "ColumnSpan": 6,
+                                        "RowIndex": 8,
+                                        "RowSpan": 4
+                                    },
+                                    {
+                                        "ElementId": "3e40b471-e65f-4ab0-8ec4-cef4171beaaf",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 6,
+                                        "ColumnSpan": 6,
+                                        "RowIndex": 8,
+                                        "RowSpan": 4
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "ContentType": "INTERACTIVE"
+            }
+        ],
+        "CalculatedFields": [],
+        "ParameterDeclarations": [],
+        "FilterGroups": [],
+        "AnalysisDefaults": {
+            "DefaultNewSheetConfiguration": {
+                "InteractiveLayoutConfiguration": {
+                    "Grid": {
+                        "CanvasSizeOptions": {
+                            "ScreenCanvasSizeOptions": {
+                                "ResizeOption": "RESPONSIVE"
+                            }
+                        }
+                    }
+                },
+                "SheetContentType": "INTERACTIVE"
+            }
+        }
+    },
+    "RequestId": "0ab35589-e0df-4a7f-a6c5-3c252e6a1d90"
+}

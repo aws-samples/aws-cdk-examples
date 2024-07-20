@@ -1,0 +1,42 @@
+{
+	"AwsAccountId": "__ACCOUNT__",
+	"DashboardId": "__DASHBOARD__",
+	"Name": "__NAME__",
+	"Permissions": [
+		{
+			"Principal": "arn:aws:quicksight:__REGION__:__ACCOUNT__:group/default/QS-developers",
+			"Actions": [
+				"quicksight:DescribeDashboard",
+				"quicksight:ListDashboardVersions",
+				"quicksight:UpdateDashboardPermissions",
+				"quicksight:QueryDashboard",
+				"quicksight:UpdateDashboard",
+				"quicksight:DeleteDashboard",
+				"quicksight:DescribeDashboardPermissions",
+				"quicksight:UpdateDashboardPublishedVersion"
+			]
+		}
+	],
+	"SourceEntity": {
+		"SourceTemplate": {
+			"DataSetReferences": [
+				{
+					"DataSetPlaceholder": "__PLACEHOLDER__",
+					"DataSetArn": "arn:aws:quicksight:__REGION__:__ACCOUNT__:dataset/__DATASET__"
+				}
+			],
+			"Arn": "arn:aws:quicksight:__REGION__:__ACCOUNT__:template/__TEMPLATE__"
+		}
+	},
+	"DashboardPublishOptions": {
+		"AdHocFilteringOption": {
+			"AvailabilityStatus": "ENABLED"
+		},
+		"ExportToCSVOption": {
+			"AvailabilityStatus": "ENABLED"
+		},
+		"SheetControlsOption": {
+			"VisibilityState": "EXPANDED"
+		}
+	}
+}

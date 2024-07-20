@@ -1,0 +1,564 @@
+{
+    "Status": 200,
+    "TemplateId": "web-template",
+    "ResourceStatus": "CREATION_SUCCESSFUL",
+    "Definition": {
+        "DataSetConfigurations": [
+            {
+                "Placeholder": "Web and Social Media Analytics",
+                "DataSetSchema": {
+                    "ColumnSchemaList": [
+                        {
+                            "Name": "New visitors Social Media",
+                            "DataType": "INTEGER"
+                        },
+                        {
+                            "Name": "New visitors CPC",
+                            "DataType": "INTEGER"
+                        },
+                        {
+                            "Name": "Tablet uniques",
+                            "DataType": "INTEGER"
+                        },
+                        {
+                            "Name": "Paid conversion",
+                            "DataType": "INTEGER"
+                        },
+                        {
+                            "Name": "Twitter mentions",
+                            "DataType": "INTEGER"
+                        },
+                        {
+                            "Name": "Mobile uniques",
+                            "DataType": "INTEGER"
+                        },
+                        {
+                            "Name": "Free sign up",
+                            "DataType": "INTEGER"
+                        },
+                        {
+                            "Name": "Mailing list adds ",
+                            "DataType": "INTEGER"
+                        },
+                        {
+                            "Name": "Date",
+                            "DataType": "DATETIME"
+                        },
+                        {
+                            "Name": "Twitter followers adds",
+                            "DataType": "INTEGER"
+                        },
+                        {
+                            "Name": "New visitors SEO",
+                            "DataType": "INTEGER"
+                        },
+                        {
+                            "Name": "Desktop uniques",
+                            "DataType": "INTEGER"
+                        }
+                    ]
+                },
+                "ColumnGroupSchemaList": []
+            }
+        ],
+        "Sheets": [
+            {
+                "SheetId": "3cd16903-7fe1-40d4-b89b-ad7031cd6787",
+                "Name": "Sheet 1",
+                "Visuals": [
+                    {
+                        "LineChartVisual": {
+                            "VisualId": "aa279d36-89bc-4416-a7ec-69b7481e3072",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "Unique visits by device type"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "LineChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "DateDimensionField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Web and Social Media Analytics",
+                                                        "ColumnName": "Date"
+                                                    },
+                                                    "DateGranularity": "MONTH",
+                                                    "HierarchyId": "FieldId1"
+                                                }
+                                            }
+                                        ],
+                                        "Values": [
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Web and Social Media Analytics",
+                                                        "ColumnName": "Desktop uniques"
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "SUM"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId3",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Web and Social Media Analytics",
+                                                        "ColumnName": "Tablet uniques"
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "SUM"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId4",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Web and Social Media Analytics",
+                                                        "ColumnName": "Mobile uniques"
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "SUM"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Colors": []
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategoryItemsLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "ColorItemsLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "Type": "LINE"
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": [
+                                {
+                                    "DateTimeHierarchy": {
+                                        "HierarchyId": "FieldId1"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "BarChartVisual": {
+                            "VisualId": "5245a531-5826-4c4e-90ef-4d8c33973792",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "Mailing List Subscription"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "BarChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "DateDimensionField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Web and Social Media Analytics",
+                                                        "ColumnName": "Date"
+                                                    },
+                                                    "DateGranularity": "YEAR",
+                                                    "HierarchyId": "FieldId1"
+                                                }
+                                            }
+                                        ],
+                                        "Values": [
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Web and Social Media Analytics",
+                                                        "ColumnName": "Mailing list adds "
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "SUM"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Colors": []
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategoryItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "ColorItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "Orientation": "VERTICAL",
+                                "BarsArrangement": "CLUSTERED"
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": [
+                                {
+                                    "DateTimeHierarchy": {
+                                        "HierarchyId": "FieldId1"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "LineChartVisual": {
+                            "VisualId": "362a8b08-9aca-4a40-b43b-8772b167256e",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "New visits by attribution (SEO/CPC/Social Media)"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "LineChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "DateDimensionField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Web and Social Media Analytics",
+                                                        "ColumnName": "Date"
+                                                    },
+                                                    "HierarchyId": "FieldId1"
+                                                }
+                                            }
+                                        ],
+                                        "Values": [
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Web and Social Media Analytics",
+                                                        "ColumnName": "New visitors CPC"
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "SUM"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId3",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Web and Social Media Analytics",
+                                                        "ColumnName": "New visitors Social Media"
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "SUM"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId4",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Web and Social Media Analytics",
+                                                        "ColumnName": "New visitors SEO"
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "SUM"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Colors": []
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategoryItemsLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "ColorItemsLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "Type": "LINE"
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": [
+                                {
+                                    "DateTimeHierarchy": {
+                                        "HierarchyId": "FieldId1"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "BarChartVisual": {
+                            "VisualId": "585db5a9-fb02-4187-b3db-724970bbc89e",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "Free and Paid Signups"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "BarChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "DateDimensionField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Web and Social Media Analytics",
+                                                        "ColumnName": "Date"
+                                                    },
+                                                    "HierarchyId": "FieldId1"
+                                                }
+                                            }
+                                        ],
+                                        "Values": [
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Web and Social Media Analytics",
+                                                        "ColumnName": "Free sign up"
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "SUM"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId3",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Web and Social Media Analytics",
+                                                        "ColumnName": "Paid conversion"
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "SUM"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Colors": []
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategoryItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "ColorItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "Orientation": "VERTICAL",
+                                "BarsArrangement": "STACKED"
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": [
+                                {
+                                    "DateTimeHierarchy": {
+                                        "HierarchyId": "FieldId1"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "BarChartVisual": {
+                            "VisualId": "ad6cd9a9-5d4f-4b42-a1df-102bda3321fd",
+                            "Title": {
+                                "Visibility": "VISIBLE",
+                                "FormatText": {
+                                    "PlainText": "Twitter mentions and followers"
+                                }
+                            },
+                            "Subtitle": {
+                                "Visibility": "VISIBLE"
+                            },
+                            "ChartConfiguration": {
+                                "FieldWells": {
+                                    "BarChartAggregatedFieldWells": {
+                                        "Category": [
+                                            {
+                                                "DateDimensionField": {
+                                                    "FieldId": "FieldId1",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Web and Social Media Analytics",
+                                                        "ColumnName": "Date"
+                                                    },
+                                                    "HierarchyId": "FieldId1"
+                                                }
+                                            }
+                                        ],
+                                        "Values": [
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId2",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Web and Social Media Analytics",
+                                                        "ColumnName": "Twitter mentions"
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "SUM"
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "NumericalMeasureField": {
+                                                    "FieldId": "FieldId3",
+                                                    "Column": {
+                                                        "DataSetIdentifier": "Web and Social Media Analytics",
+                                                        "ColumnName": "Twitter followers adds"
+                                                    },
+                                                    "AggregationFunction": {
+                                                        "SimpleNumericalAggregation": "SUM"
+                                                    }
+                                                }
+                                            }
+                                        ],
+                                        "Colors": []
+                                    }
+                                },
+                                "SortConfiguration": {
+                                    "CategoryItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "ColorItemsLimit": {
+                                        "OtherCategories": "INCLUDE"
+                                    },
+                                    "SmallMultiplesLimitConfiguration": {
+                                        "OtherCategories": "INCLUDE"
+                                    }
+                                },
+                                "Orientation": "HORIZONTAL",
+                                "BarsArrangement": "CLUSTERED",
+                                "CategoryAxis": {
+                                    "ScrollbarOptions": {
+                                        "VisibleRange": {
+                                            "PercentRange": {
+                                                "From": 90.0,
+                                                "To": 100.0
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "Actions": [],
+                            "ColumnHierarchies": [
+                                {
+                                    "DateTimeHierarchy": {
+                                        "HierarchyId": "FieldId1"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "Layouts": [
+                    {
+                        "Configuration": {
+                            "GridLayout": {
+                                "Elements": [
+                                    {
+                                        "ElementId": "aa279d36-89bc-4416-a7ec-69b7481e3072",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 0,
+                                        "ColumnSpan": 18,
+                                        "RowIndex": 9,
+                                        "RowSpan": 9
+                                    },
+                                    {
+                                        "ElementId": "5245a531-5826-4c4e-90ef-4d8c33973792",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 18,
+                                        "ColumnSpan": 18,
+                                        "RowIndex": 9,
+                                        "RowSpan": 9
+                                    },
+                                    {
+                                        "ElementId": "362a8b08-9aca-4a40-b43b-8772b167256e",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 0,
+                                        "ColumnSpan": 18,
+                                        "RowIndex": 18,
+                                        "RowSpan": 9
+                                    },
+                                    {
+                                        "ElementId": "585db5a9-fb02-4187-b3db-724970bbc89e",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 18,
+                                        "ColumnSpan": 18,
+                                        "RowIndex": 18,
+                                        "RowSpan": 9
+                                    },
+                                    {
+                                        "ElementId": "ad6cd9a9-5d4f-4b42-a1df-102bda3321fd",
+                                        "ElementType": "VISUAL",
+                                        "ColumnIndex": 0,
+                                        "ColumnSpan": 18,
+                                        "RowIndex": 27,
+                                        "RowSpan": 9
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "ContentType": "INTERACTIVE"
+            }
+        ],
+        "CalculatedFields": [],
+        "ParameterDeclarations": [],
+        "FilterGroups": [],
+        "AnalysisDefaults": {
+            "DefaultNewSheetConfiguration": {
+                "InteractiveLayoutConfiguration": {
+                    "Grid": {
+                        "CanvasSizeOptions": {
+                            "ScreenCanvasSizeOptions": {
+                                "ResizeOption": "RESPONSIVE"
+                            }
+                        }
+                    }
+                },
+                "SheetContentType": "INTERACTIVE"
+            }
+        }
+    },
+    "RequestId": "bdd6e427-836d-4f37-bfe6-3bf0bf42b90b"
+}

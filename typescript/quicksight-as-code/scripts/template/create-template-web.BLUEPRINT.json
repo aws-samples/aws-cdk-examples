@@ -1,0 +1,15 @@
+{
+	"AwsAccountId": "__ACCOUNT__",
+	"TemplateId": "web-template",
+	"SourceEntity": {
+		"SourceAnalysis": {
+			"Arn": "arn:aws:quicksight:__REGION__:__ACCOUNT__:analysis/__ANALYSIS__",
+			"DataSetReferences": [
+				{
+					"DataSetPlaceholder": "Web and Social Media Analytics",
+					"DataSetArn": "arn:aws:quicksight:__REGION__:__ACCOUNT__:dataset/__DATASET__"
+				}
+			]
+		}
+	}
+}

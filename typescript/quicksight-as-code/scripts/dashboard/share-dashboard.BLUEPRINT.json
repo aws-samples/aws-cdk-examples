@@ -1,0 +1,15 @@
+{
+	"AwsAccountId": "__ACCOUNT__",
+	"DashboardId": "__DASHBOARD__",
+	"GrantLinkPermissions": [
+            {
+                "Principal": "arn:aws:quicksight:__REGION__:__ACCOUNT__:namespace/default",
+                "Actions": [
+                    "quicksight:DescribeDashboard",
+                    "quicksight:ListDashboardVersions",
+                    "quicksight:QueryDashboard"
+                ]
+            }
+    ]
+	
+}

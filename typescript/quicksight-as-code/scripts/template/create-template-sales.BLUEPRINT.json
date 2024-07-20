@@ -1,0 +1,15 @@
+{
+	"AwsAccountId": "__ACCOUNT__",
+	"TemplateId": "sales-template",
+	"SourceEntity": {
+		"SourceAnalysis": {
+			"Arn": "arn:aws:quicksight:__REGION__:__ACCOUNT__:analysis/__ANALYSIS__",
+			"DataSetReferences": [
+				{
+					"DataSetPlaceholder": "Sales Pipeline",
+					"DataSetArn": "arn:aws:quicksight:__REGION__:__ACCOUNT__:dataset/__DATASET__"
+				}
+			]
+		}
+	}
+}
