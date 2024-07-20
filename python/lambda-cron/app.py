@@ -18,7 +18,7 @@ class LambdaCronStack(Stack):
             code=lambda_.InlineCode(handler_code),
             handler="index.main",
             timeout=Duration.seconds(300),
-            runtime=lambda_.Runtime.PYTHON_3_7,
+            runtime=lambda_.Runtime.PYTHON_3_12,
         )
 
         # Run every day at 6PM UTC

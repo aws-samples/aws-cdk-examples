@@ -30,20 +30,22 @@ export class CDKExampleLambdaApiStack extends Stack {
 
         const lambdaPolicy = new PolicyStatement()
         lambdaPolicy.addActions("s3:ListBucket")
+        lambdaPolicy.addActions("s3:getBucketLocation")
         lambdaPolicy.addResources(this.bucket.bucketArn)
 
         this.lambdaFunction = new Function(this, props.functionName, {
             functionName: props.functionName,
             handler: "handler.handler",
-            runtime: Runtime.NODEJS_10_X,
+            runtime: Runtime.NODEJS_18_X,
             code: new AssetCode(`./src`),
             memorySize: 512,
             timeout: Duration.seconds(10),
             environment: {
                 BUCKET: this.bucket.bucketName,
             },
-            initialPolicy: [lambdaPolicy],
         })
+
+        this.lambdaFunction.addToRolePolicy(lambdaPolicy)
 
         this.restApi.root.addMethod("GET", new LambdaIntegration(this.lambdaFunction, {}))
     }

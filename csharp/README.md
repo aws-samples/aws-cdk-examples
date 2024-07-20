@@ -24,5 +24,6 @@ $ cdk destroy
 
 | Example | Description |
 |---------|-------------|
+| [api-cors-lambda-crud-dynamodb](https://github.com/aws-samples/aws-cdk-examples/tree/master/csharp/api-cors-lambda-crud-dynamodb/) | API Gateway integrated Lambdas which perform CRUD operations against a DynamoDB table. |
 | [my-widget-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/csharp/my-widget-service/) | Use Lambda to serve up widgets |
 | [random-writer](https://github.com/aws-samples/aws-cdk-examples/tree/master/csharp/random-writer/) | This sample application demonstrates some essential mechanisms of the AWS CDK for .NET. It uses AWS Lambda, DynamoDB, CloudWatch. |

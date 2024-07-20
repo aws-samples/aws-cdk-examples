@@ -1,0 +1,1 @@
+This example depends Docker Engine to be running on the build machine. The current GitHub actions do not delegate builds to machines that have Docker Engine installed, and so the build verification for this project will fail.

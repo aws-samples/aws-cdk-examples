@@ -1,0 +1,298 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Inspector2EnableDelegatedAdminAccountResource creates required resources 1`] = `
+{
+  "Mappings": {
+    "DefaultCrNodeVersionMap": {
+      "af-south-1": {
+        "value": "nodejs16.x",
+      },
+      "ap-east-1": {
+        "value": "nodejs16.x",
+      },
+      "ap-northeast-1": {
+        "value": "nodejs16.x",
+      },
+      "ap-northeast-2": {
+        "value": "nodejs16.x",
+      },
+      "ap-northeast-3": {
+        "value": "nodejs16.x",
+      },
+      "ap-south-1": {
+        "value": "nodejs16.x",
+      },
+      "ap-south-2": {
+        "value": "nodejs16.x",
+      },
+      "ap-southeast-1": {
+        "value": "nodejs16.x",
+      },
+      "ap-southeast-2": {
+        "value": "nodejs16.x",
+      },
+      "ap-southeast-3": {
+        "value": "nodejs16.x",
+      },
+      "ca-central-1": {
+        "value": "nodejs16.x",
+      },
+      "cn-north-1": {
+        "value": "nodejs16.x",
+      },
+      "cn-northwest-1": {
+        "value": "nodejs16.x",
+      },
+      "eu-central-1": {
+        "value": "nodejs16.x",
+      },
+      "eu-central-2": {
+        "value": "nodejs16.x",
+      },
+      "eu-north-1": {
+        "value": "nodejs16.x",
+      },
+      "eu-south-1": {
+        "value": "nodejs16.x",
+      },
+      "eu-south-2": {
+        "value": "nodejs16.x",
+      },
+      "eu-west-1": {
+        "value": "nodejs16.x",
+      },
+      "eu-west-2": {
+        "value": "nodejs16.x",
+      },
+      "eu-west-3": {
+        "value": "nodejs16.x",
+      },
+      "me-central-1": {
+        "value": "nodejs16.x",
+      },
+      "me-south-1": {
+        "value": "nodejs16.x",
+      },
+      "sa-east-1": {
+        "value": "nodejs16.x",
+      },
+      "us-east-1": {
+        "value": "nodejs16.x",
+      },
+      "us-east-2": {
+        "value": "nodejs16.x",
+      },
+      "us-gov-east-1": {
+        "value": "nodejs16.x",
+      },
+      "us-gov-west-1": {
+        "value": "nodejs16.x",
+      },
+      "us-iso-east-1": {
+        "value": "nodejs14.x",
+      },
+      "us-iso-west-1": {
+        "value": "nodejs14.x",
+      },
+      "us-isob-east-1": {
+        "value": "nodejs14.x",
+      },
+      "us-west-1": {
+        "value": "nodejs16.x",
+      },
+      "us-west-2": {
+        "value": "nodejs16.x",
+      },
+    },
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "AWS679f53fac002430cb0da5b7982bd22872D164C4C": {
+      "DependsOn": [
+        "Inspector2EnableDelegatedAdminAccountResourceInspector2EnableResourceInspectorRole00253606",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "bb459fac5f6b4b052aac9803443226d161a5cfe96f4648b21f9e4912c698bf30.zip",
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "Inspector2EnableDelegatedAdminAccountResourceInspector2EnableResourceInspectorRole00253606",
+            "Arn",
+          ],
+        },
+        "Runtime": {
+          "Fn::FindInMap": [
+            "DefaultCrNodeVersionMap",
+            {
+              "Ref": "AWS::Region",
+            },
+            "value",
+          ],
+        },
+        "Timeout": 120,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "Inspector2EnableDelegatedAdminAccountResource99675B1A": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "Inspector2EnableDelegatedAdminAccountResourceInspector2EnableResource56770C4B",
+        "Inspector2EnableDelegatedAdminAccountResourceInspector2EnableResourceInspectorRole00253606",
+      ],
+      "Properties": {
+        "Create": "{"service":"Inspector2","action":"enableDelegatedAdminAccount","parameters":{"delegatedAdminAccountId":"12345676543"},"physicalResourceId":{"id":"eyJkZWxlZ2F0ZWRBZG1pbkFjY291bnRJZCI6IjEyMzQ1Njc2NTQzIiwibG9nUmV0ZW50aW9uIjoxLCJpbnNwZWN0b3IyRW5hYmxlUHJvcHMiOnt9LCJhdXRvRW5hYmxlIjp7ImVjMiI6dHJ1ZSwiZWNyIjp0cnVlLCJsYW1iZGEiOnRydWV9fQ=="}}",
+        "Delete": "{"service":"Inspector2","action":"disableDelegatedAdminAccount","physicalResourceId":{"id":"eyJkZWxlZ2F0ZWRBZG1pbkFjY291bnRJZCI6IjEyMzQ1Njc2NTQzIiwibG9nUmV0ZW50aW9uIjoxLCJpbnNwZWN0b3IyRW5hYmxlUHJvcHMiOnt9LCJhdXRvRW5hYmxlIjp7ImVjMiI6dHJ1ZSwiZWNyIjp0cnVlLCJsYW1iZGEiOnRydWV9fQ=="},"parameters":{"delegatedAdminAccountId":"12345676543"}}",
+        "InstallLatestAwsSdk": true,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::Inspector2EnableDelegatedAdminAccount",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "Inspector2EnableDelegatedAdminAccountResourceInspector2EnableDelegatedAdminResourceRoleC8FD65F6": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "inspector2:EnableDelegatedAdminAccount",
+                    "inspector2:DisableDelegatedAdminAccount",
+                    "organizations:EnableAWSServiceAccess",
+                    "organizations:RegisterDelegatedAdministrator",
+                    "organizations:ListDelegatedAdministrators",
+                    "organizations:ListAWSServiceAccessForOrganization",
+                    "organizations:DescribeOrganizationalUnit",
+                    "organizations:DescribeAccount",
+                    "organizations:DescribeOrganization",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*",
+                  "Sid": "PermissionsForInspectorAdmin",
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "PermissionsForInspectorAdmin",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "Inspector2EnableDelegatedAdminAccountResourceInspector2EnableResource56770C4B": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "Create": "{"service":"Inspector2","action":"enable","parameters":{"resourceTypes":["ECR","EC2","LAMBDA"]},"physicalResourceId":{"responsePath":"accounts.0.accountId"}}",
+        "Delete": "{"service":"Inspector2","action":"disable","physicalResourceId":{"responsePath":"accounts.0.accountId"},"parameters":{"resourceTypes":["ECR","EC2","LAMBDA"]}}",
+        "InstallLatestAwsSdk": true,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::Inspector2Enable",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "Inspector2EnableDelegatedAdminAccountResourceInspector2EnableResourceInspectorRole00253606": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AmazonInspector2FullAccess",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;

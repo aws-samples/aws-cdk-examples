@@ -1,0 +1,34 @@
+version: "2"
+dynamodb-pipeline:
+  source:
+    dynamodb:
+      acknowledgments: true
+      tables:
+        - table_arn: "%%%DYNAMODB_TABLE_ARN%%%"
+          stream:
+            start_position: "LATEST"
+          export:
+            s3_bucket: "%%%S3_BUCKET_NAME%%%"
+            s3_region: "%%%REGION%%%"
+            s3_prefix: "%%%DYNAMODB_TABLE_NAME%%%/"
+      aws:
+        sts_role_arn: "%%%ROLE_ARN%%%"
+        region: "%%%REGION%%%"
+  processor:
+    - date:
+        destination: "@timestamp"
+        from_time_received: true
+  sink:
+    - opensearch:
+        hosts: [ "%%%COLLECTION_ENDPOINT%%%" ]
+        index: "table-index"
+        document_id: "${getMetadata(\"primary_key\")}"
+        action: "${getMetadata(\"opensearch_action\")}"
+        document_version: "${getMetadata(\"document_version\")}"
+        document_version_type: "external"
+        aws:
+          sts_role_arn: "%%%ROLE_ARN%%%"
+          region: "%%%REGION%%%"
+          serverless: true
+          serverless_options:
+            network_policy_name: "%%%NETWORK_POLICY_NAME%%%"

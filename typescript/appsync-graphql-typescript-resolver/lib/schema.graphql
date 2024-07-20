@@ -1,0 +1,13 @@
+type Todo {
+    id: ID
+    title: String
+    completed: Boolean
+    createdAt: AWSDateTime
+    completedAt: AWSDateTime
+}
+
+type Query {
+    getTodo(id: ID!): Todo
+}
+
+

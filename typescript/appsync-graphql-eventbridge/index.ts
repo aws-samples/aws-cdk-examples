@@ -118,14 +118,14 @@ export class AppSyncCdkStack extends cdk.Stack {
           $utils.appendError($ctx.result.body, $ctx.result.statusCode)
       #end`
     });
-    putEventResolver.addDependsOn(apiSchema);
+    putEventResolver.addDependency(apiSchema);
 
     const echoLambda = new lambda.Function(this, "echoFunction", {
       code: lambda.Code.fromInline(
         "exports.handler = (event, context) => { console.log(event); context.succeed(event); }"
       ),
       handler: "index.handler",
-      runtime: lambda.Runtime.NODEJS_16_X
+      runtime: lambda.Runtime.NODEJS_LATEST
     });
 
     const rule = new Rule(this, "AppSyncEventBridgeRle", {
