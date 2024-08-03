@@ -49,7 +49,7 @@ export class GatewayLambdaAuth extends cdk.Stack {
    */
   private getOperationalFunction(): cdk.aws_lambda.IFunction {
     return new cdk.aws_lambda_nodejs.NodejsFunction(this, "operational-lambda", {
-      runtime: cdk.aws_lambda.Runtime.NODEJS_18_X,
+      runtime: cdk.aws_lambda.Runtime.NODEJS_20_X,
       handler: "index.handler",
       bundling: {
         sourceMap: true,
@@ -76,7 +76,7 @@ export class GatewayLambdaAuth extends cdk.Stack {
    */
   private getLambdaAuthFunction(): cdk.aws_lambda.IFunction {
     return new cdk.aws_lambda_nodejs.NodejsFunction(this, "authentication-lambda", {
-      runtime: cdk.aws_lambda.Runtime.NODEJS_18_X,
+      runtime: cdk.aws_lambda.Runtime.NODEJS_20_X,
       handler: "index.handler",
       bundling: {
         sourceMap: true,

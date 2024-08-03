@@ -36,7 +36,7 @@ export class CDKExampleLambdaApiStack extends Stack {
         this.lambdaFunction = new Function(this, props.functionName, {
             functionName: props.functionName,
             handler: "handler.handler",
-            runtime: Runtime.NODEJS_18_X,
+            runtime: Runtime.NODEJS_20_X,
             code: new AssetCode(`./src`),
             memorySize: 512,
             timeout: Duration.seconds(10),

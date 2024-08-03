@@ -10,7 +10,7 @@ export class SampleLambdaConstruct extends Construct {
         const lambdaProps: lambda.FunctionProps = {
             handler: 'index.handler',
             code: lambda.Code.fromInline('export function handler(event, context){}'),
-            runtime: lambda.Runtime.NODEJS_18_X,
+            runtime: lambda.Runtime.NODEJS_20_X,
         }
 
         new lambda.Function(this, 'StandardFunction', lambdaProps);

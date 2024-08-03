@@ -25,7 +25,7 @@ export class LambdaPCScalingScheduleStack extends Stack {
     this.lambdaFunction = new NodejsFunction(this, 'LambdaFunction', {
       functionName: this.lambdaFunctionName,
       entry: `./lambda/lambda-handler.ts`,
-      runtime: Runtime.NODEJS_18_X,
+      runtime: Runtime.NODEJS_20_X,
       memorySize: 512,
       timeout: Duration.seconds(6),
     });
@@ -45,13 +45,13 @@ export class LambdaPCScalingScheduleStack extends Stack {
     })
     // Scaling out every weekday (Monday through Friday) at 11:00 AM(UTC+0),
     asg.scaleOnSchedule(`${this.lambdaFunctionName}ScheduleScaleOut`, {
-      schedule: Schedule.expression('cron(0 11 ? * MON-FRI *))'), 
+      schedule: Schedule.expression('cron(0 11 ? * MON-FRI *))'),
       minCapacity: 1,
       maxCapacity: 1
     })
     // Scaling in every weekday (Monday through Friday) at 12:00 AM(UTC+0),
     asg.scaleOnSchedule(`${this.lambdaFunctionName}ScheduleScaleIn`, {
-      schedule: Schedule.expression('cron(0 12 ? * MON-FRI *))'),  
+      schedule: Schedule.expression('cron(0 12 ? * MON-FRI *))'),
       minCapacity: 0,
       maxCapacity: 0
     })

@@ -9,9 +9,9 @@ import {
 import { Construct } from 'constructs';
 
 /** A Custom Resource construct for monitoring Amazon Inspector scan results.
- * 
+ *
  * Deploys a Lambda to handle initial scan results and another Lambda to handle Inspector2 Findings.
- * 
+ *
  * For more details see https://docs.aws.amazon.com/inspector/latest/user/findings-managing-automating-responses.html
  */
 export class Inspector2MonitoringResource extends cdk.Resource {
@@ -42,13 +42,13 @@ export class Inspector2MonitoringResource extends cdk.Resource {
 
     const inspector2InitialScanHandler = new lambda_nodejs.NodejsFunction(scope, 'Inspector2InitialScanHandler', {
       timeout: cdk.Duration.minutes(15),
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_20_X,
       logRetention: logs.RetentionDays.ONE_DAY,
     });
 
     const inspector2FindingHandler = new lambda_nodejs.NodejsFunction(scope, 'Inspector2FindingHandler', {
       timeout: cdk.Duration.minutes(15),
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_20_X,
       logRetention: logs.RetentionDays.ONE_DAY,
     });
 
