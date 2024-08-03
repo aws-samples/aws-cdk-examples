@@ -1,4 +1,3 @@
 {
-  "app": "mvn exec:java -Dexec.mainClass=software.amazon.awscdk.examples.CustomResourceApp"
-  
+  "app": "mvn exec:java -pl cdk -Dexec.mainClass=software.amazon.awscdk.examples.CustomResourceApp"
 }

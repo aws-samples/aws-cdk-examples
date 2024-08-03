@@ -42,3 +42,13 @@ to run the CDK toolkit commands as usual (Maven will recompile as needed):
 
     $ cdk diff
     <diff against deployed stack>
+
+## Lambda
+[`lambda`](./lambda) contains the source code for lambda handler.
+After any code changes in the handler, follow these steps to deploy code changes.
+
+    $ mvn package -f lambda/pom.xml
+    <generates jar with lambda handler code>
+
+    $ cp lambda/target/lambda-1.0.0-jar-with-dependencies.jar asset/
+    <copies lambda handler jar to asset dir>
