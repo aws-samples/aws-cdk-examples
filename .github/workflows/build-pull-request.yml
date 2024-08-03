@@ -98,9 +98,15 @@ jobs:
             echo "- $dir"
           done
 
-          # install CDK CLI from npm, so that npx can find it later
+          # Change to language directory
           cd ./${{ matrix.language }}
-          npm install
+
+          # install CDK CLI from npm if not typescript, so that npx can find it later
+          # ts will use the one from the particular cdk app
+          if [[ ${{ matrix.language }} != 'typescript' ]]; then
+            npm install -g aws-cdk
+            npx cdk --version
+          fi
 
           # Run the build_file function in parallel for each project to be built
           # Halt the execution if any of the build_file invocations fail
