@@ -20,7 +20,7 @@
     "typescript": "~5.1.6"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.72.1",
+    "aws-cdk-lib": "2.80.0",
     "constructs": "^10.0.0",
     "jest-junit": "^16.0.0",
     "source-map-support": "^0.5.21"

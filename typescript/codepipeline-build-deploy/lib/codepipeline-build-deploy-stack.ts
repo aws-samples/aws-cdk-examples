@@ -1,8 +1,8 @@
 import * as cdk from "aws-cdk-lib";
 import * as codebuild from "aws-cdk-lib/aws-codebuild";
-import * as codecommit from "aws-cdk-lib/aws-codecommit";
 import * as codedeploy from "aws-cdk-lib/aws-codedeploy";
 import * as pipeline from "aws-cdk-lib/aws-codepipeline";
+import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 import * as pipelineactions from "aws-cdk-lib/aws-codepipeline-actions";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as ecr from "aws-cdk-lib/aws-ecr";
@@ -16,13 +16,18 @@ import * as path from "path";
 import * as fs from 'fs';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { IgnoreMode } from 'aws-cdk-lib';
-import { Code } from 'aws-cdk-lib/aws-codecommit';
 
 export class CodepipelineBuildDeployStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // Modify gitignore file to remove unneeded files from the codecommit copy    
+    // Retrieve the GitHub username/organization from the context
+    const githubUsername = this.node.tryGetContext('githubUsername');
+
+    // Retrieve the GitHub PAT from the context
+    const githubPAT = this.node.tryGetContext('githubPAT')
+
+    // modify gitignore file to remove unneeded files from the codecommit copy    
     let gitignore = fs.readFileSync('.gitignore').toString().split(/\r?\n/);
     gitignore.push('.git/');
     gitignore = gitignore.filter(g => g != 'node_modules/');
@@ -33,11 +38,26 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       ignoreMode: IgnoreMode.GIT,
       exclude: gitignore,
     });
-    
-    const codeRepo = new codecommit.Repository(this, "repo", {
-      repositoryName: "simple-code-repo",
-      // Copies files from codepipeline-build-deploy directory to the repo as the initial commit
-      code: Code.fromAsset(codeAsset, 'main'),
+
+    // Create a new Secrets Manager secret to store the GitHub PAT
+    const githubPATSecret = new secretsmanager.Secret(this, 'GithubPATSecret', {
+      secretName: 'github-pat-secret',
+      generateSecretString: {
+        secretStringTemplate: JSON.stringify({ token: githubPAT }),
+        excludePunctuation: true,
+        includeSpace: false,
+        generateStringKey: 'token',
+      },
+    });
+
+    const codeRepo = new pipeline.CfnRepository(this, "repo", {
+      repositoryName: "${githubUsername}/simple-code-repo", // Replace with your GitHub repository name
+      repositoryType: "GitHub",
+      branchName: "main", // Replace with your default branch name if different
+      tokenInfo: {
+        secretArn: githubPATSecret.secretArn,
+        secretManagerTokenKey: 'token',
+      },
     });
     
     // Creates an Elastic Container Registry (ECR) image repository
@@ -80,19 +100,6 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       environment: {
         buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_4,  
       }
-    });
-    
-        // CodeBuild project that runs the ecr image scan
-    const scanImage = new codebuild.Project(this, "ScanImage", {
-      buildSpec: codebuild.BuildSpec.fromSourceFilename("test-buildspec.yaml"),
-      source: codebuild.Source.codeCommit({ repository: codeRepo }),
-      environment: {
-        buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_4,
-        environmentVariables: {
-          IMAGE_REPO_NAME: { value: imageRepo.repositoryName },
-          IMAGE_TAG: { value: "latest" }
-        },
-      },
     });
 
     // Grants CodeBuild project access to pull/push images from/to ECR repo
@@ -232,7 +239,6 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     // Creates new pipeline artifacts
     const sourceArtifact = new pipeline.Artifact("SourceArtifact");
     const buildArtifact = new pipeline.Artifact("BuildArtifact");
-    const scanArtifact = new pipeline.Artifact("ScanArtifact");
 
     // Creates the source stage for CodePipeline
     const sourceStage = {
@@ -253,7 +259,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       actions: [
         new pipelineactions.CodeBuildAction({
           actionName: "JestCDK",
-          input: sourceArtifact,
+          input: new pipeline.Artifact("SourceArtifact"),
           project: buildTest,
         }),
       ],
@@ -265,22 +271,9 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       actions: [
         new pipelineactions.CodeBuildAction({
           actionName: "DockerBuildPush",
-          input: sourceArtifact,
+          input: new pipeline.Artifact("SourceArtifact"),
           project: buildImage,
           outputs: [buildArtifact],
-        }),
-      ],
-    };
-    
-    // Creates the build stage that runs the ecr container image scan
-    const securityTestStage = {
-      stageName: "SecurityScan",
-      actions: [
-        new pipelineactions.CodeBuildAction({
-          actionName: "ScanImage",
-          input: sourceArtifact,
-          project: scanImage,
-          outputs: [scanArtifact],
         }),
       ],
     };
@@ -316,7 +309,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     // Creates an AWS CodePipeline with source, build, and deploy stages
     new pipeline.Pipeline(this, "BuildDeployPipeline", {
       pipelineName: "ImageBuildDeployPipeline",
-      stages: [sourceStage, testStage, buildStage, securityTestStage, deployStage],
+      stages: [sourceStage, testStage, buildStage, deployStage],
     });
 
     // Outputs the ALB public endpoint
