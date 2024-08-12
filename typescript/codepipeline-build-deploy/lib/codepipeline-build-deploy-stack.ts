@@ -2,6 +2,7 @@ import * as cdk from "aws-cdk-lib";
 import * as codebuild from "aws-cdk-lib/aws-codebuild";
 import * as codedeploy from "aws-cdk-lib/aws-codedeploy";
 import * as pipeline from "aws-cdk-lib/aws-codepipeline";
+import * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';
 import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 import * as pipelineactions from "aws-cdk-lib/aws-codepipeline-actions";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
@@ -16,9 +17,14 @@ import * as path from "path";
 import * as fs from 'fs';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { IgnoreMode } from 'aws-cdk-lib';
+import * as cr from 'aws-cdk-lib/custom-resources';
+
+interface CodepipelineBuildDeployStackProps extends cdk.StackProps {
+  context: any;
+}
 
 export class CodepipelineBuildDeployStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: CodepipelineBuildDeployStackProps) {
     super(scope, id, props);
 
     // Retrieve the GitHub username/organization from the context
@@ -49,9 +55,23 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
         generateStringKey: 'token',
       },
     });
+    
+    const createGitHubRepoLambda = new lambda.Function(this, 'CreateGitHubRepoLambda', {
+      runtime: lambda.Runtime.NODEJS_16_X,
+      code: lambda.Code.fromAsset("./lambda"),
+      handler: "push-to-github.handler",
+      environment: {
+        GITHUB_PAT_SECRET_NAME: githubPATSecret.secretName,
+        GITHUB_USERNAME: githubUsername
+      },
+    });
 
+    githubPATSecret.grantRead(createGitHubRepoLambda);
+    codeAsset.bucket.grantRead(createGitHubRepoLambda);
+    
+    /*
     const codeRepo = new pipeline.CfnRepository(this, "repo", {
-      repositoryName: "${githubUsername}/simple-code-repo", // Replace with your GitHub repository name
+      repositoryName: `${githubUsername}/simple-code-repo`, // Replace with your GitHub repository name
       repositoryType: "GitHub",
       branchName: "main", // Replace with your default branch name if different
       tokenInfo: {
@@ -59,6 +79,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
         secretManagerTokenKey: 'token',
       },
     });
+    */
     
     // Creates an Elastic Container Registry (ECR) image repository
     const imageRepo = new ecr.Repository(this, "imageRepo");
@@ -244,12 +265,23 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     const sourceStage = {
       stageName: "Source",
       actions: [
+        new codepipeline_actions.GitHubSourceAction({
+          actionName: 'GitHub_Source',
+          owner: githubUsername,
+          repo: 'simple-code-repo', // The name of the new repository to be created
+          oauthToken: githubPAT,
+          output: new pipeline.Artifact(),
+          branch: 'main', // The default branch name for the new repository
+          runOrder: 1, // The order in which this action should run
+        })
+        /*
         new pipelineactions.CodeCommitSourceAction({
           actionName: "AppCodeCommit",
           branch: "main",
           output: sourceArtifact,
           repository: codeRepo,
         }),
+        */
       ],
     };
 
