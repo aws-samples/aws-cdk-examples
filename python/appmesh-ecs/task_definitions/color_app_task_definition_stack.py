@@ -130,13 +130,9 @@ class ColorAppTaskDefinitionStack(Stack):
             )
         return task_definition
    # This function creates the ECS service for each corresponding color
-   def create_color_service(self, color, namespace, taskdef, ):
+   def create_color_service(self, color, namespace, taskdef, imported_vpc ):
         environment_name ="appmesh-env"
-        vpc_id = core.Fn.import_value(f"{environment_name}:VPCID")
-        
-        availability_zones = core.Fn.split(',', f"{environment_name}:VpcAvailabilityZones")
-        private_subnet_ids = core.Fn.split(',', core.Fn.import_value(f"{environment_name}:MyPrivateSubnetIds"))
-        imported_vpc = ec2.Vpc.from_vpc_attributes(self, f"ImportedVPC-{color}", vpc_id=vpc_id, availability_zones=availability_zones, private_subnet_ids=private_subnet_ids)
+
         cluster = ecs.Cluster.from_cluster_attributes(self, f"Cluster-{color}",
                                                cluster_name=core.Fn.import_value(f"{environment_name}:ECSCluster"),
                                                vpc=imported_vpc,
@@ -249,7 +245,7 @@ class ColorAppTaskDefinitionStack(Stack):
         # Loop through all the colors to create their task definitions and ECS services
         for color in color_teller_colors:
             task_definition = self.create_color_task_definition(color, environment_name)
-            service = self.create_color_service(color, namespace, taskdef=task_definition)
+            service = self.create_color_service(color, namespace, taskdef=task_definition, imported_vpc=imported_vpc)
 
             core.CfnOutput(
             self, f"ColorTellerTaskDefinitionArn-{color}",
