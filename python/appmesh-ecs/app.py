@@ -4,7 +4,6 @@ import os
 import aws_cdk as cdk
 from core_infrastructure.ecs.ecs_stack import ECSStack
 from core_infrastructure.appmesh.appmesh_stack import AppMeshStack 
-
 from core_infrastructure.ecr.ecr_stack import ECRStack
 from task_definitions.color_app_task_definition_stack import ColorAppTaskDefinitionStack
 from colorapp.appmesh_colorapp import ServiceMeshColorAppStack
@@ -16,8 +15,8 @@ ecr_stack = ECRStack(app, "ECRStack")
 appmesh_colorapp_stack = ServiceMeshColorAppStack(app, "AppmeshColorappStack")
 
 colorapp_task_definition_stack = ColorAppTaskDefinitionStack(app, "ColorAppTaskDefinitionStack",env=cdk.Environment(
-     account=cdk.Aws.ACCOUNT_ID,
-    region=cdk.Aws.REGION
+     account=os.getenv('CDK_DEFAULT_ACCOUNT'),
+    region=os.getenv('CDK_DEFAULT_REGION')
 ))
 
 appmesh_stack.add_dependency(ecs_stack)
