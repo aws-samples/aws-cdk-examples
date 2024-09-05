@@ -14,10 +14,11 @@ appmesh_stack = AppMeshStack(app, "AppMeshStack")
 ecr_stack = ECRStack(app, "ECRStack")
 appmesh_colorapp_stack = ServiceMeshColorAppStack(app, "AppmeshColorappStack")
 
-colorapp_task_definition_stack = ColorAppTaskDefinitionStack(app, "ColorAppTaskDefinitionStack",env=cdk.Environment(
-     account=os.getenv('CDK_DEFAULT_ACCOUNT'),
-    region=os.getenv('CDK_DEFAULT_REGION')
-))
+colorapp_task_definition_stack = ColorAppTaskDefinitionStack(app, "ColorAppTaskDefinitionStack",env={
+     'account': os.getenv('CDK_DEFAULT_ACCOUNT'),
+    'region': os.getenv('CDK_DEFAULT_REGION')
+}
+)
 
 appmesh_stack.add_dependency(ecs_stack)
 appmesh_colorapp_stack.add_dependency(appmesh_stack)
