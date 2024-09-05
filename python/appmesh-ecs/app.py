@@ -13,7 +13,6 @@ ecs_stack = ECSStack(app, "ECSClusterStack")
 appmesh_stack = AppMeshStack(app, "AppMeshStack")
 ecr_stack = ECRStack(app, "ECRStack")
 appmesh_colorapp_stack = ServiceMeshColorAppStack(app, "AppmeshColorappStack")
-
 colorapp_task_definition_stack = ColorAppTaskDefinitionStack(app, "ColorAppTaskDefinitionStack",env={
      'account': os.getenv('CDK_DEFAULT_ACCOUNT'),
     'region': os.getenv('CDK_DEFAULT_REGION')
