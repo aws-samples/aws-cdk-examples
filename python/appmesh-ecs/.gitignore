@@ -8,3 +8,12 @@ __pycache__
 # CDK asset staging directory
 .cdk.staging
 cdk.out
+/colorapp/ecs_colorapp_stack.py
+new_cdk_appmesh_redo/
+vpc/
+ecsstackbackup.py.back
+xray-container.json
+envoy-container.json
+create-task-defs.sh
+colorteller-base-task-def.json
+colorgateway-base-task-def.json

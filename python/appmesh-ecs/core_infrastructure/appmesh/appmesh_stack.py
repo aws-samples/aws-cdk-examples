@@ -12,13 +12,11 @@ class AppMeshStack(Stack):
         super().__init__(scope, id,  **kwargs )
         environment_name ="appmesh-env"
         # Creates an AWS App Mesh mesh
-        mesh = appmesh.CfnMesh(self, "ecs-mesh",
-                               mesh_name=environment_name
-                               
-                               )
+        mesh = appmesh.Mesh(self, "ecs-mesh", mesh_name=environment_name) 
+         
         core.CfnOutput(
             self, "MeshName",
-            value=mesh.attr_mesh_name,
+            value=mesh.mesh_name,
             description="A reference to the AppMesh Meshs",
             export_name=f"{environment_name}:Mesh"
         )

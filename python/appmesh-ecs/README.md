@@ -1,11 +1,7 @@
 
-# App Mesh + ECS Fargate
+# Welcome to your CDK Python project!
 
-This stack will create core infrastructure resources and then create ECS services and tasks along with
-the appropriate app mesh resources. You can view the traces of the application in AWS X-Ray. This is based off of the ColorTeller CloudFormation Example.
-
-![Detailed diagram](appmesh_diagram.png)
-
+This is a blank project for CDK development with Python.
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
@@ -52,12 +48,7 @@ them to your `setup.py` file and rerun the `pip install -r requirements.txt`
 command.
 
 ## Deploying this sample
-To deploy this sample you first need to create an ECR repository and upload the images. To do this you can run
-`cdk deploy ECRStack && ./deploy_images`
-
-Then you can run 
-`cdk deploy --all`
-
+To deploy this sample, run `cdk deploy --all`
 
 ## Useful commands
 

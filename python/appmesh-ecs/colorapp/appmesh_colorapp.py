@@ -13,268 +13,158 @@ import aws_cdk.aws_iam as iam
 import aws_cdk.aws_appmesh as appmesh
 
 class ServiceMeshColorAppStack(Stack):
+    # This function creates the virtual nodes in app mesh that correspond to each color
+    def createVirtualNodes(stack: core.Stack, color: str, environment_name: str, mesh):
+        environment_name ="appmesh-env"
+        return appmesh.VirtualNode(
+            scope=stack,
+            id=f"VirtualNode-{color}",
+            mesh=mesh,
+            virtual_node_name=f"colorteller-{color}-vn",
+            
+            listeners=[
+                       appmesh.VirtualNodeListener.http(
+                           port=9080,
+                           health_check=appmesh.HealthCheck.http(
+                               healthy_threshold=3,
+                               unhealthy_threshold=2,
+                               timeout=core.Duration.millis(2000),
+                               interval=core.Duration.millis(5000),
+                               path="/ping",
+                           ),
+                       )],
+            service_discovery=appmesh.ServiceDiscovery.dns(
+                hostname=core.Fn.sub(
+                        "colorteller-${color}.${ServicesDomain}",
+                                    {
+                                        "color": str(color),
+                                        "ServicesDomain": core.Fn.import_value(f"{environment_name}:ECSServiceDiscoveryNamespace")
+                                    }
+                                )
+
+                 
+        )
+        )
+            
 
     def __init__(self, scope: Construct, id: str, **kwargs, ) -> None:
         super().__init__(scope, id, **kwargs )
         environment_name ="appmesh-env"
-        # The following creates the appmesh virtual nodes that are associated with each color in the namespace in Cloud Map
-        ColorTellerBlackVirtualNode = appmesh.CfnVirtualNode(
-        self, "ColorTellerBlackVirtualNode",
-        mesh_name=core.Fn.import_value(f"{environment_name}:Mesh"),
-        virtual_node_name="colorteller-black-vn",
-        spec=appmesh.CfnVirtualNode.VirtualNodeSpecProperty(
-            service_discovery=appmesh.CfnVirtualNode.ServiceDiscoveryProperty(
-                dns=appmesh.CfnVirtualNode.DnsServiceDiscoveryProperty(
-                    hostname=core.Fn.sub("colorteller-black.${ServicesDomain}", {"ServicesDomain": core.Fn.import_value(f"{environment_name}:ECSServiceDiscoveryNamespace")})
-                )
-            ),
-            listeners=[
-                appmesh.CfnVirtualNode.ListenerProperty(
-                    port_mapping=appmesh.CfnVirtualNode.PortMappingProperty(
-                        port=9080,
-                        protocol="http",
-                    ),
-                    health_check=appmesh.CfnVirtualNode.HealthCheckProperty(
-                        healthy_threshold=2,
-                        interval_millis=5000,
-                        path="/ping",
-                        port=9080,
-                        protocol="http",
-                        timeout_millis=2000,
-                        unhealthy_threshold=2,
-                        )
-                    )
-                ],
-            ),
+        my_mesh = appmesh.Mesh.from_mesh_name(self, "Mesh", mesh_name=core.Fn.import_value(f"{environment_name}:Mesh"))
+        color_teller_colors = ["red", "black", "blue"]
+        virtual_nodes = []
+        for color in color_teller_colors:
+            virtual_nodes.append(self.createVirtualNodes(color, environment_name, my_mesh))
+
+        ColorTellerVirtualRouter = appmesh.VirtualRouter(
+            self, "ColorTellerVirtualRouter",
+            mesh=my_mesh,
+            virtual_router_name="colorteller-vr",
+            listeners=[appmesh.VirtualRouterListener.http(port=9080)]
+            
         )
-        ColorTellerBlueVirtualNode = appmesh.CfnVirtualNode(
-        self, "ColorTellerBlueVirtualNode",
-        mesh_name=core.Fn.import_value(f"{environment_name}:Mesh"),
-        virtual_node_name="colorteller-blue-vn",
-        spec=appmesh.CfnVirtualNode.VirtualNodeSpecProperty(
-            service_discovery=appmesh.CfnVirtualNode.ServiceDiscoveryProperty(
-                dns=appmesh.CfnVirtualNode.DnsServiceDiscoveryProperty(
-                    hostname=core.Fn.sub("colorteller-blue.${ServicesDomain}", {"ServicesDomain": core.Fn.import_value(f"{environment_name}:ECSServiceDiscoveryNamespace")})
-                )
-            ),
-            listeners=[
-                appmesh.CfnVirtualNode.ListenerProperty(
-                    port_mapping=appmesh.CfnVirtualNode.PortMappingProperty(
-                        port=9080,
-                        protocol="http",
-                    ),
-                    health_check=appmesh.CfnVirtualNode.HealthCheckProperty(
-                        healthy_threshold=2,
-                        interval_millis=5000,
-                        path="/ping",
-                        port=9080,
-                        protocol="http",
-                        timeout_millis=2000,
-                        unhealthy_threshold=2,
-                        )
-                    )
-                ]
-            )
-        )  
-        ColorTellerRedVirtualNode = appmesh.CfnVirtualNode(
-        self, "ColorTellerRedVirtualNode",
-        mesh_name=core.Fn.import_value(f"{environment_name}:Mesh"),
-        virtual_node_name="colorteller-red-vn",
-        spec=appmesh.CfnVirtualNode.VirtualNodeSpecProperty(
-            service_discovery=appmesh.CfnVirtualNode.ServiceDiscoveryProperty(
-                dns=appmesh.CfnVirtualNode.DnsServiceDiscoveryProperty(
-                    hostname=core.Fn.sub("colorteller-red.${ServicesDomain}", {"ServicesDomain": core.Fn.import_value(f"{environment_name}:ECSServiceDiscoveryNamespace")})
-                )
-            ),
-            listeners=[
-                appmesh.CfnVirtualNode.ListenerProperty(
-                    port_mapping=appmesh.CfnVirtualNode.PortMappingProperty(
-                        port=9080,
-                        protocol="http",
-                    ),
-                    health_check=appmesh.CfnVirtualNode.HealthCheckProperty(
-                        healthy_threshold=2,
-                        interval_millis=5000,
-                        path="/ping",
-                        port=9080,
-                        protocol="http",
-                        timeout_millis=2000,
-                        unhealthy_threshold=2,
-                        )
-                    )
-                ]
-            )
-        )
-        ColorTellerWhiteVirtualNode = appmesh.CfnVirtualNode(
-        self, "ColorTellerWhiteVirtualNode",
-        mesh_name=core.Fn.import_value(f"{environment_name}:Mesh"),
-        virtual_node_name="colorteller-white-vn",
-        spec=appmesh.CfnVirtualNode.VirtualNodeSpecProperty(
-            service_discovery=appmesh.CfnVirtualNode.ServiceDiscoveryProperty(
-                dns=appmesh.CfnVirtualNode.DnsServiceDiscoveryProperty(
-                    hostname=core.Fn.sub("colorteller.${ServicesDomain}", {"ServicesDomain": core.Fn.import_value(f"{environment_name}:ECSServiceDiscoveryNamespace")})
-                )
-            ),
-            listeners=[
-                appmesh.CfnVirtualNode.ListenerProperty(
-                    port_mapping=appmesh.CfnVirtualNode.PortMappingProperty(
-                        port=9080,
-                        protocol="http",
-                    ),
-                    health_check=appmesh.CfnVirtualNode.HealthCheckProperty(
-                        healthy_threshold=2,
-                        interval_millis=5000,
-                        path="/ping",
-                        port=9080,
-                        protocol="http",
-                        timeout_millis=2000,
-                        unhealthy_threshold=2,
-                        )
-                    )
-                ]
-            )
-        )
-        ColorTellerVirtualRouter = appmesh.CfnVirtualRouter(
-        self, "ColorTellerVirtualRouter",
-        mesh_name=core.Fn.import_value(f"{environment_name}:Mesh"),
-        virtual_router_name="colorteller-vr",
-        spec=appmesh.CfnVirtualRouter.VirtualRouterSpecProperty(
-            listeners=[
-                appmesh.CfnVirtualRouter.VirtualRouterListenerProperty(
-                    port_mapping=appmesh.CfnVirtualRouter.PortMappingProperty(
-                        port=9080,
-                        protocol="http",
-                    )
-                )
-            ]
-        )
-        )  
+                    
         # Creates an app mesh route that distributes traffic across 3 targets when the gateway is hit
-        ColorTellerRoute = appmesh.CfnRoute(
-        self, "ColorTellerRoute",
-        mesh_name=core.Fn.import_value(f"{environment_name}:Mesh"),
-        virtual_router_name="colorteller-vr",
-        route_name="colorteller-route",
-        spec=appmesh.CfnRoute.RouteSpecProperty(
-            http_route=appmesh.CfnRoute.HttpRouteProperty(
-                action=appmesh.CfnRoute.HttpRouteActionProperty(
-                    weighted_targets=[
-                        appmesh.CfnRoute.WeightedTargetProperty(
-                            virtual_node="colorteller-white-vn",
-                            weight=1,
-                        ),
-                        appmesh.CfnRoute.WeightedTargetProperty(
-                            virtual_node="colorteller-blue-vn",
-                            weight=1,
-                        ),
-                        appmesh.CfnRoute.WeightedTargetProperty(
-                            virtual_node="colorteller-red-vn",
-                            weight=1,
-                        ),
-
-                    ],
-                ),
-                match=appmesh.CfnRoute.HttpRouteMatchProperty(
-                    prefix="/",
-                ),
-            ),
-        ),
-        )
-        ColorTellerRoute.node.add_dependency(ColorTellerVirtualRouter)
-        ColorTellerRoute.node.add_dependency(ColorTellerWhiteVirtualNode)
-        ColorTellerRoute.node.add_dependency(ColorTellerBlueVirtualNode)
-        ColorTellerRoute.node.add_dependency(ColorTellerRedVirtualNode)
-
-        # Creates a virtual service in app mesh that utilizes the virtual router
-        ColorTellerVirtualService = appmesh.CfnVirtualService(
-        self, "ColorTellerVirtualService",
-        mesh_name=core.Fn.import_value(f"{environment_name}:Mesh"),
-        virtual_service_name=core.Fn.sub("colorteller.${ServicesDomain}" , {"ServicesDomain": core.Fn.import_value(f"{environment_name}:ECSServiceDiscoveryNamespace")}),
-        spec=appmesh.CfnVirtualService.VirtualServiceSpecProperty(
-            provider=appmesh.CfnVirtualService.VirtualServiceProviderProperty(
-                virtual_router=appmesh.CfnVirtualService.VirtualRouterServiceProviderProperty(
-                    virtual_router_name="colorteller-vr",
-                ),
-            ),
-        ),
-        )
-        ColorTellerVirtualService.node.add_dependency(ColorTellerVirtualRouter)
-
-        TcpEchoVirtualNode = appmesh.CfnVirtualNode(
-        self, "TcpEchoVirtualNode",
-        mesh_name=core.Fn.import_value(f"{environment_name}:Mesh"),
-        virtual_node_name="tcpecho-vn",
-        spec=appmesh.CfnVirtualNode.VirtualNodeSpecProperty(
-            service_discovery=appmesh.CfnVirtualNode.ServiceDiscoveryProperty(
-                dns=appmesh.CfnVirtualNode.DnsServiceDiscoveryProperty(
-                    hostname=core.Fn.sub("tcpecho.${ServicesDomain}", {"ServicesDomain": core.Fn.import_value(f"{environment_name}:ECSServiceDiscoveryNamespace")})
-                )
-            ),
-            listeners=[
-                appmesh.CfnVirtualNode.ListenerProperty(
-                    port_mapping=appmesh.CfnVirtualNode.PortMappingProperty(
-                        port=2701,
-                        protocol="tcp",
-                    ),
-                    health_check=appmesh.CfnVirtualNode.HealthCheckProperty(
-                        healthy_threshold=2,
-                        interval_millis=5000,
-                        protocol="tcp",
-                        timeout_millis=2000,
-                        unhealthy_threshold=2,
-                        )
-                    )
-                ]
-            )
-        )   
-        TCPEchoVirtualService = appmesh.CfnVirtualService(
-        self, "TCPEchoVirtualService",
-        mesh_name=core.Fn.import_value(f"{environment_name}:Mesh"),
-        virtual_service_name=core.Fn.sub("tcpecho.${ServicesDomain}", {"ServicesDomain": core.Fn.import_value(f"{environment_name}:ECSServiceDiscoveryNamespace")}),
-        spec=appmesh.CfnVirtualService.VirtualServiceSpecProperty(
-            provider=appmesh.CfnVirtualService.VirtualServiceProviderProperty(
-                virtual_node=appmesh.CfnVirtualService.VirtualNodeServiceProviderProperty(
-                    virtual_node_name="tcpecho-vn",
-                ),
-            ),
-        ),
-        )
-        TCPEchoVirtualService.node.add_dependency(TcpEchoVirtualNode)
-        # Creating a virtual node for the color teller gateway 
-        ColorGatewayVirtualNode = appmesh.CfnVirtualNode(
-        self, "ColorGatewayVirtualNode",
-        mesh_name=core.Fn.import_value(f"{environment_name}:Mesh"),
-        virtual_node_name="colorgateway-vn",
-        spec=appmesh.CfnVirtualNode.VirtualNodeSpecProperty(
-            service_discovery=appmesh.CfnVirtualNode.ServiceDiscoveryProperty(
-                dns=appmesh.CfnVirtualNode.DnsServiceDiscoveryProperty(
-                    hostname=core.Fn.sub("colorgateway.${ServicesDomain}", {"ServicesDomain": core.Fn.import_value(f"{environment_name}:ECSServiceDiscoveryNamespace")})
-                )
-            ),
-            listeners=[
-                appmesh.CfnVirtualNode.ListenerProperty(
-                    port_mapping=appmesh.CfnVirtualNode.PortMappingProperty(
+       
+        ColorTellerVirtualRouter.add_route(
+            "MyRoute",        
+            route_name="colorteller-route",
+            route_spec=appmesh.RouteSpec.http(
+                weighted_targets=[
+                    appmesh.WeightedTarget(
+                        virtual_node=virtual_nodes[0],
                         port=9080,
-                        protocol="http",
-                    )
+                        weight=1
+                    ),
+                    appmesh.WeightedTarget(
+                        virtual_node=virtual_nodes[1],
+                        port=9080,
+                        weight=1
+                    ),
+                    appmesh.WeightedTarget(
+                        virtual_node=virtual_nodes[2],
+                        port=9080,
+                        weight=1
                     )
                 ],
-            backends=[
-                appmesh.CfnVirtualNode.BackendProperty(
-                virtual_service=
-                appmesh.CfnVirtualNode.VirtualServiceBackendProperty(
-                    virtual_service_name=core.Fn.sub("colorteller.${ServicesDomain}", {"ServicesDomain": core.Fn.import_value(f"{environment_name}:ECSServiceDiscoveryNamespace")}),
+                match=appmesh.HttpRouteMatch(
+                    path=appmesh.HttpRoutePathMatch.starts_with("/")
                 )
-                
-                
-                
-            ),
-            appmesh.CfnVirtualNode.BackendProperty(
-            virtual_service= appmesh.CfnVirtualNode.VirtualServiceBackendProperty(
-                    virtual_service_name=core.Fn.sub("tcpecho.${ServicesDomain}", {"ServicesDomain": core.Fn.import_value(f"{environment_name}:ECSServiceDiscoveryNamespace")}),
-                )
-            )
-            ]
             )
         )
+       
+        CollorTellerVirtualService = appmesh.VirtualService(
+             self, "ColorTellerService",
+             virtual_service_provider=appmesh.VirtualServiceProvider.virtual_router(virtual_router=ColorTellerVirtualRouter),
+             virtual_service_name=core.Fn.sub("colorteller.${ServicesDomain}" , {"ServicesDomain": core.Fn.import_value(f"{environment_name}:ECSServiceDiscoveryNamespace")}),
+             
+             
+        )
+        ColorTellerWhiteVirtualNode = appmesh.VirtualNode(
+            self, "ColorTellerWhiteVirtualNode",
+            mesh=my_mesh,
+            virtual_node_name=f"colorteller-white-vn",
+            
+            listeners=[
+                       appmesh.VirtualNodeListener.http(
+                           port=9080,
+                           health_check=appmesh.HealthCheck.http(
+                               healthy_threshold=3,
+                               unhealthy_threshold=2,
+                               timeout=core.Duration.millis(2000),
+                               interval=core.Duration.millis(5000),
+                               path="/ping",
+                           ),
+                       )],
+            service_discovery=appmesh.ServiceDiscovery.dns(
+                hostname=core.Fn.sub("colorteller.${ServicesDomain}",{"ServicesDomain": core.Fn.import_value(f"{environment_name}:ECSServiceDiscoveryNamespace")})
+            )
+
+                 
+        )
+
         
+        TcpEchoVirtualNode = appmesh.VirtualNode(
+            self, "TcpEchoVirtualNode",
+            mesh=my_mesh,
+            virtual_node_name=f"tcpecho-vn",
+
+            listeners=[
+                appmesh.VirtualNodeListener.tcp(port=2701),
+                appmesh.VirtualNodeListener.tcp(
+                    health_check=appmesh.HealthCheck.tcp(
+                        healthy_threshold=2,
+                        unhealthy_threshold=2,
+                        timeout=core.Duration.millis(2000),
+                        interval=core.Duration.millis(5000),
+                
+                        ),
+                )
+
+            ],
+            service_discovery=appmesh.ServiceDiscovery.dns(
+                hostname=core.Fn.sub("tcpecho.${ServicesDomain}", {"ServicesDomain": core.Fn.import_value(f"{environment_name}:ECSServiceDiscoveryNamespace")})
+            ),
+
+        )
+        TCPEchoVirtualService = appmesh.VirtualService(
+            self, "TCPEchoVirtualService",
+            virtual_service_provider=appmesh.VirtualServiceProvider.virtual_node(TcpEchoVirtualNode),
+            virtual_service_name=core.Fn.sub("tcpecho.${ServicesDomain}", {"ServicesDomain": core.Fn.import_value(f"{environment_name}:ECSServiceDiscoveryNamespace")}),
+
+        )
+
+        ColorGatewayVirtualNode = appmesh.VirtualNode(
+            self, "ColorGatewayVirtualNode",
+            mesh=my_mesh,
+            virtual_node_name=f"colorgateway-vn",
+
+            listeners=[appmesh.VirtualNodeListener.http(port=9080)],
+            service_discovery=appmesh.ServiceDiscovery.dns(
+                hostname=core.Fn.sub("colorgateway.${ServicesDomain}", {"ServicesDomain": core.Fn.import_value(f"{environment_name}:ECSServiceDiscoveryNamespace")})
+            ),
+            
+            
+        )
+        ColorGatewayVirtualNode.add_backend(appmesh.Backend.virtual_service(CollorTellerVirtualService))
+        ColorGatewayVirtualNode.add_backend(appmesh.Backend.virtual_service(TCPEchoVirtualService))
