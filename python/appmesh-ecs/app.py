@@ -2,7 +2,6 @@
 import os
 
 import aws_cdk as cdk
-# from core_infrastructure.vpc.vpc_stack import VPCStack
 from core_infrastructure.ecs.ecs_stack import ECSStack
 from core_infrastructure.appmesh.appmesh_stack import AppMeshStack 
 
