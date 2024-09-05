@@ -4,10 +4,7 @@ import os
 import aws_cdk as cdk
 from core_infrastructure.ecs.ecs_stack import ECSStack
 from core_infrastructure.appmesh.appmesh_stack import AppMeshStack 
-
 from core_infrastructure.ecr.ecr_stack import ECRStack
-
-from new_cdk_appmesh_redo.new_cdk_appmesh_redo_stack import NewCdkAppmeshRedoStack
 from task_definitions.color_app_task_definition_stack import ColorAppTaskDefinitionStack
 from colorapp.appmesh_colorapp import ServiceMeshColorAppStack
 
