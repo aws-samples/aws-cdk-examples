@@ -48,7 +48,7 @@ them to your `setup.py` file and rerun the `pip install -r requirements.txt`
 command.
 
 ## Deploying this sample
-To deploy this sample, run `cdk deploy --all`
+To deploy this sample, navigate to app.py and uncomment lines 19-20, then run `cdk deploy --all`
 
 ## Useful commands
 
