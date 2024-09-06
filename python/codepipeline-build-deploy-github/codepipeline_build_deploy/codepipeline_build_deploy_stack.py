@@ -34,8 +34,8 @@ class CodepipelineBuildDeployStack(Stack):
             "arn:aws:lambda:us-east-1:336392948345:layer:AWSSDKPandas-Python39:25"
         )
         git_layer_arn = "arn:aws:lambda:us-east-1:553035198032:layer:git-lambda2:8"
-        alb_blue_tg = "alb-blue-tg-1"
-        alb_green_tg = "alb-green-tg-1"
+        alb_blue_tg = "alb-blue-tg"
+        alb_green_tg = "alb-green-tg"
         pipeline_name = "GithubImageBuildDeployPipeline"
 
         github_token_secret = secretsmanager.Secret.from_secret_name_v2(
