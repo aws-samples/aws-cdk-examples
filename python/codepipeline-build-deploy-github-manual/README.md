@@ -21,28 +21,32 @@ This AWS Cloud Development Kit (CDK) Python example demonstrates how to configur
 
 When working in fast-paced development environments, CI/CD (Continuous Integration and Continuous Delivery) pipelines are used to automatically build, test, and deploy application changes across multiple accounts and environments. This allows new features and bug fixes to be tested and deployed quickly to continuously improve the application.
 
-## Requirements
+## Prerequisites
 
-- [Python v3.6+](https://www.python.org/)
-  - [AWS CDK in Python](https://docs.aws.amazon.com/cdk/v2/guide/work-with-cdk-python.html)
-- [AWS CDK v2.x](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html)
+1. [Python v3.6+](https://www.python.org/)
+2. [AWS CDK in Python](https://docs.aws.amazon.com/cdk/v2/guide/work-with-cdk-python.html)
+3. [AWS CDK v2.x](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html)
+4. GitHub Account
+    -   Create [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classicion/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)(PAT), for testing purposes you can select the `repo` permission to grant full access to the repositories.
+    - [Authenticate to an AWS account](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html#getting-started-quickstart-new-command) via a Command Line Interface (CLI) and store the GitHub PAT created above to AWS Secrets Manager using AWS CLI (This secret will be used by CodePipeline to authenticate with GitHub):
+    ```        
+    $ GITHUB_ACCESS_TOKEN='your Github access token'
+    $ REGION=us-east-1
+    $ aws secretsmanager create-secret --name github-access-token-secret --description "Github access token" --secret-string $GITHUB_ACCESS_TOKEN --region $REGION
+    ```
 
-## AWS Services Utilized
 
-- CodePipeline
-- CodeBuild
-- CodeDeploy
-- Elastic Container Service (ECS)
-- Fargate
-- Elastic Container Registry (ECR)
-- Lambda
+5. Provide the GitHub credential to CodeBuild using AWS CLI `ImportSourceCredentials` command:
+```
+$ aws codebuild import-source-credentials --server-type GITHUB --auth-type PERSONAL_ACCESS_TOKEN --token <token_value>
+  ```
 
-## Deploying
-- Prepare your GitHub repository:
+> Note: CodeBuild only allows a single credential for GitHub to be saved in a given AWS account in a given region - any attempt to add more than one will result in an error.
 
-1. Create a new GitHub repository.
-2. Clone the repository to your local machine.
-3. Copy all files and directories from the 'app/' directory of this project into the root of your cloned GitHub repository. After copying, your GitHub repository should have the following structure:
+6. Prepare your Github repository
+  - Create a new [GitHub repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/quickstart-for-repositories).
+  - Clone the repository to your local machine.
+  - Copy all files and directories from the 'app/' directory of this project into the root of your cloned GitHub repository. After copying, your GitHub repository should have the following structure:
 ```sh   
 .
 ├── Dockerfile
@@ -60,17 +64,30 @@ When working in fast-paced development environments, CI/CD (Continuous Integrati
 2 directories, 10 files
 ```
 
-- Authenticate to an AWS account via a Command Line Interface (CLI).
-  
-- Store the Github token in AWS Secrets Manager
-```sh
-$ GITHUB_ACCESS_TOKEN='this is my secret'
-$ REGION=us-east-1
-$ aws secretsmanager  create-secret --name github-access-token-secret --description "Github access token" --secret-string $GITHUB_ACCESS_TOKEN --region $REGION
-```
 
+
+
+## AWS Services Utilized
+
+- CodePipeline
+- CodeBuild
+- CodeDeploy
+- Elastic Container Service (ECS)
+- Fargate
+- Elastic Container Registry (ECR)
+- Lambda
+
+## Deploying
 
 - Navigate to this `codepipeline-build-deploy-github-manual` directory.
+- Update the GitHub username and repository name in the file:
+`codepipeline_build_deploy/codepipeline_build_deploy_stack.py`
+Look for the following lines and replace them with your GitHub information (Note: there are **two pairs** of `github_user` and `repo_name` to update in line 45 AND line 206):
+```python
+owner='github_user',    # TODO: Replace with your GitHub username
+repo='repo_name',   # TODO: Replace with your GitHub repository name
+```
+
 - `pip install -r requirements.txt` to install the required dependencies.
 - `cdk synth` to generate and review the CloudFormation template.
 - `cdk diff` to compare local changes with what is currently deployed.

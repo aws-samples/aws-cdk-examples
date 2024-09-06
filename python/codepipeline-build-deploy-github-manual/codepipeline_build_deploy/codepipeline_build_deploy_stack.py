@@ -42,8 +42,8 @@ class CodepipelineBuildDeployStack(Stack):
             build_spec=codebuild.BuildSpec.from_source_filename(
                 "buildspec.yaml"),
             source=codebuild.Source.git_hub(
-                owner="github_user",
-                repo="repo_name",
+                owner="github_user",    # TODO: Replace with your GitHub username
+                repo="repo_name",   # TODO: Replace with your GitHub repository name
                 branch_or_ref="main",
             ),
             environment=codebuild.BuildEnvironment(
@@ -203,8 +203,8 @@ class CodepipelineBuildDeployStack(Stack):
             actions=[
                 pipelineactions.GitHubSourceAction(
                     action_name="GitHub",
-                    owner='github_user',
-                    repo='repo_name',
+                    owner='github_user',    # TODO: Replace with your GitHub username
+                    repo='repo_name',   # TODO: Replace with your GitHub repository name
                     branch="main",
                     oauth_token=SecretValue.secrets_manager("github-access-token-secret"),
                     output=source_artifact,
@@ -250,10 +250,10 @@ class CodepipelineBuildDeployStack(Stack):
             ]
         )
 
-        # store Github credentials to CodeBuild
-        codebuild.GitHubSourceCredentials(self, "CodeBuildGitHubCreds",
-            access_token=SecretValue.secrets_manager("github-access-token-secret")
-        )
+        # store Github credentials to CodeBuild 
+        # codebuild.GitHubSourceCredentials(self, "CodeBuildGitHubCreds",
+        #     access_token=SecretValue.secrets_manager("github-access-token-secret")
+        # )
 
         # Creates an AWS CodePipeline with source, build, and deploy stages
         pipeline.Pipeline(
