@@ -29,14 +29,14 @@ class CodepipelineBuildDeployStack(Stack):
         default_region = "us-east-1"
         github_owner_name = "your github username"  # replace with your github username
         github_pat_secret_name = "github_access_token"
-        github_repo_name = "python-cdk-example"
+        github_repo_name = "python-cdk-example"  # add a unique suffix -xxx if you want to launch multiple cdk deploy in parallel
         sdk_for_pandas_layer_arn = (
             "arn:aws:lambda:us-east-1:336392948345:layer:AWSSDKPandas-Python39:25"
         )
         git_layer_arn = "arn:aws:lambda:us-east-1:553035198032:layer:git-lambda2:8"
-        alb_blue_tg = "alb-blue-tg"
-        alb_green_tg = "alb-green-tg"
-        pipeline_name = "GithubImageBuildDeployPipeline"
+        alb_blue_tg = "alb-blue-tg"  # add a unique suffix -xxx if you want to launch multiple cdk deploy in parallel
+        alb_green_tg = "alb-green-tg"  # add a unique suffix -xxx if you want to launch multiple cdk deploy in parallel
+        pipeline_name = "GithubImageBuildDeployPipeline" # add a unique suffix -xxx if you want to launch multiple cdk deploy in parallel
 
         github_token_secret = secretsmanager.Secret.from_secret_name_v2(
             self, "GitHubTokenSecret", github_pat_secret_name

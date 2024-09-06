@@ -73,16 +73,13 @@ def handler(event, context):
     owner = os.environ["GITHUB_OWNER_NAME"]
     repo_name = os.environ["GITHUB_REPO_NAME"]
 
-    # Delete existing GitHub credentials if any
+    # Import GitHub source credential
     codebuild = boto3.client("codebuild")
-    existing_creds = codebuild.list_source_credentials()
-    for cred in existing_creds["sourceCredentialsInfos"]:
-        if cred["serverType"] == "GITHUB":
-            codebuild.delete_source_credentials(arn=cred["arn"])
-
-    # Import new GitHub credential
     response = codebuild.import_source_credentials(
-        token=github_token, serverType="GITHUB", authType="PERSONAL_ACCESS_TOKEN"
+        token=github_token,
+        serverType="GITHUB",
+        authType="PERSONAL_ACCESS_TOKEN",
+        shouldOverwrite=True,
     )
     print(f"Source credential ARN: {response['arn']}")
 
