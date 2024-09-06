@@ -14,7 +14,7 @@
 
 ## Overview
 
-This AWS Cloud Development Kit (CDK) Python example demonstrates how to configure AWS CodePipeline with GitHub, CodeBuild, and CodeDeploy to build and deploy a Docker image to an Elastic Container Service (ECS) cluster running AWS Fargate (serverless compute for containers). The pipeline sources code from an manually created GitHub repository, builds it using CodeBuild, and deploys the resulting Docker image to ECS Fargate using CodeDeploy.
+This AWS Cloud Development Kit (CDK) Python example demonstrates how to configure AWS CodePipeline with GitHub, CodeBuild, and CodeDeploy to build and deploy a Docker image to an Elastic Container Service (ECS) cluster running AWS Fargate (serverless compute for containers). The pipeline sources code from a manually created GitHub repository, builds it using CodeBuild, and deploys the resulting Docker image to ECS Fargate using CodeDeploy.
 
 
 ## Real-world Example
