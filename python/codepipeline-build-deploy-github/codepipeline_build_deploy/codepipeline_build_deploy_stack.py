@@ -3,18 +3,17 @@ from aws_cdk import (
     aws_codedeploy as codedeploy,
     aws_codepipeline as pipeline,
     aws_codepipeline_actions as pipelineactions,
-    aws_secretsmanager as secretsmanager,
-    custom_resources as cr,
     aws_ec2 as ec2,
     aws_ecs as ecs,
     aws_ecr as ecr,
     aws_elasticloadbalancingv2 as elb,
     aws_iam as iam,
     aws_lambda as lambda_,
+    aws_secretsmanager as secretsmanager,
     custom_resources as custom,
     CfnOutput,
-    Stack,
     Duration,
+    Stack,
 )
 from constructs import Construct
 import os
@@ -28,15 +27,16 @@ class CodepipelineBuildDeployStack(Stack):
 
         # Consts
         default_region = "us-east-1"
-        github_owner_name = "xxxx"  # replace with your github user name
+        github_owner_name = "your github username"  # replace with your github username
         github_pat_secret_name = "github_access_token"
         github_repo_name = "python-cdk-example"
         sdk_for_pandas_layer_arn = (
             "arn:aws:lambda:us-east-1:336392948345:layer:AWSSDKPandas-Python39:25"
         )
         git_layer_arn = "arn:aws:lambda:us-east-1:553035198032:layer:git-lambda2:8"
-        alb_blue_tg = "alb-blue-tg"
-        alb_green_tg = "alb-green-tg"
+        alb_blue_tg = "alb-blue-tg-1"
+        alb_green_tg = "alb-green-tg-1"
+        pipeline_name = "GithubImageBuildDeployPipeline"
 
         github_token_secret = secretsmanager.Secret.from_secret_name_v2(
             self, "GitHubTokenSecret", github_pat_secret_name
@@ -83,10 +83,10 @@ class CodepipelineBuildDeployStack(Stack):
         )
 
         # Create a custom resource that uses the Lambda function
-        create_repo = cr.AwsCustomResource(
+        create_repo = custom.AwsCustomResource(
             self,
             "GitHubRepo",
-            on_create=cr.AwsSdkCall(
+            on_create=custom.AwsSdkCall(
                 service="Lambda",
                 action="invoke",
                 parameters={
@@ -97,9 +97,9 @@ class CodepipelineBuildDeployStack(Stack):
                         }
                     ),
                 },
-                physical_resource_id=cr.PhysicalResourceId.of("GitHubRepo"),
+                physical_resource_id=custom.PhysicalResourceId.of("GitHubRepo"),
             ),
-            policy=cr.AwsCustomResourcePolicy.from_statements(
+            policy=custom.AwsCustomResourcePolicy.from_statements(
                 [
                     iam.PolicyStatement(
                         actions=["lambda:InvokeFunction"],
@@ -365,7 +365,7 @@ class CodepipelineBuildDeployStack(Stack):
         pipeline.Pipeline(
             self,
             "BuildDeployPipeline",
-            pipeline_name="ImageBuildDeployPipeline",
+            pipeline_name=pipeline_name,
             stages=[source_stage, build_stage, deploy_stage],
         )
 
