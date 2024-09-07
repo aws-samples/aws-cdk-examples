@@ -48,7 +48,7 @@ When working in fast-paced development environments, CI/CD (Continuous Integrati
 ## Deploying
 
 - Authenticate to an AWS account via a Command Line Interface (CLI).
-- Navigate to this `codepipeline-build-deploy-github` directory.
+- Navigate to this `codepipeline-build-deploy` directory.
 - `pip install -r requirements.txt` to install the required dependencies.
 - Replace `github_owner_name` with your github [username](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/remembering-your-github-username-or-email#finding-your-username-in-the-url-of-remote-repositories) in `codepipeline_build_deploy_stack.py`
 - `cdk synth` to generate and review the CloudFormation template.
