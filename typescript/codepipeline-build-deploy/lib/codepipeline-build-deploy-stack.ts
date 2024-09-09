@@ -35,9 +35,9 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     });
     
     const default_region = "us-east-1";
-    const github_owner_name = "rajatgoel47";  // replace with your github username
+    const github_owner_name = "github_owner_name";  // replace with your github username
     const github_pat_secret_name = "github_access_token";
-    const github_repo_name = "typescript-cdk-example-1";  // add a unique suffix -xxx if you want to launch multiple cdk deploy in parallel
+    const github_repo_name = "typescript-cdk-example";  // add a unique suffix -xxx if you want to launch multiple cdk deploy in parallel
     const sdk_for_pandas_layer_arn = (
         "arn:aws:lambda:us-east-1:336392948345:layer:AWSSDKPandas-Python39:25"
     );
