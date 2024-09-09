@@ -1,6 +1,6 @@
 import * as cdk from "aws-cdk-lib";
 import * as codebuild from "aws-cdk-lib/aws-codebuild";
-import * as codecommit from "aws-cdk-lib/aws-codecommit";
+import * as secrets from "aws-cdk-lib/aws-secretsmanager";
 import * as codedeploy from "aws-cdk-lib/aws-codedeploy";
 import * as pipeline from "aws-cdk-lib/aws-codepipeline";
 import * as pipelineactions from "aws-cdk-lib/aws-codepipeline-actions";
@@ -34,12 +34,77 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       exclude: gitignore,
     });
     
-    const codeRepo = new codecommit.Repository(this, "repo", {
-      repositoryName: "simple-code-repo",
-      // Copies files from codepipeline-build-deploy directory to the repo as the initial commit
-      code: Code.fromAsset(codeAsset, 'main'),
-    });
+    const default_region = "us-east-1";
+    const github_owner_name = "rajatgoel47";  // replace with your github username
+    const github_pat_secret_name = "github_access_token";
+    const github_repo_name = "typescript-cdk-example-1";  // add a unique suffix -xxx if you want to launch multiple cdk deploy in parallel
+    const sdk_for_pandas_layer_arn = (
+        "arn:aws:lambda:us-east-1:336392948345:layer:AWSSDKPandas-Python39:25"
+    );
+    const git_layer_arn = "arn:aws:lambda:us-east-1:553035198032:layer:git-lambda2:8";
+    const alb_blue_tg = "alb-blue-tg";  // add a unique suffix -xxx if you want to launch multiple cdk deploy in parallel
+    const alb_green_tg = "alb-green-tg";  // add a unique suffix -xxx if you want to launch multiple cdk deploy in parallel
+    const pipeline_name = "GithubImageBuildDeployPipeline"; // add a unique suffix -xxx if you want to launch multiple cdk deploy in parallel
+
+    const github_token_secret = secrets.Secret.fromSecretNameV2(
+        this, "GitHubTokenSecret", github_pat_secret_name
+    );
     
+    // Create a Lambda function to handle GitHub repo creation
+    const githubRepoCreator = new lambda.Function(this, 'GitHubRepoCreator', {
+      runtime: lambda.Runtime.PYTHON_3_9,
+      handler: 'index.handler',
+      code: lambda.Code.fromAsset(path.join(__dirname, '/lambda/github_repo_creator')),
+      layers: [
+        lambda.LayerVersion.fromLayerVersionArn(this, 'AWSSDKPandasLayer', sdk_for_pandas_layer_arn),
+        lambda.LayerVersion.fromLayerVersionArn(this, 'GitLayer', git_layer_arn),
+      ],
+      timeout: cdk.Duration.seconds(30), // Set timeout to 30 seconds
+    environment: {
+      HOME: '/tmp',
+      GIT_CONFIG_NOSYSTEM: '1',
+      DEFAULT_REGION: default_region,
+      GITHUB_TOKEN_SECRET_NAME: github_pat_secret_name,
+      GITHUB_OWNER_NAME: github_owner_name,
+      GITHUB_REPO_NAME: github_repo_name,
+      },
+    });
+
+// Grant the Lambda function permission to read the secret
+    github_token_secret.grantRead(githubRepoCreator);
+// Grant the Lambda function permission to manage source credentials
+    githubRepoCreator.addToRolePolicy(
+      new iam.PolicyStatement({
+      actions: [
+        'codebuild:ImportSourceCredentials',
+        'codebuild:DeleteSourceCredentials',
+        'codebuild:ListSourceCredentials',
+      ],
+      resources: ['*'],
+      })
+    );
+
+    // Create a custom resource that uses the Lambda function
+    const createRepo = new custom.AwsCustomResource(this, 'GitHubRepo', {
+      onCreate: {
+        service: 'Lambda',
+        action: 'invoke',
+        parameters: {
+      FunctionName: githubRepoCreator.functionName,
+      Payload: JSON.stringify({
+        dir_path: 'app/', // application assets under lambda/github_repo_creator
+        }),
+      },
+      physicalResourceId: custom.PhysicalResourceId.of('GitHubRepo'),
+    },
+    policy: custom.AwsCustomResourcePolicy.fromStatements([
+      new iam.PolicyStatement({
+        actions: ['lambda:InvokeFunction'],
+        resources: [githubRepoCreator.functionArn],
+      }),
+    ]),
+  });
+
     // Creates an Elastic Container Registry (ECR) image repository
     const imageRepo = new ecr.Repository(this, "imageRepo");
 
@@ -56,8 +121,13 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
 
     // CodeBuild project that builds the Docker image
     const buildImage = new codebuild.Project(this, "BuildImage", {
-      buildSpec: codebuild.BuildSpec.fromSourceFilename("app/buildspec.yaml"),
-      source: codebuild.Source.codeCommit({ repository: codeRepo }),
+      buildSpec: codebuild.BuildSpec.fromSourceFilename("buildspec.yaml"),
+      source: codebuild.Source.gitHub({
+        owner: github_owner_name,
+        repo: github_repo_name,
+        branchOrRef: "main",
+        webhook: true
+      }),
       environment: {
         privileged: true,
         environmentVariables: {
@@ -73,14 +143,9 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       },
     });
     
-    // CodeBuild project that builds the Docker image
-    const buildTest = new codebuild.Project(this, "BuildTest", {
-      buildSpec: codebuild.BuildSpec.fromSourceFilename("buildspec.yaml"),
-      source: codebuild.Source.codeCommit({ repository: codeRepo }),
-      environment: {
-        buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_4,  
-      }
-    });
+    // adding dependency
+
+    buildImage.node.addDependency(createRepo);
 
     // Grants CodeBuild project access to pull/push images from/to ECR repo
     imageRepo.grantPullPush(buildImage);
@@ -224,23 +289,14 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     const sourceStage = {
       stageName: "Source",
       actions: [
-        new pipelineactions.CodeCommitSourceAction({
-          actionName: "AppCodeCommit",
-          branch: "main",
+        new pipelineactions.GitHubSourceAction({
+          actionName: "GitHub",
+          owner: github_owner_name,
+          branch: "main", 
+          oauthToken: github_token_secret.secretValue,
           output: sourceArtifact,
-          repository: codeRepo,
-        }),
-      ],
-    };
-
-    // Run jest test and send result to CodeBuild    
-    const testStage = {
-      stageName: "Test",
-      actions: [
-        new pipelineactions.CodeBuildAction({
-          actionName: "JestCDK",
-          input: new pipeline.Artifact("SourceArtifact"),
-          project: buildTest,
+          repo: github_repo_name,
+          trigger: pipelineactions.GitHubTrigger.WEBHOOK,
         }),
       ],
     };
@@ -289,12 +345,13 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     // Creates an AWS CodePipeline with source, build, and deploy stages
     new pipeline.Pipeline(this, "BuildDeployPipeline", {
       pipelineName: "ImageBuildDeployPipeline",
-      stages: [sourceStage, testStage, buildStage, deployStage],
+      stages: [sourceStage, buildStage, deployStage],
     });
 
     // Outputs the ALB public endpoint
     new cdk.CfnOutput(this, "PublicAlbEndpoint", {
       value: "http://" + publicAlb.loadBalancerDnsName,
     });
+
   }
 }

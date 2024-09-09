@@ -25,6 +25,15 @@ When working in fast-paced development environments, CI/CD (Continuous Integrati
 - [TypeScript v3.8+](https://www.typescriptlang.org/)
     - [AWS CDK in TypeScript](https://docs.aws.amazon.com/cdk/v2/guide/work-with-cdk-typescript.html)
 - [AWS CDK v2.x](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html)
+- GitHub Account
+  - Create [Personal Access Token Classic](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens), make sure to select the `admin:repo_hook` and `repo` permissions to allow read access to the pipeline and also allow it to install a webhook to trigger pipeline actions when making a new commit.
+  - Store PAT to Secrets Manager
+    ```
+    GITHUB_ACCESS_TOKEN='your access token'
+    REGION=us-east-1
+    aws secretsmanager  create-secret --name github_access_token --description "GitHub Access Token" --secret-string $GITHUB_ACCESS_TOKEN --region $REGION
+    ```
+
 
 ## AWS Services Utilized
 
