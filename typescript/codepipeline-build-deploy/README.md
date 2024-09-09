@@ -14,7 +14,7 @@
 
 ## Overview
 
-This AWS Cloud Development Kit (CDK) TypeScript example demonstrates how to configure AWS CodePipeline with CodeCommit, CodeBuild, and CodeDeploy to build and deploy a Docker image to an Elastic Container Service (ECS) cluster running [AWS Fargate](https://aws.amazon.com/fargate/) (serverless compute for containers).
+This AWS Cloud Development Kit (CDK) TypeScript example demonstrates how to configure AWS CodePipeline with GitHub, CodeBuild, and CodeDeploy to build and deploy a Docker image to an Elastic Container Service (ECS) cluster running [AWS Fargate](https://aws.amazon.com/fargate/) (serverless compute for containers).
 
 ## Real-world Example
 
@@ -29,13 +29,17 @@ When working in fast-paced development environments, CI/CD (Continuous Integrati
 ## AWS Services Utilized
 
 - CodePipeline
-- CodeCommit
 - CodeBuild
 - CodeDeploy
 - Elastic Container Service (ECS)
 - Fargate
 - Elastic Container Registry (ECR)
 - Lambda
+
+## External Tools
+
+- GitHub
+
 
 ## Deploying
 
@@ -46,6 +50,7 @@ When working in fast-paced development environments, CI/CD (Continuous Integrati
 - `cdk diff` to compare local changes with what is currently deployed.
 - `npm run test` to run the tests we specify in `codepipeline-build-deploy.test.ts`.
 - `cdk deploy` to deploy the stack to the AWS account you're authenticated to.
+-  create secret in secrets manager that contains the value of GitHub personal authentication token
 
 ## Output
 
@@ -64,7 +69,6 @@ After a successful deployment, CDK will output a public endpoint for:
 - Navigate to the AWS CodePipeline console and select `ImageBuildDeployPipeline`. Then click on `Release change` to trigger the pipeline and observe the workflow in action end-to-end.
 - Navigate to the AWS Console to view the services that were deployed:
   - CodePipeline pipeline
-  - CodeCommit repository
   - CodeBuild project
   - CodeDeploy application
   - ECS cluster
@@ -72,6 +76,10 @@ After a successful deployment, CDK will output a public endpoint for:
   - ECR image repository
   - Lambda functions
 
+- Check in GitHub for creation of source code repository
+  - The GitHub Personal Access Token should have these scopes:
+    - * repo - to read the repository
+    - * admin:repo_hook - if you plan to use webhooks (true by default)
 ## Further Improvements
 
 - Add [manual approval actions](https://docs.aws.amazon.com/codepipeline/latest/userguide/approvals-action-add.html) to the CodePipeline workflow.

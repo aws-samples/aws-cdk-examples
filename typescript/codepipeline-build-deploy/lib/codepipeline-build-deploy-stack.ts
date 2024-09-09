@@ -1,10 +1,12 @@
 import * as cdk from "aws-cdk-lib";
+import * as iam from '@aws-cdk/aws-iam';
 import * as codebuild from "aws-cdk-lib/aws-codebuild";
-import * as codecommit from "aws-cdk-lib/aws-codecommit";
+import * as githubactions from "aws-cdk-lib/aws-codepipeline-actions";
 import * as codedeploy from "aws-cdk-lib/aws-codedeploy";
 import * as pipeline from "aws-cdk-lib/aws-codepipeline";
+import * as secrets from "aws-cdk-lib/aws-secretsmanager";
 import * as pipelineactions from "aws-cdk-lib/aws-codepipeline-actions";
-import * as ec2 from "aws-cdk-lib/aws-ec2";
+import * as ec2 from "aws-cdk-lib/aws-ec2"; 
 import * as ecr from "aws-cdk-lib/aws-ecr";
 import * as ecs from "aws-cdk-lib/aws-ecs";
 import * as elb from "aws-cdk-lib/aws-elasticloadbalancingv2";
@@ -16,7 +18,6 @@ import * as path from "path";
 import * as fs from 'fs';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { IgnoreMode } from 'aws-cdk-lib';
-import { Code } from 'aws-cdk-lib/aws-codecommit';
 
 export class CodepipelineBuildDeployStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -34,11 +35,6 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       exclude: gitignore,
     });
     
-    const codeRepo = new codecommit.Repository(this, "repo", {
-      repositoryName: "simple-code-repo",
-      // Copies files from codepipeline-build-deploy directory to the repo as the initial commit
-      code: Code.fromAsset(codeAsset, 'main'),
-    });
     
     // Creates an Elastic Container Registry (ECR) image repository
     const imageRepo = new ecr.Repository(this, "imageRepo");
@@ -54,10 +50,31 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       portMappings: [{ containerPort: 80 }],
     });
 
+    const codeBuildServiceRole = new iam.Role(this, 'CodeBuildServiceRole', {
+      assumedBy: new iam.ServicePrincipal('codebuild.amazonaws.com'),
+      roleName: 'CodeBuildServiceRole',
+      description: 'Service Role for CodeBuild',
+      managedPolicies: [
+        iam.ManagedPolicy.fromAwsManagedPolicyName('CloudWatchLogsFullAccess'),
+        iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonS3ReadOnlyAccess'),
+        // Add any other necessary managed policies or can be fine grained as per usgae
+      ]
+    });
+
+    // Grant access to Secrets Manager
+    codeBuildServiceRole.addToPolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,  
+        actions: ['secretsmanager:GetSecretValue'],
+        resources: ['arn:aws:secretsmanager:<aws_region>:<aws_account>>:secret:github-oauth-token-*'],
+      })
+     );
+
     // CodeBuild project that builds the Docker image
     const buildImage = new codebuild.Project(this, "BuildImage", {
       buildSpec: codebuild.BuildSpec.fromSourceFilename("app/buildspec.yaml"),
-      source: codebuild.Source.codeCommit({ repository: codeRepo }),
+      source: codebuild.Source.gitHub({ owner: 'owner_name', repo: 'repo_name', webhook: true }),
+      role: codeBuildServiceRole,
       environment: {
         privileged: true,
         environmentVariables: {
@@ -69,21 +86,29 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
           TASK_DEFINITION_ARN: { value: fargateTaskDef.taskDefinitionArn },
           TASK_ROLE_ARN: { value: fargateTaskDef.taskRole.roleArn },
           EXECUTION_ROLE_ARN: { value: fargateTaskDef.executionRole?.roleArn },
+          
         },
+   
       },
     });
     
+   
+
     // CodeBuild project that builds the Docker image
     const buildTest = new codebuild.Project(this, "BuildTest", {
       buildSpec: codebuild.BuildSpec.fromSourceFilename("buildspec.yaml"),
-      source: codebuild.Source.codeCommit({ repository: codeRepo }),
+      source: codebuild.Source.gitHub({ owner: 'owner_name', repo: 'repo_name', webhook: true }),
       environment: {
         buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_4,  
       }
     });
 
+
+
     // Grants CodeBuild project access to pull/push images from/to ECR repo
     imageRepo.grantPullPush(buildImage);
+
+
 
     // Lambda function that triggers CodeBuild image build project
     const triggerCodeBuild = new lambda.Function(this, "BuildLambda", {
@@ -224,11 +249,13 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     const sourceStage = {
       stageName: "Source",
       actions: [
-        new pipelineactions.CodeCommitSourceAction({
-          actionName: "AppCodeCommit",
-          branch: "main",
+        new githubactions.GitHubSourceAction({
+          actionName: "GitHub",
+          owner: 'owner_name',
+          repo: 'repo_name',
+          oauthToken: cdk.SecretValue.secretsManager('github-oauth-token'),
+          trigger: githubactions.GitHubTrigger.WEBHOOK,
           output: sourceArtifact,
-          repository: codeRepo,
         }),
       ],
     };
@@ -296,5 +323,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     new cdk.CfnOutput(this, "PublicAlbEndpoint", {
       value: "http://" + publicAlb.loadBalancerDnsName,
     });
+
+     // Note: Create a GitHub OAuth token and store it in Secrets Manager with the name 'github-oauth-token'
   }
 }
