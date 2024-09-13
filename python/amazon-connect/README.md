@@ -1,7 +1,30 @@
+# Amazon Connect
 
-# Welcome to your CDK Python project!
+<!--BEGIN STABILITY BANNER-->
+---
 
-This is a blank project for CDK development with Python.
+![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
+
+> **This is a stable example. It should successfully build out of the box**
+>
+> This example is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
+---
+<!--END STABILITY BANNER-->
+
+## Overview
+
+This is an example CDK application that deploys an Amazon Connect instance.
+
+**Use Case**: a customer wants to be able to provision and configure Amazon Connect instances using CDK in Python.
+
+## Solution
+
+The solution deploys an Amazon Connect instance along with S3 buckets for call recordings and scheduled reports.
+Moreover, a Firehose Delivery Stream is deployed for Contact Trace Records.
+
+The instance is then assigned a phone number and the hours of operation for the contact centre are configured.
+
+## CDK Toolkit
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
@@ -47,12 +70,19 @@ To add additional dependencies, for example other CDK libraries, just add
 them to your `setup.py` file and rerun the `pip install -r requirements.txt`
 command.
 
-## Useful commands
 
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk docs`        open CDK documentation
+## Deploying the solution
 
-Enjoy!
+To deploy the solution, use the following command:
+
+```shell
+$ cdk deploy --all
+```
+
+## Destroying the deployment
+
+To destroy the provisioned infrastructure, you can simply run the following command:
+
+```shell
+$ cdk destroy --all
+```
