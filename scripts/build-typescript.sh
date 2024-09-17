@@ -15,7 +15,7 @@ echo "=============================="
 cd $scriptdir/../$(dirname $projFile)
 if [ -f DO_NOT_AUTOTEST ]; then
   echo "found DO_NOT_AUTOTEST, skip it."
-  return
+  exit 0
 fi
 # Check if yarn.lock exists
 if [ -f "yarn.lock" ]; then
