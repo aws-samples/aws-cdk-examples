@@ -35,15 +35,7 @@ When working in fast-paced development environments, CI/CD (Continuous Integrati
     $ aws secretsmanager create-secret --name github-access-token-secret --description "Github access token" --secret-string $GITHUB_ACCESS_TOKEN --region $REGION
     ```
 
-
-5. Provide the GitHub credential to CodeBuild using AWS CLI `ImportSourceCredentials` command:
-```
-$ aws codebuild import-source-credentials --server-type GITHUB --auth-type PERSONAL_ACCESS_TOKEN --token <token_value>
-  ```
-
-> Note: CodeBuild only allows a single credential for GitHub to be saved in a given AWS account in a given region - any attempt to add more than one will result in an error.
-
-6. Prepare your Github repository
+5. Prepare your Github repository
   - Create a new [GitHub repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/quickstart-for-repositories).
   - Clone the repository to your local machine.
   - Copy all files and directories from the 'app/' directory of this project into the root of your cloned GitHub repository. After copying, your GitHub repository should have the following structure:
