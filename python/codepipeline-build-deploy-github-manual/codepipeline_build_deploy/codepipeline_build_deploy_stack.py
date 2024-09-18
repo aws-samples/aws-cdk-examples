@@ -250,10 +250,10 @@ class CodepipelineBuildDeployStack(Stack):
             ]
         )
 
-        # store Github credentials to CodeBuild 
-        # codebuild.GitHubSourceCredentials(self, "CodeBuildGitHubCreds",
-        #     access_token=SecretValue.secrets_manager("github-access-token-secret")
-        # )
+        # Store Github credentials to CodeBuild 
+        codebuild.GitHubSourceCredentials(self, "CodeBuildGitHubCreds",
+            access_token=SecretValue.secrets_manager("github-access-token-secret")
+        )
 
         # Creates an AWS CodePipeline with source, build, and deploy stages
         pipeline.Pipeline(
