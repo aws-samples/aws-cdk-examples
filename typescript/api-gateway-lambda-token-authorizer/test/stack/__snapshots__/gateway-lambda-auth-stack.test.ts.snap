@@ -190,7 +190,7 @@ exports[`Snapshot Stack 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "a89b0c25113046ece0e7fb82e6d729811e22e9ed30e0d44feb9ffa39ef67b8a4.zip",
+          "S3Key": "54d6cb98b9e5561fbb4fe0db67802db343f5d9cc99a208caf080d13cfcdb9d13.zip",
         },
         "Description": "Lambda Authorizer",
         "Environment": {
@@ -375,7 +375,7 @@ exports[`Snapshot Stack 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "5ce4b859d5e57c3d238da3ac017e0ea37bf34ad1b71de268430b08e38bb9450d.zip",
+          "S3Key": "7d88236a0e52bda80be5720fa18eb669103ca13ac2a446c41b0c83034981e124.zip",
         },
         "Description": "Operational Lambda",
         "Environment": {
