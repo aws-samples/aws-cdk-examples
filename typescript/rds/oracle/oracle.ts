@@ -103,15 +103,15 @@ export class Oracle extends Stack {
     super(scope, id);
 
     // default database username
-    var oracleUsername = "dbadmin";
+    let oracleUsername = "dbadmin";
     if (typeof props.oracleUsername !== 'undefined') {
       oracleUsername = "dbadmin";
     }
-    var ingressSources = [];
+    let ingressSources = [];
     if (typeof props.ingressSources !== 'undefined') {
       ingressSources = props.ingressSources;
     }
-    var engineVersion = rds.OracleEngineVersion.VER_19_0_0_0_2021_04_R1;
+    let engineVersion = rds.OracleEngineVersion.VER_19_0_0_0_2021_04_R1;
     if (typeof props.engineVersion !== 'undefined') {
       engineVersion = props.engineVersion;
     }
