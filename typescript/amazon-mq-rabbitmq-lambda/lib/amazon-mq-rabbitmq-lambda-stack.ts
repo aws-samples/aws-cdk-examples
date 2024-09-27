@@ -58,7 +58,6 @@ export class AmazonMqRabbitmqLambdaStack extends Stack {
       logGroup: consumerLambdaLogGroup,   // Attach the custom CloudWatch log group
     });
 
-    // Prevent the default log group creation
     consumer_lambda.logGroup.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
     // Add RabbitMQ as an event source for the Lambda function to consume messages from 'testQueue'

@@ -1,16 +1,16 @@
 # Amazon MQ RabbitMQ Integration with Lambda, Secrets Manager, and CloudWatch Logs
 <!--BEGIN STABILITY BANNER-->
 ---
-![Stability: Experimental](https://img.shields.io/badge/stability-Experimental-important.svg?style=for-the-badge)
+
+![Stability: Developer Preview](https://img.shields.io/badge/stability-Developer--Preview-important.svg?style=for-the-badge)
 
 > **This is an experimental example. It may not build out of the box**
 >
-> This examples is built on Construct Libraries marked "Experimental" and may not be updated for latest breaking changes.
+> This example is built on Construct Libraries marked "Developer Preview" and may not be updated for latest breaking changes.
 >
-> It additionally requires infrastructure prerequisites that must be created before successful build.
+> It may additionally requires infrastructure prerequisites that must be created before successful build.
 >
 > If build is unsuccessful, please create an [issue](https://github.com/aws-samples/aws-cdk-examples/issues/new) so that we may debug the problem
-
 ---
 <!--END STABILITY BANNER-->
 This example demonstrates how to set up an Amazon MQ RabbitMQ cluster, integrate it with AWS Lambda for message processing,
@@ -46,6 +46,11 @@ This script connects to the RabbitMQ broker using the provided credentials and p
 After running the producer.py script, you can check the CloudWatch Log Group for your Lambda function to see the output from [consumer.js](lambda/consumer.js).
 The [consumer.js](lambda/consumer.js) file includes an example output that shows the details of the received messages, including their Base64-encoded data.
 
+Additionally, you can check the RabbitMQ management console to see the three messages that were published by producer.py
+and consumed by the Lambda function, similar to the picture below.
+
+![Queued Messages](images/queued-messages.png)
+
 ## Stack Components
 
 ![Component Diagram](/images/amazon-mq-rabbitmq-lambda-diagram.png)
@@ -69,6 +74,9 @@ To avoid incurring future charges, remember to destroy the resources:
 ```bash
 cdk destroy
 ```
+
+## Future Enhancements and Exploration Opportunities
+![Future Enhancements and Exploration Opportunities](images/Future-Enhancements-and-Exploration-Opportunities.png)
 
 ## Further Reading
 
