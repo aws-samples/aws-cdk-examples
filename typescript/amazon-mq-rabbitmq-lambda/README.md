@@ -53,7 +53,7 @@ and consumed by the Lambda function, similar to the picture below.
 
 ## Stack Components
 
-![Component Diagram](/images/amazon-mq-rabbitmq-lambda-diagram.png)
+![Component Diagram](images/amazon-mq-rabbitmq-lambda-diagram.png)
 
 This stack includes:
 
