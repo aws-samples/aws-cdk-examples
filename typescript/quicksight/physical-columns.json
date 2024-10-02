@@ -1,0 +1,8 @@
+{
+  "Internal": [
+    { "name": "timestamps", "type": "STRING"},
+    { "name": "Service", "type": "STRING"},
+    { "name": "Response", "type": "STRING"},
+    { "name": "Length", "type": "STRING"}
+  ]
+}
