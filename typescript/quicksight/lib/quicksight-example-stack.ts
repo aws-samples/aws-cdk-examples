@@ -1,19 +1,16 @@
-import * as cdk from 'aws-cdk-lib';
 import {Construct} from 'constructs';
-import {Bucket} from 'aws-cdk-lib/aws-s3';
+import {BlockPublicAccess, Bucket, BucketAccessControl, BucketEncryption} from 'aws-cdk-lib/aws-s3';
 import {BucketDeployment, Source} from 'aws-cdk-lib/aws-s3-deployment';
-import {aws_s3} from 'aws-cdk-lib';
 import {CfnDataSet, CfnDataSource, CfnTemplate} from 'aws-cdk-lib/aws-quicksight';
 import {CfnManagedPolicy} from 'aws-cdk-lib/aws-iam';
-import {readFileSync} from 'node:fs';
+import { Stack, StackProps } from 'aws-cdk-lib';
 import {logicalColumns} from './logical-columns';
 import {physicalColumns} from './physical-columns';
 
-
-export class QuicksightExampleStack extends cdk.Stack {
+export class QuicksightExampleStack extends Stack {
   public static MANIFEST_KEY = 'manifests/manifest.json';
 
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     const { bucket, deployment } = this.createBucket();
@@ -26,10 +23,10 @@ export class QuicksightExampleStack extends cdk.Stack {
     const bucketName = 'example-bucket';
 
     // Set up a bucket
-    const bucket = new aws_s3.Bucket(this, bucketName, {
-      accessControl: aws_s3.BucketAccessControl.BUCKET_OWNER_FULL_CONTROL,
-      encryption: aws_s3.BucketEncryption.S3_MANAGED,
-      blockPublicAccess: aws_s3.BlockPublicAccess.BLOCK_ALL
+    const bucket = new Bucket(this, bucketName, {
+      accessControl: BucketAccessControl.BUCKET_OWNER_FULL_CONTROL,
+      encryption: BucketEncryption.S3_MANAGED,
+      blockPublicAccess: BlockPublicAccess.BLOCK_ALL
     });
 
     const manifest = {
