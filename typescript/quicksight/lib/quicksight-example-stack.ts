@@ -24,6 +24,9 @@ export class QuicksightExampleStack extends Stack {
   public static QUICKSIGHT_SERVICE_ROLE = 'aws-quicksight-service-role-v0';
 
 
+  public static QUICKSIGHT_DATASET_NAME = 'quicksightExampleDataset';
+
+
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
@@ -179,16 +182,16 @@ export class QuicksightExampleStack extends Stack {
       dataTransforms
     }
 
-    const  datasetName = 'quicksightExampleDataset';
+
     new CfnDataSet(
       this,
-      datasetName,
+      QuicksightExampleStack.QUICKSIGHT_DATASET_NAME,
       {
         awsAccountId: this.account,
         physicalTableMap: {[QuicksightExampleStack.QUICKSIGHT_DATASOURCE_NAME]: physicalTableProperties},
         logicalTableMap: {[QuicksightExampleStack.QUICKSIGHT_DATASOURCE_NAME]: logicalTableProperties},
-        name: datasetName,
-        dataSetId: datasetName,
+        name: QuicksightExampleStack.QUICKSIGHT_DATASET_NAME,
+        dataSetId: QuicksightExampleStack.QUICKSIGHT_DATASET_NAME,
         permissions: quicksightDatasetPermissions,
         importMode: 'SPICE'
       }
