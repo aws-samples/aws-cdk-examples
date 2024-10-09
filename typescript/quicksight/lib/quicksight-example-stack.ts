@@ -16,13 +16,13 @@ export class QuicksightExampleStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const bucket = this.createBucket();
+    const { bucket, deployment } = this.createBucket();
     const accountQuicksight = 'arn:aws:quicksight:<region>:<accountid>:user/<namespace>/<username>';
-    this.createQuicksightResources(bucket, accountQuicksight);
+    this.createQuicksightResources(bucket, deployment, accountQuicksight);
   }
 
   // creates s3 bucket and deploys test data
-  public createBucket(): Bucket {
+  public createBucket(): {bucket: Bucket, deployment: BucketDeployment} {
     const bucketName = 'example-bucket';
 
     // Set up a bucket
@@ -50,14 +50,14 @@ export class QuicksightExampleStack extends cdk.Stack {
       manifest
     );
     // deploy them
-    new BucketDeployment(this, 'BucketDeployment', {
+    const deployment = new BucketDeployment(this, 'BucketDeployment', {
       sources: [sourceInternal, Source.asset('./data')],
       destinationBucket: bucket,
     });
-    return bucket;
+    return { bucket, deployment };
   }
 
-  public createQuicksightResources(bucket: Bucket, quicksightAccountArn: string) {
+  public createQuicksightResources(bucket: Bucket, deployment: BucketDeployment, quicksightAccountArn: string) {
     const quicksightS3DataSourceName = 's3DataSourceExample';
     // make it a stack parameter so users dont have to change the code
     // make sure here it is clear that the acc cant be created
@@ -126,8 +126,8 @@ export class QuicksightExampleStack extends cdk.Stack {
     )
 
     // quicksight needs these to be created so we waiting for the
-    quicksightS3DataSource.node.addDependency(bucket);
     quicksightS3DataSource.node.addDependency(managedPolicy);
+    quicksightS3DataSource.node.addDependency(deployment);
 
     const transformOperations: CfnDataSet.TransformOperationProperty[] = logicalColumns;
 
