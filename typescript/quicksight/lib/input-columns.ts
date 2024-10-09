@@ -1,5 +1,8 @@
-
-export const inputColumns = [
+import { CfnDataSet } from "aws-cdk-lib/aws-quicksight";
+/**
+ * @see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-quicksight-dataset-inputcolumn.html
+ */
+export const inputColumns: CfnDataSet.InputColumnProperty[] = [
   { "name": "Country Name", "type": "STRING"},
   { "name": "Country Code", "type": "STRING"},
   { "name": "1960", "type": "STRING"},

@@ -1,6 +1,6 @@
 import { CfnDataSet } from "aws-cdk-lib/aws-quicksight";
 /**
- * @see https://docs.aws.amazon.com/quicksight/latest/APIReference/API_TransformOperation.html
+ * @see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-quicksight-dataset-transformoperation.html
  */
 export const dataTransforms: CfnDataSet.TransformOperationProperty[] = [
   {

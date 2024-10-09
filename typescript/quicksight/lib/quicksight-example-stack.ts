@@ -3,9 +3,13 @@ import {BlockPublicAccess, Bucket, BucketAccessControl, BucketEncryption} from '
 import {BucketDeployment, Source} from 'aws-cdk-lib/aws-s3-deployment';
 import {CfnDataSet, CfnDataSource, CfnTemplate} from 'aws-cdk-lib/aws-quicksight';
 import {CfnManagedPolicy} from 'aws-cdk-lib/aws-iam';
-import { Stack, StackProps } from 'aws-cdk-lib';
+import {Stack} from 'aws-cdk-lib';
 import {dataTransforms} from './data-transforms';
 import {inputColumns} from './input-columns';
+
+interface QuicksightExampleProps {
+  quicksightAccountArn: string;
+}
 
 export class QuicksightExampleStack extends Stack {
   /**
@@ -25,13 +29,11 @@ export class QuicksightExampleStack extends Stack {
 
   public static QUICKSIGHT_DATASET_NAME = 'quicksightExampleDataset';
 
-
-  constructor(scope: Construct, id: string, props?: StackProps) {
-    super(scope, id, props);
+  constructor(scope: Construct, id: string, props: QuicksightExampleProps) {
+    super(scope, id);
 
     const { bucket, deployment } = this.createBucket();
-    const accountQuicksight = 'arn:aws:quicksight:<region>:<accountid>:user/<namespace>/<username>';
-    this.createQuicksightResources(bucket, deployment, accountQuicksight);
+    this.createQuicksightResources(bucket, deployment, props.quicksightAccountArn);
   }
 
   // creates s3 bucket and deploys test data
@@ -62,7 +64,7 @@ export class QuicksightExampleStack extends Stack {
       QuicksightExampleStack.MANIFEST_KEY,
       manifest
     );
-    // deploy them
+    // deploy them and the files stored in the data directory
     const deployment = new BucketDeployment(this, 'BucketDeployment', {
       sources: [sourceInternal, Source.asset('./data')],
       destinationBucket: bucket,
@@ -154,10 +156,13 @@ export class QuicksightExampleStack extends Stack {
       }
     )
 
-    // quicksight needs these to be created so we waiting for the
+    // quicksight needs these to be created so we're waiting for the creation of these resources
     quicksightS3DataSource.node.addDependency(managedPolicy);
     quicksightS3DataSource.node.addDependency(deployment);
 
+    /**
+     * @see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-quicksight-dataset-physicaltable.html
+     */
     const physicalTableProperties: CfnDataSet.PhysicalTableProperty = {
       s3Source: {
         dataSourceArn: quicksightS3DataSource.attrArn,
@@ -170,8 +175,9 @@ export class QuicksightExampleStack extends Stack {
         }
       }
     }
+
     /**
-     * @see https://docs.aws.amazon.com/quicksight/latest/APIReference/API_LogicalTable.html
+     * @see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-quicksight-dataset-logicaltable.html
      */
     const logicalTableProperties: CfnDataSet.LogicalTableProperty = {
       alias: 's3-extract-data-cast',
