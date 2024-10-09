@@ -1,4 +1,8 @@
-export const logicalColumns = [
+import { CfnDataSet } from "aws-cdk-lib/aws-quicksight";
+/**
+ * @see https://docs.aws.amazon.com/quicksight/latest/APIReference/API_TransformOperation.html
+ */
+export const dataTransforms: CfnDataSet.TransformOperationProperty[] = [
   {
     "castColumnTypeOperation": {
       "columnName": "1960",

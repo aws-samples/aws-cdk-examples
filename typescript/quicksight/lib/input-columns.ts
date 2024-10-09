@@ -1,4 +1,5 @@
-export const physicalColumns = [
+
+export const inputColumns = [
   { "name": "Country Name", "type": "STRING"},
   { "name": "Country Code", "type": "STRING"},
   { "name": "1960", "type": "STRING"},

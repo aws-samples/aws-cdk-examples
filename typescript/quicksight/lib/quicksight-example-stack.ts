@@ -4,8 +4,8 @@ import {BucketDeployment, Source} from 'aws-cdk-lib/aws-s3-deployment';
 import {CfnDataSet, CfnDataSource, CfnTemplate} from 'aws-cdk-lib/aws-quicksight';
 import {CfnManagedPolicy} from 'aws-cdk-lib/aws-iam';
 import { Stack, StackProps } from 'aws-cdk-lib';
-import {logicalColumns} from './logical-columns';
-import {physicalColumns} from './physical-columns';
+import {dataTransforms} from './data-transforms';
+import {inputColumns} from './input-columns';
 
 export class QuicksightExampleStack extends Stack {
   /**
@@ -156,20 +156,10 @@ export class QuicksightExampleStack extends Stack {
     quicksightS3DataSource.node.addDependency(managedPolicy);
     quicksightS3DataSource.node.addDependency(deployment);
 
-    const transformOperations: CfnDataSet.TransformOperationProperty[] = logicalColumns;
-
-    const logicalTableProperties = {
-      alias: 's3-extract-data-cast',
-      source: {
-        physicalTableId: QuicksightExampleStack.QUICKSIGHT_DATASOURCE_NAME
-      },
-      dataTransforms: transformOperations
-    }
-
-    const physicalTableProperties = {
+    const physicalTableProperties: CfnDataSet.PhysicalTableProperty = {
       s3Source: {
         dataSourceArn: quicksightS3DataSource.attrArn,
-        inputColumns: physicalColumns,
+        inputColumns,
         uploadSettings: {
           format: 'CSV',
           delimiter: ',',
@@ -178,6 +168,17 @@ export class QuicksightExampleStack extends Stack {
         }
       }
     }
+    /**
+     * @see https://docs.aws.amazon.com/quicksight/latest/APIReference/API_LogicalTable.html
+     */
+    const logicalTableProperties: CfnDataSet.LogicalTableProperty = {
+      alias: 's3-extract-data-cast',
+      source: {
+        physicalTableId: QuicksightExampleStack.QUICKSIGHT_DATASOURCE_NAME
+      },
+      dataTransforms
+    }
+
     const  datasetName = 'quicksightExampleDataset';
     new CfnDataSet(
       this,
