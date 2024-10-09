@@ -8,7 +8,13 @@ import {logicalColumns} from './logical-columns';
 import {physicalColumns} from './physical-columns';
 
 export class QuicksightExampleStack extends Stack {
+  // location of the manifest json file in the s3 bucket.
+  // Used by quicksight to discover the csv files.
   public static MANIFEST_KEY = 'manifests/manifest.json';
+  /**
+   * foo bar
+   */
+  public static QUICKSIGHT_DATASOURCE_NAME = 's3DataSourceExample';
 
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
@@ -55,10 +61,6 @@ export class QuicksightExampleStack extends Stack {
   }
 
   public createQuicksightResources(bucket: Bucket, deployment: BucketDeployment, quicksightAccountArn: string) {
-    const quicksightS3DataSourceName = 's3DataSourceExample';
-    // make it a stack parameter so users dont have to change the code
-    // make sure here it is clear that the acc cant be created
-    // replace with your own values here
 
     const quicksightDataSourcePermissions: CfnTemplate.ResourcePermissionProperty[] = [
       {
@@ -104,8 +106,8 @@ export class QuicksightExampleStack extends Stack {
       'S3DataSource',
       {
         awsAccountId: this.account,
-        dataSourceId: quicksightS3DataSourceName,
-        name: quicksightS3DataSourceName,
+        dataSourceId: QuicksightExampleStack.QUICKSIGHT_DATASOURCE_NAME,
+        name: QuicksightExampleStack.QUICKSIGHT_DATASOURCE_NAME,
         dataSourceParameters: {
           s3Parameters: {
             manifestFileLocation: {
@@ -131,7 +133,7 @@ export class QuicksightExampleStack extends Stack {
     const logicalTableProperties = {
       alias: 's3-extract-data-cast',
       source: {
-        physicalTableId: quicksightS3DataSourceName
+        physicalTableId: QuicksightExampleStack.QUICKSIGHT_DATASOURCE_NAME
       },
       dataTransforms: transformOperations
     }
@@ -154,8 +156,8 @@ export class QuicksightExampleStack extends Stack {
       'quicksightExampleDataset',
       {
         awsAccountId: this.account,
-        physicalTableMap: {[quicksightS3DataSourceName]: physicalTableProperties},
-        logicalTableMap: {[quicksightS3DataSourceName]: logicalTableProperties},
+        physicalTableMap: {[QuicksightExampleStack.QUICKSIGHT_DATASOURCE_NAME]: physicalTableProperties},
+        logicalTableMap: {[QuicksightExampleStack.QUICKSIGHT_DATASOURCE_NAME]: logicalTableProperties},
         name: 'quicksightExampleDataset',
         dataSetId: 'quicksightExampleDataset',
         permissions: quicksightDatasetPermissions,
