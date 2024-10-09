@@ -8,13 +8,21 @@ import {logicalColumns} from './logical-columns';
 import {physicalColumns} from './physical-columns';
 
 export class QuicksightExampleStack extends Stack {
-  // location of the manifest json file in the s3 bucket.
-  // Used by quicksight to discover the csv files.
+  /**
+   * location of the manifest json file in the s3 bucket.
+   * Used by quicksight to discover the csv files.
+   * */
   public static MANIFEST_KEY = 'manifests/manifest.json';
   /**
-   * foo bar
+   * Name of the datasource in quicksight
    */
   public static QUICKSIGHT_DATASOURCE_NAME = 's3DataSourceExample';
+  /**
+   * By default, Amazon QuickSight uses a role named aws-quicksight-service-role-v0.
+   * @see https://docs.aws.amazon.com/lake-formation/latest/dg/qs-integ-lf.html
+   */
+  public static QUICKSIGHT_SERVICE_ROLE = 'aws-quicksight-service-role-v0';
+
 
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
@@ -92,14 +100,34 @@ export class QuicksightExampleStack extends Stack {
       }
     ];
 
-    // this service role is created automatically when you set up your quicksight account
-    const quicksightServiceRole = 'aws-quicksight-service-role-v0';
-    // allow quicksight to access the bucket
-    const managedPolicy = this.createManagedPolicyForQuicksight(
-      'quicksightExamplePolicy',
-      'quicksightExamplePolicy',
-      bucket.bucketName,
-      [ quicksightServiceRole ]);
+    const policyName = 'quicksightExamplePolicy'
+    const managedPolicy = new CfnManagedPolicy(
+        this,
+        policyName,
+        {
+          managedPolicyName: policyName,
+          policyDocument: {
+            'Statement': [
+              {
+                'Effect': 'Allow',
+                'Action': ['s3:ListAllMyBuckets'],
+                'Resource': ['arn:aws:s3:::*']
+              },
+              {
+                'Effect': 'Allow',
+                'Action': ['s3:*'],
+                'Resource': [
+                  `arn:aws:s3:::${bucket.bucketName}`,
+                  `arn:aws:s3:::${bucket.bucketName}/*`
+                ]
+              }
+            ],
+            'Version': '2012-10-17'
+          },
+          roles: [ QuicksightExampleStack.QUICKSIGHT_SERVICE_ROLE ]
+        }
+      );
+
 
     const quicksightS3DataSource = new CfnDataSource(
       this,
@@ -150,62 +178,18 @@ export class QuicksightExampleStack extends Stack {
         }
       }
     }
-
+    const  datasetName = 'quicksightExampleDataset';
     new CfnDataSet(
       this,
-      'quicksightExampleDataset',
+      datasetName,
       {
         awsAccountId: this.account,
         physicalTableMap: {[QuicksightExampleStack.QUICKSIGHT_DATASOURCE_NAME]: physicalTableProperties},
         logicalTableMap: {[QuicksightExampleStack.QUICKSIGHT_DATASOURCE_NAME]: logicalTableProperties},
-        name: 'quicksightExampleDataset',
-        dataSetId: 'quicksightExampleDataset',
+        name: datasetName,
+        dataSetId: datasetName,
         permissions: quicksightDatasetPermissions,
         importMode: 'SPICE'
-      }
-    );
-  }
-
-  // Creates a very simple manifest JSON for the QuickSight S3 data source.
-  public static createS3Manifest(s3BucketName: string): object {
-    return {
-      fileLocations: [
-        {
-          URIPrefixes: [`s3://${s3BucketName}`]
-        },
-      ],
-      globalUploadSettings: {
-        format: 'CSV',
-        delimiter: ',',
-      }
-    };
-  }
-
-  createManagedPolicyForQuicksight(idManagedPolicy: string, namePolicy: string, bucketName: string, quicksightRoles: string[]): CfnManagedPolicy {
-    return new CfnManagedPolicy(
-      this,
-      idManagedPolicy,
-      {
-        managedPolicyName: namePolicy,
-        policyDocument: {
-          'Statement': [
-            {
-              'Effect': 'Allow',
-              'Action': ['s3:ListAllMyBuckets'],
-              'Resource': ['arn:aws:s3:::*']
-            },
-            {
-              'Effect': 'Allow',
-              'Action': ['s3:*'],
-              'Resource': [
-                `arn:aws:s3:::${bucketName}`,
-                `arn:aws:s3:::${bucketName}/*`
-              ]
-            }
-          ],
-          'Version': '2012-10-17'
-        },
-        roles: quicksightRoles
       }
     );
   }
