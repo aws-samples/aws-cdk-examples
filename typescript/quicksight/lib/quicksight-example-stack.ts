@@ -23,7 +23,6 @@ export class QuicksightExampleStack extends Stack {
    */
   public static QUICKSIGHT_SERVICE_ROLE = 'aws-quicksight-service-role-v0';
 
-
   public static QUICKSIGHT_DATASET_NAME = 'quicksightExampleDataset';
 
 
