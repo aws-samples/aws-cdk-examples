@@ -17,9 +17,23 @@
 
 This project demonstrates how to set up Amazon Quicksight. It will set up a S3 Bucket, import some test data and makes it available as a datasource to quicksight.
 
+With this setup you can create analysis in the console to view e.g. the world-population data:
+world-population.csv file in data directory taken from https://data.worldbank.org/indicator/SP.POP.TOTL
+License: CC BY-4.0
+
+## Build
+ 
+To build this app, you need to be in this example's root folder. Then run the following:
+ 
+```bash
+npm install -g aws-cdk
+npm install
+npm run build
+```
+
 ## Deploy
 
-1. Create a quicksight account [here](https://docs.aws.amazon.com/quicksight/latest/user/signing-up.html).
+1. Create a quicksight account [by following these instructions](https://docs.aws.amazon.com/quicksight/latest/user/signing-up.html).
 2. Use the arn of the quicksight account and pass it to cdk using a context `cdk deploy --context quicksightAccountArn=<arn>`
 
 ## Useful commands
@@ -30,6 +44,3 @@ This project demonstrates how to set up Amazon Quicksight. It will set up a S3 B
 * `npx cdk deploy`  deploy this stack to your default AWS account/region
 * `npx cdk diff`    compare deployed stack with current state
 * `npx cdk synth`   emits the synthesized CloudFormation template
-
-world-population.csv file in data directory taken from https://data.worldbank.org/indicator/SP.POP.TOTL
-License: CC BY-4.0
