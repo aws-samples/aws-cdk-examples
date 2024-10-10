@@ -13,11 +13,14 @@
 ---
 <!--END STABILITY BANNER-->
 
-# Welcome to your CDK TypeScript project
+## Overview
 
-This is a blank project for CDK development with TypeScript.
+This project demonstrates how to set up Amazon Quicksight. It will set up a S3 Bucket, import some test data and makes it available as a datasource to quicksight.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+## Deploy
+
+1. Create a quicksight account [here](https://docs.aws.amazon.com/quicksight/latest/user/signing-up.html).
+2. Use the arn of the quicksight account and pass it to cdk using a context `cdk deploy --context quicksightAccountArn=<arn>`
 
 ## Useful commands
 
