@@ -31,6 +31,14 @@ npm install
 npm run build
 ```
 
+## Resources
+
+1. * `Bucket` (aws-s3): Creates an Amazon S3 bucket with encryption and full access control, used to store data files and the manifest for QuickSight.
+2. * `BucketDeployment` (aws-s3-deployment): Deploys world population data and manifest JSON files to the S3 bucket, making them accessible for analysis in QuickSight.
+3. * `CfnDataSource` (aws-quicksight): Defines an Amazon QuickSight data source that connects to the S3 bucket to access the uploaded CSV files.
+4. * `CfnDataSet` (aws-quicksight): Configures a QuickSight dataset that organizes and structures the CSV data from the S3 bucket for reporting and analysis.
+5. * `CfnManagedPolicy` (aws-iam): Creates an IAM policy granting permissions to the QuickSight service role, allowing access to the S3 bucket and other necessary actions.
+
 ## Deploy
 
 1. Create a quicksight account [by following these instructions](https://docs.aws.amazon.com/quicksight/latest/user/signing-up.html).
