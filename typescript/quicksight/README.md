@@ -22,9 +22,9 @@ world-population.csv file in data directory taken from https://data.worldbank.or
 License: CC BY-4.0
 
 ## Build
- 
+
 To build this app, you need to be in this example's root folder. Then run the following:
- 
+
 ```bash
 npm install -g aws-cdk
 npm install
@@ -43,6 +43,18 @@ npm run build
 
 1. Create a quicksight account [by following these instructions](https://docs.aws.amazon.com/quicksight/latest/user/signing-up.html).
 2. Use the arn of the quicksight account and pass it to cdk using a context `cdk deploy --context quicksightAccountArn=<arn>`
+
+The Quicksight account arn should look like this 'arn:aws:quicksight:\<region>:\<accountid>:user/\<namespace>/\<username>'
+
+#### \<region>
+The aws region that contains the quicksight resources.
+#### \<accountid>
+This is your AWS account id.
+#### \<namespace>
+You can create a separate namespace, but if you haven't created one it should be 'default'.
+#### \<username>
+You can find the username in Quicksight. It should be the same as your IAM Account name
+and if you are using a role it will be added to the name as well like: \<role>/\<username>
 
 ## Useful commands
 
