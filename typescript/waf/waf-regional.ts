@@ -17,18 +17,18 @@ export class WafRegionalStack extends cdk.Stack {
    * Create output for use in WAF config
    */
   protected makeRules(listOfRules: listOfRules[] = []) {
-    var rules: wafv2.CfnRuleGroup.RuleProperty[] = [];
+    let rules: wafv2.CfnRuleGroup.RuleProperty[] = [];
 
     for (const r of listOfRules) {
-      var stateProp: wafv2.CfnWebACL.StatementProperty = {
+      let stateProp: wafv2.CfnWebACL.StatementProperty = {
         managedRuleGroupStatement: {
           name: r['name'],
           vendorName: "AWS",
         }
       };
-      var overrideAction: wafv2.CfnWebACL.OverrideActionProperty = { none: {} }
+      let overrideAction: wafv2.CfnWebACL.OverrideActionProperty = { none: {} }
 
-      var rule: wafv2.CfnRuleGroup.RuleProperty = {
+      let rule: wafv2.CfnRuleGroup.RuleProperty = {
         name: r['name'],
         priority: r['priority'],
         // @ts-expect-error Property 'overrideAction' does not exist on type 'CfnRuleGroup.RuleProperty'
@@ -44,7 +44,7 @@ export class WafRegionalStack extends cdk.Stack {
     };
 
     // Allowed country list
-    var ruleGeoMatch: wafv2.CfnWebACL.RuleProperty = {
+    let ruleGeoMatch: wafv2.CfnWebACL.RuleProperty = {
       name: 'GeoMatch',
       priority: 0,
       action: {
@@ -91,7 +91,7 @@ export class WafRegionalStack extends cdk.Stack {
      * and requests will be blocked once this limit is reached.
      * The IP address is automatically unblocked after it falls below the limit.
      */
-    var ruleLimitRequests100: wafv2.CfnWebACL.RuleProperty = {
+    let ruleLimitRequests100: wafv2.CfnWebACL.RuleProperty = {
       name: 'LimitRequests100',
       priority: 1,
       action: {

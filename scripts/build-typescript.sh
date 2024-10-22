@@ -13,9 +13,9 @@ echo "running build for typescript/${projFile}"
 echo "=============================="
 
 cd $scriptdir/../$(dirname $projFile)
-if [ -f DO_NOT_AUTOTEST ]; then 
+if [ -f DO_NOT_AUTOTEST ]; then
   echo "found DO_NOT_AUTOTEST, skip it."
-  return
+  exit 0
 fi
 # Check if yarn.lock exists
 if [ -f "yarn.lock" ]; then
@@ -33,7 +33,7 @@ elif [ -f "package-lock.json" ]; then
     npm run --if-present test
 else
     echo "No lock files found (yarn.lock or package-lock.json) but package.json available. Running 'yarn install'... "
-    yarn install
+    yarn install --mutex network
     yarn build
     npm run --if-present test
 fi
