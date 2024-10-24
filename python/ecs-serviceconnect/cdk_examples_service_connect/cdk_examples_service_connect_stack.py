@@ -1,8 +1,6 @@
 from aws_cdk import (
-    # Duration,
     Stack,
     aws_ec2 as ec2,
-    # aws_sqs as sqs,
 )
 from constructs import Construct
 from ecs.ecs_stack import EcsStack

@@ -1,31 +1,11 @@
-# write a boilerplate class for an appmesh mesh with cdk
-# from aws_cdk import (
-#     aws_appmesh as appmesh,
-    
-# )
-# import os
-# import aws_cdk as core
-# from aws_cdk import Stack, Tags, App
 from constructs import Construct
-# import aws_cdk.aws_ecs as ecs
-# import aws_cdk.aws_servicediscovery as servicediscovery
-# import aws_cdk.aws_elasticloadbalancingv2 as elbv2
-# import aws_cdk.aws_ec2 as ec2
-# import aws_cdk.aws_ecr as ecr
-# from aws_cdk.aws_ecr_assets import DockerImageAsset, Platform
-# import subprocess
 from aws_cdk.aws_ecr_assets import DockerImageAsset, Platform
 import cdk_ecr_deployment as ecrdeploy
 
 from aws_cdk import (
-    # Duration,
     NestedStack,
-    Stack,
-    aws_ec2 as ec2,
     aws_ecr as ecr,
-    aws_ecs as ecs,
     Aws
-    # aws_sqs as sqs,
 )
 class EcrStack(NestedStack):
 
@@ -64,9 +44,3 @@ class EcrStack(NestedStack):
         # Exporting values to be used in other stacks
         self.frontend_docker_asset = frontendAsset
         self.backend_data_docker_asset = dataAsset
-        self.frontend_repo = FrontendRepository
-        self.backend_repo = BackendDataRepository
-        self.frontend_repository_uri = FrontendRepository.repository_uri
-        self.frontend_repository_name = FrontendRepository.repository_name
-        self.backend_data_repository_uri = BackendDataRepository.repository_uri
-        self.backend_data_repository_name = BackendDataRepository.repository_name
