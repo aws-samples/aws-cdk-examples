@@ -1,0 +1,151 @@
+{
+  "Version": "2019-10-30",
+  "StartAction": "d3f90ab2-eb2a-467f-a349-323422ad8bec",
+  "Metadata": {
+    "entryPointPosition": {
+      "x": -10.4,
+      "y": -28
+    },
+    "ActionMetadata": {
+      "51bffcc2-8bda-46a4-8b29-6c327c109cfe": {
+        "position": {
+          "x": 271.2,
+          "y": -29.6
+        }
+      },
+      "d3f90ab2-eb2a-467f-a349-323422ad8bec": {
+        "position": {
+          "x": 80,
+          "y": 188.8
+        }
+      },
+      "52f73b71-7081-4cf0-b6f6-4202cfba2863": {
+        "position": {
+          "x": 512,
+          "y": 12.8
+        }
+      },
+      "6a6556e1-b596-4f5b-b0c1-c5ac5ab965a3": {
+        "position": {
+          "x": 1228.8,
+          "y": 196.8
+        }
+      },
+      "049fca85-b0bd-49d6-8517-2943c248cdc3": {
+        "position": {
+          "x": 734.4,
+          "y": -100.8
+        },
+        "parameters": {
+          "LambdaFunctionARN": {
+            "useDynamic": true
+          }
+        },
+        "dynamicMetadata": {},
+        "useDynamic": true
+      },
+      "3e5551e7-b4b8-4051-a438-019dfe5b760b": {
+        "position": {
+          "x": 1025.6,
+          "y": -50.4
+        }
+      }
+    },
+    "Annotations": [],
+    "name": "MainFlow",
+    "description": "",
+    "type": "contactFlow",
+    "status": "published",
+    "hash": {}
+  },
+  "Actions": [
+    {
+      "Parameters": {
+        "FlowAttributes": {
+          "HelloLambdaArn": {
+            "Value": "HelloLambdaArnValue"
+          }
+        }
+      },
+      "Identifier": "51bffcc2-8bda-46a4-8b29-6c327c109cfe",
+      "Type": "UpdateFlowAttributes",
+      "Transitions": {
+        "NextAction": "52f73b71-7081-4cf0-b6f6-4202cfba2863",
+        "Errors": [
+          {
+            "NextAction": "6a6556e1-b596-4f5b-b0c1-c5ac5ab965a3",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "FlowLoggingBehavior": "Enabled"
+      },
+      "Identifier": "d3f90ab2-eb2a-467f-a349-323422ad8bec",
+      "Type": "UpdateFlowLoggingBehavior",
+      "Transitions": {
+        "NextAction": "51bffcc2-8bda-46a4-8b29-6c327c109cfe"
+      }
+    },
+    {
+      "Parameters": {
+        "Text": "Hello"
+      },
+      "Identifier": "52f73b71-7081-4cf0-b6f6-4202cfba2863",
+      "Type": "MessageParticipant",
+      "Transitions": {
+        "NextAction": "049fca85-b0bd-49d6-8517-2943c248cdc3",
+        "Errors": [
+          {
+            "NextAction": "6a6556e1-b596-4f5b-b0c1-c5ac5ab965a3",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {},
+      "Identifier": "6a6556e1-b596-4f5b-b0c1-c5ac5ab965a3",
+      "Type": "DisconnectParticipant",
+      "Transitions": {}
+    },
+    {
+      "Parameters": {
+        "LambdaFunctionARN": "$.FlowAttributes.HelloLambdaArn",
+        "InvocationTimeLimitSeconds": "3",
+        "ResponseValidation": {
+          "ResponseType": "JSON"
+        }
+      },
+      "Identifier": "049fca85-b0bd-49d6-8517-2943c248cdc3",
+      "Type": "InvokeLambdaFunction",
+      "Transitions": {
+        "NextAction": "3e5551e7-b4b8-4051-a438-019dfe5b760b",
+        "Errors": [
+          {
+            "NextAction": "6a6556e1-b596-4f5b-b0c1-c5ac5ab965a3",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    },
+    {
+      "Parameters": {
+        "SSML": "<speak> <say-as interpret-as=\"date\" format=\"mmddyyyy\"> $.External.body.response </say-as> </speak>"
+      },
+      "Identifier": "3e5551e7-b4b8-4051-a438-019dfe5b760b",
+      "Type": "MessageParticipant",
+      "Transitions": {
+        "NextAction": "6a6556e1-b596-4f5b-b0c1-c5ac5ab965a3",
+        "Errors": [
+          {
+            "NextAction": "6a6556e1-b596-4f5b-b0c1-c5ac5ab965a3",
+            "ErrorType": "NoMatchingError"
+          }
+        ]
+      }
+    }
+  ]
+}
