@@ -1,7 +1,7 @@
 # AWS Codepipeline CI/CD Solution for ECS Fargate and Lambda
 
 ## Architect Design:
-<img width="900" alt="image" src="https://github.com/jfan9/jfan9-aws-cdk-examples/blob/92d14c15f68fb2887f74de3b7203ab85cc5c0b71/typescript/aws-codepipeline-ecs-lambda/static_images/Architecture_diagram.png">
+![](./static_images/Architecture_diagram.png)
 
 ## Overview
 
