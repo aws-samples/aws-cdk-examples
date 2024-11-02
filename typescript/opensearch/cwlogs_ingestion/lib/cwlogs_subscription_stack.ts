@@ -57,7 +57,7 @@ export class CWLogsSubscriptionStack extends Stack {
           entry: path.join(__dirname, "../resources/lambda/cw_subscription_filter/layers"),
           compatibleRuntimes: [
             Runtime.PYTHON_3_12,
-            Runtime.PYTHON_3_12,
+            Runtime.PYTHON_3_11,
           ],
           description: "A layer that contains the required modules",
           license: "MIT License",
