@@ -34,7 +34,7 @@ export class CWLogsSubscriptionStack extends Stack {
           code: Code.fromAsset(path.join(__dirname, '../resources/lambda/log_emitter')),
           handler: 'handler.log_emitter',
           timeout: Duration.seconds(300),
-          runtime: Runtime.PYTHON_3_9,
+          runtime: Runtime.PYTHON_3_12,
           logGroup: logGroup
         });
     
@@ -56,15 +56,15 @@ export class CWLogsSubscriptionStack extends Stack {
         const lambdaLayer = new PythonLayerVersion(this, `${this.STACK_NAMING_PREFIX}LambdaLayer`, {
           entry: path.join(__dirname, "../resources/lambda/cw_subscription_filter/layers"),
           compatibleRuntimes: [
-            Runtime.PYTHON_3_9,
-            Runtime.PYTHON_3_8,
+            Runtime.PYTHON_3_12,
+            Runtime.PYTHON_3_12,
           ],
           description: "A layer that contains the required modules",
           license: "MIT License",
         });
     
         const lambdaFunction = new Function(this, `${this.STACK_NAMING_PREFIX}LambdaFunction`, {
-            runtime: Runtime.PYTHON_3_9,
+            runtime: Runtime.PYTHON_3_12,
             code: Code.fromAsset(path.join(__dirname, '../resources/lambda/cw_subscription_filter')),
             handler: 'handler.cw_subscription_handler',
             layers: [lambdaLayer],
