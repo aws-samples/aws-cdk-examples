@@ -190,7 +190,7 @@ exports[`Snapshot Stack 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "a89b0c25113046ece0e7fb82e6d729811e22e9ed30e0d44feb9ffa39ef67b8a4.zip",
+          "S3Key": "a1deff17a695906f93c544b1deae2bf444210622f05330da961687eb8f4a51a7.zip",
         },
         "Description": "Lambda Authorizer",
         "Environment": {

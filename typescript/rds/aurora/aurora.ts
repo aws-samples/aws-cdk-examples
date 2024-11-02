@@ -144,7 +144,7 @@ export class Aurora extends Stack {
     let replicaInstances = props.replicaInstances ?? 1;
     let backupRetentionDays = props.backupRetentionDays ?? 14;
 
-    var ingressSources = [];
+    let ingressSources = [];
     if (typeof props.ingressSources !== 'undefined') {
       ingressSources = props.ingressSources;
     }
