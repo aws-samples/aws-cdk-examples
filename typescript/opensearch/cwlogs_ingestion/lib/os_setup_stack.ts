@@ -1,6 +1,6 @@
 import { Fn, Stack, StackProps } from 'aws-cdk-lib';
 import { Peer, Port, SecurityGroup, Vpc } from 'aws-cdk-lib/aws-ec2';
-import { Effect, Policy, PolicyDocument, PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
+import { Effect, Policy, PolicyDocument, PolicyStatement, Role, AccountPrincipal } from 'aws-cdk-lib/aws-iam';
 import { CfnAccessPolicy, CfnCollection, CfnSecurityPolicy, CfnVpcEndpoint } from 'aws-cdk-lib/aws-opensearchserverless';
 import { CfnPipeline } from 'aws-cdk-lib/aws-osis';
 import { Construct } from 'constructs';
@@ -129,7 +129,7 @@ export class OpenSearchSetupStack extends Stack {
 
         // Create a dashboard access role
         const dashboardAccessRole = new Role(this, `${this.STACK_RESOURCE_NAMING_PREFIX}DashboardAccessRole`, {
-          assumedBy: new ServicePrincipal('ec2.amazonaws.com'),
+          assumedBy: new AccountPrincipal(this.account) ,
         });
     
         dashboardAccessRole.attachInlinePolicy(
