@@ -1,5 +1,5 @@
 # Use the official Python image
-FROM --platform=linux/amd64 python:3.9-slim
+FROM --platform=linux/amd64 python:3.12-slim
 
 ARG SERVICE_B_URL_BUILD_ARG
 ENV SERVICE_B_URL=$SERVICE_B_URL_BUILD_ARG
