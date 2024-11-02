@@ -41,9 +41,9 @@ export class NeptuneWithVpcStack extends cdk.Stack {
     });
 
     // Get lists of Subnets by type
-    var neptunePublicSubnets = neptuneVpc.publicSubnets;
-    var neptunePrivateSubnets = neptuneVpc.privateSubnets;
-    var neptuneIsolatedSubnets = neptuneVpc.isolatedSubnets;
+    let neptunePublicSubnets = neptuneVpc.publicSubnets;
+    let neptunePrivateSubnets = neptuneVpc.privateSubnets;
+    let neptuneIsolatedSubnets = neptuneVpc.isolatedSubnets;
 
     // Create Subnet group list to be used with Neptune.
     const neptuneSubnets: ec2.SubnetSelection = { subnets: neptuneIsolatedSubnets };

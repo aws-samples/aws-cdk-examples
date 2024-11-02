@@ -7,12 +7,12 @@ const handler = async function (event: any, context: any) {
     const S3Client = new S3()
 
     try {
-        var method = event.httpMethod
+        let method = event.httpMethod
 
         if (method === "GET") {
             if (event.path === "/") {
                 const data = await S3Client.listObjectsV2({ Bucket: bucketName })
-                var body = {
+                let body = {
                     widgets: data.Contents!.map(function (e) {
                         return e.Key
                     }),

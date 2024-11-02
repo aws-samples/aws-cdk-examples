@@ -1,0 +1,27 @@
+{
+  "name": "amazon-mq-rabbitmq-lambda",
+  "version": "0.1.0",
+  "bin": {
+    "amazon-mq-rabbitmq-lambda": "bin/amazon-mq-rabbitmq-lambda.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "22.5.4",
+    "aws-cdk": "2.160.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.6.2"
+  },
+  "dependencies": {
+    "@cdklabs/cdk-amazonmq": "^0.0.1",
+    "aws-cdk-lib": "2.160.0",
+    "constructs": "^10.0.0"
+  }
+}

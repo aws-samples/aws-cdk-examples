@@ -17,23 +17,23 @@ export class WafCloudFrontStack extends cdk.Stack {
    * Create output for use in WAF config
    */
   protected makeRules(listOfRules: listOfRules[] = []) {
-    var rules: wafv2.CfnRuleGroup.RuleProperty[] = [];
+    let rules: wafv2.CfnRuleGroup.RuleProperty[] = [];
     listOfRules.forEach(function (r) {
-      var mrgsp: wafv2.CfnWebACL.ManagedRuleGroupStatementProperty = {
+      let mrgsp: wafv2.CfnWebACL.ManagedRuleGroupStatementProperty = {
         name: r['name'],
         vendorName: "AWS",
         excludedRules: []
       };
 
-      var stateProp: wafv2.CfnWebACL.StatementProperty = {
+      let stateProp: wafv2.CfnWebACL.StatementProperty = {
         managedRuleGroupStatement: {
           name: r['name'],
           vendorName: "AWS",
         }
       };
-      var overrideAction: wafv2.CfnWebACL.OverrideActionProperty = { none: {} }
+      let overrideAction: wafv2.CfnWebACL.OverrideActionProperty = { none: {} }
 
-      var rule: wafv2.CfnWebACL.RuleProperty = {
+      let rule: wafv2.CfnWebACL.RuleProperty = {
         name: r['name'],
         priority: r['priority'],
         overrideAction: overrideAction,
@@ -48,7 +48,7 @@ export class WafCloudFrontStack extends cdk.Stack {
     }); // forEach
 
     // Allowed country list
-    var ruleGeoMatch: wafv2.CfnWebACL.RuleProperty = {
+    let ruleGeoMatch: wafv2.CfnWebACL.RuleProperty = {
       name: 'GeoMatch',
       priority: 0,
       action: {
@@ -95,7 +95,7 @@ export class WafCloudFrontStack extends cdk.Stack {
      * and requests will be blocked once this limit is reached.
      * The IP address is automatically unblocked after it falls below the limit.
      */
-    var ruleLimitRequests100: wafv2.CfnWebACL.RuleProperty = {
+    let ruleLimitRequests100: wafv2.CfnWebACL.RuleProperty = {
       name: 'LimitRequests100',
       priority: 1,
       action: {
