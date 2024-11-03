@@ -25,20 +25,7 @@ export class StepfunctionExternalDefinitionStack extends cdk.Stack {
         includeExecutionData: true,
       },
     });
-    stateMachine.addToRolePolicy(new iam.PolicyStatement({
-      actions: [
-        'logs:CreateLogDelivery',
-        'logs:GetLogDelivery',
-        'logs:UpdateLogDelivery',
-        'logs:DeleteLogDelivery',
-        'logs:ListLogDeliveries',
-        'logs:PutLogEvents',
-        'logs:PutResourcePolicy',
-        'logs:DescribeResourcePolicies',
-        'logs:DescribeLogGroups'
-      ],
-      resources: ['*'],
-    }));
+    logGroup.grantWrite(stateMachine.role);
 
     const api = new apigateway.RestApi(this, "StepFuncApi", {
       restApiName: "StepFuncApi",
