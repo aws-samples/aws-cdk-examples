@@ -1,5 +1,4 @@
-DynamoDB Stream Constructs for AWS CDK
----
+# DynamoDB Stream Integration with Lambda and SNS
 
 <!--BEGIN STABILITY BANNER-->
 ---
@@ -31,7 +30,7 @@ This solution demonstrates a use case for real-time notifications: alerting user
 - L2 (low-level) construct for fine-grained control over DynamoDB streams
 - [L3 (high-level)](https://docs.aws.amazon.com/solutions/latest/constructs/aws-dynamodbstreams-lambda.html) construct for simplified, best-practice implementations of DynamoDB streams
 - Integration with Lambda functions for stream processing
-- Implements an SQS Dead Letter Queue (DLQ) for the Lambda function processing the DynamoDB stream, enhancing reliability and error handling
+- Implements an SQS Dead Letter Queue (DLQ) for the Lambda function failure handling
 - Shows how to use Amazon SNS to distribute stream processing results or notifications.
 
 
