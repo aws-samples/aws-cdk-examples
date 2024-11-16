@@ -1,0 +1,11 @@
+{
+    "id": {
+        "S": "1"
+    },
+    "count": {
+        "N": "10"
+    },
+    "itemName": {
+        "S": "Coffee Beans"
+    }
+}
