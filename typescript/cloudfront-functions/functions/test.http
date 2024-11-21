@@ -1,0 +1,10 @@
+GET http://d2kfsug7s5ks8g.cloudfront.net/
+Accept: application/html
+X-Correlation-ID: abcde
+Cookie: foo=bar
+
+###
+GET http://d2kfsug7s5ks8g.cloudfront.net/ClixFeeder
+Accept: application/html
+
+###
