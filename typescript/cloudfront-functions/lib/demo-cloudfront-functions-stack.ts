@@ -49,7 +49,7 @@ export class DemoCloudfrontFunctionsStack extends cdk.Stack {
       functionName: 'RequestFunction',
       runtime: FunctionRuntime.JS_2_0,
       code: FunctionCode.fromFile({
-        filePath: './functions/request-function.js'
+        filePath: './resources/functions/request-function.js'
       })
     });
 
@@ -58,7 +58,7 @@ export class DemoCloudfrontFunctionsStack extends cdk.Stack {
       functionName: 'ResponseFunction',
       runtime: FunctionRuntime.JS_2_0,
       code: FunctionCode.fromFile({
-        filePath: './functions/response-function.js'
+        filePath: './resources/functions/response-function.js'
       })
     });
 

@@ -1,14 +1,3 @@
-<!--BEGIN STABILITY BANNER-->
----
-
-![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
-
-> **This is a stable example. It should successfully build out of the box**
->
-> This example is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
----
-<!--END STABILITY BANNER-->
-
 # demo-cloudfront-functions
 
 This project will create a S3 bucket with simple `html` files that will serve as our website source code, a
@@ -75,7 +64,7 @@ with Developer Tools enabled) or similar tool (e.g. curl, wget).
 
 ### Other test cases
 
-You can explore the `/functions/request-function.js` and `/functions/response-function.js` for
+You can explore the `/reources/functions/request-function.js` and `/reources/functions/response-function.js` for
 more handling rules. Some of them are validated through _CloudWatch Logs_ and _X-Ray_ given their nature.
 
 ## Destroying the deployment
