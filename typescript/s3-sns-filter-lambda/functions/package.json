@@ -1,0 +1,9 @@
+{
+  "name": "functions",
+  "version": "1.0.0",
+  "license": "ISC",
+  "author": "ken.yip",
+  "dependencies": {
+    "@aws-sdk/client-sns": "^3.691.0"
+  }
+}
