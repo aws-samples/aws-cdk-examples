@@ -11,15 +11,10 @@ export interface StaticSiteBasicProps {
 
 /**
  * Static site infrastructure, which deploys site content to an S3 bucket.
- *
- * The site redirects from HTTP to HTTPS, using a CloudFront distribution,
- * Route53 alias record, and ACM certificate.
  */
 export class StaticSiteBasic extends Construct {
   constructor(parent: Stack, name: string, props: StaticSiteBasicProps) {
     super(parent, name);
-
-    // new CfnOutput(this, "Site", { value: "https://" + siteDomain });
 
     // Content bucket
     const indexDocument = "index.html";
@@ -58,7 +53,6 @@ export class StaticSiteBasic extends Construct {
 
     // Deploy site contents to S3 bucket
     new s3deploy.BucketDeployment(this, "DeployWebsite", {
-      //sources: [s3deploy.Source.asset(path.join(__dirname, './site-contents'))],
       sources: [s3deploy.Source.asset(path.join(__dirname, "./site-contents"))],
       destinationBucket: websiteBucket,
       destinationKeyPrefix: props.staticContentPrefix, // optional prefix in destination bucket
