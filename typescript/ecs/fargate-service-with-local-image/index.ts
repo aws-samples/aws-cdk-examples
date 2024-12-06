@@ -9,7 +9,8 @@ const stack = new cdk.Stack(app, 'FargateServiceWithLocalImage');
 
 // Create VPC and Fargate Cluster
 // NOTE: Limit AZs to avoid reaching resource quotas
-const vpc = new ec2.Vpc(stack, 'MyVpc', { maxAzs: 2 });
+//       NAT needed to pull from ECR and to push cloudwatch logs
+const vpc = new ec2.Vpc(stack, 'MyVpc', { maxAzs: 2, natGateways: 1 });
 const cluster = new ecs.Cluster(stack, 'Cluster', { vpc });
 
 // Instantiate Fargate Service with a cluster and a local image that gets
