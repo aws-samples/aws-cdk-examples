@@ -10,12 +10,10 @@ import org.junit.platform.commons.util.StringUtils;
 import software.amazon.awscdk.App;
 import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.cxapi.CloudFormationStackArtifact;
-import software.amazon.awscdk.services.apigatewayv2.HttpMethod;
 
 import java.util.*;
 import java.util.stream.Stream;
 
-import static com.myorg.HttpProxyApiGatewayStack.*;
 import static com.myorg.TestUtils.*;
 
 public class HttpProxyApiGatewayTest {
@@ -25,17 +23,10 @@ public class HttpProxyApiGatewayTest {
   @BeforeAll
   public static void setUp() {
     var app = App.Builder.create().build();
-    var httpProxyApiGatewayStack = new HttpProxyApiGatewayStack(
-      app,
-      "HttpProxyApiGatewayStack",
-      StackProps.builder()
-        .stackName("HttpProxyApiGatewayStack")
-        .build(),
-      List.of(
-        new ProxyResourceParameters("PetStore", "http://petstore-demo-endpoint.execute-api.com", HttpMethod.ANY.name(), "/petstore/pets?type=fish"),
-        new ProxyResourceParameters("OpenTrivia", "https://opentdb.com", HttpMethod.ANY.name(), "/api.php?amount=10")
-      )
-    );
+    var stackProps = StackProps.builder()
+      .stackName("HttpProxyApiGatewayStack")
+      .build();
+    var httpProxyApiGatewayStack = new HttpProxyApiGatewayStack(app, "HttpProxyApiGatewayStack", stackProps);
     Optional.of(app)
       .map(App::synth)
       .flatMap(
@@ -74,7 +65,7 @@ public class HttpProxyApiGatewayTest {
 
   @Test
   @DisplayName("Test if the expected IAM role for the REST API is present in the resources of the stack.")
-  public void testIamRole() {
+  public void testRestAPIIamRole() {
     var iamRoleMatchMap = Map.of(
       "/Type", "AWS::IAM::Role",
       "/Properties/AssumeRolePolicyDocument/Statement/0/Action", "sts:AssumeRole",
@@ -98,7 +89,16 @@ public class HttpProxyApiGatewayTest {
     );
     var restApiId = findResourceId(stackResourcesMap, restApiMatchMap);
     var iamRoleMatchMap = Map.of(
-      "/Type", "AWS::IAM::Role"
+      "/Type", "AWS::IAM::Role",
+      "/Properties/AssumeRolePolicyDocument/Statement/0/Action", "sts:AssumeRole",
+      "/Properties/AssumeRolePolicyDocument/Statement/0/Effect", "Allow",
+      "/Properties/AssumeRolePolicyDocument/Statement/0/Principal/Service", "apigateway.amazonaws.com",
+      "/Properties/AssumeRolePolicyDocument/Version", "2012-10-17",
+      "/Properties/ManagedPolicyArns/0/Fn::Join/0", "",
+      "/Properties/ManagedPolicyArns/0/Fn::Join/1/0", "arn:",
+      "/Properties/ManagedPolicyArns/0/Fn::Join/1/1/Ref", "AWS::Partition",
+      "/Properties/ManagedPolicyArns/0/Fn::Join/1/2", ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
+      "/DeletionPolicy", "Delete"
     );
     var iamRoleId = findResourceId(stackResourcesMap, iamRoleMatchMap);
     var apiGatewayAccountMatchMap = Map.of(
@@ -199,13 +199,134 @@ public class HttpProxyApiGatewayTest {
       "/Properties/RequestParameters/method.request.path.proxy", "true",
       "/Properties/RestApiId/Ref", restApiId
     );
-    Long expectedPermissionsCount = 2L;
+    Long expectedApiGatewayMethodsCount = 2L;
     Assertions.assertTrue(
       Optional.ofNullable(findResources(stackResourcesMap, apiGatewayMethodsMatchMap))
         .map(Map::entrySet)
         .map(Set::stream)
         .map(Stream::count)
-        .filter(methodsCont -> methodsCont.equals(expectedPermissionsCount))
+        .filter(methodsCont -> methodsCont.equals(expectedApiGatewayMethodsCount))
+        .isPresent()
+    );
+  }
+
+  @Test
+  @DisplayName("Test if the expected IAM roles for the test lambdas are present in the resources of the stack.")
+  public void testLambdaFunctionsIAMRoles() {
+    var lambdaFunctionsIAMRolesMatchMap = Map.of(
+      "/Type", "AWS::IAM::Role",
+      "/Properties/AssumeRolePolicyDocument/Statement/0/Action", "sts:AssumeRole",
+      "/Properties/AssumeRolePolicyDocument/Statement/0/Effect", "Allow",
+      "/Properties/AssumeRolePolicyDocument/Statement/0/Principal/Service", "lambda.amazonaws.com",
+      "/Properties/AssumeRolePolicyDocument/Version", "2012-10-17",
+      "/Properties/ManagedPolicyArns/0/Fn::Join/0", "",
+      "/Properties/ManagedPolicyArns/0/Fn::Join/1/0", "arn:",
+      "/Properties/ManagedPolicyArns/0/Fn::Join/1/1/Ref", "AWS::Partition",
+      "/Properties/ManagedPolicyArns/0/Fn::Join/1/2", ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+    );
+    Long expectedLambdaFunctionsIAMRolesCount = 2L;
+    Assertions.assertTrue(
+      Optional.ofNullable(findResources(stackResourcesMap, lambdaFunctionsIAMRolesMatchMap))
+        .map(Map::entrySet)
+        .map(Set::stream)
+        .map(Stream::count)
+        .filter(methodsCont -> methodsCont.equals(expectedLambdaFunctionsIAMRolesCount))
+        .isPresent()
+    );
+  }
+
+  @Test
+  @DisplayName("Test if the expected lambda functions are present in the resources of the stack.")
+  public void testLambdaFunctions() {
+    var lambdaFunctionsMatchMap = Map.of(
+      "/Type", "AWS::Lambda::Function",
+      "/Properties/Runtime", "python3.12"
+    );
+    Long expectedLambdaFunctionsCount = 2L;
+    Assertions.assertTrue(
+      Optional.ofNullable(findResources(stackResourcesMap, lambdaFunctionsMatchMap))
+        .map(Map::entrySet)
+        .map(Set::stream)
+        .map(Stream::count)
+        .filter(methodsCont -> methodsCont.equals(expectedLambdaFunctionsCount))
+        .isPresent()
+    );
+  }
+
+  @Test
+  @DisplayName("Test if the expected lambda versions are present in the resources of the stack.")
+  public void testLambdaVersions() {
+    var lambdaVersionsMatchMap = Map.of(
+      "/Type", "AWS::Lambda::Version"
+    );
+    Long expectedLambdaVersionsCount = 2L;
+    Assertions.assertTrue(
+      Optional.ofNullable(findResources(stackResourcesMap, lambdaVersionsMatchMap))
+        .map(Map::entrySet)
+        .map(Set::stream)
+        .map(Stream::count)
+        .filter(methodsCont -> methodsCont.equals(expectedLambdaVersionsCount))
+        .isPresent()
+    );
+  }
+
+  @Test
+  @DisplayName("Test if the expected lambda aliases are present in the resources of the stack.")
+  public void testLambdaAliases() {
+    var lambdaAliasesMatchMap = Map.of(
+      "/Type", "AWS::Lambda::Alias",
+      "/Properties/Name", "Prod"
+    );
+    Long expectedLambdaAliasesCount = 2L;
+    Assertions.assertTrue(
+      Optional.ofNullable(findResources(stackResourcesMap, lambdaAliasesMatchMap))
+        .map(Map::entrySet)
+        .map(Set::stream)
+        .map(Stream::count)
+        .filter(methodsCont -> methodsCont.equals(expectedLambdaAliasesCount))
+        .isPresent()
+    );
+  }
+
+  @Test
+  @DisplayName("Test if the expected lambda permissions are present in the resources of the stack.")
+  public void testLambdaPermissions() {
+    var lambdaPermissionsMatchMap = Map.of(
+      "/Type", "AWS::Lambda::Permission",
+      "/Properties/Action", "lambda:InvokeFunctionUrl",
+      "/Properties/FunctionUrlAuthType", "NONE",
+      "/Properties/Principal", "*"
+    );
+    Long expectedLambdaPermissionsCount = 2L;
+    Assertions.assertTrue(
+      Optional.ofNullable(findResources(stackResourcesMap, lambdaPermissionsMatchMap))
+        .map(Map::entrySet)
+        .map(Set::stream)
+        .map(Stream::count)
+        .filter(methodsCont -> methodsCont.equals(expectedLambdaPermissionsCount))
+        .isPresent()
+    );
+  }
+
+  @Test
+  @DisplayName("Test if the expected lambda function URLs are present in the resources of the stack.")
+  public void testLambdaFunctionURLs() {
+    var lambdaFunctionsURLsMatchMap = Map.of(
+      "/Type", "AWS::Lambda::Url",
+      "/Properties/AuthType", "NONE",
+      "/Properties/InvokeMode", "BUFFERED",
+      "/Properties/Qualifier", "Prod",
+      "/Properties/Cors/AllowHeaders/0", "*",
+      "/Properties/Cors/AllowMethods/0", "GET",
+      "/Properties/Cors/AllowOrigins/0", "*"
+    );
+    Long expectedLambdaFunctionsURLsCount = 2L;
+    Assertions.assertTrue(
+      Optional.ofNullable(findResources(stackResourcesMap, lambdaFunctionsURLsMatchMap))
+        .map(Map::entrySet)
+        .map(Set::stream)
+        .map(Stream::count)
+        .filter(methodsCont -> methodsCont.equals(expectedLambdaFunctionsURLsCount))
         .isPresent()
     );
   }

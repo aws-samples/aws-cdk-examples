@@ -12,14 +12,15 @@
 <!--END STABILITY BANNER-->
 
 This example creates an API Gateway with proxy resources for 2 HTTP backends.
-More HTTP backend APIs can be easily added.
 This is useful for scenarios when incoming requests must be routed to one or more backend API hosts.
-An HTTP proxy integration enables direct interactions between clients and backends without any intervention from API Gateway after the API method is set up.
+An HTTP proxy integration enables direct interactions between clients and backends without any intervention from the API Gateway after the API method is set up.
 
 > For more information on using HTTP proxy integrations with the APIGateway check out this [AWS tutorial](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-create-api-as-simple-proxy-for-http.html).
 
-> For demonstration purposes this CDK example deploys a solution that routes to the [PetsStore API](http://petstore-demo-endpoint.execute-api.com/) (from this [AWS tutorial](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-create-api-as-simple-proxy-for-http.html)) and to the [OpenTrivia API](https://opentdb.com).
-> If you prefer to use your own HTTP backend APIs modify the argument used to call the [`HttpProxyApiGatewayStack`](src/main/java/com/myorg/HttpProxyApiGatewayStack.java) constructor in the [`HttpProxyApiGatewayApp`](src/main/java/com/myorg/HttpProxyApiGatewayApp.java) class.
+> For demonstration purposes this CDK example deploys a solution that routes to a couple of test HTTP APIs.
+> The 2 test HTTP APIs are implemented using lambdas exposed through function URLs.
+> This example can be modified though, if you prefer to use your own HTTP backend APIs.
+> To do that you can modify the `createHTTPTestAPIs` method in the [`HttpProxyApiGatewayStack`](src/main/java/com/myorg/HttpProxyApiGatewayStack.java) class to return a list of `ProxyResourceParameters` corresponding to your own resources.
 
 ## Build
 
@@ -37,12 +38,13 @@ This will install the necessary CDK, then this example's dependencies, and then 
 
 Run `cdk deploy`.
 This will deploy / redeploy the Stack to AWS.
-After the CDK deployment is successful, 2 URL examples will be available in the terminal console output:
+After the CDK deployment is successful, 2 URL examples will be available in the terminal console:
 
-- One for the `PetStoreProxyEndPointGetRequestExample` stack output
-- One for the `OpenTriviaProxyEndPointGetRequestExample` stack output
+- One for the `HttpProxyApiGatewayStack.HelloFunctionResourceExample` output
+- One for the `HttpProxyApiGatewayStack.ByeFunctionResourceExample` output
 
 At this point, you can copy each of the 2 URLs and paste them in the address bar of a browser to invoke the 2 APIs.
+Also note that both URLs have the same host (the DNS of the new API Gateway created).
 
 ## Useful commands
 
