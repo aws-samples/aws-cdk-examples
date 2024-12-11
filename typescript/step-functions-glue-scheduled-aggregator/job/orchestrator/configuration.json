@@ -1,0 +1,89 @@
+{
+  "Comment": "Demo ETL Workflow",
+  "StartAt": "Format Date Time to the hour before",
+  "States": {
+    "Format Date Time to the hour before": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "${function_name}"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException",
+            "Lambda.TooManyRequestsException"
+          ],
+          "IntervalSeconds": 1,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
+        }
+      ],
+      "Next": "Run ETL Job"
+    },
+    "Run ETL Job": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::glue:startJobRun.sync",
+      "Parameters": {
+        "JobName": "${job_name}",
+        "Arguments": {
+          "--target_datetime.$": "$.target_datetime"
+        }
+      },
+      "Next": "Success",
+      "ResultPath": "$.jobInformation",
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "Next": "Format Error Output",
+          "ResultPath": "$.error"
+        }
+      ]
+    },
+    "Format Error Output": {
+      "Type": "Pass",
+      "Next": "Send Failed Event",
+      "Parameters": {
+        "target_datetime": "2024-08-22T07:00:00.000Z",
+        "jobInformation.$": "States.StringToJson($.error.Cause)"
+      }
+    },
+    "Send Failed Event": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::events:putEvents",
+      "Parameters": {
+        "Entries": [
+          {
+            "Detail": {
+              "Message": "Glue Job execution failure",
+              "JobName.$": "$.jobInformation.JobName",
+              "JobId.$": "$.jobInformation.Id",
+              "JobArguments.$": "$.jobInformation.Arguments",
+              "JobStartedOn.$": "$.jobInformation.StartedOn",
+              "JobCompletedOn.$": "$.jobInformation.CompletedOn",
+              "JobRunStatus.$": "$.jobInformation.JobRunState",
+              "JobErrorMessage.$": "$.jobInformation.ErrorMessage",
+              "JobLogGroupName.$": "$.jobInformation.LogGroupName"
+            },
+            "DetailType": "JobExecutionFailure",
+            "EventBusName": "${eventbus_name}",
+            "Source": "com.demo.glue-scheduled-aggregators"
+          }
+        ]
+      },
+      "Next": "Fail"
+    },
+    "Fail": {
+      "Type": "Fail"
+    },
+    "Success": {
+      "Type": "Succeed"
+    }
+  }
+}
