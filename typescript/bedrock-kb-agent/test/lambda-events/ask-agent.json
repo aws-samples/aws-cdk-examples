@@ -1,0 +1,37 @@
+{
+  "level": "INFO",
+  "location": "lambda_handler:196",
+  "routeKey": "POST /api/v1/weather",
+  "rawPath": "/api/v1/weather",
+  "requestContext": {
+    "authorizer": {
+      "jwt": {
+        "claims": {
+          "cognito:username": "test@test.com"
+        }
+      }
+    },
+    "http": {
+      "method": "POST",
+      "path": "/api/v1/weather",
+      "protocol": "HTTP/1.1",
+      "sourceIp": "139.178.117.190",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+    },
+    "routeKey": "POST /api/v1/weather",
+    "stage": "$default"
+  },
+  "body": "{\"question\":\"how is the weather in London?\"}",
+  "headers": {
+    "authorization": "aaa"
+  },
+  "timestamp": "2024-10-01 06:56:30,807+0000",
+  "service": "service_undefined",
+  "cold_start": false,
+  "function_name": "main-IncidentsFn2D47B0F9-IeYNpTCcy6AZ",
+  "function_memory_size": "128",
+  "function_arn": "arn:aws:lambda:us-east-1:724772087956:function:main-IncidentsFn2D47B0F9-IeYNpTCcy6AZ",
+  "function_request_id": "04500c74-0d12-421b-9da5-6fdd666d12bd",
+  "correlation_id": "e9V82i49oAMEJ-Q=",
+  "xray_trace_id": "1-66fb9d1e-41a6eaa309b55ad0585dca46"
+}
