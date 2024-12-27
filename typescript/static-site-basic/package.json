@@ -1,0 +1,26 @@
+{
+  "name": "static-site-basic",
+  "version": "1.0.0",
+  "description": "Infrastructure for hosting an HTTP website in S3",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "author": {
+    "name": "Amazon Web Services",
+    "url": "https://aws.amazon.com",
+    "organization": true
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/node": "^10.17.0",
+    "aws-cdk": "*",
+    "typescript": "~5.1.6"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.0.0",
+    "constructs": "^10.0.0",
+    "ts-node": "^10.9.2"
+  }
+}

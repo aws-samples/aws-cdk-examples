@@ -7,7 +7,6 @@ import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
 import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import * as cloudfront_origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import { CfnOutput, Duration, RemovalPolicy, Stack } from 'aws-cdk-lib';
-import * as iam from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
 import path = require('path');
 
@@ -28,9 +27,6 @@ export class StaticSite extends Construct {
 
     const zone = route53.HostedZone.fromLookup(this, 'Zone', { domainName: props.domainName });
     const siteDomain = props.siteSubDomain + '.' + props.domainName;
-    const cloudfrontOAI = new cloudfront.OriginAccessIdentity(this, 'cloudfront-OAI', {
-      comment: `OAI for ${name}`
-    });
 
     new CfnOutput(this, 'Site', { value: 'https://' + siteDomain });
 
@@ -54,12 +50,6 @@ export class StaticSite extends Construct {
       autoDeleteObjects: true, // NOT recommended for production code
     });
 
-    // Grant access to cloudfront
-    siteBucket.addToResourcePolicy(new iam.PolicyStatement({
-      actions: ['s3:GetObject'],
-      resources: [siteBucket.arnForObjects('*')],
-      principals: [new iam.CanonicalUserPrincipal(cloudfrontOAI.cloudFrontOriginAccessIdentityS3CanonicalUserId)]
-    }));
     new CfnOutput(this, 'Bucket', { value: siteBucket.bucketName });
 
     // TLS certificate
@@ -85,7 +75,7 @@ export class StaticSite extends Construct {
         }
       ],
       defaultBehavior: {
-        origin: new cloudfront_origins.S3Origin(siteBucket, {originAccessIdentity: cloudfrontOAI}),
+        origin: cloudfront_origins.S3BucketOrigin.withOriginAccessControl(siteBucket),
         compress: true,
         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
