@@ -75,6 +75,7 @@ public class TestUtils {
           .filter(matchEntry -> isNotBlank(matchEntry.getValue()))
           .map(matchEntry -> createResourcePredicate(matchEntry.getKey(), matchEntry.getValue()))
           .reduce(Predicate::and)
-      ).orElseGet(() -> _ -> false);
-  }
+      ).orElseGet(() -> entry -> false);
+}
+
 }
