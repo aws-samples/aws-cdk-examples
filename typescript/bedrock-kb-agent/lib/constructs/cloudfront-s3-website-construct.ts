@@ -15,6 +15,7 @@
 
 import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
+import * as cloudfront_origins from "aws-cdk-lib/aws-cloudfront-origins";
 
 export interface CloudFrontS3WebSiteConstructProps extends cdk.StackProps {
   /**
@@ -122,16 +123,20 @@ export class CloudFrontS3WebSiteConstruct extends Construct {
     );
     this.siteBucket.grantRead(originAccessIdentity);
 
-    const s3origin = new cdk.aws_cloudfront_origins.S3Origin(this.siteBucket, {
-      originAccessIdentity: originAccessIdentity,
-    });
+    // const s3origin = new cdk.aws_cloudfront_origins.S3Origin(this.siteBucket, {
+    //   originAccessIdentity: originAccessIdentity,
+    // });
 
     const cloudFrontDistribution = new cdk.aws_cloudfront.Distribution(
       this,
       "WebAppDistribution",
       {
         defaultBehavior: {
-          origin: s3origin,
+          // origin: s3origin,
+          origin: cloudfront_origins.S3BucketOrigin.withOriginAccessControl(
+            this.siteBucket,
+          ),
+
           cachePolicy: new cdk.aws_cloudfront.CachePolicy(this, "CachePolicy", {
             defaultTtl: cdk.Duration.hours(1),
           }),
