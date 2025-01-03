@@ -1,0 +1,7 @@
+{
+  "nodeEnv": "NODE_ENV",
+  "aws": {
+    "region": "AWS_REGION",
+    "accountId": "AWS_ACCOUNT_ID"
+  }
+}
