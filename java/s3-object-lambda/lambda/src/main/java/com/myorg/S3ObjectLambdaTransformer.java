@@ -34,7 +34,7 @@ public class S3ObjectLambdaTransformer {
    * This method retrieves the original object from S3, applies transformations,
    * and returns the modified object data.
    *
-   * @param event The S3 Object Lambda event containing request details
+   * @param event   The S3 Object Lambda event containing request details
    * @param context The Lambda execution context
    */
   public void handleRequest(S3ObjectLambdaEvent event, Context context) {
@@ -46,7 +46,7 @@ public class S3ObjectLambdaTransformer {
       // Extract the pre-signed URL from the event context
       var objectContext = event.getGetObjectContext();
       var s3Url = objectContext.getInputS3Url();
-      
+
       // Create HTTP client and fetch the original object
       var uri = URI.create(s3Url);
       var httpClient = HttpClient.newBuilder().build();
@@ -55,35 +55,40 @@ public class S3ObjectLambdaTransformer {
       var requestBody = RequestBody.empty();
       var responseBodyBytes = readBytes(response);
       var writeGetObjectResponseRequestBuilder = WriteGetObjectResponseRequest.builder()
-        .requestRoute(event.outputRoute())
-        .requestToken(event.outputToken())
-        .statusCode(response.statusCode());
+          .requestRoute(event.outputRoute())
+          .requestToken(event.outputToken())
+          .statusCode(response.statusCode());
       // Process successful responses (HTTP 200)
       if (response.statusCode() == 200) {
         // Build metadata object with content length and hash values
         var metadata = TransformedObject.Metadata.builder()
-          .withLength((long) responseBodyBytes.length)     // Set content length
-          .withMD5(DigestUtils.md5Hex(responseBodyBytes))    // Calculate MD5 hash
-          .withSHA1(DigestUtils.sha1Hex(responseBodyBytes))  // Calculate SHA1 hash
-          .withSHA256(DigestUtils.sha256Hex(responseBodyBytes))  // Calculate SHA256 hash
-          .build();
+            .withLength((long) responseBodyBytes.length) // Set content length
+            .withMD5(DigestUtils.md5Hex(responseBodyBytes)) // Calculate MD5 hash
+            .withSHA1(DigestUtils.sha1Hex(responseBodyBytes)) // Calculate SHA1 hash
+            .withSHA256(DigestUtils.sha256Hex(responseBodyBytes)) // Calculate SHA256 hash
+            .build();
         // Create transformed object containing the metadata
         var transformedObject = TransformedObject.builder()
-          .withMetadata(metadata)
-          .build();
+            .withMetadata(metadata)
+            .build();
         // Log the transformed object for debugging
         log(context, "transformedObject: " + writeValue(objectMapper, transformedObject));
         requestBody = RequestBody.fromString(writeValue(objectMapper, transformedObject));
-  } else {
-      // Handle non-200 HTTP responses by setting the error message
+      } else {
+        // Handle non-200 HTTP responses by setting the error message
         writeGetObjectResponseRequestBuilder
-          .errorMessage(new String(responseBodyBytes));  // Convert error response body to string and set as error message
+            .errorMessage(new String(responseBodyBytes)); // Convert error response body to string and set as error
+                                                          // message
       }
-      // Write the final response back to S3 Object Lambda with either transformed object or error details
+      // Write the final response back to S3 Object Lambda with either transformed
+      // object or error details
       s3Client.writeGetObjectResponse(writeGetObjectResponseRequestBuilder.build(), requestBody);
     } catch (IOException | InterruptedException e) {
       // Wrap and rethrow any IO or threading exceptions that occur during processing
-      throw new RuntimeException("Error while handling request: " + e.getMessage(), e)    }
+      throw new RuntimeException("Error while handling request: " + e.getMessage(), e);
+    }
+  }
+
   }
 
   /**
