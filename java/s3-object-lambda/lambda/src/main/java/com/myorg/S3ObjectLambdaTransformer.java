@@ -89,8 +89,6 @@ public class S3ObjectLambdaTransformer {
     }
   }
 
-  }
-
   /**
    * Reads all bytes from the input stream of an HTTP response.
    * Converts the response stream into a byte array for processing.
