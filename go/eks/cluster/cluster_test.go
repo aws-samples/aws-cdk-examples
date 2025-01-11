@@ -27,14 +27,14 @@ func TestClusterStack(t *testing.T) {
 
 	// Cluster
 	clusterVersion := template.Get("Resources.EKSClusterE11008B6.Properties.Config.version").String()
-	assert.Equal(t, "1.28", clusterVersion)
+	assert.Equal(t, "1.31", clusterVersion)
 
 	ipFamily := template.Get("Resources.EKSClusterE11008B6.Properties.Config.kubernetesNetworkConfig.ipFamily").String()
 	assert.Equal(t, "ipv4", ipFamily)
 
 	// Managed Node Group
 	maxSize := template.Get("Resources.EKSClusterNodegroupcustomnodegroup2F3798CA.Properties.ScalingConfig.MaxSize").Int()
-	assert.Equal(t, int64(2), maxSize)
+	assert.Equal(t, int64(5), maxSize)
 
 	minSize := template.Get("Resources.EKSClusterNodegroupcustomnodegroup2F3798CA.Properties.ScalingConfig.MinSize").Int()
 	assert.Equal(t, int64(2), minSize)
@@ -46,7 +46,7 @@ func TestClusterStack(t *testing.T) {
 	assert.Equal(t, int64(100), diskSize)
 
 	amiType := template.Get("Resources.EKSClusterNodegroupcustomnodegroup2F3798CA.Properties.AmiType").String()
-	assert.Equal(t, "AL2_x86_64", amiType)
+	assert.Equal(t, "AL2023_x86_64_STANDARD", amiType)
 
 	// Fargate
 	fargateProfileNamespace := template.Get("Resources.MyProfileC56205EE.Properties.Config.selectors.0.namespace").String()
