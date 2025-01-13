@@ -1,8 +1,23 @@
-import { KubectlV29Layer } from "@aws-cdk/lambda-layer-kubectl-v29";
+import { KubectlV31Layer as KubectlLayer } from "@aws-cdk/lambda-layer-kubectl-v31";
 import * as cdk from "aws-cdk-lib";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as eks from "aws-cdk-lib/aws-eks";
 import * as iam from "aws-cdk-lib/aws-iam";
+
+const kubernetesVersion = eks.KubernetesVersion.V1_31;
+
+const clusterLogging = [
+  // eks.ClusterLoggingTypes.API,
+  // eks.ClusterLoggingTypes.AUTHENTICATOR,
+  // eks.ClusterLoggingTypes.SCHEDULER,
+  eks.ClusterLoggingTypes.AUDIT,
+  // eks.ClusterLoggingTypes.CONTROLLER_MANAGER,
+];
+
+const instanceTypes = [
+  new ec2.InstanceType("m5.large"),
+  new ec2.InstanceType("m5a.large"),
+];
 
 class EKSCluster extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
@@ -15,59 +30,52 @@ class EKSCluster extends cdk.Stack {
     const eksCluster = new eks.Cluster(this, "EKSCluster", {
       vpc: vpc,
       defaultCapacity: 0,
-      version: eks.KubernetesVersion.V1_29,
-      kubectlLayer: new KubectlV29Layer(this, "kubectl"),
+      version: kubernetesVersion,
+      kubectlLayer: new KubectlLayer(this, "kubectl"),
       ipFamily: eks.IpFamily.IP_V4,
-      clusterLogging: [
-        // eks.ClusterLoggingTypes.API,
-        // eks.ClusterLoggingTypes.AUTHENTICATOR,
-        // eks.ClusterLoggingTypes.SCHEDULER,
-        eks.ClusterLoggingTypes.AUDIT,
-        // eks.ClusterLoggingTypes.CONTROLLER_MANAGER,
-      ],
-      outputClusterName: true,
-      outputConfigCommand: true,
+      clusterLogging: clusterLogging,
     });
 
+    // HINT: required cdk v2.135.0 or higher version to support instanceTypes assignment when working with AL2023
+    // - https://github.com/aws/aws-cdk/pull/29505
+    // - https://github.com/aws/aws-cdk/releases/tag/v2.135.0
     eksCluster.addNodegroupCapacity("custom-node-group", {
-      amiType: eks.NodegroupAmiType.AL2_X86_64,
-      instanceTypes: [new ec2.InstanceType("m5.large")],
+      amiType: eks.NodegroupAmiType.AL2023_X86_64_STANDARD,
+      instanceTypes: instanceTypes,
       desiredSize: 2,
+      minSize: 2,
+      maxSize: 5,
       diskSize: 20,
       nodeRole: new iam.Role(this, "eksClusterNodeGroupRole", {
         roleName: "eksClusterNodeGroupRole",
         assumedBy: new iam.ServicePrincipal("ec2.amazonaws.com"),
         managedPolicies: [
-          iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonEKSWorkerNodePolicy"),
-          iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonEC2ContainerRegistryReadOnly"),
-          iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonEKS_CNI_Policy"),
-        ],
+          "AmazonEKSWorkerNodePolicy",
+          "AmazonEC2ContainerRegistryReadOnly",
+          "AmazonEKS_CNI_Policy",
+        ].map((policy) => iam.ManagedPolicy.fromAwsManagedPolicyName(policy)),
       }),
     });
 
     // Fargate
-    const myProfile = new eks.FargateProfile(this, 'myProfile', {
+    new eks.FargateProfile(this, "myProfile", {
       cluster: eksCluster,
-      selectors: [ { namespace: 'default' } ],
+      selectors: [{ namespace: "default" }],
     });
 
-    // Managed Addon: kube-proxy
-    const kubeProxy = new eks.CfnAddon(this, "addonKubeProxy", {
-      addonName: "kube-proxy",
-      clusterName: eksCluster.clusterName,
-    });
+    // Managed Addons
+    const addManagedAddon = (id: string, addonName: string) => {
+      new eks.CfnAddon(this, id, {
+        addonName,
+        clusterName: eksCluster.clusterName,
+      });
+    };
 
-    // Managed Addon: coredns
-    const coreDns = new eks.CfnAddon(this, "addonCoreDns", {
-      addonName: "coredns",
-      clusterName: eksCluster.clusterName,
-    });
-
-    // Managed Addon: vpc-cni
-    const vpcCni = new eks.CfnAddon(this, "addonVpcCni", {
-      addonName: "vpc-cni",
-      clusterName: eksCluster.clusterName,
-    });
+    addManagedAddon("addonKubeProxy", "kube-proxy");
+    addManagedAddon("addonCoreDns", "coredns");
+    addManagedAddon("addonVpcCni", "vpc-cni");
+    addManagedAddon("addonEksPodIdentityAgent", "eks-pod-identity-agent");
+    addManagedAddon("addonMetricsServer", "metrics-server");
   }
 }
 

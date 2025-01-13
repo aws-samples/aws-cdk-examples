@@ -15,18 +15,18 @@
   },
   "license": "Apache-2.0",
   "devDependencies": {
-    "@types/jest": "^29.5.12",
-    "@types/node": "20.11.20",
-    "aws-cdk": "^2.130.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "22.10.5",
+    "aws-cdk": "^2.175.1",
     "jest": "^29.7.0",
-    "ts-jest": "^29.1.2",
+    "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "~5.3.3"
+    "typescript": "~5.7.3"
   },
   "dependencies": {
-    "@aws-cdk/lambda-layer-kubectl-v29": "^2.0.0",
-    "aws-cdk-lib": "^2.130.0",
-    "constructs": "^10.3.0",
+    "@aws-cdk/lambda-layer-kubectl-v31": "^2.0.0",
+    "aws-cdk-lib": "^2.175.1",
+    "constructs": "^10.4.2",
     "source-map-support": "^0.5.21"
   }
 }
