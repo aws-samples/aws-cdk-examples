@@ -1,0 +1,25 @@
+{
+  "name": "aws-codepipeline-ecs-lambda",
+  "version": "0.1.0",
+  "bin": {
+    "aws-codepipeline-ecs-lambda": "bin/aws-codepipeline-ecs-lambda.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.140",
+    "@types/node": "20.14.2",
+    "aws-cdk": "2.162.1",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.4.5"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "2.162.1",
+    "@types/aws-lambda": "^8.10.140",
+    "constructs": "^10.0.0",
+    "source-map-support": "^0.5.21"
+  }
+}

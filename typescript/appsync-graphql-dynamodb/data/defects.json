@@ -1,0 +1,441 @@
+[
+    {
+        "licenseplate": {
+            "S": "87FRABCE"
+        },
+        "defectstartdate": {
+            "N": "20180520"
+        },
+        "defectdescription": {
+            "S": "Anti-lock braking system warning device indicates defect"
+        },
+        "id": {
+            "S": "baca5f72-5e36-4c32-a6d8-013ec2898903"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "87FRABCE"
+        },
+        "defectstartdate": {
+            "N": "20100227"
+        },
+        "defectdescription": {
+            "S": "Airbag/belt belt system warning device is defective"
+        },
+        "id": {
+            "S": "b719aed7-7183-4732-817d-617d38c303a9"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "87FRABCE"
+        },
+        "defectstartdate": {
+            "N": "20180520"
+        },
+        "defectdescription": {
+            "S": "Anti-lock braking system warning device indicates defect"
+        },
+        "id": {
+            "S": "8e69405c-418c-4488-ad31-fb03267dfbdf"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "87FRABCE"
+        },
+        "defectstartdate": {
+            "N": "20170401"
+        },
+        "defectdescription": {
+            "S": "Tire damaged"
+        },
+        "id": {
+            "S": "637e6881-2b34-43c0-be8f-7fbc572d49a6"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "87FRABCE"
+        },
+        "defectstartdate": {
+            "N": "20100227"
+        },
+        "defectdescription": {
+            "S": "Airbag/belt belt system warning device is defective"
+        },
+        "id": {
+            "S": "fc547c3a-ea08-483f-a602-4e042d4b4391"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "87FRABCE"
+        },
+        "defectstartdate": {
+            "N": "20180520"
+        },
+        "defectdescription": {
+            "S": "Anti-lock braking system warning device indicates defect"
+        },
+        "id": {
+            "S": "f52c4789-b30b-4407-99ea-89c6e52e39a9"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "87FRABCE"
+        },
+        "defectstartdate": {
+            "N": "20100227"
+        },
+        "defectdescription": {
+            "S": "Airbag/belt belt system warning device is defective"
+        },
+        "id": {
+            "S": "9752d1f9-92a4-42e1-8089-d4e5483cddff"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "87FRABCE"
+        },
+        "defectstartdate": {
+            "N": "20120401"
+        },
+        "defectdescription": {
+            "S": "Excessive fluid leakage of other fluids"
+        },
+        "id": {
+            "S": "ca4fad0f-ca62-4982-9cdc-fffbac1adf43"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "87FRABCE"
+        },
+        "defectstartdate": {
+            "N": "20180520"
+        },
+        "defectdescription": {
+            "S": "Anti-lock braking system warning device indicates defect"
+        },
+        "id": {
+            "S": "db55f773-156b-4c9e-a51a-00417fe48b6e"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "93A5ZR2U"
+        },
+        "defectstartdate": {
+            "N": "20170401"
+        },
+        "defectdescription": {
+            "S": "Brake lining carrier/fastener contacts drum/disc"
+        },
+        "id": {
+            "S": "9281a7b0-66c3-4ef4-8c95-c54c05742e77"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "93A5ZR2U"
+        },
+        "defectstartdate": {
+            "N": "20170401"
+        },
+        "defectdescription": {
+            "S": "Tail light does not work (properly)"
+        },
+        "id": {
+            "S": "e268ea35-2ad0-4d06-9fcd-3f97b23b1847"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "93A5ZR2U"
+        },
+        "defectstartdate": {
+            "N": "20120401"
+        },
+        "defectdescription": {
+            "S": "Excessive fluid leakage of other fluids"
+        },
+        "id": {
+            "S": "5e75b0d3-f955-454d-8808-68850ced01b9"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "93A5ZR2U"
+        },
+        "defectdescription": {
+            "S": "Steering ball or ball joint with wear less than or equal to 1.0 mm"
+        },
+        "id": {
+            "S": "b239e6be-bd9c-4430-8b69-1be791579022"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "93A5ZR2U"
+        },
+        "defectdescription": {
+            "S": "Mechanical parts of the braking system show wear"
+        },
+        "id": {
+            "S": "488e0371-8fd4-4d3b-bbd6-a2a1f24fc9fd"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "93A5ZR2U"
+        },
+        "defectstartdate": {
+            "N": "20100227"
+        },
+        "defectdescription": {
+            "S": "Airbag/belt belt system warning device is defective"
+        },
+        "id": {
+            "S": "6c7cafb6-5ad7-4357-96c8-103782aa3cce"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "93A5ZR2U"
+        },
+        "defectstartdate": {
+            "N": "20120401"
+        },
+        "defectdescription": {
+            "S": "Excessive fluid leakage of other fluids"
+        },
+        "id": {
+            "S": "6d9fa8cb-a2b6-4246-8830-a07259facfa5"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "104RZAFB"
+        },
+        "defectstartdate": {
+            "N": "20170401"
+        },
+        "defectdescription": {
+            "S": "CO more than legally permitted"
+        },
+        "id": {
+            "S": "738d1a2e-f823-435a-8a7a-6a0a3b6ec521"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "104RZAFB"
+        },
+        "defectstartdate": {
+            "N": "20120401"
+        },
+        "defectdescription": {
+            "S": "Excessive fluid leakage of other fluids"
+        },
+        "id": {
+            "S": "afb380de-0ce8-458d-a851-eb738c7e72bf"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "BR794ZQ3"
+        },
+        "defectstartdate": {
+            "N": "20170401"
+        },
+        "defectdescription": {
+            "S": "Battery incorrectly attached"
+        },
+        "id": {
+            "S": "0f8e3b45-ebdd-43ef-91a4-fb8cb788ef27"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "BR794ZQ3"
+        },
+        "defectstartdate": {
+            "N": "20170401"
+        },
+        "defectdescription": {
+            "S": "Door cannot be opened normally"
+        },
+        "id": {
+            "S": "d2f79117-a6c3-4540-a15f-410e51ce3e8f"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "BR794ZQ3"
+        },
+        "defectstartdate": {
+            "N": "20170401"
+        },
+        "defectdescription": {
+            "S": "Tail light does not work (properly)"
+        },
+        "id": {
+            "S": "0f000fb4-4ad7-4fef-be53-4cef677c9261"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "BR794ZQ3"
+        },
+        "defectdescription": {
+            "S": "Mechanical parts of the braking system show wear"
+        },
+        "id": {
+            "S": "47e9b8d0-481e-40e1-8520-25383faa7872"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "BR794ZQ3"
+        },
+        "defectstartdate": {
+            "N": "20100227"
+        },
+        "defectdescription": {
+            "S": "Airbag/belt belt system warning device is defective"
+        },
+        "id": {
+            "S": "4bb08f28-e802-45b9-8411-5e07fbbdf8cb"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "BR794ZQ3"
+        },
+        "defectstartdate": {
+            "N": "20180520"
+        },
+        "defectdescription": {
+            "S": "Anti-lock braking system warning device indicates defect"
+        },
+        "id": {
+            "S": "baca5f72-5e36-4c32-a6d8-013ec2898903"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "BR794ZQ3"
+        },
+        "defectstartdate": {
+            "N": "20100227"
+        },
+        "defectdescription": {
+            "S": "Airbag/belt belt system warning device is defective"
+        },
+        "id": {
+            "S": "b719aed7-7183-4732-817d-617d38c303a9"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "BR794ZQ3"
+        },
+        "defectstartdate": {
+            "N": "20180520"
+        },
+        "defectdescription": {
+            "S": "Anti-lock braking system warning device indicates defect"
+        },
+        "id": {
+            "S": "8e69405c-418c-4488-ad31-fb03267dfbdf"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "BR794ZQ3"
+        },
+        "defectstartdate": {
+            "N": "20170401"
+        },
+        "defectdescription": {
+            "S": "Tire damaged"
+        },
+        "id": {
+            "S": "637e6881-2b34-43c0-be8f-7fbc572d49a6"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "BR794ZQ3"
+        },
+        "defectstartdate": {
+            "N": "20100227"
+        },
+        "defectdescription": {
+            "S": "Airbag/belt belt system warning device is defective"
+        },
+        "id": {
+            "S": "fc547c3a-ea08-483f-a602-4e042d4b4391"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "BR794ZQ3"
+        },
+        "defectstartdate": {
+            "N": "20180520"
+        },
+        "defectdescription": {
+            "S": "Anti-lock braking system warning device indicates defect"
+        },
+        "id": {
+            "S": "f52c4789-b30b-4407-99ea-89c6e52e39a9"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "BR794ZQ3"
+        },
+        "defectstartdate": {
+            "N": "20100227"
+        },
+        "defectdescription": {
+            "S": "Airbag/belt belt system warning device is defective"
+        },
+        "id": {
+            "S": "9752d1f9-92a4-42e1-8089-d4e5483cddff"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "BR794ZQ3"
+        },
+        "defectstartdate": {
+            "N": "20120401"
+        },
+        "defectdescription": {
+            "S": "Excessive fluid leakage of other fluids"
+        },
+        "id": {
+            "S": "ca4fad0f-ca62-4982-9cdc-fffbac1adf43"
+        }
+    },
+    {
+        "licenseplate": {
+            "S": "BR794ZQ3"
+        },
+        "defectstartdate": {
+            "N": "20180520"
+        },
+        "defectdescription": {
+            "S": "Anti-lock braking system warning device indicates defect"
+        },
+        "id": {
+            "S": "db55f773-156b-4c9e-a51a-00417fe48b6e"
+        }
+    }
+]

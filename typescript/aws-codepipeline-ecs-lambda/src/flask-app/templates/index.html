@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/style.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>Flask App</title>
+    <style>
+        body {
+            background-color: {{ bg }};
+        }
+    </style>
+</head>
+<body>
+   <h1>Welcome to Flask App</h1>
+   <h1>This page was rendered on {{ context.day }}/{{ context.month }}/{{ context.year }} at {{ context.strftime("%H") }}:{{ context.strftime("%M") }}:{{ context.strftime("%S") }} UTC</h1>
+   <h1>{{ env }}</h1>
+</body>
+</html>
