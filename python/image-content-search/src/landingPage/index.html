@@ -14,7 +14,7 @@
     var idToken = authData.split('&').find((rec) => rec.split('=')[0] == 'id_token').split('=')[1]
     var getSignedUrlEndpoint = window.location.href.split('#')[0].replace('web', 'signedUrl')
     var searchImageEndpoint = window.location.href.split('#')[0].replace('web', 'search')
-    var loginPage = '###loginPage###';
+    var loginPage = '{loginPage}';
     var logoutPage = loginPage.replace('login', 'logout');
 
     function logout() {

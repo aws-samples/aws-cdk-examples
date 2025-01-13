@@ -1,0 +1,23 @@
+{
+  "name": "stepfunction-external-definition",
+  "version": "0.1.0",
+  "bin": {
+    "stepfunction-external-definition": "bin/stepfunction-external-definition.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "devDependencies": {
+    "@types/node": "22.5.4",
+    "aws-cdk": "2.162.1",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.6.2"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "2.162.1",
+    "constructs": "^10.0.0",
+    "source-map-support": "^0.5.21"
+  }
+}

@@ -144,7 +144,7 @@ export class Aurora extends Stack {
     let replicaInstances = props.replicaInstances ?? 1;
     let backupRetentionDays = props.backupRetentionDays ?? 14;
 
-    var ingressSources = [];
+    let ingressSources = [];
     if (typeof props.ingressSources !== 'undefined') {
       ingressSources = props.ingressSources;
     }
@@ -152,7 +152,6 @@ export class Aurora extends Stack {
     const dbs = ['mysql', 'postgresql'];
     if (!dbs.includes(props.engine!)) {
       throw new Error('Unknown Engine Please Use mysql or postgresql');
-      process.exit(1);
     }
     if (backupRetentionDays < 14) {
       backupRetentionDays = 14;
