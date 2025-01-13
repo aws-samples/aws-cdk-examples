@@ -6,7 +6,7 @@ import (
 	"github.com/aws/aws-cdk-go/awscdk/v2/awseks"
 	"github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
-	kubectlv28 "github.com/cdklabs/awscdk-kubectl-go/kubectlv28/v2"
+	kubectl "github.com/cdklabs/awscdk-kubectl-go/kubectlv31/v2"
 )
 
 type ClusterStackProps struct {
@@ -20,14 +20,15 @@ func NewClusterStack(scope constructs.Construct, id string, props *ClusterStackP
 	}
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
+	// VPC
 	vpc := awsec2.NewVpc(stack, jsii.String("EKSVpc"), nil) // Create a new VPC for our cluster
 
 	// Cluster
 	eksCluster := awseks.NewCluster(stack, jsii.String("EKSCluster"), &awseks.ClusterProps{
 		Vpc:             vpc,
 		DefaultCapacity: jsii.Number(0), // manage capacity with managed nodegroups later since we want to customize nodegroup
-		KubectlLayer:    kubectlv28.NewKubectlV28Layer(stack, jsii.String("kubectl128layer")),
-		Version:         awseks.KubernetesVersion_V1_28(),
+		KubectlLayer:    kubectl.NewKubectlV31Layer(stack, jsii.String("kubectl131layer")),
+		Version:         awseks.KubernetesVersion_V1_31(),
 	})
 
 	// Managed Node Group
@@ -35,10 +36,13 @@ func NewClusterStack(scope constructs.Construct, id string, props *ClusterStackP
 		jsii.String("custom-node-group"), &awseks.NodegroupOptions{
 			InstanceTypes: &[]awsec2.InstanceType{
 				awsec2.NewInstanceType(jsii.String("t3.medium")),
+				awsec2.NewInstanceType(jsii.String("t3a.medium")),
 			},
-			MinSize:  jsii.Number(2),
-			DiskSize: jsii.Number(100),
-			AmiType:  awseks.NodegroupAmiType_AL2_X86_64,
+			DesiredSize: jsii.Number(2),
+			MinSize:     jsii.Number(2),
+			MaxSize:     jsii.Number(5),
+			DiskSize:    jsii.Number(100),
+			AmiType:     awseks.NodegroupAmiType_AL2023_X86_64_STANDARD,
 		})
 
 	// Fargate Profile

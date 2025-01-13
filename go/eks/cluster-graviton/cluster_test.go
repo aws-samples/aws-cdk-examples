@@ -27,14 +27,14 @@ func TestClusterStack(t *testing.T) {
 
 	// Cluster
 	clusterVersion := template.Get("Resources.Cluster9EE0221C.Properties.Config.version").String()
-	assert.Equal(t, "1.28", clusterVersion)
+	assert.Equal(t, "1.31", clusterVersion)
 
 	ipFamily := template.Get("Resources.Cluster9EE0221C.Properties.Config.kubernetesNetworkConfig.ipFamily").String()
 	assert.Equal(t, "ipv4", ipFamily)
 
 	// Managed Node Group
 	maxSize := template.Get("Resources.ClusterNodegroupcustomnodegroupF798ADA7.Properties.ScalingConfig.MaxSize").Int()
-	assert.Equal(t, int64(2), maxSize)
+	assert.Equal(t, int64(5), maxSize)
 
 	minSize := template.Get("Resources.ClusterNodegroupcustomnodegroupF798ADA7.Properties.ScalingConfig.MinSize").Int()
 	assert.Equal(t, int64(2), minSize)
@@ -46,7 +46,7 @@ func TestClusterStack(t *testing.T) {
 	assert.Equal(t, int64(100), diskSize)
 
 	amiType := template.Get("Resources.ClusterNodegroupcustomnodegroupF798ADA7.Properties.AmiType").String()
-	assert.Equal(t, "AL2_ARM_64", amiType)
+	assert.Equal(t, "AL2023_ARM_64_STANDARD", amiType)
 
 	// Fargate
 	fargateProfileNamespace := template.Get("Resources.MyProfileC56205EE.Properties.Config.selectors.0.namespace").String()
@@ -61,6 +61,12 @@ func TestClusterStack(t *testing.T) {
 
 	addonNameCoreDns := template.Get("Resources.CfnAddonCoreDns.Properties.AddonName").String()
 	assert.Equal(t, "coredns", addonNameCoreDns)
+
+	addonNameEksPodIdentityAgent := template.Get("Resources.CfnAddonEksPodIdentityAgent.Properties.AddonName").String()
+	assert.Equal(t, "eks-pod-identity-agent", addonNameEksPodIdentityAgent)
+
+	addonNameMetricsServer := template.Get("Resources.CfnAddonMetricsServer.Properties.AddonName").String()
+	assert.Equal(t, "metrics-server", addonNameMetricsServer)
 
 	// AWS Load Balancer Controller
 	albRelease := template.Get("Resources.TestStackCluster8E857178AlbController95870509.Properties.Release").String()
