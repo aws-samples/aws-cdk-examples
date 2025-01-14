@@ -95,12 +95,10 @@ For other packages or tools like `kubectl`, create an S3 bucket accessible from 
 Sample cloudshell session:
 
 ```
-[cloudshell-user@ip-10-2-84-204 ~]$ curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.28.5/2024-01-04/bin/linux/amd64/kubectl
-% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                Dload  Upload   Total   Spent    Left  Speed
-100 47.5M  100 47.5M    0     0  7975k      0  0:00:06  0:00:06 --:--:-- 10.4M
-[cloudshell-user@ip-10-2-84-204 ~]$ aws s3 cp kubectl s3://my-bucket/kubectl-1.28.5
-upload: ./kubectl to s3://my-bucket/kubectl-1.28.5          
+[cloudshell-user@ip-10-2-84-204 ~]$ curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.31.4/2025-01-10/bin/darwin/amd64/kubectl
+
+[cloudshell-user@ip-10-2-84-204 ~]$ aws s3 cp kubectl s3://my-bucket/kubectl-1.31.4
+upload: ./kubectl to s3://my-bucket/kubectl-1.31.4
 ```
 
 ## Accessing the EKS cluster with kubectl
@@ -118,7 +116,7 @@ Test the access to the EKS cluster. Get pods and nodes
 ```
 [ssm-user@ip-10-0-0-240 ~]$ kubectl get nodes
 NAME                                           STATUS   ROLES    AGE   VERSION
-ip-10-0-0-60.ap-southeast-1.compute.internal   Ready    <none>   19h   v1.28.5-eks-5e0fdde
+ip-10-0-0-60.ap-southeast-1.compute.internal   Ready    <none>   19h   v1.31.0-eks-a737599
 
 [ssm-user@ip-10-0-0-240 ~]$ kubectl get pods -A
 NAMESPACE     NAME                       READY   STATUS    RESTARTS        AGE
