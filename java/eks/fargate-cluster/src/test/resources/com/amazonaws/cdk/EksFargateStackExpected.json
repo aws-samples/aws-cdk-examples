@@ -384,7 +384,7 @@
         },
         "Config": {
           "name": "SampleCluster",
-          "version": "1.28",
+          "version": "1.31",
           "roleArn": {
             "Fn::GetAtt": [
               "EksClusterAdminRoleD3CAEBD0",
@@ -751,7 +751,7 @@
       "Type": "AWS::EKS::Addon",
       "Properties": {
         "AddonName": "vpc-cni",
-        "AddonVersion": "v1.16.0-eksbuild.1",
+        "AddonVersion": "v1.19.2-eksbuild.1",
         "ClusterName": {
           "Ref": "EksFargateCluster07FC3D2B"
         },
@@ -765,7 +765,7 @@
       "Type": "AWS::EKS::Addon",
       "Properties": {
         "AddonName": "kube-proxy",
-        "AddonVersion": "v1.28.4-eksbuild.1",
+        "AddonVersion": "v1.31.3-eksbuild.2",
         "ClusterName": {
           "Ref": "EksFargateCluster07FC3D2B"
         },
