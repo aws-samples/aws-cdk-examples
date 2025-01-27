@@ -9,7 +9,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <cdk.version>2.122.0</cdk.version>
+        <cdk.version>2.175.1</cdk.version>
+        <kubectl.version>2.0.0</kubectl.version>
         <constructs.version>[10.0.0,11.0.0)</constructs.version>
         <junit.version>5.7.1</junit.version>
     </properties>
@@ -42,6 +43,12 @@
             <groupId>software.amazon.awscdk</groupId>
             <artifactId>aws-cdk-lib</artifactId>
             <version>${cdk.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>software.amazon.awscdk</groupId>
+            <artifactId>cdk-lambda-layer-kubectl-v31</artifactId>
+            <version>${kubectl.version}</version>
         </dependency>
 
         <dependency>
