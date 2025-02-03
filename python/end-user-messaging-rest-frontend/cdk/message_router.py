@@ -106,15 +106,15 @@ class MessageRouter(Construct):
 
         # Lambda that sends the SQS messagges to WhatsApp
         default_whatsapp_phone_arn = default_whatsapp_phone_arn.value_as_string
-        if len(default_whatsapp_phone_arn) == 0:
-            default_whatsapp_phone_arn = self.get_waba_phone_number_arn()
         wa_sender_lambda_role = iam.Role(scope=self,
                                          id='SQS2WhatsAppLambdaRole',
                                          assumed_by=iam.ServicePrincipal('lambda.amazonaws.com'),
                                          managed_policies=[base_lambda_policy])
         wa_sender_lambda_role.add_to_policy(iam.PolicyStatement(sid='SocialMessagingStatement',
                                                                 effect=iam.Effect.ALLOW,
-                                                                resources=[default_whatsapp_phone_arn],
+                                                                resources=[default_whatsapp_phone_arn
+                                                                           if len(default_whatsapp_phone_arn) > 0
+                                                                           else '*'],
                                                                 actions=['social-messaging:SendWhatsAppMessage']))
         image = lambda_.DockerImageCode.from_image_asset('lambda/send_whatsapp',
                                                          platform=lambda_platform)
@@ -175,30 +175,3 @@ class MessageRouter(Construct):
                                                                                         'to the DynamoDB table',
                                                                           }
                                                                       ])
-
-    @staticmethod
-    def get_waba_phone_number_arn() -> str:
-        """
-        Try to automatically determine the sender phone number ARN
-
-        The method will query the social messaging service. If there is only one account
-        linked with a single phone number, the code will use that.
-        """
-        # If no phone id was provided, try to find it
-        whatsapp = boto3.client('socialmessaging')
-        try:
-            response = whatsapp.list_linked_whatsapp_business_accounts(maxResults=1)
-            if len(response['linkedAccounts']) != 1:
-                raise RuntimeError('Could not automatically determine the WhatsApp phone number and none was defined')
-
-            waba_id = response['linkedAccounts'][0]['id']
-            response = whatsapp.get_linked_whatsapp_business_account(id=waba_id)
-            if response['account']['registrationStatus'] != 'COMPLETE':
-                raise RuntimeError('Business account is not fully registered')
-            if len(response['account']['phoneNumbers']) != 1:
-                raise RuntimeError('Cannot determine automatically what WhatsApp phone number to use')
-            phone_arn = response['account']['phoneNumbers'][0]['arn']
-        except whatsapp.exceptions.ClientError:
-            phone_arn = ''
-
-        return phone_arn

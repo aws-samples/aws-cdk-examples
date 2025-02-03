@@ -42,7 +42,7 @@ class MessageAPI(Stack):
                                                               'Messaging Social that will be used for sending WhatsApp '
                                                               'Messages. Leave empty to try to automatically detect '
                                                               'the phone number.',
-                                                  default=MessageRouter.get_waba_phone_number_arn())
+                                                  default='')
         default_whatsapp_template = CfnParameter(scope=self,
                                                  id='WATemplate',
                                                  type='String',
