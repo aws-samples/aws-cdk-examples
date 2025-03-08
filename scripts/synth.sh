@@ -12,7 +12,8 @@ if $fake_context; then
   cp $scriptdir/fake.context.json cdk.context.json
 fi
 
-npx cdk synth
+yarn global add cdk@latest
+cdk synth
 
 if $fake_context; then
   rm -f cdk.context.json
