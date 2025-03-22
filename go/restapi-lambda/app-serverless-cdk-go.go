@@ -22,7 +22,7 @@ func NewAppServerlessCdkGoStack(scope constructs.Construct, id string, props *Ap
 
 	// create Lambda function
 	getHandler := awscdklambdagoalpha.NewGoFunction(stack, jsii.String("myGoHandler"), &awscdklambdagoalpha.GoFunctionProps{
-		Runtime: awslambda.Runtime_GO_1_X(),
+		Runtime: awslambda.Runtime_PROVIDED_AL2(),
 		Entry:   jsii.String("./lambda-handler"),
 		Bundling: &awscdklambdagoalpha.BundlingOptions{
 			GoBuildFlags: jsii.Strings(`-ldflags "-s -w"`),
