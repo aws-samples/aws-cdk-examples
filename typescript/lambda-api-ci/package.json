@@ -12,15 +12,15 @@
     "prettier": "prettier --write '**/{bin,lib,src,tst}/*.ts'"
   },
   "devDependencies": {
-    "aws-cdk": "*",
-    "@types/node": "^20.11.24",
+    "aws-cdk": "2.1004.0",
+    "@types/node": "22.7.9",
     "ts-node": "^10.9.2",
-    "typescript": "~5.3.3",
+    "typescript": "~5.6.3",
     "prettier": "^3.2.5"
   },
   "dependencies": {
-    "aws-cdk-lib": "^2.131.0",
-    "constructs": "^10.3.0",
+    "aws-cdk-lib": "2.185.0",
+    "constructs": "^10.0.0",
     "@aws-sdk/client-s3": "^3.525.0",
     "source-map-support": "^0.5.21"
   },
