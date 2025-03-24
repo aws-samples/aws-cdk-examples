@@ -50,10 +50,10 @@ exports[`Snapshot Stack 1`] = `
         "value": "nodejs20.x",
       },
       "cn-north-1": {
-        "value": "nodejs18.x",
+        "value": "nodejs20.x",
       },
       "cn-northwest-1": {
-        "value": "nodejs18.x",
+        "value": "nodejs20.x",
       },
       "eu-central-1": {
         "value": "nodejs20.x",
@@ -104,10 +104,10 @@ exports[`Snapshot Stack 1`] = `
         "value": "nodejs20.x",
       },
       "us-gov-east-1": {
-        "value": "nodejs18.x",
+        "value": "nodejs20.x",
       },
       "us-gov-west-1": {
-        "value": "nodejs18.x",
+        "value": "nodejs20.x",
       },
       "us-iso-east-1": {
         "value": "nodejs18.x",
@@ -322,7 +322,7 @@ exports[`Snapshot Stack 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "a1deff17a695906f93c544b1deae2bf444210622f05330da961687eb8f4a51a7.zip",
+          "S3Key": "2ad282c80ed8bef2dc8a20da8b07e92dd5259826cca0b685f8cc11f808eca9bb.zip",
         },
         "Description": "Lambda Authorizer",
         "Environment": {
@@ -507,7 +507,7 @@ exports[`Snapshot Stack 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "5ce4b859d5e57c3d238da3ac017e0ea37bf34ad1b71de268430b08e38bb9450d.zip",
+          "S3Key": "dc8dcb7f07403837f3ff1672cbf17e30ee3eaa1a3a058c5397b9db8b9e964b6b.zip",
         },
         "Description": "Operational Lambda",
         "Environment": {
