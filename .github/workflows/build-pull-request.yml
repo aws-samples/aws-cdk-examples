@@ -144,7 +144,6 @@ jobs:
 
           # Check the exit status of parallel
           parallel_exit=$?
-
           # If parallel failed, make sure the workflow fails too
           if [ $parallel_exit -ne 0 ]; then
             echo "::error::One or more builds failed. See build output above for details."
