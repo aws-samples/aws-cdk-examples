@@ -43,10 +43,14 @@ jobs:
       - name: Build changed files
         if: steps.changed-files.outputs.any_changed == 'true'
         run: |
+          # Create a temporary directory for build logs
+          mkdir -p /tmp/build_logs
+          
           # Function to build a single file
           build_file() {
             echo "Build File $1"
             local file="$1"
+            local log_file="/tmp/build_logs/$(basename "$file" | sed 's/\//_/g').log"
             IFS="/" read -ra path_parts <<< "$file"
             language=${path_parts[0]}
 
@@ -59,12 +63,17 @@ jobs:
 
             # Run the build script for the current language, passing the project directory and extra path
             echo "::group::$file"
-            if ../scripts/build-${language}.sh "$file"; then
+            if ../scripts/build-${language}.sh "$file" > "$log_file" 2>&1; then
               echo "::endgroup::"
+              return 0
             else
+              local exit_code=$?
               echo "::endgroup::"
-              echo "::error::Build failed for $file"
-              return 1
+              echo "::group::Error details for $file"
+              cat "$log_file"
+              echo "::endgroup::"
+              echo "::error::Build failed for $file with exit code $exit_code"
+              return $exit_code
             fi
           }
 
