@@ -126,6 +126,15 @@ jobs:
           # Check the exit status of parallel
           parallel_exit=$?
           
+          # If parallel succeeded, clean up node_modules to save space
+          if [ $parallel_exit -eq 0 ]; then
+            echo "::group::Cleaning up node_modules"
+            # Find all node_modules directories within the language directory and remove them
+            find ./ -name "node_modules" -type d -prune -exec rm -rf {} \; 2>/dev/null || true
+            echo "Cleanup completed"
+            echo "::endgroup::"
+          fi
+          
           # If parallel failed, make sure the workflow fails too
           if [ $parallel_exit -ne 0 ]; then
             echo "::error::One or more builds failed. See error details above."
