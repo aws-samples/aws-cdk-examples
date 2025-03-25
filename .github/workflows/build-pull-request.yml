@@ -30,13 +30,14 @@ jobs:
         with:
           language: ${{ matrix.language }}
 
-      # Get the list of changed files, excluding Markdown files
+      # Get the list of changed files, excluding Markdown files and deleted files
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@27ae6b33eaed7bf87272fdeb9f1c54f9facc9d99
         with:
           files: ${{ matrix.language }}/**
           files_ignore: '**/*.md'
+          files_separator: ' '
 
       # Build the changed files for the specified language
       - name: Build changed files
@@ -73,7 +74,8 @@ jobs:
           # Create an array to store directories to be built
           apps_to_build=()
 
-          files=(${{ steps.changed-files.outputs.all_modified_files }})
+          # Use only added and modified files, ignoring deleted files
+          files=(${{ steps.changed-files.outputs.added_files }} ${{ steps.changed-files.outputs.modified_files }})
 
           # Check the directories of each changed file for cdk.json
           for file in "${files[@]}"; do
