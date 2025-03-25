@@ -9,7 +9,6 @@ describe('Snapshot', () => {
         const app = new App();
         const stack = new GatewayLambdaAuth(app, 'test-api-gateway-lambda-auth');
         const template = Template.fromStack(stack);
-        
         // Normalize the template before snapshot comparison
         const normalizedTemplate = normalizeTemplate(template.toJSON());
         expect(normalizedTemplate).toMatchSnapshot();

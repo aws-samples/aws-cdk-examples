@@ -45,8 +45,8 @@ jobs:
         run: |
           # Create a temporary directory for build logs
           mkdir -p /tmp/build_logs
-          npm install -g eslint > /dev/null
-
+          yarn global add eslint@latest
+          yarn global add aws-cdk@latest
           # Function to build a single file
           build_file() {
             echo "Build File $1"
@@ -70,17 +70,16 @@ jobs:
 
             if [ $exit_code -eq 0 ]; then
               echo "✅ Build succeeded for $file"
-              
               # Clean up node_modules and cdk.out for this project immediately after successful build
               echo "Cleaning up build artifacts for $(dirname "$file")"
               local project_dir=$(dirname "$file")
-              
+
               # Remove node_modules directory if it exists
               if [ -d "$project_dir/node_modules" ]; then
                 echo "Removing $project_dir/node_modules"
                 rm -rf "$project_dir/node_modules"
               fi
-              
+
               # Remove cdk.out directory if it exists
               if [ -d "$project_dir/cdk.out" ]; then
                 echo "Removing $project_dir/cdk.out"
@@ -129,13 +128,6 @@ jobs:
           # Change to language directory
           cd ./${{ matrix.language }}
 
-          # install CDK CLI from npm if not typescript, so that npx can find it later
-          # ts will use the one from the particular cdk app
-          if [[ ${{ matrix.language }} != 'typescript' ]]; then
-            npm install -g aws-cdk
-            npx cdk --version
-          fi
-
           # Run the build_file function in parallel for each project to be built
           # Halt the execution if any of the build_file invocations fail
           echo "::group::Build Output"
@@ -145,7 +137,6 @@ jobs:
 
           # Check the exit status of parallel
           parallel_exit=$?
-
           # If parallel failed, make sure the workflow fails too
           if [ $parallel_exit -ne 0 ]; then
             echo "::error::One or more builds failed. See build output above for details."

@@ -87,11 +87,17 @@ export class InstanceConnectEndpoint extends Construct {
     const onEventHandler = new lambdaPython.PythonFunction(this, 'onEventHandler', {
       ...commonProps,
       handler: 'on_event',
-    });
+      bundling: {
+        user: "1000",
+      },
+      });
 
     const isCompleteHandler = new lambdaPython.PythonFunction(this, 'isCompleteHandler', {
       ...commonProps,
       handler: 'is_complete',
+      bundling: {
+        user: "1000",
+      },
     });
 
     const provider = new cr.Provider(this, 'Provider', {

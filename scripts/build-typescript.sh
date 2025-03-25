@@ -20,7 +20,7 @@ fi
 # Check if yarn.lock exists
 if [ -f "yarn.lock" ]; then
     echo "yarn.lock file found. Running 'yarn install'..."
-    yarn install --frozen-lockfile
+    yarn install --frozen-lockfile --mutex network
     yarn build
     npm run --if-present test
 # Check if package-lock.json exists
