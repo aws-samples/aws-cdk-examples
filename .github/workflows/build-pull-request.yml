@@ -45,7 +45,8 @@ jobs:
         run: |
           # Create a temporary directory for build logs
           mkdir -p /tmp/build_logs
-          
+          npm install -g eslint
+
           # Function to build a single file
           build_file() {
             echo "Build File $1"
@@ -122,25 +123,25 @@ jobs:
           # Run the build_file function in parallel for each project to be built
           # Halt the execution if any of the build_file invocations fail
           parallel --keep-order --halt-on-error 2 build_file ::: "${apps_to_build[@]}"
-          
+
           # Check the exit status of parallel
           parallel_exit=$?
-          
+
           # If parallel succeeded, clean up node_modules and cdk.out to save space
           if [ $parallel_exit -eq 0 ]; then
             echo "::group::Cleaning up build artifacts"
             # Find all node_modules directories within the language directory and remove them
             echo "Removing node_modules directories..."
             find ./ -name "node_modules" -type d -prune -exec rm -rf {} \; 2>/dev/null || true
-            
+
             # Find all cdk.out directories within the language directory and remove them
             echo "Removing cdk.out directories..."
             find ./ -name "cdk.out" -type d -prune -exec rm -rf {} \; 2>/dev/null || true
-            
+
             echo "Cleanup completed"
             echo "::endgroup::"
           fi
-          
+
           # If parallel failed, make sure the workflow fails too
           if [ $parallel_exit -ne 0 ]; then
             echo "::error::One or more builds failed. See error details above."
