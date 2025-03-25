@@ -2,7 +2,6 @@ import { App, Stack } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import { EC2Example } from '../src/ec2-instance';
 import { InstanceSize, CPUTypes } from '../src/envValidator';
-import { normalizeTemplate } from '../../test-utils/normalize-template';
 
 const devEnv = {
   account: process.env.CDK_DEFAULT_ACCOUNT,
@@ -29,8 +28,7 @@ test('Snapshot', () => {
   });
 
   const template = Template.fromStack(stack);
-  const normalizedTemplate = normalizeTemplate(template.toJSON());
-  expect(normalizedTemplate).toMatchSnapshot();
+  expect(template.toJSON()).toMatchSnapshot();
 });
 
 test('LARGE', () => {
