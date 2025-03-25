@@ -145,7 +145,6 @@ exports[`Inspector2MonitoringResource creates required resources 1`] = `
           },
           "S3Key": "NORMALIZED_ASSET_HASH.zip",
         },
-        },
         "Handler": "index.handler",
         "Role": {
           "Fn::GetAtt": [
@@ -222,7 +221,6 @@ exports[`Inspector2MonitoringResource creates required resources 1`] = `
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
           "S3Key": "NORMALIZED_ASSET_HASH.zip",
-        },
         },
         "Handler": "index.handler",
         "Role": {
