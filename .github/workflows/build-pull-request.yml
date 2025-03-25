@@ -46,7 +46,6 @@ jobs:
           # Create a temporary directory for build logs
           mkdir -p /tmp/build_logs
           npm install -g eslint > /dev/null
-
           # Function to build a single file
           build_file() {
             echo "Build File $1"
@@ -63,6 +62,7 @@ jobs:
             echo "Build Path $file"
 
             # Run the build script for the current language, passing the project directory and extra path
+<<<<<<< HEAD
             echo "::group::Building $file"
             # Run the build command and capture output to both the log file and stdout
             ../scripts/build-${language}.sh "$file" 2>&1 | tee "$log_file"
@@ -70,17 +70,17 @@ jobs:
 
             if [ $exit_code -eq 0 ]; then
               echo "✅ Build succeeded for $file"
-              
+
               # Clean up node_modules and cdk.out for this project immediately after successful build
               echo "Cleaning up build artifacts for $(dirname "$file")"
               local project_dir=$(dirname "$file")
-              
+
               # Remove node_modules directory if it exists
               if [ -d "$project_dir/node_modules" ]; then
                 echo "Removing $project_dir/node_modules"
                 rm -rf "$project_dir/node_modules"
               fi
-              
+
               # Remove cdk.out directory if it exists
               if [ -d "$project_dir/cdk.out" ]; then
                 echo "Removing $project_dir/cdk.out"
@@ -89,6 +89,20 @@ jobs:
             else
               echo "❌ Build failed for $file with exit code $exit_code"
               echo "::error::Build failed for $file with exit code $exit_code"
+=======
+            echo "::group::$file"
+            if ../scripts/build-${language}.sh "$file" > "$log_file" 2>&1; then
+              echo "::endgroup::"
+              return 0
+            else
+              local exit_code=$?
+              echo "::endgroup::"
+              echo "::group::Error details for $file"
+              cat "$log_file"
+              echo "::endgroup::"
+              echo "::error::Build failed for $file with exit code $exit_code"
+              return $exit_code
+>>>>>>> 0eba763 (Fix build-pull-request to display errors)
             fi
             echo "::endgroup::"
             return $exit_code
