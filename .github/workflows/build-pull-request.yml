@@ -45,7 +45,7 @@ jobs:
         run: |
           # Create a temporary directory for build logs
           mkdir -p /tmp/build_logs
-          npm install -g eslint
+          npm install -g eslint > /dev/null
 
           # Function to build a single file
           build_file() {
@@ -67,9 +67,25 @@ jobs:
             # Run the build command and capture output to both the log file and stdout
             ../scripts/build-${language}.sh "$file" 2>&1 | tee "$log_file"
             local exit_code=${PIPESTATUS[0]}
-            
+
             if [ $exit_code -eq 0 ]; then
               echo "✅ Build succeeded for $file"
+              
+              # Clean up node_modules and cdk.out for this project immediately after successful build
+              echo "Cleaning up build artifacts for $(dirname "$file")"
+              local project_dir=$(dirname "$file")
+              
+              # Remove node_modules directory if it exists
+              if [ -d "$project_dir/node_modules" ]; then
+                echo "Removing $project_dir/node_modules"
+                rm -rf "$project_dir/node_modules"
+              fi
+              
+              # Remove cdk.out directory if it exists
+              if [ -d "$project_dir/cdk.out" ]; then
+                echo "Removing $project_dir/cdk.out"
+                rm -rf "$project_dir/cdk.out"
+              fi
             else
               echo "❌ Build failed for $file with exit code $exit_code"
               echo "::error::Build failed for $file with exit code $exit_code"
@@ -129,21 +145,6 @@ jobs:
 
           # Check the exit status of parallel
           parallel_exit=$?
-
-          # If parallel succeeded, clean up node_modules and cdk.out to save space
-          if [ $parallel_exit -eq 0 ]; then
-            echo "::group::Cleaning up build artifacts"
-            # Find all node_modules directories within the language directory and remove them
-            echo "Removing node_modules directories..."
-            find ./ -name "node_modules" -type d -prune -exec rm -rf {} \; 2>/dev/null || true
-
-            # Find all cdk.out directories within the language directory and remove them
-            echo "Removing cdk.out directories..."
-            find ./ -name "cdk.out" -type d -prune -exec rm -rf {} \; 2>/dev/null || true
-
-            echo "Cleanup completed"
-            echo "::endgroup::"
-          fi
 
           # If parallel failed, make sure the workflow fails too
           if [ $parallel_exit -ne 0 ]; then

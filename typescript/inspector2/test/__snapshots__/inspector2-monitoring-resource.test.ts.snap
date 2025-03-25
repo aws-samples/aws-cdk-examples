@@ -3,126 +3,105 @@
 exports[`Inspector2MonitoringResource creates required resources 1`] = `
 {
   "Mappings": {
-    "LatestNodeRuntimeMap": {
+    "DefaultCrNodeVersionMap": {
       "af-south-1": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "ap-east-1": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "ap-northeast-1": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "ap-northeast-2": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "ap-northeast-3": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "ap-south-1": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "ap-south-2": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "ap-southeast-1": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "ap-southeast-2": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "ap-southeast-3": {
-        "value": "nodejs20.x",
-      },
-      "ap-southeast-4": {
-        "value": "nodejs20.x",
-      },
-      "ap-southeast-5": {
-        "value": "nodejs20.x",
-      },
-      "ap-southeast-7": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "ca-central-1": {
-        "value": "nodejs20.x",
-      },
-      "ca-west-1": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "cn-north-1": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "cn-northwest-1": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "eu-central-1": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "eu-central-2": {
-        "value": "nodejs20.x",
-      },
-      "eu-isoe-west-1": {
-        "value": "nodejs18.x",
+        "value": "nodejs16.x",
       },
       "eu-north-1": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "eu-south-1": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "eu-south-2": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "eu-west-1": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "eu-west-2": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "eu-west-3": {
-        "value": "nodejs20.x",
-      },
-      "il-central-1": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "me-central-1": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "me-south-1": {
-        "value": "nodejs20.x",
-      },
-      "mx-central-1": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "sa-east-1": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "us-east-1": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "us-east-2": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "us-gov-east-1": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "us-gov-west-1": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "us-iso-east-1": {
-        "value": "nodejs18.x",
+        "value": "nodejs14.x",
       },
       "us-iso-west-1": {
-        "value": "nodejs18.x",
+        "value": "nodejs14.x",
       },
       "us-isob-east-1": {
-        "value": "nodejs18.x",
+        "value": "nodejs14.x",
       },
       "us-west-1": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
       "us-west-2": {
-        "value": "nodejs20.x",
+        "value": "nodejs16.x",
       },
     },
   },
@@ -144,6 +123,11 @@ exports[`Inspector2MonitoringResource creates required resources 1`] = `
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
           "S3Key": "NORMALIZED_ASSET_HASH.zip",
+        },
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+          },
         },
         "Handler": "index.handler",
         "Role": {
@@ -221,6 +205,11 @@ exports[`Inspector2MonitoringResource creates required resources 1`] = `
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
           "S3Key": "NORMALIZED_ASSET_HASH.zip",
+        },
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+          },
         },
         "Handler": "index.handler",
         "Role": {
@@ -407,14 +396,13 @@ exports[`Inspector2MonitoringResource creates required resources 1`] = `
         },
         "Runtime": {
           "Fn::FindInMap": [
-            "LatestNodeRuntimeMap",
+            "DefaultCrNodeVersionMap",
             {
               "Ref": "AWS::Region",
             },
             "value",
           ],
         },
-        "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
     },
