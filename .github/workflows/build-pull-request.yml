@@ -62,7 +62,6 @@ jobs:
             echo "Build Path $file"
 
             # Run the build script for the current language, passing the project directory and extra path
-<<<<<<< HEAD
             echo "::group::Building $file"
             # Run the build command and capture output to both the log file and stdout
             ../scripts/build-${language}.sh "$file" 2>&1 | tee "$log_file"
@@ -89,20 +88,6 @@ jobs:
             else
               echo "❌ Build failed for $file with exit code $exit_code"
               echo "::error::Build failed for $file with exit code $exit_code"
-=======
-            echo "::group::$file"
-            if ../scripts/build-${language}.sh "$file" > "$log_file" 2>&1; then
-              echo "::endgroup::"
-              return 0
-            else
-              local exit_code=$?
-              echo "::endgroup::"
-              echo "::group::Error details for $file"
-              cat "$log_file"
-              echo "::endgroup::"
-              echo "::error::Build failed for $file with exit code $exit_code"
-              return $exit_code
->>>>>>> 0eba763 (Fix build-pull-request to display errors)
             fi
             echo "::endgroup::"
             return $exit_code
