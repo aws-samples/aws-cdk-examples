@@ -122,3 +122,12 @@ jobs:
           # Run the build_file function in parallel for each project to be built
           # Halt the execution if any of the build_file invocations fail
           parallel --keep-order --halt-on-error 2 build_file ::: "${apps_to_build[@]}"
+          
+          # Check the exit status of parallel
+          parallel_exit=$?
+          
+          # If parallel failed, make sure the workflow fails too
+          if [ $parallel_exit -ne 0 ]; then
+            echo "::error::One or more builds failed. See error details above."
+            exit $parallel_exit
+          fi
