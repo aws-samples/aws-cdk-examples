@@ -69,7 +69,6 @@ jobs:
 
             if [ $exit_code -eq 0 ]; then
               echo "✅ Build succeeded for $file"
-
               # Clean up node_modules and cdk.out for this project immediately after successful build
               echo "Cleaning up build artifacts for $(dirname "$file")"
               local project_dir=$(dirname "$file")
