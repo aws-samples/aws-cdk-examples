@@ -1,6 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import { Inspector2EnableDelegatedAdminAccountResource } from '../lib/inspector2-enable-delegated-admin-account-resource';
+import { normalizeTemplate } from '../../test-utils/normalize-template';
 
 test('Inspector2EnableDelegatedAdminAccountResource creates required resources', () => {
   const app = new cdk.App();
@@ -18,5 +19,7 @@ test('Inspector2EnableDelegatedAdminAccountResource creates required resources',
     },
   });
 
-  expect(Template.fromStack(stack)).toMatchSnapshot();
+  const template = Template.fromStack(stack);
+  const normalizedTemplate = normalizeTemplate(template.toJSON());
+  expect(normalizedTemplate).toMatchSnapshot();
 });

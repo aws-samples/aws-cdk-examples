@@ -143,7 +143,7 @@ exports[`Inspector2EnableResource creates required resources 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "4cd2f2411231aa073e609dc99a49b5c5e974252bf9abf0f9350d237d17cce8be.zip",
+          "S3Key": "NORMALIZED_ASSET_HASH.zip",
         },
         "Handler": "index.handler",
         "MemorySize": 512,
@@ -258,7 +258,7 @@ exports[`Inspector2EnableResource creates required resources 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "2819175352ad1ce0dae768e83fc328fb70fb5f10b4a8ff0ccbcb791f02b0716d.zip",
+          "S3Key": "NORMALIZED_ASSET_HASH.zip",
         },
         "Handler": "index.handler",
         "Role": {
