@@ -4,6 +4,7 @@ import {
 } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import { SftpServerStack } from '../aws-transfer-sftp-server';
+import { normalizeTemplate } from '../../test-utils/normalize-template';
 
 test('SftpServerStack has required resources', () => {
   const app = new cdk.App();
@@ -23,5 +24,8 @@ test('SftpServerStack has required resources', () => {
     dataBucket: bucket,
   });
 
-  expect(Template.fromStack(stack)).toMatchSnapshot();
+  // Normalize the template before snapshot comparison
+  const template = Template.fromStack(stack);
+  const normalizedTemplate = normalizeTemplate(template.toJSON());
+  expect(normalizedTemplate).toMatchSnapshot();
 });

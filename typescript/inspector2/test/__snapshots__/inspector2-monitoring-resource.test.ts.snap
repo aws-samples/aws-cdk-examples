@@ -122,7 +122,7 @@ exports[`Inspector2MonitoringResource creates required resources 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "387c7c1f429cca9662171575d60cec88ab73d6da0e9d197558cbc4bbd665bb6e.zip",
+          "S3Key": "NORMALIZED_ASSET_HASH.zip",
         },
         "Environment": {
           "Variables": {
@@ -204,7 +204,7 @@ exports[`Inspector2MonitoringResource creates required resources 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "08c8f1505ccfb98c41cb39e43e5ec867fcb42aee41bba9ea3bb3ca27a3025c0c.zip",
+          "S3Key": "NORMALIZED_ASSET_HASH.zip",
         },
         "Environment": {
           "Variables": {
@@ -385,7 +385,7 @@ exports[`Inspector2MonitoringResource creates required resources 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "5fa1330271b8967d9254ba2d4a07144f8acefe8b77e6d6bba38261373a50d5f8.zip",
+          "S3Key": "NORMALIZED_ASSET_HASH.zip",
         },
         "Handler": "index.handler",
         "Role": {

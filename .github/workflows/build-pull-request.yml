@@ -30,22 +30,28 @@ jobs:
         with:
           language: ${{ matrix.language }}
 
-      # Get the list of changed files, excluding Markdown files
+      # Get the list of changed files, excluding Markdown files and deleted files
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@27ae6b33eaed7bf87272fdeb9f1c54f9facc9d99
         with:
           files: ${{ matrix.language }}/**
           files_ignore: '**/*.md'
+          files_separator: ' '
 
       # Build the changed files for the specified language
       - name: Build changed files
         if: steps.changed-files.outputs.any_changed == 'true'
         run: |
+          # Create a temporary directory for build logs
+          mkdir -p /tmp/build_logs
+          npm install -g eslint > /dev/null
+
           # Function to build a single file
           build_file() {
             echo "Build File $1"
             local file="$1"
+            local log_file="/tmp/build_logs/$(basename "$file" | sed 's/\//_/g').log"
             IFS="/" read -ra path_parts <<< "$file"
             language=${path_parts[0]}
 
@@ -57,14 +63,35 @@ jobs:
             echo "Build Path $file"
 
             # Run the build script for the current language, passing the project directory and extra path
-            echo "::group::$file"
-            if ../scripts/build-${language}.sh "$file"; then
-              echo "::endgroup::"
+            echo "::group::Building $file"
+            # Run the build command and capture output to both the log file and stdout
+            ../scripts/build-${language}.sh "$file" 2>&1 | tee "$log_file"
+            local exit_code=${PIPESTATUS[0]}
+
+            if [ $exit_code -eq 0 ]; then
+              echo "✅ Build succeeded for $file"
+              
+              # Clean up node_modules and cdk.out for this project immediately after successful build
+              echo "Cleaning up build artifacts for $(dirname "$file")"
+              local project_dir=$(dirname "$file")
+              
+              # Remove node_modules directory if it exists
+              if [ -d "$project_dir/node_modules" ]; then
+                echo "Removing $project_dir/node_modules"
+                rm -rf "$project_dir/node_modules"
+              fi
+              
+              # Remove cdk.out directory if it exists
+              if [ -d "$project_dir/cdk.out" ]; then
+                echo "Removing $project_dir/cdk.out"
+                rm -rf "$project_dir/cdk.out"
+              fi
             else
-              echo "::endgroup::"
-              echo "::error::Build failed for $file"
-              return 1
+              echo "❌ Build failed for $file with exit code $exit_code"
+              echo "::error::Build failed for $file with exit code $exit_code"
             fi
+            echo "::endgroup::"
+            return $exit_code
           }
 
           # Export the build_file function for use in parallel
@@ -73,7 +100,8 @@ jobs:
           # Create an array to store directories to be built
           apps_to_build=()
 
-          files=(${{ steps.changed-files.outputs.all_modified_files }})
+          # Use only added and modified files, ignoring deleted files
+          files=(${{ steps.changed-files.outputs.added_files }} ${{ steps.changed-files.outputs.modified_files }})
 
           # Check the directories of each changed file for cdk.json
           for file in "${files[@]}"; do
@@ -110,4 +138,18 @@ jobs:
 
           # Run the build_file function in parallel for each project to be built
           # Halt the execution if any of the build_file invocations fail
+          echo "::group::Build Output"
+          echo "Starting builds for all projects..."
           parallel --keep-order --halt-on-error 2 build_file ::: "${apps_to_build[@]}"
+          echo "::endgroup::"
+
+          # Check the exit status of parallel
+          parallel_exit=$?
+
+          # If parallel failed, make sure the workflow fails too
+          if [ $parallel_exit -ne 0 ]; then
+            echo "::error::One or more builds failed. See build output above for details."
+            exit $parallel_exit
+          else
+            echo "✅ All builds completed successfully!"
+          fi

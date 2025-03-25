@@ -1,4 +1,0 @@
-aws-lambda-powertools
-pydantic
-aws_xray_sdk
-jsonpath_ng
