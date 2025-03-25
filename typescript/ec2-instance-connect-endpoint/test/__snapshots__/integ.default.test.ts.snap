@@ -252,7 +252,7 @@ exports[`default validation 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "8e3d635893ea17fa3158623489cd42c680fad925b38de1ef51cb10d84f6e245e.zip",
+          "S3Key": "NORMALIZED_ASSET_HASH.zip",
         },
         "Description": "AWS CDK resource provider framework - isComplete (integ-testing-eicendpoint/EICEndpoint/Provider)",
         "Environment": {
@@ -400,7 +400,7 @@ exports[`default validation 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "8e3d635893ea17fa3158623489cd42c680fad925b38de1ef51cb10d84f6e245e.zip",
+          "S3Key": "NORMALIZED_ASSET_HASH.zip",
         },
         "Description": "AWS CDK resource provider framework - onEvent (integ-testing-eicendpoint/EICEndpoint/Provider)",
         "Environment": {
@@ -558,7 +558,7 @@ exports[`default validation 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "8e3d635893ea17fa3158623489cd42c680fad925b38de1ef51cb10d84f6e245e.zip",
+          "S3Key": "NORMALIZED_ASSET_HASH.zip",
         },
         "Description": "AWS CDK resource provider framework - onTimeout (integ-testing-eicendpoint/EICEndpoint/Provider)",
         "Environment": {
@@ -970,7 +970,7 @@ exports[`default validation 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "aac3b196628b72a9c085e6ec0f4a578af32bb0dcdc9189b3dbe24aa40e373942.zip",
+          "S3Key": "NORMALIZED_ASSET_HASH.zip",
         },
         "Handler": "index.is_complete",
         "MemorySize": 256,
@@ -995,7 +995,7 @@ exports[`default validation 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "aac3b196628b72a9c085e6ec0f4a578af32bb0dcdc9189b3dbe24aa40e373942.zip",
+          "S3Key": "NORMALIZED_ASSET_HASH.zip",
         },
         "Handler": "index.on_event",
         "MemorySize": 256,
