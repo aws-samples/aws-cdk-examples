@@ -17,3 +17,34 @@ This is a CDK application that implements cross-account event routing using Amaz
 
 ### Multiple consumers
 ![architecture](./images/multi-consumers.png)
+
+
+## Instructions
+
+### Single consumer:
+1. Run: `cd single-consumer`
+2. Change the values of `producerAccountId` and `consumerAccountId` in `cdk.json`
+3. Install and configure the CDK: https://docs.aws.amazon.com/CDK/latest/userguide/install_config.html
+```ruby
+npm run build
+
+cdk ls
+
+cdk synth
+
+cdk deploy --all
+```
+
+### Multiple consumers:
+1. Run: `cd multiple-consumer`
+2. Change the values of `producerAccountId`, `consumer1AccountId`, and `consumer2AccountId` in `cdk.json`
+3. Install and configure the CDK: https://docs.aws.amazon.com/CDK/latest/userguide/install_config.html
+```ruby
+npm run build
+
+cdk ls
+
+cdk synth
+
+cdk deploy --all
+```
