@@ -10,7 +10,7 @@ A CDK way to set up a Event Bridge Mesh, where you relay the messages from one E
 
 
 ### Single consumer
-
+![architecture](./images/single-consumer.png)
 
 ### Multiple consumers
-
+![architecture](./images/multi-consumers.png)
