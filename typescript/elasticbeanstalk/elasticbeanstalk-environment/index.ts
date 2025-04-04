@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import * as cdk from 'aws-cdk-lib';
-import * as elasticbeanstalk from 'aws-cdk-lib/aws-elasticbeanstalk';
+import { CfnApplication, CfnEnvironment } from 'aws-cdk-lib/aws-elasticbeanstalk';
+import { InstanceProfile, ManagedPolicy, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 
 
 export class CdkStack extends cdk.Stack {
@@ -11,21 +12,57 @@ export class CdkStack extends cdk.Stack {
     const node = this.node;
 
     const appName = 'MyApp';
-
     const platform = node.tryGetContext("platform");
+    const solution = node.tryGetContext("solution");
 
-    const app = new elasticbeanstalk.CfnApplication(this, 'Application', {
+
+    // Create Role: 
+    const ebRole = new Role(this, `${appName}-eb-role` , {
+      assumedBy: new ServicePrincipal('ec2.amazonaws.com'),
+      roleName:`${appName}-eb-role`
+    });
+  
+    // some managed policies eb must have
+    ebRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AWSElasticBeanstalkWebTier'));
+    ebRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AWSElasticBeanstalkMulticontainerDocker'));
+    ebRole.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName('AWSElasticBeanstalkWorkerTier'));
+
+    //Custom policies
+    //access to config secrets
+  
+    const roleARN = ebRole.roleArn;
+
+   // Create instance profile
+    const instanceProfile = new InstanceProfile(this, `${appName}-instance-role`, {
+      role: ebRole,
+      instanceProfileName: `${appName}-instance-role`,
+    })
+
+    const app = new CfnApplication(this, `${appName}-Application`, {
       applicationName: appName
     });
 
-    const env = new elasticbeanstalk.CfnEnvironment(this, 'Environment', {
-      environmentName: 'MySampleEnvironment',
-      applicationName: app.applicationName || appName,
-      platformArn: platform
+    const env = new CfnEnvironment(this, `${appName}-Environment`, {
+      environmentName: `${appName}-Environment`,
+      applicationName: appName,
+      solutionStackName: solution,
+      //platformArn: platform,
+      optionSettings: [
+        {
+          namespace: "aws:autoscaling:launchconfiguration",
+          optionName: "IamInstanceProfile",
+          value: instanceProfile.instanceProfileArn,
+        },
+        {
+          namespace: "aws:elasticbeanstalk:environment",
+          optionName: "EnvironmentType",
+          value: "SingleInstance", 
+        },
+      ]
     });
 
     // to ensure the application is created before the environment
-    env.addDependsOn(app);
+    env.addDependency(app);
   }
 }
 
