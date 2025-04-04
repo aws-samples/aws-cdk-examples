@@ -5,6 +5,7 @@ import { LogGroup } from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
 
 export interface producerStackProps extends cdk.StackProps {
+  readonly appName:           string;
   readonly consumerAccountId: string;
 }
 
@@ -13,10 +14,10 @@ export class producerStack extends cdk.Stack {
       super(scope, id, props);
   
       // Create the EventBus
-      const producerEventBus = new EventBus(this, 'ProducerEventBus');
+      const producerEventBus = new EventBus(this, `${props.appName}-producer-event-bus`);
   
       // Create rule to forward events to consumer account
-      const rule = new Rule(this, 'ForwardToConsumerRule', {
+      const rule = new Rule(this, `${props.appName}-forward-to-consumer-rule`, {
         eventBus: producerEventBus,
         eventPattern: {
           // Define your event pattern here
@@ -35,7 +36,7 @@ export class producerStack extends cdk.Stack {
   
       // Optional: Add CloudWatch target for monitoring
       rule.addTarget(new targets.CloudWatchLogGroup(
-        new LogGroup(this, 'producerLogs')
+        new LogGroup(this, `${props.appName}-producer-logs`)
       ));
     }
   }
