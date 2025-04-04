@@ -1,14 +1,16 @@
-# Welcome to your CDK TypeScript project
+# CDK Sample: Event Bridge mesh with CDK
 
-This is a blank project for CDK development with TypeScript.
+## Description 
+A CDK way to set up a Event Bridge Mesh, where you relay the messages from one Event Bridge in a producer account to another Event Bridge in a consumer account
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+## Backgroud
 
-## Useful commands
 
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `npx cdk deploy`  deploy this stack to your default AWS account/region
-* `npx cdk diff`    compare deployed stack with current state
-* `npx cdk synth`   emits the synthesized CloudFormation template
+## Solution
+
+
+### Single consumer
+
+
+### Multiple consumers
+
