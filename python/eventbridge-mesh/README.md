@@ -40,6 +40,13 @@ cdk bootstrap aws://222222222222/us-east-1 \
     --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess
 ```
 
+3. (Optional: Only do this step, when you deploys multiple consumers solution) In account: `333333333333`, run the below command:
+```
+cdk bootstrap aws://333333333333/us-east-1 \
+    --trust 000000000000 \
+    --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess
+```
+
 ### Deploy Single consumer solution:
 1. Run: `cd single-consumer`
 2. Change the values of `producerAccountId` and `consumerAccountId` in `cdk.json`
