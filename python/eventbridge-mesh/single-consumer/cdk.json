@@ -3,8 +3,8 @@
     "context": {
         "appName": "eventbridge-mesh",
         "region": "us-east-1",
-        "producerAccountId": "117645918752",
-        "consumer1AccountId": "778142832559"
+        "producerAccountId": "111111111111",
+        "consumer1AccountId": "222222222222"
     }
     
 }

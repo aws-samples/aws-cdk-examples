@@ -24,26 +24,26 @@ This is a CDK application that implements cross-account event routing using Amaz
 ## Instructions
 
 ### CDK bootstrapping
-To deploy the stacks in different accounts, you need to bootstrap the CDKToolkit with trust flag. Assuming you will run `cdk deploy` command from account ID: `000000000000`, and deploys producer stack to account ID: `111111111111`, and consumer stack to account ID: `222222222222`
+To deploy the stacks in different accounts, you need to bootstrap the CDKToolkit with trust flag. Assuming you will run `cdk deploy` command from account ID: `123456789012`, and deploys producer stack to account ID: `111111111111`, and consumer stack to account ID: `222222222222`
 
 1. In account: `111111111111`, run the below command:
 ```
 cdk bootstrap aws://111111111111/us-east-1 \
-    --trust 000000000000 \
+    --trust 123456789012 \
     --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess
 ```
 
 2. In account: `222222222222`, run the below command:
 ```
 cdk bootstrap aws://222222222222/us-east-1 \
-    --trust 000000000000 \
+    --trust 123456789012 \
     --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess
 ```
 
 3. (Optional: Only do this step, when you deploys multiple consumers solution) In account: `333333333333`, run the below command:
 ```
 cdk bootstrap aws://333333333333/us-east-1 \
-    --trust 000000000000 \
+    --trust 123456789012 \
     --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess
 ```
 
