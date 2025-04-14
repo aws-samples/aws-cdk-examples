@@ -20,8 +20,8 @@ An example that shows how to create an SSM document and associate it with target
 1. SSM Document is created with a command to write the current timestamp to a file.
 2. SSM Document Association is created with a target tag, parameter, and schedule.
 3. An EC2 instance is created with the same tag-value combination as the SSM Document Association target.
-3. You can connect to the EC2 instance using AWS Session Manager.
-4. Verify the existence of the file with the timestamp.
+4. You can connect to the EC2 instance using AWS Session Manager.
+5. Verify the existence of the file with the timestamp.
 
 
 ## Build and Deploy
@@ -59,7 +59,6 @@ Stack ARN: <STACK_ARN>
 ## Try it out
 
 1. Deploy the stack and connect to the EC2 instance using AWS Session Manager. 
-
 
 2. Verify the existence of the file with the timestamp.
 
