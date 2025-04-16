@@ -1,6 +1,7 @@
 {
     "context": {
-        "platform": "arn:aws:elasticbeanstalk:us-east-1::platform/Tomcat 8 with Java 8 running on 64bit Amazon Linux"
+        "platform": "arn:aws:elasticbeanstalk:us-east-1::platform/Corretto 21 running on 64bit Amazon Linux 2023/4.5.0",
+        "solution": "64bit Amazon Linux 2023 v6.5.0 running Node.js 20"
     },
     "app": "node index"
 }

@@ -31,3 +31,17 @@ cdk bootstrap
 cdk deploy
 
 ```
+
+#### How to retrieve platform or solutionStackName?
+
+- `platform`
+```shell
+aws elasticbeanstalk list-platform-versions \
+    --query 'PlatformSummaryList[*].[PlatformArn,PlatformBranchName]' --output table
+```
+
+- `solutionStackName`
+```shell
+aws elasticbeanstalk list-available-solution-stacks \
+    --query 'SolutionStackDetails[*].[SolutionStackName]' --output table
+```
