@@ -52,7 +52,7 @@ cdk bootstrap aws://333333333333/us-east-1 \
 2. Change the values of `producerAccountId` and `consumerAccountId` in `cdk.json`
 3. Install and configure the CDK: https://docs.aws.amazon.com/CDK/latest/userguide/install_config.html
 4. Make sure you use a role or user has proper permission in account ID: `123456789012`, and run below commands:
-```ruby
+```shell
 npm run build
 
 cdk ls
@@ -67,7 +67,7 @@ cdk deploy --all
 2. Change the values of `producerAccountId`, `consumer1AccountId`, and `consumer2AccountId` in `cdk.json`
 3. Install and configure the CDK: https://docs.aws.amazon.com/CDK/latest/userguide/install_config.html
 4. Make sure you use a role or user has proper permission in account ID: `123456789012`, and run below commands:
-```ruby
+```shell
 npm run build
 
 cdk ls
