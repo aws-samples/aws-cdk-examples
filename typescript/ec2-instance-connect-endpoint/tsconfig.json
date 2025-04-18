@@ -23,10 +23,19 @@
       "./node_modules/@types"
     ],
     "outDir": "lib",
-    "rootDir": "."
+    "rootDir": "../..",
+    "baseUrl": ".",
+    "paths": {
+      "../../test-utils/*": ["../../test-utils/*"]
+    }
   },
   "exclude": [
     "node_modules",
-    "cdk.out"
+    "cdk.out",
+    "lib"
+  ],
+  "include": [
+    "**/*.ts",
+    "../../test-utils/**/*.ts"
   ]
 }
