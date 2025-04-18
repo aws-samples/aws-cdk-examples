@@ -1,1 +1,0 @@
-Sample file that can be downloaded during deploy.
