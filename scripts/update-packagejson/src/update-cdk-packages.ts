@@ -41,7 +41,7 @@ async function getCdkCliVersion(): Promise<string> {
   try {
     const { exec } = require('child_process');
     return new Promise((resolve, reject) => {
-      exec('npx cdk --version', (error: Error | null, stdout: string) => {
+      exec('cdk --version', (error: Error | null, stdout: string) => {
         if (error) {
           reject(new PackageUpdateError('Failed to get CDK version', { cause: error }));
           return;
@@ -245,7 +245,7 @@ async function updatePackages(repoRoot: string): Promise<void> {
 }
 
 // Export functions for testing or importing
-export { 
+export {
   updatePackages,
   updatePackageJson,
   findPackageJsonFiles,
