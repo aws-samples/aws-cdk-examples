@@ -1,6 +1,5 @@
 import { Template } from 'aws-cdk-lib/assertions';
-import { IntegTesting } from '../src/integ.default';
-import { normalizeTemplate } from '../../test-utils/normalize-template';
+import { IntegTesting } from '../bin/app';
 
 test('default validation', () => {
   const integ = new IntegTesting();

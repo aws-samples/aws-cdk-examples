@@ -1,8 +1,9 @@
+#!/usr/bin/env node
 import {
   App, CfnOutput, Stack,
   aws_ec2 as ec2,
 } from 'aws-cdk-lib';
-import { InstanceConnectEndpoint } from './endpoint';
+import { InstanceConnectEndpoint } from '../src/endpoint';
 
 export class IntegTesting {
   readonly stack: Stack[];
@@ -11,7 +12,7 @@ export class IntegTesting {
     const env = { region: process.env.CDK_DEFAULT_REGION, account: process.env.CDK_DEFAULT_ACCOUNT };
     const stack = new Stack(app, 'integ-testing-eicendpoint', { env });
 
-    const vpc = new ec2.Vpc(stack, 'Vpc', { subnetConfiguration: [{ cidrMask: 24, name: 'rds', subnetType: ec2. SubnetType. PRIVATE_ISOLATED }] });
+    const vpc = new ec2.Vpc(stack, 'Vpc', { subnetConfiguration: [{ cidrMask: 24, name: 'rds', subnetType: ec2.SubnetType.PRIVATE_ISOLATED }] });
 
     const instance = new ec2.Instance(stack, 'instance', {
       vpc,

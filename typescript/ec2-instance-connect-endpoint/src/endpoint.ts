@@ -1,5 +1,4 @@
 import * as path from 'path';
-import * as lambdaPython from '@aws-cdk/aws-lambda-python-alpha';
 import {
   Stack,
   aws_ec2 as ec2,
@@ -8,6 +7,7 @@ import {
   custom_resources as cr,
   CustomResource,
   Duration,
+  aws_s3_assets as assets,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 
@@ -75,29 +75,28 @@ export class InstanceConnectEndpoint extends Construct {
       resources: ['*'],
     }));
 
+    // Create an asset for the Lambda code
+    const lambdaAsset = new assets.Asset(this, 'LambdaAsset', {
+      path: path.join(__dirname, '../lambda.d'),
+    });
+
+    // Common properties for Lambda functions
     const commonProps = {
-      entry: path.join(__dirname, '../lambda.d'),
       runtime: lambda.Runtime.PYTHON_3_9,
-      index: 'index.py',
       memorySize: 256,
       timeout: Duration.minutes(10),
       role,
+      code: lambda.Code.fromBucket(lambdaAsset.bucket, lambdaAsset.s3ObjectKey),
     };
 
-    const onEventHandler = new lambdaPython.PythonFunction(this, 'onEventHandler', {
+    const onEventHandler = new lambda.Function(this, 'onEventHandler', {
       ...commonProps,
-      handler: 'on_event',
-      bundling: {
-        user: "1000",
-      },
-      });
+      handler: 'index.on_event',
+    });
 
-    const isCompleteHandler = new lambdaPython.PythonFunction(this, 'isCompleteHandler', {
+    const isCompleteHandler = new lambda.Function(this, 'isCompleteHandler', {
       ...commonProps,
-      handler: 'is_complete',
-      bundling: {
-        user: "1000",
-      },
+      handler: 'index.is_complete',
     });
 
     const provider = new cr.Provider(this, 'Provider', {
