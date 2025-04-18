@@ -1,0 +1,985 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EC2Stack Snapshot test 1`] = `
+{
+  "Outputs": {
+    "sshCommand": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "ssh ec2-user@",
+            {
+              "Fn::GetAtt": [
+                "EC2Instance1F00751C93ecacd2478e7d47",
+                "PublicDnsName",
+              ],
+            },
+          ],
+        ],
+      },
+    },
+    "ssmCommand": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "aws ssm start-session --target ",
+            {
+              "Ref": "EC2Instance1F00751C93ecacd2478e7d47",
+            },
+          ],
+        ],
+      },
+    },
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "SsmParameterValueawsserviceamiamazonlinuxlatestal2023amikernel61arm64C96584B6F00A464EAD1953AFF4B05118Parameter": {
+      "Default": "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-arm64",
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+    },
+  },
+  "Resources": {
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C512MiB6723FB92": {
+      "DependsOn": [
+        "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C512MiBServiceRoleDefaultPolicy96C3E726",
+        "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C512MiBServiceRoleBA21DBC1",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-us-east-1",
+          },
+          "S3Key": "NORMALIZED_ASSET_HASH.zip",
+        },
+        "Environment": {
+          "Variables": {
+            "AWS_CA_BUNDLE": "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem",
+          },
+        },
+        "Handler": "index.handler",
+        "Layers": [
+          {
+            "Ref": "EC2assetBucketDeploymentAwsCliLayerFF55632D",
+          },
+        ],
+        "MemorySize": 512,
+        "Role": {
+          "Fn::GetAtt": [
+            "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C512MiBServiceRoleBA21DBC1",
+            "Arn",
+          ],
+        },
+        "Runtime": "python3.11",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C512MiBServiceRoleBA21DBC1": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C512MiBServiceRoleDefaultPolicy96C3E726": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      {
+                        "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-us-east-1",
+                      },
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      {
+                        "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-us-east-1",
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "EC2assetBucketC584B4AB",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "EC2assetBucketC584B4AB",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C512MiBServiceRoleDefaultPolicy96C3E726",
+        "Roles": [
+          {
+            "Ref": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C512MiBServiceRoleBA21DBC1",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
+      "DependsOn": [
+        "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-us-east-1",
+          },
+          "S3Key": "NORMALIZED_ASSET_HASH.zip",
+        },
+        "Description": {
+          "Fn::Join": [
+            "",
+            [
+              "Lambda function for auto-deleting objects in ",
+              {
+                "Ref": "EC2assetBucketC584B4AB",
+              },
+              " S3 bucket.",
+            ],
+          ],
+        },
+        "Handler": "index.handler",
+        "MemorySize": 128,
+        "Role": {
+          "Fn::GetAtt": [
+            "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs20.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Sub": "arn:\${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "EC2Instance1F00751C93ecacd2478e7d47": {
+      "CreationPolicy": {
+        "ResourceSignal": {
+          "Count": 1,
+          "Timeout": "PT10M",
+        },
+      },
+      "DependsOn": [
+        "EC2serverEc2RoleDefaultPolicy34EE5F1D",
+        "EC2serverEc2Role6775A3D4",
+      ],
+      "Metadata": {
+        "AWS::CloudFormation::Init": {
+          "config": {
+            "commands": {
+              "000": {
+                "command": "chmod +x /etc/config.sh",
+              },
+              "001": {
+                "command": "/etc/config.sh",
+              },
+            },
+            "files": {
+              "/etc/config.json": {
+                "content": {
+                  "STACK_ID": "TestStack",
+                },
+                "group": "root",
+                "mode": "000644",
+                "owner": "root",
+              },
+              "/etc/config.sh": {
+                "content": "#!/bin/bash -xe
+/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/tmp/amazon-cloudwatch-agent.json
+",
+                "encoding": "plain",
+                "group": "root",
+                "mode": "000644",
+                "owner": "root",
+              },
+              "/home/ec2-user/.ssh/authorized_keys": {
+                "content": "
+",
+                "encoding": "plain",
+                "group": "root",
+                "mode": "000644",
+                "owner": "root",
+              },
+              "/tmp/amazon-cloudwatch-agent.json": {
+                "content": "{
+	"agent": {
+		"run_as_user": "root"
+	},
+	"logs": {
+		"logs_collected": {
+			"files": {
+				"collect_list": [
+					{
+						"file_path": "/var/log/cloud-init-output.log",
+						"log_group_name": "/ec2/log/ec2-example/",
+						"log_stream_name": "{instance_id}-cloud-init-output",
+						"retention_in_days": 7
+					},
+					{
+						"file_path": "/var/log/cloud-init.log",
+						"log_group_name": "/ec2/log/ec2-example/",
+						"log_stream_name": "{instance_id}-cloud-init",
+						"retention_in_days": 7
+					}
+				]
+			}
+		}
+	}
+}",
+                "encoding": "plain",
+                "group": "root",
+                "mode": "000644",
+                "owner": "root",
+              },
+            },
+          },
+          "configSets": {
+            "default": [
+              "config",
+            ],
+          },
+        },
+      },
+      "Properties": {
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "IamInstanceProfile": {
+          "Ref": "EC2InstanceInstanceProfile2CAA3051",
+        },
+        "ImageId": {
+          "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestal2023amikernel61arm64C96584B6F00A464EAD1953AFF4B05118Parameter",
+        },
+        "InstanceType": "m7g.large",
+        "SecurityGroupIds": [
+          {
+            "Fn::GetAtt": [
+              "EC2ec2InstanceSecurityGroupD268D496",
+              "GroupId",
+            ],
+          },
+          {
+            "Fn::GetAtt": [
+              "VPCSSHSecurityGroup0495A24F",
+              "GroupId",
+            ],
+          },
+        ],
+        "SubnetId": {
+          "Ref": "VPCServerPublicSubnet1SubnetF3987995",
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/EC2/Instance",
+          },
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash
+yum update -y
+curl -sL https://dl.yarnpkg.com/rpm/yarn.repo | sudo tee /etc/yum.repos.d/yarn.repo
+curl -sL https://rpm.nodesource.com/setup_18.x | sudo -E bash - 
+yum install -y amazon-cloudwatch-agent nodejs python3-pip zip unzip docker yarn
+sudo systemctl enable docker
+sudo systemctl start docker
+mkdir -p /home/ec2-user/sample
+aws s3 cp s3://",
+                {
+                  "Ref": "EC2assetBucketC584B4AB",
+                },
+                "/sample /home/ec2-user/sample --recursive
+# fingerprint: 32d640a23cf42eea
+(
+  set +e
+  /opt/aws/bin/cfn-init -v --region ",
+                {
+                  "Ref": "AWS::Region",
+                },
+                " --stack ",
+                {
+                  "Ref": "AWS::StackName",
+                },
+                " --resource EC2Instance1F00751C93ecacd2478e7d47 --url https://cloudformation.",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ".",
+                {
+                  "Ref": "AWS::URLSuffix",
+                },
+                " --role ",
+                {
+                  "Ref": "EC2serverEc2Role6775A3D4",
+                },
+                " -c default
+  /opt/aws/bin/cfn-signal -e $? --region ",
+                {
+                  "Ref": "AWS::Region",
+                },
+                " --stack ",
+                {
+                  "Ref": "AWS::StackName",
+                },
+                " --resource EC2Instance1F00751C93ecacd2478e7d47 --url https://cloudformation.",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ".",
+                {
+                  "Ref": "AWS::URLSuffix",
+                },
+                " --role ",
+                {
+                  "Ref": "EC2serverEc2Role6775A3D4",
+                },
+                "
+  cat /var/log/cfn-init.log >&2
+)",
+              ],
+            ],
+          },
+        },
+      },
+      "Type": "AWS::EC2::Instance",
+    },
+    "EC2InstanceInstanceProfile2CAA3051": {
+      "Properties": {
+        "Roles": [
+          {
+            "Ref": "EC2serverEc2Role6775A3D4",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "EC2assetBucketAutoDeleteObjectsCustomResource48CBA772": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "EC2assetBucketPolicy31C0B372",
+      ],
+      "Properties": {
+        "BucketName": {
+          "Ref": "EC2assetBucketC584B4AB",
+        },
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::S3AutoDeleteObjects",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "EC2assetBucketC584B4AB": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "OwnershipControls": {
+          "Rules": [
+            {
+              "ObjectOwnership": "BucketOwnerPreferred",
+            },
+          ],
+        },
+        "Tags": [
+          {
+            "Key": "aws-cdk:auto-delete-objects",
+            "Value": "true",
+          },
+          {
+            "Key": "aws-cdk:cr-owned:566cfaa5",
+            "Value": "true",
+          },
+        ],
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "EC2assetBucketDeploymentAwsCliLayerFF55632D": {
+      "Properties": {
+        "Content": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-us-east-1",
+          },
+          "S3Key": "NORMALIZED_ASSET_HASH.zip",
+        },
+        "Description": "/opt/awscli/aws",
+      },
+      "Type": "AWS::Lambda::LayerVersion",
+    },
+    "EC2assetBucketDeploymentCustomResource512MiB0663CD81": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "DestinationBucketName": {
+          "Ref": "EC2assetBucketC584B4AB",
+        },
+        "Exclude": [
+          "**/node_modules/**",
+          "**/dist/**",
+        ],
+        "OutputObjectKeys": true,
+        "Prune": true,
+        "RetainOnDelete": false,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C512MiB6723FB92",
+            "Arn",
+          ],
+        },
+        "SourceBucketNames": [
+          {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-us-east-1",
+          },
+        ],
+        "SourceObjectKeys": [
+          "906c472a7a70d98f9ddd319c5286b06cc53be23c17afba3dba925f37cd89ba0a.zip",
+        ],
+      },
+      "Type": "Custom::CDKBucketDeployment",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "EC2assetBucketPolicy31C0B372": {
+      "Properties": {
+        "Bucket": {
+          "Ref": "EC2assetBucketC584B4AB",
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:PutBucketPolicy",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::GetAtt": [
+                    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+                    "Arn",
+                  ],
+                },
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "EC2assetBucketC584B4AB",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "EC2assetBucketC584B4AB",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "EC2ec2InstanceSecurityGroupD268D496": {
+      "Properties": {
+        "GroupDescription": "TestStack/EC2/ec2InstanceSecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "VPC61AD6880",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "EC2serverEc2Role6775A3D4": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
+              ],
+            ],
+          },
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/CloudWatchAgentServerPolicy",
+              ],
+            ],
+          },
+        ],
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "logs:PutRetentionPolicy",
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "RetentionPolicy",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "EC2serverEc2RoleDefaultPolicy34EE5F1D": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "EC2assetBucketC584B4AB",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "EC2assetBucketC584B4AB",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "cloudformation:DescribeStackResource",
+                "cloudformation:SignalResource",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "AWS::StackId",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "EC2serverEc2RoleDefaultPolicy34EE5F1D",
+        "Roles": [
+          {
+            "Ref": "EC2serverEc2Role6775A3D4",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "VPC61AD6880": {
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/VPC/VPC",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "VPCIGWE1DD60CF": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/VPC/VPC",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::InternetGateway",
+    },
+    "VPCSSHSecurityGroup0495A24F": {
+      "Properties": {
+        "GroupDescription": "Security Group for SSH",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "from 0.0.0.0/0:22",
+            "FromPort": 22,
+            "IpProtocol": "tcp",
+            "ToPort": 22,
+          },
+        ],
+        "VpcId": {
+          "Ref": "VPC61AD6880",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "VPCServerPublicSubnet1DefaultRoute0DEC8857": {
+      "DependsOn": [
+        "VPCVPCGW3AFA48F6",
+      ],
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "VPCIGWE1DD60CF",
+        },
+        "RouteTableId": {
+          "Ref": "VPCServerPublicSubnet1RouteTable140320E2",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "VPCServerPublicSubnet1RouteTable140320E2": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/VPC/VPC/ServerPublicSubnet1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "VPC61AD6880",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VPCServerPublicSubnet1RouteTableAssociationBCA9EE21": {
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "VPCServerPublicSubnet1RouteTable140320E2",
+        },
+        "SubnetId": {
+          "Ref": "VPCServerPublicSubnet1SubnetF3987995",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VPCServerPublicSubnet1SubnetF3987995": {
+      "Properties": {
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.0.0/24",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "ServerPublic",
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          {
+            "Key": "Name",
+            "Value": "TestStack/VPC/VPC/ServerPublicSubnet1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "VPC61AD6880",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VPCServerPublicSubnet2DefaultRoute6A434666": {
+      "DependsOn": [
+        "VPCVPCGW3AFA48F6",
+      ],
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "VPCIGWE1DD60CF",
+        },
+        "RouteTableId": {
+          "Ref": "VPCServerPublicSubnet2RouteTableD6971BF3",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "VPCServerPublicSubnet2RouteTableAssociationE261CDCA": {
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "VPCServerPublicSubnet2RouteTableD6971BF3",
+        },
+        "SubnetId": {
+          "Ref": "VPCServerPublicSubnet2SubnetDB508B90",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VPCServerPublicSubnet2RouteTableD6971BF3": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "TestStack/VPC/VPC/ServerPublicSubnet2",
+          },
+        ],
+        "VpcId": {
+          "Ref": "VPC61AD6880",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VPCServerPublicSubnet2SubnetDB508B90": {
+      "Properties": {
+        "AvailabilityZone": {
+          "Fn::Select": [
+            1,
+            {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.1.0/24",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "ServerPublic",
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          {
+            "Key": "Name",
+            "Value": "TestStack/VPC/VPC/ServerPublicSubnet2",
+          },
+        ],
+        "VpcId": {
+          "Ref": "VPC61AD6880",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VPCVPCGW3AFA48F6": {
+      "Properties": {
+        "InternetGatewayId": {
+          "Ref": "VPCIGWE1DD60CF",
+        },
+        "VpcId": {
+          "Ref": "VPC61AD6880",
+        },
+      },
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
