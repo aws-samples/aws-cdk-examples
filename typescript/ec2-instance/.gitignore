@@ -11,9 +11,3 @@ cdk.out
 # Parcel default cache directory
 .parcel-cache
 
-# Build output
-lib
-coverage
-.nyc_output
-dist
-.DS_Store

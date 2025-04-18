@@ -128,18 +128,52 @@ jobs:
           # Change to language directory
           cd ./${{ matrix.language }}
 
-          # Run the build_file function in parallel for each project to be built
-          # Halt the execution if any of the build_file invocations fail
+          # Run the build_file function for each project to be built
           echo "::group::Build Output"
           echo "Starting builds for all projects..."
-          parallel --keep-order --halt-on-error 2 build_file ::: "${apps_to_build[@]}"
+          
+          # Track failed builds
+          failed_builds=()
+          
+          # Process each project one by one with clear grouping
+          for app in "${apps_to_build[@]}"; do
+            echo "::group::Building $app"
+            
+            # Run the build directly
+            set +e  # Don't exit on error
+            ../scripts/build-${language}.sh "$app"
+            build_exit=$?
+            set -e  # Re-enable exit on error
+            
+            if [ $build_exit -ne 0 ]; then
+              echo "❌ BUILD FAILED: $app (exit code $build_exit)"
+              failed_builds+=("$app")
+            else
+              echo "✅ BUILD SUCCEEDED: $app"
+            fi
+            echo "::endgroup::"
+          done
           echo "::endgroup::"
-
-          # Check the exit status of parallel
-          parallel_exit=$?
+          
+          # Print summary outside of any group
+          echo ""
+          echo "====== BUILD SUMMARY ======"
+          if [ ${#failed_builds[@]} -gt 0 ]; then
+            echo "❌ FAILED BUILDS:"
+            for failed in "${failed_builds[@]}"; do
+              echo "  - $failed"
+            done
+            parallel_exit=1
+          else
+            echo "✅ ALL BUILDS SUCCEEDED"
+            parallel_exit=0
+          fi
+          echo "=========================="
+          echo ""
+          
           # If parallel failed, make sure the workflow fails too
           if [ $parallel_exit -ne 0 ]; then
-            echo "::error::One or more builds failed. See build output above for details."
+            echo "::error::One or more builds failed. See build summary above for details."
             exit $parallel_exit
           else
             echo "✅ All builds completed successfully!"
