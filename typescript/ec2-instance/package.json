@@ -20,7 +20,7 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.189.0",
+    "aws-cdk-lib": "2.189.1",
     "constructs": "^10.0.5",
     "dotenv": "^16.3.1"
   },
