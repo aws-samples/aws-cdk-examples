@@ -128,40 +128,70 @@ jobs:
           # Change to language directory
           cd ./${{ matrix.language }}
 
-          # Run the build_file function in parallel for each project to be built
-          # Halt the execution if any of the build_file invocations fail
+          # Run the build_file function for each project to be built
           echo "::group::Build Output"
           echo "Starting builds for all projects..."
-          # Use --line-buffer to ensure output is displayed immediately
-          # Use --verbose to show which command is being executed
-          # Remove --halt-on-error to ensure all errors are displayed
-          parallel --keep-order --line-buffer --verbose build_file ::: "${apps_to_build[@]}" || true
           
-          # Check for any failed builds by examining the log files
-          echo "Checking for build failures..."
+          # Track failed builds
           failed_builds=()
-          for log_file in /tmp/build_logs/*.log; do
-            if grep -q "Build failed" "$log_file"; then
-              project=$(basename "$log_file" .log | sed 's/_/\//g')
-              failed_builds+=("$project")
-              echo "::error::Build failed for $project"
-              echo "--- Error output for $project ---"
-              cat "$log_file"
-              echo "--- End of error output ---"
+          
+          # Process each project one by one with clear grouping
+          for app in "${apps_to_build[@]}"; do
+            echo "::group::Building $app"
+            
+            # Run the build directly
+            set +e  # Don't exit on error
+            ../scripts/build-${language}.sh "$app"
+            build_exit=$?
+            set -e  # Re-enable exit on error
+            
+            if [ $build_exit -ne 0 ]; then
+              echo "❌ BUILD FAILED: $app (exit code $build_exit)"
+              failed_builds+=("$app")
+            else
+              echo "✅ BUILD SUCCEEDED: $app"
+            fi
+            echo "::endgroup::"
+          done
+          echo "::endgroup::"
+          # Print summary outside of any group
+          echo ""
+          echo "====== BUILD SUMMARY ======"
+          if [ ${#failed_builds[@]} -gt 0 ]; then
+            echo "❌ FAILED BUILDS:"
+            for failed in "${failed_builds[@]}"; do
+              echo "  - $failed"
+            done
+            parallel_exit=1
+          else
+            echo "✅ ALL BUILDS SUCCEEDED"
+            parallel_exit=0
+          fi
+          echo "=========================="
+          echo ""
+              echo "✅ BUILD SUCCEEDED: $app"
             fi
           done
           echo "::endgroup::"
-
-          # Check if any builds failed
+          
+          # Print a clear summary of build results
+          echo ""
+          echo "====== BUILD SUMMARY ======"
           if [ ${#failed_builds[@]} -gt 0 ]; then
-            echo "::error::The following builds failed: ${failed_builds[*]}"
+            echo "❌ FAILED BUILDS:"
+            for failed in "${failed_builds[@]}"; do
+              echo "  - $failed"
+            done
             parallel_exit=1
           else
+            echo "✅ ALL BUILDS SUCCEEDED"
             parallel_exit=0
           fi
+          echo "=========================="
+          echo ""
           # If parallel failed, make sure the workflow fails too
           if [ $parallel_exit -ne 0 ]; then
-            echo "::error::One or more builds failed. See build output above for details."
+            echo "::error::One or more builds failed. See build summary above for details."
             exit $parallel_exit
           else
             echo "✅ All builds completed successfully!"
