@@ -1,0 +1,43 @@
+{
+  "name": "update-packagejson",
+  "version": "1.0.0",
+  "description": "Package.json update utility",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "update-packagejson": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf dist",
+    "lint": "eslint . --ext .ts",
+    "test": "jest",
+    "prebuild": "npm run clean",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "aws",
+    "cdk",
+    "package",
+    "update"
+  ],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "22.7.9",
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "@typescript-eslint/parser": "^7.1.0",
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0",
+    "rimraf": "^5.0.5",
+    "ts-jest": "^29.2.5",
+    "typescript": "~5.6.3"
+  },
+  "dependencies": {
+    "tsx": "^4.7.1"
+  }
+}

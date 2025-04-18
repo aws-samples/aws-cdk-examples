@@ -13,12 +13,12 @@
   "devDependencies": {
     "@types/express": "^4.17.15",
     "@types/node": "22.7.9",
-    "aws-cdk": "2.1004.0",
+    "aws-cdk": "2.1010.0",
     "typescript": "~5.6.3"
   },
   "dependencies": {
     "@aws-sdk/client-evidently": "^3.245.0",
-    "aws-cdk-lib": "2.185.0",
+    "aws-cdk-lib": "2.190.0",
     "constructs": "^10.0.0",
     "express": "^4.17.1"
   }

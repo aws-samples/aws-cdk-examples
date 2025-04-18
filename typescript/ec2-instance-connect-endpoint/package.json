@@ -16,15 +16,24 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
-    "@types/node": "^16",
-    "aws-cdk": "2.1007.0",
-    "jest": "^29.5.0",
-    "ts-jest": "^29.1.1",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.1.6"
+    "@types/node": "22.7.9",
+    "@typescript-eslint/eslint-plugin": "^5",
+    "@typescript-eslint/parser": "^5",
+    "aws-cdk": "2.1010.0",
+    "aws-cdk-lib": "2.85.0",
+    "constructs": "10.0.5",
+    "eslint": "^8",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.6.3"
+  },
+  "peerDependencies": {
+    "aws-cdk-lib": "^2.85.0",
+    "constructs": "^10.0.5"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.189.1",
-    "constructs": "10.0.5"
+    "aws-cdk-lib": "2.190.0",
+    "constructs": "^10.0.0"
   }
 }
