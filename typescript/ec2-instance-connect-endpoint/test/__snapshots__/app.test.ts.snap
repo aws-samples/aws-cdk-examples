@@ -3,206 +3,126 @@
 exports[`default validation 1`] = `
 {
   "Mappings": {
-    "DefaultCrNodeVersionMap": {
+    "LatestNodeRuntimeMap": {
       "af-south-1": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "ap-east-1": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "ap-northeast-1": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "ap-northeast-2": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "ap-northeast-3": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "ap-south-1": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "ap-south-2": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "ap-southeast-1": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "ap-southeast-2": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "ap-southeast-3": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
+      },
+      "ap-southeast-4": {
+        "value": "nodejs20.x",
+      },
+      "ap-southeast-5": {
+        "value": "nodejs20.x",
+      },
+      "ap-southeast-7": {
+        "value": "nodejs20.x",
       },
       "ca-central-1": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
+      },
+      "ca-west-1": {
+        "value": "nodejs20.x",
       },
       "cn-north-1": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "cn-northwest-1": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "eu-central-1": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "eu-central-2": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
+      },
+      "eu-isoe-west-1": {
+        "value": "nodejs18.x",
       },
       "eu-north-1": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "eu-south-1": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "eu-south-2": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "eu-west-1": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "eu-west-2": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "eu-west-3": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
+      },
+      "il-central-1": {
+        "value": "nodejs20.x",
       },
       "me-central-1": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "me-south-1": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
+      },
+      "mx-central-1": {
+        "value": "nodejs20.x",
       },
       "sa-east-1": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "us-east-1": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "us-east-2": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "us-gov-east-1": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "us-gov-west-1": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "us-iso-east-1": {
-        "value": "nodejs14.x",
+        "value": "nodejs18.x",
       },
       "us-iso-west-1": {
-        "value": "nodejs14.x",
+        "value": "nodejs18.x",
       },
       "us-isob-east-1": {
-        "value": "nodejs14.x",
+        "value": "nodejs18.x",
       },
       "us-west-1": {
-        "value": "nodejs16.x",
+        "value": "nodejs20.x",
       },
       "us-west-2": {
-        "value": "nodejs16.x",
-      },
-    },
-    "ServiceprincipalMap": {
-      "af-south-1": {
-        "states": "states.af-south-1.amazonaws.com",
-      },
-      "ap-east-1": {
-        "states": "states.ap-east-1.amazonaws.com",
-      },
-      "ap-northeast-1": {
-        "states": "states.ap-northeast-1.amazonaws.com",
-      },
-      "ap-northeast-2": {
-        "states": "states.ap-northeast-2.amazonaws.com",
-      },
-      "ap-northeast-3": {
-        "states": "states.ap-northeast-3.amazonaws.com",
-      },
-      "ap-south-1": {
-        "states": "states.ap-south-1.amazonaws.com",
-      },
-      "ap-south-2": {
-        "states": "states.ap-south-2.amazonaws.com",
-      },
-      "ap-southeast-1": {
-        "states": "states.ap-southeast-1.amazonaws.com",
-      },
-      "ap-southeast-2": {
-        "states": "states.ap-southeast-2.amazonaws.com",
-      },
-      "ap-southeast-3": {
-        "states": "states.ap-southeast-3.amazonaws.com",
-      },
-      "ca-central-1": {
-        "states": "states.ca-central-1.amazonaws.com",
-      },
-      "cn-north-1": {
-        "states": "states.cn-north-1.amazonaws.com",
-      },
-      "cn-northwest-1": {
-        "states": "states.cn-northwest-1.amazonaws.com",
-      },
-      "eu-central-1": {
-        "states": "states.eu-central-1.amazonaws.com",
-      },
-      "eu-central-2": {
-        "states": "states.eu-central-2.amazonaws.com",
-      },
-      "eu-north-1": {
-        "states": "states.eu-north-1.amazonaws.com",
-      },
-      "eu-south-1": {
-        "states": "states.eu-south-1.amazonaws.com",
-      },
-      "eu-south-2": {
-        "states": "states.eu-south-2.amazonaws.com",
-      },
-      "eu-west-1": {
-        "states": "states.eu-west-1.amazonaws.com",
-      },
-      "eu-west-2": {
-        "states": "states.eu-west-2.amazonaws.com",
-      },
-      "eu-west-3": {
-        "states": "states.eu-west-3.amazonaws.com",
-      },
-      "me-central-1": {
-        "states": "states.me-central-1.amazonaws.com",
-      },
-      "me-south-1": {
-        "states": "states.me-south-1.amazonaws.com",
-      },
-      "sa-east-1": {
-        "states": "states.sa-east-1.amazonaws.com",
-      },
-      "us-east-1": {
-        "states": "states.us-east-1.amazonaws.com",
-      },
-      "us-east-2": {
-        "states": "states.us-east-2.amazonaws.com",
-      },
-      "us-gov-east-1": {
-        "states": "states.us-gov-east-1.amazonaws.com",
-      },
-      "us-gov-west-1": {
-        "states": "states.us-gov-west-1.amazonaws.com",
-      },
-      "us-iso-east-1": {
-        "states": "states.amazonaws.com",
-      },
-      "us-iso-west-1": {
-        "states": "states.amazonaws.com",
-      },
-      "us-isob-east-1": {
-        "states": "states.amazonaws.com",
-      },
-      "us-west-1": {
-        "states": "states.us-west-1.amazonaws.com",
-      },
-      "us-west-2": {
-        "states": "states.us-west-2.amazonaws.com",
+        "value": "nodejs20.x",
       },
     },
   },
@@ -280,7 +200,7 @@ exports[`default validation 1`] = `
         },
         "Runtime": {
           "Fn::FindInMap": [
-            "DefaultCrNodeVersionMap",
+            "LatestNodeRuntimeMap",
             {
               "Ref": "AWS::Region",
             },
@@ -353,6 +273,16 @@ exports[`default validation 1`] = `
               ],
             },
             {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "EICEndpointonEventHandlerC2E1F5F2",
+                  "Arn",
+                ],
+              },
+            },
+            {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
               "Resource": [
@@ -377,6 +307,16 @@ exports[`default validation 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "EICEndpointisCompleteHandler0273707A",
+                  "Arn",
+                ],
+              },
             },
           ],
           "Version": "2012-10-17",
@@ -431,7 +371,7 @@ exports[`default validation 1`] = `
         },
         "Runtime": {
           "Fn::FindInMap": [
-            "DefaultCrNodeVersionMap",
+            "LatestNodeRuntimeMap",
             {
               "Ref": "AWS::Region",
             },
@@ -504,6 +444,16 @@ exports[`default validation 1`] = `
               ],
             },
             {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "EICEndpointonEventHandlerC2E1F5F2",
+                  "Arn",
+                ],
+              },
+            },
+            {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
               "Resource": [
@@ -528,6 +478,16 @@ exports[`default validation 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "EICEndpointisCompleteHandler0273707A",
+                  "Arn",
+                ],
+              },
             },
             {
               "Action": "states:StartExecution",
@@ -586,7 +546,7 @@ exports[`default validation 1`] = `
         },
         "Runtime": {
           "Fn::FindInMap": [
-            "DefaultCrNodeVersionMap",
+            "LatestNodeRuntimeMap",
             {
               "Ref": "AWS::Region",
             },
@@ -659,6 +619,16 @@ exports[`default validation 1`] = `
               ],
             },
             {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "EICEndpointonEventHandlerC2E1F5F2",
+                  "Arn",
+                ],
+              },
+            },
+            {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
               "Resource": [
@@ -683,6 +653,16 @@ exports[`default validation 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": "lambda:GetFunction",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "EICEndpointisCompleteHandler0273707A",
+                  "Arn",
+                ],
+              },
             },
           ],
           "Version": "2012-10-17",
@@ -724,6 +704,22 @@ exports[`default validation 1`] = `
             ],
           ],
         },
+        "LoggingConfiguration": {
+          "Destinations": [
+            {
+              "CloudWatchLogsLogGroup": {
+                "LogGroupArn": {
+                  "Fn::GetAtt": [
+                    "EICEndpointProviderwaiterstatemachineLogGroupA14674E7",
+                    "Arn",
+                  ],
+                },
+              },
+            },
+          ],
+          "IncludeExecutionData": false,
+          "Level": "ERROR",
+        },
         "RoleArn": {
           "Fn::GetAtt": [
             "EICEndpointProviderwaiterstatemachineRole5E284D23",
@@ -733,6 +729,26 @@ exports[`default validation 1`] = `
       },
       "Type": "AWS::StepFunctions::StateMachine",
     },
+    "EICEndpointProviderwaiterstatemachineLogGroupA14674E7": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "",
+            [
+              "/aws/vendedlogs/states/waiter-state-machine-",
+              {
+                "Ref": "EICEndpointProviderframeworkisCompleteB1442B18",
+              },
+              "-c8d3e609467293bed52b842a64c4ccf79555d8f837",
+            ],
+          ],
+        },
+        "RetentionInDays": 731,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
     "EICEndpointProviderwaiterstatemachineRole5E284D23": {
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -741,15 +757,7 @@ exports[`default validation 1`] = `
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": {
-                "Service": {
-                  "Fn::FindInMap": [
-                    "ServiceprincipalMap",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    "states",
-                  ],
-                },
+                "Service": "states.amazonaws.com",
               },
             },
           ],
@@ -813,6 +821,22 @@ exports[`default validation 1`] = `
                   ],
                 },
               ],
+            },
+            {
+              "Action": [
+                "logs:CreateLogDelivery",
+                "logs:CreateLogStream",
+                "logs:GetLogDelivery",
+                "logs:UpdateLogDelivery",
+                "logs:DeleteLogDelivery",
+                "logs:ListLogDeliveries",
+                "logs:PutLogEvents",
+                "logs:PutResourcePolicy",
+                "logs:DescribeResourcePolicies",
+                "logs:DescribeLogGroups",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
             },
           ],
           "Version": "2012-10-17",
