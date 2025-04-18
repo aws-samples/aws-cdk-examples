@@ -2,7 +2,7 @@ import { App } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import { EC2Stack } from '../lib/ec2-stack';
 import { InstanceSize, CPUTypes } from '../lib/utils/env-validator';
-import { normalizeTemplate } from '../../../test-utils/normalize-template';
+import { normalizeTemplate } from '../../test-utils/normalize-template';
 
 const devEnv = {
   account: process.env.CDK_DEFAULT_ACCOUNT,
@@ -23,7 +23,7 @@ describe('EC2Stack', () => {
       ...stackProps,
       env: devEnv,
     });
-    
+
     const template = Template.fromStack(stack);
     const normalizedTemplate = normalizeTemplate(template.toJSON());
     expect(normalizedTemplate).toMatchSnapshot();
@@ -31,7 +31,7 @@ describe('EC2Stack', () => {
 
   test('Instance size validation', () => {
     const app = new App();
-    
+
     // Valid sizes should not throw errors
     Object.keys(InstanceSize).forEach(size => {
       expect(() => {
@@ -42,7 +42,7 @@ describe('EC2Stack', () => {
         });
       }).not.toThrow();
     });
-    
+
     // Invalid size should throw error
     const validSizes = Object.keys(InstanceSize).join(', ');
     expect(() => {
@@ -56,7 +56,7 @@ describe('EC2Stack', () => {
 
   test('CPU type validation', () => {
     const app = new App();
-    
+
     // Valid CPU types should not throw errors
     Object.keys(CPUTypes).forEach(cpuType => {
       expect(() => {
@@ -67,7 +67,7 @@ describe('EC2Stack', () => {
         });
       }).not.toThrow();
     });
-    
+
     // Invalid CPU type should throw error
     const validCpuTypes = Object.keys(CPUTypes).join(', ');
     expect(() => {

@@ -23,11 +23,15 @@
       "./node_modules/@types"
     ],
     "outDir": "lib",
-    "rootDir": "."
+    "rootDir": "../.."
   },
   "exclude": [
     "node_modules",
     "cdk.out",
     "lib"
+  ],
+  "include": [
+    "**/*.ts",
+    "../../test-utils/**/*.ts"
   ]
 }
