@@ -20,7 +20,7 @@
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "~5.6.3",
-    "esbuild": "^0.19.4"
+    "esbuild": "^0.25.0"
   },
   "dependencies": {
     "@types/aws-lambda": "^8.10.121",
