@@ -3,6 +3,8 @@ import * as codebuild from "aws-cdk-lib/aws-codebuild";
 import * as codecommit from "aws-cdk-lib/aws-codecommit";
 import * as codedeploy from "aws-cdk-lib/aws-codedeploy";
 import * as pipeline from "aws-cdk-lib/aws-codepipeline";
+import * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';
+import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 import * as pipelineactions from "aws-cdk-lib/aws-codepipeline-actions";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as ecr from "aws-cdk-lib/aws-ecr";
@@ -16,12 +18,22 @@ import * as path from "path";
 import * as fs from 'fs';
 import { Asset } from 'aws-cdk-lib/aws-s3-assets';
 import { IgnoreMode } from 'aws-cdk-lib';
-import { Code } from 'aws-cdk-lib/aws-codecommit';
+import * as cr from 'aws-cdk-lib/custom-resources';
+
+interface CodepipelineBuildDeployStackProps extends cdk.StackProps {
+  context: any;
+}
 
 export class CodepipelineBuildDeployStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: CodepipelineBuildDeployStackProps) {
     super(scope, id, props);
 
+    // Determine which repository type to use (GitHub or CodeCommit)
+    const useGitHub = this.node.tryGetContext('useGitHub') === 'true';
+    
+    // Repository name to use
+    const repositoryName = this.node.tryGetContext('repositoryName') || 'simple-code-repo';
+    
     // modify gitignore file to remove unneeded files from the codecommit copy    
     let gitignore = fs.readFileSync('.gitignore').toString().split(/\r?\n/);
     gitignore.push('.git/');
@@ -34,12 +46,61 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       exclude: gitignore,
     });
     
-    const codeRepo = new codecommit.Repository(this, "repo", {
-      repositoryName: "simple-code-repo",
-      // Copies files from codepipeline-build-deploy directory to the repo as the initial commit
-      code: Code.fromAsset(codeAsset, 'main'),
-    });
+    // Create repository based on selected type
+    let codeRepo: codecommit.IRepository;
+    let githubOwner = '';
+    let githubToken = '';
     
+    if (useGitHub) {
+      // Retrieve the GitHub username/organization from the context (only needed for GitHub)
+      githubOwner = this.node.tryGetContext('githubUsername');
+
+      // Retrieve the GitHub PAT from the context (only needed for GitHub)
+      githubToken = this.node.tryGetContext('githubPAT');
+      
+      if (!githubOwner || !githubToken) {
+        throw new Error('When using GitHub, both githubUsername and githubPAT context variables must be provided');
+      }
+      
+      // Create a new Secrets Manager secret to store the GitHub PAT
+      const githubPATSecret = new secretsmanager.Secret(this, 'GithubPATSecret', {
+        secretName: 'github-pat-secret',
+        generateSecretString: {
+          secretStringTemplate: JSON.stringify({ token: githubToken }),
+          excludePunctuation: true,
+          includeSpace: false,
+          generateStringKey: 'token',
+        },
+      });
+      
+      const createGitHubRepoLambda = new lambda.Function(this, 'CreateGitHubRepoLambda', {
+        runtime: lambda.Runtime.NODEJS_16_X,
+        code: lambda.Code.fromAsset("./lambda"),
+        handler: "push-to-github.handler",
+        environment: {
+          GITHUB_PAT_SECRET_NAME: githubPATSecret.secretName,
+          GITHUB_USERNAME: githubOwner
+        },
+      });
+
+      githubPATSecret.grantRead(createGitHubRepoLambda);
+      codeAsset.bucket.grantRead(createGitHubRepoLambda);
+      
+      // For GitHub, we still need a CodeCommit repo for the build process
+      codeRepo = new codecommit.Repository(this, 'CodeCommitRepo', {
+        repositoryName: repositoryName + '-mirror',
+        description: 'Mirror repository for the CodePipeline Build Deploy example',
+        code: codecommit.Code.fromAsset(codeAsset),
+      });
+    } else {
+      // For CodeCommit, create a new repository
+      codeRepo = new codecommit.Repository(this, 'CodeCommitRepo', {
+        repositoryName: repositoryName,
+        description: 'Repository for the CodePipeline Build Deploy example',
+        code: codecommit.Code.fromAsset(codeAsset),
+      });
+    }
+
     // Creates an Elastic Container Registry (ECR) image repository
     const imageRepo = new ecr.Repository(this, "imageRepo");
 
@@ -57,7 +118,12 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     // CodeBuild project that builds the Docker image
     const buildImage = new codebuild.Project(this, "BuildImage", {
       buildSpec: codebuild.BuildSpec.fromSourceFilename("app/buildspec.yaml"),
-      source: codebuild.Source.codeCommit({ repository: codeRepo }),
+      source: useGitHub 
+        ? codebuild.Source.gitHub({
+            owner: githubOwner,
+            repo: repositoryName,
+          })
+        : codebuild.Source.codeCommit({ repository: codeRepo }),
       environment: {
         privileged: true,
         environmentVariables: {
@@ -76,7 +142,12 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     // CodeBuild project that builds the Docker image
     const buildTest = new codebuild.Project(this, "BuildTest", {
       buildSpec: codebuild.BuildSpec.fromSourceFilename("buildspec.yaml"),
-      source: codebuild.Source.codeCommit({ repository: codeRepo }),
+      source: useGitHub 
+        ? codebuild.Source.gitHub({
+            owner: githubOwner,
+            repo: repositoryName,
+          })
+        : codebuild.Source.codeCommit({ repository: codeRepo }),
       environment: {
         buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_4,  
       }
@@ -224,12 +295,21 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     const sourceStage = {
       stageName: "Source",
       actions: [
-        new pipelineactions.CodeCommitSourceAction({
-          actionName: "AppCodeCommit",
-          branch: "main",
-          output: sourceArtifact,
-          repository: codeRepo,
-        }),
+        useGitHub 
+          ? new pipelineactions.GitHubSourceAction({
+              actionName: 'GitHub_Source',
+              owner: githubOwner,
+              repo: repositoryName,
+              oauthToken: cdk.SecretValue.unsafePlainText(githubToken),
+              output: sourceArtifact,
+              branch: 'main',
+            })
+          : new pipelineactions.CodeCommitSourceAction({
+              actionName: "AppCodeCommit",
+              branch: "main",
+              output: sourceArtifact,
+              repository: codeRepo,
+            }),
       ],
     };
 
@@ -239,7 +319,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       actions: [
         new pipelineactions.CodeBuildAction({
           actionName: "JestCDK",
-          input: new pipeline.Artifact("SourceArtifact"),
+          input: sourceArtifact,
           project: buildTest,
         }),
       ],
@@ -251,7 +331,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       actions: [
         new pipelineactions.CodeBuildAction({
           actionName: "DockerBuildPush",
-          input: new pipeline.Artifact("SourceArtifact"),
+          input: sourceArtifact,
           project: buildImage,
           outputs: [buildArtifact],
         }),
