@@ -1,10 +1,8 @@
-# InstanceConnectEndpoint 
+# EC2 Instance Connect Endpoint
 
-`InstanceConnectEndpoint` is a sample AWS CDK construct that allows you to build [EC2 Instance Connect Endpoint](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/connect-using-eice.html) in your VPC with CDK custom resource.
+This is a CDK construct that allows you to build [EC2 Instance Connect Endpoint](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/connect-using-eice.html) in your VPC with a CDK custom resource.
 
-This sample is generated with [projen](https://github.com/projen/projen) `awscdk-construct` project type so you can reference the `.projenrc.ts` and create your own CDK construct library like this with very little modification.
-
-# sample
+## Usage
 
 ```ts
 // create an EIC Endpoint in an isolated subnet
@@ -14,52 +12,54 @@ new InstanceConnectEndpoint(stack, 'EICEndpoint', {
 });
 ```
 
-See full sample at [integ.default.ts](./src/integ.default.ts).
+See full sample at [bin/app.ts](./bin/app.ts).
 
-# deploy the default integration test
+## Deploy the sample application
 
 ```sh
-$ cd typescripts/ec2-instance-connect-endpoint
-$ yarn install
-# configure your AWS CLI
-$ npx cdk diff
-$ npx cdk deploy
+# Install dependencies
+npm install
+
+# Configure your AWS CLI
+npm run build
+npx cdk diff
+npx cdk deploy
 ```
 
-On deployment completed, check the instance ID from the output:
+On deployment completion, check the instance ID from the output:
 
 ```
 integ-testing-eicendpoint.InstanceId = i-01d0f0c7ca761ff29
 ```
 
-Now, connect it with AWS CLI:
+Now, connect to it with AWS CLI:
 
 ```sh
-$ aws ec2-instance-connect ssh --instance-id i-01d0f0c7ca761ff29
+aws ec2-instance-connect ssh --instance-id i-01d0f0c7ca761ff29
 ```
 
-# `awssh`
+## `awssh` Shortcut
 
-Alternatively, you can create an `awssh` alias like this:
+You can create an `awssh` alias for convenience:
 
 ```sh
 alias awssh='aws ec2-instance-connect ssh --instance-id'
 ```
 
-Now, you can just `awssh` into any ec2 instance behind the endpoint.
+Now, you can quickly connect to any EC2 instance behind the endpoint:
 
 ```sh
-$ awssh i-01d0f0c7ca761ff29
+awssh i-01d0f0c7ca761ff29
 ```
 
-# run the tests
+## Run tests
 
 ```sh
-$ yarn test
+npm test
 ```
 
-# clean up
+## Clean up
 
 ```sh
-$ npx cdk destroy
+npx cdk destroy
 ```

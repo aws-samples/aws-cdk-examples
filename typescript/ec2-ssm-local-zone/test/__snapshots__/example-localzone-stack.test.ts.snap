@@ -376,6 +376,12 @@ sudo iptables-save",
             "Ref": "VpcprivateSubnet1SubnetCEAD3716",
           },
         ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "ExampleLocalZoneStack/Vpc",
+          },
+        ],
         "VpcEndpointType": "Interface",
         "VpcId": {
           "Ref": "Vpc8378EB38",
@@ -703,6 +709,12 @@ sudo iptables-save",
             "Ref": "VpcprivateSubnet1SubnetCEAD3716",
           },
         ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "ExampleLocalZoneStack/Vpc",
+          },
+        ],
         "VpcEndpointType": "Interface",
         "VpcId": {
           "Ref": "Vpc8378EB38",
@@ -786,6 +798,12 @@ sudo iptables-save",
         "SubnetIds": [
           {
             "Ref": "VpcprivateSubnet1SubnetCEAD3716",
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "ExampleLocalZoneStack/Vpc",
           },
         ],
         "VpcEndpointType": "Interface",

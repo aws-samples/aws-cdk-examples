@@ -5,7 +5,7 @@ import {App, Duration, RemovalPolicy, Stack, StackProps} from 'aws-cdk-lib';
 import {Effect, PolicyStatement, Role, ServicePrincipal} from "aws-cdk-lib/aws-iam";
 import { AttributeType, Table } from "aws-cdk-lib/aws-dynamodb";
 import { Construct } from 'constructs';
-
+import { CfnOutput } from "aws-cdk-lib";
 import config from './config.json';
 
 class ChatAppStack extends Stack {
@@ -33,8 +33,8 @@ class ChatAppStack extends Stack {
 
         const connectFunc = new Function(this, 'connect-lambda', {
             code: new AssetCode('./onconnect'),
-            handler: 'app.handler',
-            runtime: Runtime.NODEJS_12_X,
+            handler: 'onconnectLambda.handler',
+            runtime: Runtime.NODEJS_LATEST,
             timeout: Duration.seconds(300),
             memorySize: 256,
             environment: {
@@ -46,8 +46,8 @@ class ChatAppStack extends Stack {
 
         const disconnectFunc = new Function(this, 'disconnect-lambda', {
             code: new AssetCode('./ondisconnect'),
-            handler: 'app.handler',
-            runtime: Runtime.NODEJS_12_X,
+            handler: 'ondisconnectLambda.handler',
+            runtime: Runtime.NODEJS_LATEST,
             timeout: Duration.seconds(300),
             memorySize: 256,
             environment: {
@@ -55,12 +55,12 @@ class ChatAppStack extends Stack {
             }
         });
 
-        table.grantReadWriteData(disconnectFunc)
+        table.grantReadWriteData(disconnectFunc);
 
         const messageFunc = new Function(this, 'message-lambda', {
             code: new AssetCode('./sendmessage'),
-            handler: 'app.handler',
-            runtime: Runtime.NODEJS_12_X,
+            handler: 'sendmessageLambda.handler',
+            runtime: Runtime.NODEJS_LATEST,
             timeout: Duration.seconds(300),
             memorySize: 256,
             initialPolicy: [
@@ -79,7 +79,7 @@ class ChatAppStack extends Stack {
             }
         });
 
-        table.grantReadWriteData(messageFunc)
+        table.grantReadWriteData(messageFunc);
 
         // access role for the socket api to access the socket lambda
         const policy = new PolicyStatement({
@@ -149,9 +149,17 @@ class ChatAppStack extends Stack {
             stageName: "dev"
         });
 
-        deployment.node.addDependency(connectRoute)
-        deployment.node.addDependency(disconnectRoute)
-        deployment.node.addDependency(messageRoute)
+        deployment.node.addDependency(connectRoute);
+        deployment.node.addDependency(disconnectRoute);
+        deployment.node.addDependency(messageRoute);
+
+
+        // add the domain name of the ws api to the cloudformation outputs
+        new CfnOutput(this, "websocket-api-endpoint", {
+            description: "The endpoint for the websocket api",
+            value: api.attrApiEndpoint + "/dev",
+            exportName: "websocket-api-endpoint"
+        });
     }
 }
 const app = new App();

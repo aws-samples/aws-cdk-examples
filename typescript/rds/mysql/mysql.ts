@@ -103,15 +103,15 @@ export class Mysql extends Stack {
     super(scope, id);
 
     // default database username
-    var mysqlUsername = "dbadmin";
+    let mysqlUsername = "dbadmin";
     if (typeof props.mysqlUsername !== 'undefined') {
       mysqlUsername = props.mysqlUsername;
     }
-    var ingressSources = [];
+    let ingressSources = [];
     if (typeof props.ingressSources !== 'undefined') {
       ingressSources = props.ingressSources;
     }
-    var engineVersion = rds.MysqlEngineVersion.VER_8_0_28;
+    let engineVersion = rds.MysqlEngineVersion.VER_8_0_28;
     if (typeof props.engineVersion !== 'undefined') {
       engineVersion = props.engineVersion;
     }

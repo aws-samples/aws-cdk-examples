@@ -1,6 +1,6 @@
 # Amazon Api Gateway Rest Api to Amazon SQS
 
-This example creates a rest api toghether with a SQS. By calling the rest api, a message will be forwarded to the SQS.
+This example creates a rest api together with a SQS. By calling the rest api, a message will be forwarded to the SQS.
 
 ## Deploy
 Run `cdk deploy`. This will deploy / redeploy your Stack to your AWS Account.

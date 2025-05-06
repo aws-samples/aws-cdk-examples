@@ -1,0 +1,3 @@
+*.json
+node_modules
+cdk.out

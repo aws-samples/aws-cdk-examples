@@ -1,6 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import { Inspector2EnableResource } from '../lib/inspector2-enable-resource';
+import { normalizeTemplate } from '../../test-utils/normalize-template';
 
 test('Inspector2EnableResource creates required resources', () => {
   const app = new cdk.App();
@@ -11,5 +12,7 @@ test('Inspector2EnableResource creates required resources', () => {
     logRetention: cdk.aws_logs.RetentionDays.ONE_DAY,
   });
 
-  expect(Template.fromStack(stack)).toMatchSnapshot();
+  const template = Template.fromStack(stack);
+  const normalizedTemplate = normalizeTemplate(template.toJSON());
+  expect(normalizedTemplate).toMatchSnapshot();
 });

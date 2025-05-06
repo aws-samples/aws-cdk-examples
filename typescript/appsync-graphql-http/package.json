@@ -1,0 +1,27 @@
+{
+  "name": "appsync-graphql-http",
+  "version": "1.0.0",
+  "description": "Running a GraphQL API with four resolvers to do CRUD operations with HTTP datasource",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "author": {
+    "name": "Nestor Cortina <nexckycort@gmail.com>",
+    "url": "https://nexckycort.github.io"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@aws-appsync/utils": "^1.5.0",
+    "@types/node": "22.7.9",
+    "aws-cdk": "2.1010.0",
+    "typescript": "~5.6.3"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "2.190.0",
+    "constructs": "^10.0.0"
+  }
+}

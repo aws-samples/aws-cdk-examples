@@ -117,6 +117,7 @@ export class EvidentlyClientSideEvaluationLambdaStack extends cdk.Stack {
     launch.addDependsOn(feature)
 
     // Create Lambda resources
+    const configuration = `applications/${application.ref}/environments/${environment.ref}/configurations/${project.name}`
     const lambdaFunction = new lambda.Function(this, 'LambdaFunction', {
       code: new lambda.InlineCode(fs.readFileSync('lambda-handler.py', { encoding: 'utf-8' })),
       handler: 'index.main',
@@ -128,7 +129,8 @@ export class EvidentlyClientSideEvaluationLambdaStack extends cdk.Stack {
       environment: {
         // This tells the AppConfig extension which AppConfig configuration to use for local evaluation.
         // It must be in the form applications/<APP_ID>/environments/<ENV_ID>/configurations/<PROJECT_NAME>
-        AWS_APPCONFIG_EXTENSION_EVIDENTLY_CONFIGURATIONS: `applications/${application.ref}/environments/${environment.ref}/configurations/${project.name}`
+        AWS_APPCONFIG_EXTENSION_EVIDENTLY_CONFIGURATIONS: configuration,
+        AWS_APPCONFIG_EXTENSION_PREFETCH_LIST: configuration
       }
     });
     lambdaFunction.role?.addToPrincipalPolicy(

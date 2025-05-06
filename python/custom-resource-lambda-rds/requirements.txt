@@ -1,7 +1,0 @@
-aws-cdk.core>=1.134.0
-aws-cdk.assertions>=1.134.0
-aws-cdk.aws-lambda>=1.134.0
-aws-cdk.aws-rds>=1.134.0
-aws-cdk.aws-ec2>=1.134.0
-aws-cdk.aws-lambda-python>=1.134.0
-aws-cdk.aws-cloudformation>=1.134.0

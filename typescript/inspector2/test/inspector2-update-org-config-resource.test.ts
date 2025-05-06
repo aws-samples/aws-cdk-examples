@@ -1,6 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import { Inspector2UpdateOrganizationConfigurationResource } from '../lib/inspector2-update-org-config-resource';
+import { normalizeTemplate } from '../../test-utils/normalize-template';
 
 test('Inspector2UpdateOrganizationConfigurationResource creates required resources', () => {
   const app = new cdk.App();
@@ -15,5 +16,7 @@ test('Inspector2UpdateOrganizationConfigurationResource creates required resourc
     },
   });
 
-  expect(Template.fromStack(stack)).toMatchSnapshot();
+  const template = Template.fromStack(stack);
+  const normalizedTemplate = normalizeTemplate(template.toJSON());
+  expect(normalizedTemplate).toMatchSnapshot();
 });

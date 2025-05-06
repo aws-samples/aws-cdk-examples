@@ -29,7 +29,7 @@ export class RekognitionLambdaS3TriggerStack extends cdk.Stack {
     // create Lambda function
     const lambdaFunction = new lambda.Function(this, 'RekFunction', {
       handler: 'rekfunction.handler',
-      runtime: lambda.Runtime.NODEJS_14_X,
+      runtime: lambda.Runtime.NODEJS_20_X,
       code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
       environment: {
         'BUCKET_NAME': bucket.bucketName,

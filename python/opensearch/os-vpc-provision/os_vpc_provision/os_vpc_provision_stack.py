@@ -78,10 +78,8 @@ class OpenSearchVpcProvisionStack(Stack):
             allow_all_outbound=True,
             security_group_name="OpenSearchSecGrp",
         )
-        es_sec_grp.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(80))
-        es_sec_grp.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(443))
 
-        vpc_subnets = ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC)
+        vpc_subnets = ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE_WITH_NAT)
         domain = opensearch.Domain(
             self,
             "opensearch-stack-demo",
@@ -158,6 +156,19 @@ class OpenSearchVpcProvisionStack(Stack):
             )
         )
 
+        proxy_instance_sec_grp = ec2.SecurityGroup(
+            self,
+            "OpenSearchProxyInstanceSecGrp",
+            vpc=vpc,
+            allow_all_outbound=True,
+            security_group_name="OpenSearchProxyInstanceSecGrp",
+        )
+        proxy_instance_sec_grp.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(80))
+        proxy_instance_sec_grp.add_ingress_rule(ec2.Peer.any_ipv4(), ec2.Port.tcp(443))
+
+        es_sec_grp.add_ingress_rule(proxy_instance_sec_grp, ec2.Port.tcp(80))
+        es_sec_grp.add_ingress_rule(proxy_instance_sec_grp, ec2.Port.tcp(443))
+
         instance = ec2.Instance(
             self,
             "opensearch-proxy-instance",
@@ -166,9 +177,9 @@ class OpenSearchVpcProvisionStack(Stack):
             machine_image=amzn_linux,
             vpc_subnets=sn_public,
             role=role,
+            security_group=proxy_instance_sec_grp
+
         )
-        instance.connections.allow_from_any_ipv4(ec2.Port.tcp(22), "SSH")
-        instance.connections.allow_from_any_ipv4(ec2.Port.tcp(443), "HTTPS")
 
         stmt = iam.PolicyStatement(actions=["es:*"], resources=[domain.domain_arn])
         instance.add_to_role_policy(stmt)

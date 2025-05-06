@@ -1,6 +1,5 @@
 def main(event, context):
     import logging as log
-    import cfnresponse
     log.getLogger().setLevel(log.INFO)
 
     # This needs to change if there are to be multiple resources in the same stack
@@ -14,13 +13,12 @@ def main(event, context):
             raise RuntimeError('Create failure requested')
 
         # Do the thing
-        message = event['ResourceProperties']['Message']
+        message = event['ResourceProperties']['message']
         attributes = {
             'Response': 'You said "%s"' % message
         }
 
-        cfnresponse.send(event, context, cfnresponse.SUCCESS, attributes, physical_id)
+        return { 'Data': attributes }
     except Exception as e:
         log.exception(e)
-        # cfnresponse's error message is always "see CloudWatch"
-        cfnresponse.send(event, context, cfnresponse.FAILED, {}, physical_id)
+        return { 'Data': {} }

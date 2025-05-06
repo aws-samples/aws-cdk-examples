@@ -19,7 +19,7 @@ export class SharedStack extends cdk.Stack {
     this.bucketName = bucket.bucketName;
 
     const fn = new lambda.Function(this, 'S3EventNotificationsLambda', {
-      runtime: lambda.Runtime.NODEJS_12_X,
+      runtime: lambda.Runtime.NODEJS_18_X,
       functionName: 'S3EventNotificationsManager',
       handler: 'manage-s3-event-notifications.handler',
       code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),

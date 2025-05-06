@@ -1,8 +1,13 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: MIT-0
 
-const aws = require('aws-sdk');
-const s3 = new aws.S3();
+import {
+  S3Client,
+  GetBucketNotificationConfigurationCommand,
+  PutBucketNotificationConfigurationCommand
+} from "@aws-sdk/client-s3";
+const s3Client = new S3Client({ region: process.env.AWS_REGION });
+
 const url = require('url');
 const https = require('https');
 
@@ -13,14 +18,23 @@ exports.handler = async function (event, context) {
         const getParams = {
             Bucket: props.BucketName
         };
-        const currentConfiguration = await s3.getBucketNotificationConfiguration(getParams).promise();
+        const getBucketNotConfig = new GetBucketNotificationConfigurationCommand(getParams);
+
+        // const currentConfiguration = await getBucketNotificationConfiguration(getParams).promise();
+      const currentConfiguration = await s3Client.send(getBucketNotConfig);
         const mergedConfiguration = mergeConfigurations(event.RequestType, props.NotificationConfiguration, currentConfiguration)
         const putParams = {
             Bucket: props.BucketName,
             NotificationConfiguration: mergedConfiguration
         }
-        log({ bucket: props.BucketName, previousConfiguration: JSON.stringify(currentConfiguration), newConfiguration: JSON.stringify(mergedConfiguration) });
-        await s3.putBucketNotificationConfiguration(putParams).promise();
+        log({
+          bucket: props.BucketName,
+          previousConfiguration: JSON.stringify(currentConfiguration),
+          newConfiguration: JSON.stringify(mergedConfiguration)
+        });
+
+        const putBucketNotificationCommand = new PutBucketNotificationConfigurationCommand(putParams);
+        s3Client.send(putBucketNotificationCommand);
         return await submitResponse('SUCCESS');
     } catch (e) {
         logError(e);
@@ -36,7 +50,7 @@ exports.handler = async function (event, context) {
             if (input && input.length) {
                 // If input configuration exists, merge it with existing configuration
                 const inputIds = new Set(input.map(obj => obj.Id));
-                if (request == 'Delete') {
+                if (request === 'Delete') {
                     mergedConfig[key] = value.filter(obj => !inputIds.has(obj.Id));
                 } else {
                     const filterConfig = value.filter(obj => !inputIds.has(obj.Id));
