@@ -33,7 +33,7 @@ jobs:
       # Get the list of changed files, excluding Markdown files and deleted files
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@4168bb487d5b82227665ab4ec90b67ce02691741
+        uses: tj-actions/changed-files@480f49412651059a414a6a5c96887abb1877de8a
         with:
           files: ${{ matrix.language }}/**
           files_ignore: '**/*.md'
