@@ -1,3 +1,32 @@
+# TypeScript source files
+*.ts
+!*.d.ts
 
+# Test files
+test/
+__tests__/
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+
+# Legacy build artifacts
 .LAST_BUILD
 *.snk
+
+# Source control files
+.git/
+.github/
+.gitignore
+
+# Configuration files
+tsconfig.json
+cdk.json
+jest.config.js
+.eslintrc.js
+.prettierrc
+.npmignore
+
+# Editor and IDE files
+.idea/
+.vscode/
