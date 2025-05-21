@@ -1,5 +1,34 @@
+# TypeScript compiled files
+*.js
+!jest.config.js
+*.d.ts
+
+# TypeScript incremental build states
+*.tsbuildinfo
+
+# Node.js dependency directory
+node_modules/
+
+# NPM debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+
+# Legacy build artifacts
 .LAST_BUILD
 *.snk
-*.js
-*.d.ts
+
+# Editor and IDE files
+.idea/
+.vscode/
 *.swp
+*.swo
+*~
+
+# OS specific files
+.DS_Store
+Thumbs.db

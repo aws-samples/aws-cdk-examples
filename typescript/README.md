@@ -4,6 +4,25 @@
 
 This section contains all the CDK code examples written in Typescript. For more information on using the CDK in Typescript, please see the [Developer Guide](https://docs.aws.amazon.com/cdk/latest/guide/work-with-cdk-typescript.html).
 
+## Repository Configuration Files
+
+This directory contains the following configuration files:
+
+- `.gitignore`: Specifies which files and directories should be excluded from Git version control
+  - Excludes compiled JavaScript files (except jest.config.js)
+  - Excludes TypeScript declaration files (*.d.ts)
+  - Excludes node_modules and other build artifacts
+  - Excludes CDK staging and output directories
+  - Excludes editor/IDE specific files and OS-specific files
+
+- `.npmignore`: Specifies which files and directories should be excluded when publishing to npm
+  - Excludes TypeScript source files (but includes declaration files)
+  - Excludes test files and directories
+  - Excludes configuration files and build artifacts
+  - Excludes source control files
+
+These files are used as a reference for the individual example projects. Each example may have its own specific configuration files tailored to its needs.
+
 ## Running Examples
 
 To run a Typescript example, execute the following:
