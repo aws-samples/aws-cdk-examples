@@ -56,7 +56,7 @@ class EksFargateStackTest {
       Map.of(
         "Config", Map.of(
           "name", "SampleCluster",
-          "version", "1.31"
+          "version", "1.32"
         )
       )
     ), 1);
