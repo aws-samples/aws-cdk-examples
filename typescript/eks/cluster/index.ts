@@ -1,10 +1,10 @@
-import { KubectlV31Layer as KubectlLayer } from "@aws-cdk/lambda-layer-kubectl-v31";
+import { KubectlV32Layer as KubectlLayer } from "@aws-cdk/lambda-layer-kubectl-v32";
 import * as cdk from "aws-cdk-lib";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as eks from "aws-cdk-lib/aws-eks";
 import * as iam from "aws-cdk-lib/aws-iam";
 
-const kubernetesVersion = eks.KubernetesVersion.V1_31;
+const kubernetesVersion = eks.KubernetesVersion.V1_32;
 
 const clusterLogging = [
   // eks.ClusterLoggingTypes.API,
