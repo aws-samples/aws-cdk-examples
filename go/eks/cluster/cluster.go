@@ -6,7 +6,7 @@ import (
 	"github.com/aws/aws-cdk-go/awscdk/v2/awseks"
 	"github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
-	kubectl "github.com/cdklabs/awscdk-kubectl-go/kubectlv31/v2"
+	kubectl "github.com/cdklabs/awscdk-kubectl-go/kubectlv32/v2"
 )
 
 type ClusterStackProps struct {
@@ -27,8 +27,8 @@ func NewClusterStack(scope constructs.Construct, id string, props *ClusterStackP
 	eksCluster := awseks.NewCluster(stack, jsii.String("EKSCluster"), &awseks.ClusterProps{
 		Vpc:             vpc,
 		DefaultCapacity: jsii.Number(0), // manage capacity with managed nodegroups later since we want to customize nodegroup
-		KubectlLayer:    kubectl.NewKubectlV31Layer(stack, jsii.String("kubectl131layer")),
-		Version:         awseks.KubernetesVersion_V1_31(),
+		KubectlLayer:    kubectl.NewKubectlV32Layer(stack, jsii.String("kubectl132layer")),
+		Version:         awseks.KubernetesVersion_V1_32(),
 	})
 
 	// Managed Node Group

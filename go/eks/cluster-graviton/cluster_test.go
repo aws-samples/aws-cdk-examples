@@ -27,7 +27,7 @@ func TestClusterStack(t *testing.T) {
 
 	// Cluster
 	clusterVersion := template.Get("Resources.Cluster9EE0221C.Properties.Config.version").String()
-	assert.Equal(t, "1.31", clusterVersion)
+	assert.Equal(t, "1.32", clusterVersion)
 
 	ipFamily := template.Get("Resources.Cluster9EE0221C.Properties.Config.kubernetesNetworkConfig.ipFamily").String()
 	assert.Equal(t, "ipv4", ipFamily)
