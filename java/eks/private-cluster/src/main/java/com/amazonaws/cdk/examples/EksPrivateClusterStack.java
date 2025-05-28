@@ -89,7 +89,7 @@ public class EksPrivateClusterStack extends Stack {
     this.cluster =
         Cluster.Builder.create(this, "eks")
             .vpc(vpc)
-            .version(KubernetesVersion.V1.32)
+            .version(KubernetesVersion.V1_32)
             .vpcSubnets(
                 List.of(SubnetSelection.builder().subnetType(SubnetType.PRIVATE_ISOLATED).build()))
             .endpointAccess(EndpointAccess.PRIVATE)

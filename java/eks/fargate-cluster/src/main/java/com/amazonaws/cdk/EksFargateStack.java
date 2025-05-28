@@ -43,7 +43,7 @@ public class EksFargateStack extends Stack {
                 .mastersRole(clusterAdminRole)
                 .role(clusterAdminRole)
                 .endpointAccess(EndpointAccess.PUBLIC)
-                .version(KubernetesVersion.V1.32)
+                .version(KubernetesVersion.V1_32)
                 .vpc(props.getVpc())
                 .kubectlLayer(new KubectlV32Layer(this, "KubectlLayer"))
                 .vpcSubnets(List.of(SubnetSelection.builder()
