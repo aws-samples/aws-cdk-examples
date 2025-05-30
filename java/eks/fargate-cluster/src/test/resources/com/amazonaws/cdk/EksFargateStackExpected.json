@@ -384,7 +384,7 @@
         },
         "Config": {
           "name": "SampleCluster",
-          "version": "1.31",
+          "version": "1.32",
           "roleArn": {
             "Fn::GetAtt": [
               "EksClusterAdminRoleD3CAEBD0",
@@ -765,7 +765,7 @@
       "Type": "AWS::EKS::Addon",
       "Properties": {
         "AddonName": "kube-proxy",
-        "AddonVersion": "v1.31.3-eksbuild.2",
+        "AddonVersion": "v1.32.3-eksbuild.7",
         "ClusterName": {
           "Ref": "EksFargateCluster07FC3D2B"
         },
