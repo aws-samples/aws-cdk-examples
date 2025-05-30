@@ -51,7 +51,7 @@ class EKSCluster extends cdk.Stack {
         assumedBy: new iam.ServicePrincipal("ec2.amazonaws.com"),
         managedPolicies: [
           "AmazonEKSWorkerNodePolicy",
-          "AmazonEC2ContainerRegistryReadOnly",
+          "AmazonEC2ContainerRegistryPullOnly",
           "AmazonEKS_CNI_Policy",
         ].map((policy) => iam.ManagedPolicy.fromAwsManagedPolicyName(policy)),
       }),

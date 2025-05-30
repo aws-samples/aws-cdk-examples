@@ -175,7 +175,7 @@ public class EksPrivateClusterStack extends Stack {
     client
         .getRole()
         .addManagedPolicy(
-            ManagedPolicy.fromAwsManagedPolicyName("AmazonEC2ContainerRegistryReadOnly"));
+            ManagedPolicy.fromAwsManagedPolicyName("AmazonEC2ContainerRegistryPullOnly"));
     // access to read assets from S3 bucket e.g. kubectl, awscliv2, etc
     client
         .getRole()
