@@ -69,7 +69,7 @@ class ApiSqsLambdaStack(Stack):
         #Creating Lambda function that will be triggered by the SQS Queue
         sqs_lambda = _lambda.Function(self,'SQSTriggerLambda',
             handler='lambda-handler.handler',
-            runtime=_lambda.Runtime.PYTHON_3_7,
+            runtime=_lambda.Runtime.PYTHON_3_11,
             code=_lambda.Code.from_asset('lambda'),
         )
 
