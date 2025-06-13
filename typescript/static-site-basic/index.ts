@@ -28,6 +28,7 @@ const app = new cdk.App();
 new MyStaticSiteBasicStack(app, "MyStaticSite", {
   env: {
     account: app.node.tryGetContext("accountId"),
+    region: "eu-west-1",
   },
 });
 
