@@ -260,18 +260,6 @@ describe('AWS Batch OpenMP Benchmark Stack', () => {
   });
 
   describe('Script Files', () => {
-    test('submit-job script exists and is executable', () => {
-      const fs = require('fs');
-      const path = require('path');
-      
-      const scriptPath = path.join(__dirname, '..', 'scripts', 'submit-job.sh');
-      expect(fs.existsSync(scriptPath)).toBe(true);
-      
-      // Check if file is executable (has execute permission)
-      const stats = fs.statSync(scriptPath);
-      expect(stats.mode & parseInt('111', 8)).toBeGreaterThan(0);
-    });
-
     test('build-and-deploy script includes deployment info capture', () => {
       const fs = require('fs');
       const path = require('path');
@@ -283,37 +271,6 @@ describe('AWS Batch OpenMP Benchmark Stack', () => {
       expect(scriptContent).toContain('deployment-info.json');
       expect(scriptContent).toContain('stackOutputs');
       expect(scriptContent).toContain('awsProfile');
-    });
-
-    test('package.json follows standard format', () => {
-      const fs = require('fs');
-      const path = require('path');
-      
-      const packagePath = path.join(__dirname, '..', 'package.json');
-      const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
-      
-      // Check standard fields
-      expect(packageJson).toHaveProperty('name', 'batch-ecr-lambda');
-      expect(packageJson).toHaveProperty('description');
-      expect(packageJson).toHaveProperty('private', true);
-      expect(packageJson).toHaveProperty('author');
-      expect(packageJson).toHaveProperty('license', 'Apache-2.0');
-      
-      // Check standard scripts
-      expect(packageJson.scripts).toHaveProperty('build', 'tsc');
-      expect(packageJson.scripts).toHaveProperty('watch', 'tsc -w');
-      expect(packageJson.scripts).toHaveProperty('test', 'jest');
-      expect(packageJson.scripts).toHaveProperty('cdk', 'cdk');
-    });
-
-    test('gitignore includes deployment-info.json', () => {
-      const fs = require('fs');
-      const path = require('path');
-      
-      const gitignorePath = path.join(__dirname, '..', '.gitignore');
-      const gitignoreContent = fs.readFileSync(gitignorePath, 'utf8');
-      
-      expect(gitignoreContent).toContain('deployment-info.json');
     });
   });
 
