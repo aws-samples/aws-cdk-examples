@@ -1,5 +1,5 @@
 {
-  "name": "batch-ecr-lambda",
+  "name": "batch-ecr-openmp",
   "version": "1.0.0",
   "description": "AWS Batch with containerized application in ECR and Lambda for job submission",
   "private": true,
