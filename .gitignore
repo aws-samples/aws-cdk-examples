@@ -375,8 +375,11 @@ $RECYCLE.BIN/
 
 ### CDK-specific ignores ###
 *.swp
-cdk.context.json
 package-lock.json
 yarn.lock
 .cdk.staging
 cdk.out
+
+# Although this file is being ignored in this repository, generally it should be commited. 
+# https://docs.aws.amazon.com/cdk/v2/guide/context.html#context-construct
+cdk.context.json
