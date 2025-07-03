@@ -16,10 +16,10 @@ func TestSqsLambdaStack(t *testing.T) {
 	stack := NewSqsLambdaStack(app, "MyStack", nil)
 
 	// THEN
-	template := assertions.Template_FromStack(stack)
+	template := assertions.Template_FromStack(stack, nil)
 
 	template.HasResourceProperties(jsii.String("AWS::Lambda::Function"), map[string]interface{}{
-		"Runtime": "go1.x",
+		"Runtime": "provided.al2",
 	})
 
 	template.HasResourceProperties(jsii.String("AWS::SQS::Queue"), map[string]interface{}{

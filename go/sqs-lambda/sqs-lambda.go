@@ -28,8 +28,8 @@ func NewSqsLambdaStack(scope constructs.Construct, id string, props *SqsLambdaSt
 	})
 
 	// create Lambda function
-	awscdklambdagoalpha.NewGoFunction(stack, jsii.String("myGoHandler"), &awscdklambdagoalpha.GoFunctionProps{
-		Runtime: awslambda.Runtime_GO_1_X(),
+	lambda := awscdklambdagoalpha.NewGoFunction(stack, jsii.String("myGoHandler"), &awscdklambdagoalpha.GoFunctionProps{
+		Runtime: awslambda.Runtime_PROVIDED_AL2(),
 		Entry:   jsii.String("./sqs-consumer-handler"),
 		Events: &[]awslambda.IEventSource{
 			awslambdaeventsources.NewSqsEventSource(queue, &awslambdaeventsources.SqsEventSourceProps{
@@ -44,7 +44,13 @@ func NewSqsLambdaStack(scope constructs.Construct, id string, props *SqsLambdaSt
 	// log SQS endpoint URL
 	awscdk.NewCfnOutput(stack, jsii.String("sqsUrl"), &awscdk.CfnOutputProps{
 		Description: jsii.String("SQS endpoint URL"),
-		Value:       queue.QueueArn(),
+		Value:       queue.QueueUrl(),
+	})
+
+	// log generated Lambda name
+	awscdk.NewCfnOutput(stack, jsii.String("lambdaName"), &awscdk.CfnOutputProps{
+		Description: jsii.String("Lambda Name"),
+		Value:       lambda.FunctionName(),
 	})
 
 	return stack
