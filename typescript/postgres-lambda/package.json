@@ -12,7 +12,8 @@
     "build:lambda": "yarn workspaces foreach -v -A run build",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "install-deps": "cd lambda/lambda-to-postgres && npm install --prefix ./deps && cd ../../lambda/postgres-to-lambda && npm install --prefix ./deps && cd ../../lambda/postgres-setup && npm install --prefix ./deps"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
@@ -28,5 +29,6 @@
     "aws-cdk-lib": "^2.204.0",
     "constructs": "^10.4.2",
     "esbuild": "^0.25.6"
-  }
+  },
+  "packageManager": "yarn@4.9.2"
 }

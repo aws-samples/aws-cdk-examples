@@ -144,6 +144,7 @@ SELECT validate_data('{"id": 789, "value": "valid data"}'::JSONB);
 ├── test/                   # Unit tests
 ├── setup-postgres-lambda.sql # Reference SQL (now automated)
 ├── test-lambda.sh         # Lambda testing script
+├── .yarn/                 # Yarn 2+ configuration
 └── README.md              # This file
 ```
 
@@ -155,11 +156,11 @@ This project uses Yarn Workspaces to manage multiple packages in a monorepo stru
 # List all workspaces
 yarn workspaces list
 
-# Run a command in all Lambda workspaces
-yarn workspaces foreach -v --include '@lambda/*' run <command>
+# Run a command in all workspaces
+yarn workspaces foreach -v -A run <command>
 
 # Run a command in a specific workspace
-yarn workspace @lambda/lambda-to-postgres run <command>
+yarn workspace postgres-to-lambda run <command>
 
 # Install dependencies for all workspaces
 yarn install
@@ -240,6 +241,12 @@ Before using in production:
 ### Useful Commands
 
 ```bash
+# Build all packages
+yarn build
+
+# Build only Lambda functions
+yarn build:lambda
+
 # Build and watch for changes
 yarn watch
 
