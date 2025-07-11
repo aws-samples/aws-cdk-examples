@@ -1,0 +1,7 @@
+{
+  "name": "postgres-to-lambda",
+  "version": "1.0.0",
+  "description": "Lambda function that is called by PostgreSQL",
+  "main": "index.js",
+  "dependencies": {}
+}

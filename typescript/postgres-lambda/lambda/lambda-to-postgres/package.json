@@ -1,0 +1,10 @@
+{
+  "name": "lambda-to-postgres",
+  "version": "1.0.0",
+  "description": "Lambda function that calls PostgreSQL",
+  "main": "index.js",
+  "dependencies": {
+    "pg": "^8.11.3",
+    "@aws-sdk/client-secrets-manager": "^3.450.0"
+  }
+}

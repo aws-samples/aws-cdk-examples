@@ -1,0 +1,9 @@
+{
+  "name": "postgres-setup",
+  "version": "1.0.0",
+  "dependencies": {
+    "pg": "^8.11.3",
+    "@aws-sdk/client-secrets-manager": "^3.0.0",
+    "node-fetch": "^3.3.2"
+  }
+}
