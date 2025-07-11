@@ -46,6 +46,7 @@ export class PostgresLambdaStack extends cdk.Stack {
               'cp -r . /asset-output/'
             ].join(' && ')
           ],
+          user: '1000',
         },
       }),
       vpc,
@@ -69,7 +70,20 @@ export class PostgresLambdaStack extends cdk.Stack {
     const postgresFunction = new lambda.Function(this, 'PostgresFunction', {
       runtime: lambda.Runtime.NODEJS_LATEST,
       handler: 'index.handler',
-      code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/postgres-to-lambda')),
+      code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/postgres-to-lambda'), {
+        bundling: {
+          image: cdk.DockerImage.fromRegistry('public.ecr.aws/sam/build-nodejs18.x'),
+          command: [
+            'bash', '-c', [
+              'cp -r . /tmp',
+              'cd /tmp',
+              'npm init -y',
+              'cp -r . /asset-output/'
+            ].join(' && ')
+          ],
+          user: '1000',
+        },
+      }),
       environment: {
         FUNCTION_NAME: 'PostgresFunction',
       },
@@ -114,6 +128,7 @@ export class PostgresLambdaStack extends cdk.Stack {
               'cp -r . /asset-output/'
             ].join(' && ')
           ],
+          user: '1000',
         },
       }),
       vpc,
