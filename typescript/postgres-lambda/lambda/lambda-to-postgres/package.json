@@ -1,10 +1,14 @@
 {
-  "name": "lambda-to-postgres",
+  "name": "@lambda/lambda-to-postgres",
   "version": "1.0.0",
-  "description": "Lambda function that calls PostgreSQL",
+  "description": "Lambda function that connects to PostgreSQL",
   "main": "index.js",
+  "scripts": {
+    "build": "echo 'No build needed for JavaScript files'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
-    "pg": "^8.11.3",
-    "@aws-sdk/client-secrets-manager": "^3.450.0"
+    "pg": "^8.16.3",
+    "aws-sdk": "^2.1377.0"
   }
 }

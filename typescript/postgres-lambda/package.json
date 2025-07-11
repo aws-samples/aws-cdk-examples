@@ -1,11 +1,17 @@
 {
   "name": "postgres-lambda",
   "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    ".",
+    "lambda/*"
+  ],
   "bin": {
     "postgres-lambda": "bin/postgres-lambda.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && yarn workspaces foreach -v -A run build",
+    "build:lambda": "yarn workspaces foreach -v -A run build",
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk"
@@ -21,10 +27,8 @@
   },
   "dependencies": {
     "@aws-cdk/aws-lambda-nodejs": "^1.203.0",
-    "@types/pg": "^8.15.4",
     "aws-cdk-lib": "^2.204.0",
     "constructs": "^10.4.2",
-    "esbuild": "^0.25.6",
-    "pg": "^8.16.3"
+    "esbuild": "^0.25.6"
   }
 }

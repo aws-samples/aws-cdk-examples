@@ -98,7 +98,6 @@ export class PostgresLambdaStack extends cdk.Stack {
         DB_SECRET_ARN: dbCluster.secret?.secretArn || '',
         DB_NAME: 'demodb',
         POSTGRES_FUNCTION_NAME: postgresFunction.functionName,
-        AWS_REGION: this.region,
       },
       timeout: cdk.Duration.minutes(5),
     });

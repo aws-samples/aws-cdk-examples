@@ -1,7 +1,13 @@
 {
-  "name": "postgres-to-lambda",
+  "name": "@lambda/postgres-to-lambda",
   "version": "1.0.0",
-  "description": "Lambda function that is called by PostgreSQL",
+  "description": "Lambda function called by PostgreSQL",
   "main": "index.js",
-  "dependencies": {}
+  "scripts": {
+    "build": "echo 'No build needed for JavaScript files'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1377.0"
+  }
 }

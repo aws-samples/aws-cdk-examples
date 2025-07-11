@@ -9,6 +9,7 @@ A complete AWS CDK example demonstrating bidirectional integration between Auror
 - **Secure Architecture**: Private subnets, IAM roles, and Secrets Manager integration
 - **Production-Ready**: Includes error handling, connection pooling, and security best practices
 - **Automated Setup**: Custom CDK resource automatically configures PostgreSQL extensions and functions
+- **Yarn Workspaces**: Organized monorepo structure for managing multiple Lambda functions
 
 ## Architecture
 
@@ -23,10 +24,10 @@ graph TD
         end
     end
     
-    L1 -->|"(1) Connect and Query"| DB
-    DB -->|"(2) Invoke via aws_lambda extension"| L2
-    L2 -->|"(3) Return Result"| DB
-    L3 -->|"(4) Setup Extensions & Functions"| DB
+    L1 -->|"1. Connect and Query"| DB
+    DB -->|"2. Invoke via aws_lambda extension"| L2
+    L2 -->|"3. Return Result"| DB
+    L3 -->|"4. Setup Extensions & Functions"| DB
     
     SM[AWS Secrets Manager] -->|Provide Credentials| L1
     SM -->|Provide Credentials| L3
@@ -54,16 +55,17 @@ graph TD
 
 - AWS CDK v2 installed (`npm install -g aws-cdk`)
 - Node.js 18.x or later
+- Yarn package manager installed
 - AWS CLI configured with appropriate credentials
 
 ### Deploy
 
 ```bash
-# Install dependencies
-npm install
+# Install dependencies using yarn workspaces
+yarn install
 
 # Deploy the stack (setup is now automated!)
-npx cdk deploy
+yarn cdk deploy
 ```
 
 The deployment will automatically:
@@ -145,6 +147,30 @@ SELECT validate_data('{"id": 789, "value": "valid data"}'::JSONB);
 └── README.md              # This file
 ```
 
+## Yarn Workspaces
+
+This project uses Yarn Workspaces to manage multiple packages in a monorepo structure:
+
+```bash
+# List all workspaces
+yarn workspaces list
+
+# Run a command in all Lambda workspaces
+yarn workspaces foreach -v --include '@lambda/*' run <command>
+
+# Run a command in a specific workspace
+yarn workspace @lambda/lambda-to-postgres run <command>
+
+# Install dependencies for all workspaces
+yarn install
+```
+
+The workspace structure allows for:
+- Shared dependencies between packages
+- Individual package management
+- Simplified build and deployment process
+- Better organization of Lambda functions
+
 ## Configuration
 
 ### Environment Variables
@@ -215,16 +241,16 @@ Before using in production:
 
 ```bash
 # Build and watch for changes
-npm run watch
+yarn watch
 
 # Run tests
-npm run test
+yarn test
 
 # View CloudFormation template
-npx cdk synth
+yarn cdk synth
 
 # Compare deployed vs current state
-npx cdk diff
+yarn cdk diff
 
 # View stack outputs
 aws cloudformation describe-stacks --stack-name PostgresLambdaStack --query 'Stacks[0].Outputs'
@@ -236,7 +262,7 @@ aws logs describe-log-groups --log-group-name-prefix /aws/lambda/PostgresLambdaS
 ## Cleanup
 
 ```bash
-npx cdk destroy
+yarn cdk destroy
 ```
 
 **Note**: This will delete all resources including the database and any data stored in it.
