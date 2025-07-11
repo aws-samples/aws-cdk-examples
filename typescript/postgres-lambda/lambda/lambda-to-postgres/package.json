@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Lambda function that connects to PostgreSQL",
   "main": "index.js",
+  "scripts": {
+    "build": "cd $(pwd) && npm install --no-package-lock"
+  },
   "dependencies": {
     "pg": "^8.11.0"
   }
