@@ -16,6 +16,13 @@ export class PostgresLambdaStack extends cdk.Stack {
       maxAzs: 2,
       natGateways: 1,
     });
+    const parameterGroup = new rds.ParameterGroup(this, 'PGClusterParamGroup', {
+      engine: rds.DatabaseClusterEngine.auroraPostgres({
+        version: rds.AuroraPostgresEngineVersion.VER_17_4
+      }),
+      parameters: {
+      },
+    });
 
     // Create a PostgreSQL Aurora Serverless v2 cluster
     const dbCluster = new rds.DatabaseCluster(this, 'PostgresCluster', {
@@ -28,13 +35,16 @@ export class PostgresLambdaStack extends cdk.Stack {
       serverlessV2MaxCapacity: 1,
       defaultDatabaseName: 'demodb',
       credentials: rds.Credentials.fromGeneratedSecret('postgres'),
+      parameterGroup: parameterGroup,
     });
 
+
+
     const bundleCommand = [
-            'bash', '-c', [
-              'cp -r . /asset-output/',
-            ].join(' && ')
-          ]
+      'bash', '-c', [
+        'cp -r . /asset-output/',
+      ].join(' && ')
+    ]
 
     // Create a Lambda function that calls PostgreSQL with Docker bundling
     const lambdaToPostgres = new lambda.Function(this, 'LambdaToPostgres', {

@@ -1,9 +1,9 @@
 /**
  * Lambda function that is called by PostgreSQL
- * 
+ *
  * This function can be invoked from PostgreSQL using the aws_lambda extension
  * Example SQL:
- * 
+ *
  * SELECT * FROM aws_lambda.invoke(
  *   aws_commons.create_lambda_function_arn('PostgresFunction', 'us-east-1'),
  *   '{"action": "process", "data": {"id": 123, "value": "test"}}',
@@ -12,14 +12,14 @@
  */
 exports.handler = async (event) => {
   console.log('Event received from PostgreSQL:', JSON.stringify(event));
-  
+
   try {
     // Process the event data
     const action = event.action || 'default';
     const data = event.data || {};
-    
+
     let result;
-    
+
     // Perform different actions based on the event
     switch (action) {
       case 'process':
@@ -34,7 +34,7 @@ exports.handler = async (event) => {
       default:
         result = { status: 'success', message: 'Default action performed', data };
     }
-    
+
     return {
       statusCode: 200,
       body: result,

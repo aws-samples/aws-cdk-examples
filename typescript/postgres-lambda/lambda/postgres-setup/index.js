@@ -40,8 +40,8 @@ exports.handler = async (event, context) => {
       RETURNS JSONB AS $$
       SELECT payload FROM aws_lambda.invoke(
         aws_commons.create_lambda_function_arn('${POSTGRES_FUNCTION_NAME}', '${AWS_REGION}'),
-        json_build_object('action', 'process', 'data', data)::text,
-        'Event'
+        json_build_object('action', 'process', 'data', data)::JSONB,
+        'RequestResponse'
       );
       $$ LANGUAGE SQL;
 
@@ -49,8 +49,8 @@ exports.handler = async (event, context) => {
       RETURNS JSONB AS $$
       SELECT payload FROM aws_lambda.invoke(
         aws_commons.create_lambda_function_arn('${POSTGRES_FUNCTION_NAME}', '${AWS_REGION}'),
-        json_build_object('action', 'transform', 'data', data)::text,
-        'Event'
+        json_build_object('action', 'transform', 'data', data)::JSONB,
+        'RequestResponse'
       );
       $$ LANGUAGE SQL;
 
@@ -58,8 +58,8 @@ exports.handler = async (event, context) => {
       RETURNS JSONB AS $$
       SELECT payload FROM aws_lambda.invoke(
         aws_commons.create_lambda_function_arn('${POSTGRES_FUNCTION_NAME}', '${AWS_REGION}'),
-        json_build_object('action', 'validate', 'data', data)::text,
-        'Event'
+        json_build_object('action', 'validate', 'data', data)::JSONB,
+        'RequestResponse'
       );
       $$ LANGUAGE SQL;
     `;
