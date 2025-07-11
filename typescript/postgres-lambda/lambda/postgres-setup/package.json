@@ -7,7 +7,8 @@
     "build": "mkdir -p node_modules && npm install --no-package-lock"
   },
   "dependencies": {
-    "pg": "^8.11.0",
-    "@aws-sdk/client-secrets-manager": "^3.350.0"
+    "@aws-sdk/client-secrets-manager": "^3.350.0",
+    "cfn-response": "^1.0.1",
+    "pg": "^8.11.0"
   }
 }

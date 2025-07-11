@@ -58,7 +58,7 @@ export class PostgresLambdaStack extends cdk.Stack {
     });
 
     // Grant Lambda access to the DB
-    dbCluster.connections.allowDefaultPortTo(lambdaToPostgres);
+    dbCluster.connections.allowDefaultPortFrom(lambdaToPostgres);
 
     // Grant the Lambda function permission to read the database secret
     dbCluster.secret?.grantRead(lambdaToPostgres);

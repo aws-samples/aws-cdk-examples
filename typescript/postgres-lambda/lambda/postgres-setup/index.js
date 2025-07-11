@@ -1,15 +1,14 @@
 const { Client } = require('pg');
 const { SecretsManagerClient, GetSecretValueCommand } = require('@aws-sdk/client-secrets-manager');
-const https = require('https');
-const url = require('url');
+const response = require('cfn-response');
 
 const secretsManager = new SecretsManagerClient();
 
-exports.handler = async (event) => {
+exports.handler = async (event, context) => {
   console.log('Event:', JSON.stringify(event, null, 2));
 
   if (event.RequestType === 'Delete') {
-    return sendResponse(event, 'SUCCESS', 'Delete operation completed');
+    return response.send(event, context, response.SUCCESS, {}, 'postgres-setup-delete');
   }
 
   try {
@@ -68,56 +67,15 @@ exports.handler = async (event) => {
     await client.query(setupSQL);
     await client.end();
 
-    return sendResponse(event, 'SUCCESS', 'PostgreSQL setup completed successfully');
+    // Send success response
+    return response.send(event, context, response.SUCCESS, {
+      Message: 'PostgreSQL setup completed successfully'
+    }, 'postgres-setup-' + Date.now());
 
   } catch (error) {
     console.error('Error:', error);
-    return sendResponse(event, 'FAILED', error.message);
+    return response.send(event, context, response.FAILED, {
+      Error: error.message
+    });
   }
 };
-
-function sendResponse(event, status, reason) {
-  return new Promise((resolve, reject) => {
-    const responseBody = JSON.stringify({
-      Status: status,
-      Reason: reason,
-      PhysicalResourceId: 'postgres-setup-' + Date.now(),
-      StackId: event.StackId,
-      RequestId: event.RequestId,
-      LogicalResourceId: event.LogicalResourceId,
-      Data: {}
-    });
-
-    console.log('Response:', responseBody);
-
-    // Parse the URL
-    const parsedUrl = url.parse(event.ResponseURL);
-    
-    // Prepare the request options
-    const options = {
-      hostname: parsedUrl.hostname,
-      port: 443,
-      path: parsedUrl.path,
-      method: 'PUT',
-      headers: {
-        'Content-Type': '',
-        'Content-Length': responseBody.length
-      }
-    };
-
-    // Send the response
-    const request = https.request(options, (response) => {
-      console.log(`Status code: ${response.statusCode}`);
-      resolve({ status, reason });
-    });
-
-    request.on('error', (error) => {
-      console.error('Error sending response:', error);
-      reject(error);
-    });
-
-    // Write the response body and end the request
-    request.write(responseBody);
-    request.end();
-  });
-}

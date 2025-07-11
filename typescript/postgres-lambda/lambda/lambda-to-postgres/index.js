@@ -8,16 +8,18 @@ const secretsManager = new SecretsManager();
  */
 exports.handler = async (event) => {
   console.log('Event received:', JSON.stringify(event));
-  
+
   try {
     // Get database credentials from Secrets Manager
     const secretArn = process.env.DB_SECRET_ARN;
     const dbName = process.env.DB_NAME;
-    
+
     console.log(`Retrieving secret from ${secretArn}`);
     const secretResponse = await secretsManager.getSecretValue({ SecretId: secretArn });
     const secret = JSON.parse(secretResponse.SecretString);
-    
+    const logSecret = {...secret, password: '*********'};
+    console.log(logSecret);
+
     // Create PostgreSQL client
     const client = new Client({
       host: secret.host,
@@ -28,13 +30,13 @@ exports.handler = async (event) => {
       ssl: {
         rejectUnauthorized: false, // For demo purposes only, consider proper SSL setup in production
       },
-      connectionTimeoutMillis: 5000,
+      connectionTimeoutMillis: 10000,
     });
-    
+
     // Connect to the database
     console.log('Connecting to PostgreSQL database...');
     await client.connect();
-    
+
     // Check if our demo table exists, if not create it
     console.log('Creating demo table if it does not exist...');
     await client.query(`
@@ -44,19 +46,19 @@ exports.handler = async (event) => {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
-    
+
     // Insert a record
     const message = event.message || 'Hello from Lambda!';
     console.log(`Inserting message: ${message}`);
     await client.query('INSERT INTO demo_table (message) VALUES ($1)', [message]);
-    
+
     // Query the records
     console.log('Querying records...');
     const result = await client.query('SELECT * FROM demo_table ORDER BY created_at DESC LIMIT 10');
-    
+
     // Close the connection
     await client.end();
-    
+
     // Return the results
     return {
       statusCode: 200,
