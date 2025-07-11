@@ -1,5 +1,7 @@
 const { Client } = require('pg');
 const { SecretsManagerClient, GetSecretValueCommand } = require('@aws-sdk/client-secrets-manager');
+const https = require('https');
+const url = require('url');
 
 const secretsManager = new SecretsManagerClient();
 
@@ -74,24 +76,48 @@ exports.handler = async (event) => {
   }
 };
 
-async function sendResponse(event, status, reason) {
-  const response = {
-    Status: status,
-    Reason: reason,
-    PhysicalResourceId: 'postgres-setup-' + Date.now(),
-    StackId: event.StackId,
-    RequestId: event.RequestId,
-    LogicalResourceId: event.LogicalResourceId
-  };
+function sendResponse(event, status, reason) {
+  return new Promise((resolve, reject) => {
+    const responseBody = JSON.stringify({
+      Status: status,
+      Reason: reason,
+      PhysicalResourceId: 'postgres-setup-' + Date.now(),
+      StackId: event.StackId,
+      RequestId: event.RequestId,
+      LogicalResourceId: event.LogicalResourceId,
+      Data: {}
+    });
 
-  console.log('Response:', JSON.stringify(response, null, 2));
+    console.log('Response:', responseBody);
 
-  const fetch = (await import('node-fetch')).default;
-  await fetch(event.ResponseURL, {
-    method: 'PUT',
-    headers: { 'Content-Type': '' },
-    body: JSON.stringify(response)
+    // Parse the URL
+    const parsedUrl = url.parse(event.ResponseURL);
+    
+    // Prepare the request options
+    const options = {
+      hostname: parsedUrl.hostname,
+      port: 443,
+      path: parsedUrl.path,
+      method: 'PUT',
+      headers: {
+        'Content-Type': '',
+        'Content-Length': responseBody.length
+      }
+    };
+
+    // Send the response
+    const request = https.request(options, (response) => {
+      console.log(`Status code: ${response.statusCode}`);
+      resolve({ status, reason });
+    });
+
+    request.on('error', (error) => {
+      console.error('Error sending response:', error);
+      reject(error);
+    });
+
+    // Write the response body and end the request
+    request.write(responseBody);
+    request.end();
   });
-
-  return response;
 }
