@@ -30,19 +30,20 @@ export class PostgresLambdaStack extends cdk.Stack {
       credentials: rds.Credentials.fromGeneratedSecret('postgres'),
     });
 
+    const bundleCommand = [
+            'bash', '-c', [
+              'cp -r . /asset-output/',
+            ].join(' && ')
+          ]
+
     // Create a Lambda function that calls PostgreSQL with Docker bundling
     const lambdaToPostgres = new lambda.Function(this, 'LambdaToPostgres', {
       runtime: lambda.Runtime.NODEJS_LATEST,
       handler: 'index.handler',
       code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/lambda-to-postgres'), {
         bundling: {
-          image: cdk.DockerImage.fromRegistry('public.ecr.aws/sam/build-nodejs18.x'),
-          command: [
-            'bash', '-c', [
-              'cp -r . /asset-output/'
-            ].join(' && ')
-          ],
-          user: '1000',
+          image: lambda.Runtime.NODEJS_LATEST.bundlingImage,
+          command: bundleCommand,
         },
       }),
       vpc,
@@ -68,13 +69,8 @@ export class PostgresLambdaStack extends cdk.Stack {
       handler: 'index.handler',
       code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/postgres-to-lambda'), {
         bundling: {
-          image: cdk.DockerImage.fromRegistry('public.ecr.aws/sam/build-nodejs18.x'),
-          command: [
-            'bash', '-c', [
-              'cp -r . /asset-output/'
-            ].join(' && ')
-          ],
-          user: '1000',
+          image: lambda.Runtime.NODEJS_LATEST.bundlingImage,
+          command: bundleCommand,
         },
       }),
       environment: {
@@ -111,13 +107,8 @@ export class PostgresLambdaStack extends cdk.Stack {
       handler: 'index.handler',
       code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/postgres-setup'), {
         bundling: {
-          image: cdk.DockerImage.fromRegistry('public.ecr.aws/sam/build-nodejs18.x'),
-          command: [
-            'bash', '-c', [
-              'cp -r . /asset-output/'
-            ].join(' && ')
-          ],
-          user: '1000',
+          image: lambda.Runtime.NODEJS_LATEST.bundlingImage,
+          command: bundleCommand,
         },
       }),
       vpc,
