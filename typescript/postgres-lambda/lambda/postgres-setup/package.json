@@ -1,14 +1,9 @@
 {
-  "name": "@lambda/postgres-setup",
+  "name": "postgres-setup",
   "version": "1.0.0",
-  "description": "Lambda function for automated PostgreSQL setup",
+  "description": "Lambda function for PostgreSQL setup",
   "main": "index.js",
-  "scripts": {
-    "build": "echo 'No build needed for JavaScript files'",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "dependencies": {
-    "pg": "^8.16.3",
-    "aws-sdk": "^2.1377.0"
+    "pg": "^8.11.0"
   }
 }

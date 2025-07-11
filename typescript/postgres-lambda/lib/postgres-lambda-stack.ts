@@ -39,10 +39,6 @@ export class PostgresLambdaStack extends cdk.Stack {
           image: cdk.DockerImage.fromRegistry('public.ecr.aws/sam/build-nodejs18.x'),
           command: [
             'bash', '-c', [
-              'cp -r . /tmp',
-              'cd /tmp',
-              'npm init -y',
-              'npm install pg',
               'cp -r . /asset-output/'
             ].join(' && ')
           ],
@@ -75,9 +71,6 @@ export class PostgresLambdaStack extends cdk.Stack {
           image: cdk.DockerImage.fromRegistry('public.ecr.aws/sam/build-nodejs18.x'),
           command: [
             'bash', '-c', [
-              'cp -r . /tmp',
-              'cd /tmp',
-              'npm init -y',
               'cp -r . /asset-output/'
             ].join(' && ')
           ],
@@ -121,10 +114,6 @@ export class PostgresLambdaStack extends cdk.Stack {
           image: cdk.DockerImage.fromRegistry('public.ecr.aws/sam/build-nodejs18.x'),
           command: [
             'bash', '-c', [
-              'cp -r . /tmp',
-              'cd /tmp',
-              'npm init -y',
-              'npm install pg',
               'cp -r . /asset-output/'
             ].join(' && ')
           ],

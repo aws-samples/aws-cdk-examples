@@ -6,9 +6,7 @@
     ".",
     "lambda/*"
   ],
-  "bin": {
-    "postgres-lambda": "bin/postgres-lambda.js"
-  },
+  "bin": "bin/postgres-lambda.js",
   "scripts": {
     "build": "tsc && yarn workspaces foreach -v -A run build",
     "build:lambda": "yarn workspaces foreach -v -A run build",
