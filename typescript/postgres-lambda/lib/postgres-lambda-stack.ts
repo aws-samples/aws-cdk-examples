@@ -6,7 +6,6 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as cr from 'aws-cdk-lib/custom-resources';
 import * as path from 'path';
-import * as nodejs from 'aws-cdk-lib/aws-lambda-nodejs';
 
 export class PostgresLambdaStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -31,10 +30,24 @@ export class PostgresLambdaStack extends cdk.Stack {
       credentials: rds.Credentials.fromGeneratedSecret('postgres'),
     });
 
-    // Create a Lambda function that calls PostgreSQL using NodejsFunction
-    const lambdaToPostgres = new nodejs.NodejsFunction(this, 'LambdaToPostgres', {
+    // Create a Lambda function that calls PostgreSQL with Docker bundling
+    const lambdaToPostgres = new lambda.Function(this, 'LambdaToPostgres', {
       runtime: lambda.Runtime.NODEJS_LATEST,
-      entry: path.join(__dirname, '../lambda/lambda-to-postgres/index.js'),
+      handler: 'index.handler',
+      code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/lambda-to-postgres'), {
+        bundling: {
+          image: cdk.DockerImage.fromRegistry('public.ecr.aws/sam/build-nodejs18.x'),
+          command: [
+            'bash', '-c', [
+              'cp -r . /tmp',
+              'cd /tmp',
+              'npm init -y',
+              'npm install pg',
+              'cp -r . /asset-output/'
+            ].join(' && ')
+          ],
+        },
+      }),
       vpc,
       vpcSubnets: {
         subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
@@ -42,11 +55,6 @@ export class PostgresLambdaStack extends cdk.Stack {
       environment: {
         DB_SECRET_ARN: dbCluster.secret?.secretArn || '',
         DB_NAME: 'demodb',
-      },
-      bundling: {
-        externalModules: [
-          'aws-sdk', // Use the AWS SDK available in the Lambda runtime
-        ],
       },
       timeout: cdk.Duration.seconds(30),
     });
@@ -57,20 +65,17 @@ export class PostgresLambdaStack extends cdk.Stack {
     // Grant the Lambda function permission to read the database secret
     dbCluster.secret?.grantRead(lambdaToPostgres);
 
-    // Create a Lambda function that is called by PostgreSQL using NodejsFunction
-    const postgresFunction = new nodejs.NodejsFunction(this, 'PostgresFunction', {
+    // Create a Lambda function that is called by PostgreSQL
+    const postgresFunction = new lambda.Function(this, 'PostgresFunction', {
       runtime: lambda.Runtime.NODEJS_LATEST,
-      entry: path.join(__dirname, '../lambda/postgres-to-lambda/index.js'),
+      handler: 'index.handler',
+      code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/postgres-to-lambda')),
       environment: {
         FUNCTION_NAME: 'PostgresFunction',
       },
-      bundling: {
-        externalModules: [
-          'aws-sdk', // Use the AWS SDK available in the Lambda runtime
-        ],
-      },
       timeout: cdk.Duration.seconds(30),
     });
+
 
     // Create a role for PostgreSQL to assume to invoke Lambda
     const postgresLambdaRole = new iam.Role(this, 'PostgresLambdaRole', {
@@ -78,6 +83,7 @@ export class PostgresLambdaStack extends cdk.Stack {
     });
 
     postgresFunction.grantInvoke(postgresLambdaRole);
+
 
     const l1DbCluster = dbCluster.node.defaultChild as rds.CfnDBCluster
     const exisitingProperty = (l1DbCluster.associatedRoles as []) || [];
@@ -92,10 +98,24 @@ export class PostgresLambdaStack extends cdk.Stack {
 
     l1DbCluster.addPropertyOverride('AssociatedRoles', updatedRoles);
 
-    // Create Lambda function for PostgreSQL setup using NodejsFunction
-    const setupFunction = new nodejs.NodejsFunction(this, 'PostgresSetupFunction', {
+    // Create Lambda function for PostgreSQL setup with Docker bundling
+    const setupFunction = new lambda.Function(this, 'PostgresSetupFunction', {
       runtime: lambda.Runtime.NODEJS_LATEST,
-      entry: path.join(__dirname, '../lambda/postgres-setup/index.js'),
+      handler: 'index.handler',
+      code: lambda.Code.fromAsset(path.join(__dirname, '../lambda/postgres-setup'), {
+        bundling: {
+          image: cdk.DockerImage.fromRegistry('public.ecr.aws/sam/build-nodejs18.x'),
+          command: [
+            'bash', '-c', [
+              'cp -r . /tmp',
+              'cd /tmp',
+              'npm init -y',
+              'npm install pg',
+              'cp -r . /asset-output/'
+            ].join(' && ')
+          ],
+        },
+      }),
       vpc,
       vpcSubnets: {
         subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
@@ -104,11 +124,6 @@ export class PostgresLambdaStack extends cdk.Stack {
         DB_SECRET_ARN: dbCluster.secret?.secretArn || '',
         DB_NAME: 'demodb',
         POSTGRES_FUNCTION_NAME: postgresFunction.functionName,
-      },
-      bundling: {
-        externalModules: [
-          'aws-sdk', // Use the AWS SDK available in the Lambda runtime
-        ],
       },
       timeout: cdk.Duration.minutes(5),
     });

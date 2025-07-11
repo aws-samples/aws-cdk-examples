@@ -2,7 +2,9 @@
 !jest.config.js
 *.d.ts
 node_modules
-**/node_modules
+# Allow node_modules in Lambda directories
+!lambda/*/node_modules
+!lambda/*/*.js
 
 # CDK asset staging directory
 .cdk.staging
