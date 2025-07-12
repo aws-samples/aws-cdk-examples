@@ -80,12 +80,7 @@ No manual setup required! 🎉
 
 ### Test Lambda → PostgreSQL
 
-Using the provided test script:
-```bash
-./test-lambda.sh --function-name <LAMBDA_TO_POSTGRES_FUNCTION_NAME> --message "Hello World"
-```
-
-Or using AWS CLI directly:
+Using AWS CLI directly:
 ```bash
 aws lambda invoke \
   --function-name <LAMBDA_TO_POSTGRES_FUNCTION_NAME> \
@@ -129,8 +124,9 @@ SELECT validate_data('{"id": 789, "value": "valid data"}'::JSONB);
 
 1. **Extension Setup**: Uses `aws_lambda` extension for Lambda invocation (automated)
 2. **Function Creation**: SQL functions wrap Lambda calls with proper ARN construction (automated)
-3. **Event Processing**: Lambda receives structured JSON events from PostgreSQL
-4. **Result Return**: Lambda response becomes available in SQL query results
+3. **Synchronous Invocation**: Uses 'RequestResponse' invocation type for immediate results
+4. **Event Processing**: Lambda receives structured JSON events from PostgreSQL
+5. **Result Return**: Lambda response becomes available in SQL query results
 
 ## Project Structure
 
@@ -142,8 +138,6 @@ SELECT validate_data('{"id": 789, "value": "valid data"}'::JSONB);
 │   ├── postgres-to-lambda/ # Lambda called by PostgreSQL
 │   └── postgres-setup/     # Lambda for automated setup
 ├── test/                   # Unit tests
-├── setup-postgres-lambda.sql # Reference SQL (now automated)
-├── test-lambda.sh         # Lambda testing script
 ├── .yarn/                 # Yarn 2+ configuration
 └── README.md              # This file
 ```

@@ -16,13 +16,6 @@ export class PostgresLambdaStack extends cdk.Stack {
       maxAzs: 2,
       natGateways: 1,
     });
-    const parameterGroup = new rds.ParameterGroup(this, 'PGClusterParamGroup', {
-      engine: rds.DatabaseClusterEngine.auroraPostgres({
-        version: rds.AuroraPostgresEngineVersion.VER_17_4
-      }),
-      parameters: {
-      },
-    });
 
     // Create a PostgreSQL Aurora Serverless v2 cluster
     const dbCluster = new rds.DatabaseCluster(this, 'PostgresCluster', {
@@ -35,7 +28,6 @@ export class PostgresLambdaStack extends cdk.Stack {
       serverlessV2MaxCapacity: 1,
       defaultDatabaseName: 'demodb',
       credentials: rds.Credentials.fromGeneratedSecret('postgres'),
-      parameterGroup: parameterGroup,
     });
 
 
@@ -144,9 +136,6 @@ export class PostgresLambdaStack extends cdk.Stack {
 
     new cdk.CustomResource(this, 'PostgresSetupResource', {
       serviceToken: setupProvider.serviceToken,
-      properties: {
-        test: 'yo'
-      },
     });
 
     // Output the database endpoint and secret ARN
