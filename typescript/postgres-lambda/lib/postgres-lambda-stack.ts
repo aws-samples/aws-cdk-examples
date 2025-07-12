@@ -134,7 +134,7 @@ export class PostgresLambdaStack extends cdk.Stack {
     });
 
     // Grant setup function access to the DB and secrets
-    dbCluster.connections.allowDefaultPortTo(setupFunction);
+    dbCluster.connections.allowDefaultPortFrom(setupFunction);
     dbCluster.secret?.grantRead(setupFunction);
 
     // Create custom resource to trigger setup
@@ -144,6 +144,9 @@ export class PostgresLambdaStack extends cdk.Stack {
 
     new cdk.CustomResource(this, 'PostgresSetupResource', {
       serviceToken: setupProvider.serviceToken,
+      properties: {
+        test: 'yo'
+      },
     });
 
     // Output the database endpoint and secret ARN
