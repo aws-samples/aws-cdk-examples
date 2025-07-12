@@ -1,0 +1,14 @@
+{
+  "name": "postgres-setup",
+  "version": "1.0.0",
+  "description": "Lambda function for PostgreSQL setup",
+  "main": "index.js",
+  "scripts": {
+    "build": "mkdir -p node_modules && npm install --no-package-lock"
+  },
+  "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.350.0",
+    "cfn-response": "^1.0.1",
+    "pg": "^8.11.0"
+  }
+}
