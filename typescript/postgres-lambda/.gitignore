@@ -1,0 +1,32 @@
+*.js
+!jest.config.js
+*.d.ts
+node_modules
+#**/node_modules
+
+!lambda/*/*.js
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+
+# Yarn specific
+.yarn/*
+.pnp.*
+yarn-debug.log*
+yarn-error.log*
+
+# Build artifacts
+dist/
+build/
+*.tsbuildinfo
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
