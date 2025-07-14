@@ -23,15 +23,15 @@ graph TD
             L3[Lambda Function\nPostgresSetup]
         end
     end
-    
-    L1 -->|"1. Connect and Query"| DB
-    DB -->|"2. Invoke via aws_lambda extension"| L2
-    L2 -->|"3. Return Result"| DB
-    L3 -->|"4. Setup Extensions & Functions"| DB
-    
+
+    L1 -->|"1 Connect and Query"| DB
+    DB -->|"2 Invoke via aws_lambda extension"| L2
+    L2 -->|"3 Return Result"| DB
+    L3 -->|"4 Setup Extensions & Functions"| DB
+
     SM[AWS Secrets Manager] -->|Provide Credentials| L1
     SM -->|Provide Credentials| L3
-    
+
     style DB fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#000
     style L1 fill:#FFF3E0,stroke:#F57C00,stroke-width:2px,color:#000
     style L2 fill:#FFF3E0,stroke:#F57C00,stroke-width:2px,color:#000
@@ -138,7 +138,6 @@ SELECT validate_data('{"id": 789, "value": "valid data"}'::JSONB);
 │   ├── postgres-to-lambda/ # Lambda called by PostgreSQL
 │   └── postgres-setup/     # Lambda for automated setup
 ├── test/                   # Unit tests
-├── .yarn/                 # Yarn 2+ configuration
 └── README.md              # This file
 ```
 
@@ -148,10 +147,7 @@ This project uses Yarn Workspaces to manage multiple packages in a monorepo stru
 
 ```bash
 # List all workspaces
-yarn workspaces list
-
-# Run a command in all workspaces
-yarn workspaces foreach -v -A run <command>
+yarn workspaces info
 
 # Run a command in a specific workspace
 yarn workspace postgres-to-lambda run <command>
