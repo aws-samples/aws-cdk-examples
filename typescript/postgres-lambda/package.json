@@ -2,10 +2,15 @@
   "name": "postgres-lambda",
   "version": "0.1.0",
   "private": true,
-  "workspaces": [
-    ".",
-    "lambda/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "lambda/*"
+    ],
+    "nohoist": [
+      "**",
+      "**/**"
+    ]
+  },
   "bin": "bin/postgres-lambda.js",
   "scripts": {
     "build": "tsc && yarn workspaces foreach -v -A run build",
@@ -29,6 +34,5 @@
     "aws-cdk-lib": "^2.204.0",
     "constructs": "^10.4.2",
     "esbuild": "^0.25.6"
-  },
-  "packageManager": "yarn@4.9.2"
+  }
 }
