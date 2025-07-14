@@ -13,12 +13,10 @@
   },
   "bin": "bin/postgres-lambda.js",
   "scripts": {
-    "build": "tsc && yarn workspaces foreach -v -A run build",
-    "build:lambda": "yarn workspaces foreach -v -A run build",
+    "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk",
-    "install-deps": "cd lambda/lambda-to-postgres && npm install --prefix ./deps && cd ../../lambda/postgres-to-lambda && npm install --prefix ./deps && cd ../../lambda/postgres-setup && npm install --prefix ./deps"
+    "cdk": "cdk"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
@@ -30,7 +28,6 @@
     "typescript": "~5.6.3"
   },
   "dependencies": {
-    "@aws-cdk/aws-lambda-nodejs": "^1.203.0",
     "aws-cdk-lib": "^2.204.0",
     "constructs": "^10.4.2",
     "esbuild": "^0.25.6"
