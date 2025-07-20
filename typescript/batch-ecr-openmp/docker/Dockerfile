@@ -27,7 +27,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user for security
-RUN useradd -m -u 1000 openmp
+RUN useradd -m -u 1001 openmp
 
 # Copy the built executable
 COPY --from=builder /build/openmp_benchmark /usr/local/bin/
