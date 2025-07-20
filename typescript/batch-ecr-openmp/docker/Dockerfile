@@ -1,5 +1,5 @@
 # Multi-stage build for OpenMP C++ application
-FROM ubuntu:22.04 as builder
+FROM ubuntu:24.04 as builder
 
 # Install build dependencies
 RUN apt-get update && apt-get install -y \
@@ -19,7 +19,7 @@ COPY src/openmp/ .
 RUN make clean && make
 
 # Runtime stage
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 # Install runtime dependencies
 RUN apt-get update && apt-get install -y \

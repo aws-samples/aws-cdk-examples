@@ -16,7 +16,8 @@ This example demonstrates how to use AWS Batch with a containerized C++ OpenMP a
 ## Prerequisites
 
 Before deploying, ensure you have:
-- AWS CLI configured with appropriate credentials
+- AWS CLI configured with sufficient permissions for infrastructure deployment
+  - AdministratorAccess recommended, or custom policy with EC2, VPC, Batch, ECR, Lambda, IAM, CloudFormation, and CloudWatch Logs permissions
 - Docker installed and running
 - Node.js and npm installed
 - `jq` command-line JSON processor (for job submission script)
