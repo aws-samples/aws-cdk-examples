@@ -1,0 +1,28 @@
+{
+  "name": "batch-ecr-openmp",
+  "version": "1.0.0",
+  "description": "AWS Batch with containerized application in ECR and Lambda for job submission",
+  "private": true,
+  "bin": {
+    "batch-ecr-lambda": "bin/aws-batch-openmp-benchmark.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "cdk": "cdk"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "22.7.9",
+    "aws-cdk": "2.1018.1",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "typescript": "~5.6.3"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.200.1",
+    "constructs": "^10.4.2"
+  }
+}
