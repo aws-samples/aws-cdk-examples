@@ -12,6 +12,8 @@ def handler(event, context):
             'Content-Type': 'text/html'
         },
         'body': file_get_contents("index.html").format(loginPage=login_page)
+    }
+
 def file_get_contents(filename):
     with open(filename) as f:
         return f.read()
