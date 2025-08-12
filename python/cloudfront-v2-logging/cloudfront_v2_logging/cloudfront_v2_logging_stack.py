@@ -1,8 +1,10 @@
 from aws_cdk import (
     Duration,
     Stack,
+    Size,
     aws_logs as logs,
     aws_cloudfront as cloudfront,
+    aws_cloudfront_origins as origins,
     aws_iam as iam,
     aws_s3 as s3,
     aws_kinesisfirehose as firehose,
@@ -10,12 +12,10 @@ from aws_cdk import (
     RemovalPolicy,
     CfnOutput,
     CfnParameter,
-    CfnMapping
 )
+# Import the destinations module from aws-cdk-lib
+from aws_cdk.aws_kinesisfirehose import S3Bucket, Compression
 from constructs import Construct
-from cdk_nag import NagSuppressions
-
-import json
 
 class CloudfrontV2LoggingStack(Stack):
     """
@@ -30,7 +30,7 @@ class CloudfrontV2LoggingStack(Stack):
         super().__init__(scope, construct_id, **kwargs)
 
         # CloudFormation parameters for customization
-        log_retention_days = CfnParameter(
+        s3_log_retention_days = CfnParameter(
             self, "LogRetentionDays",
             type="Number",
             default=30,
@@ -51,8 +51,8 @@ class CloudfrontV2LoggingStack(Stack):
             ]
         )
         
-        # Create the logging bucket for CloudFront
-        # This bucket will store logs in Parquet format and from Firehose
+        # Create the S3 logging bucket for CloudFront
+        # This bucket will store logs from the S3 output in Parquet format and also be the target for our Firehose delivery
         logging_bucket = s3.Bucket(
             self, "CFLoggingBucket",
             removal_policy=RemovalPolicy.DESTROY,
@@ -63,7 +63,7 @@ class CloudfrontV2LoggingStack(Stack):
             enforce_ssl=True,
             lifecycle_rules=[
                 s3.LifecycleRule(
-                    expiration=Duration.days(log_retention_days.value_as_number),  # Configurable log retention
+                    expiration=Duration.days(s3_log_retention_days.value_as_number),  # Configurable log retention
                 )
             ]
         )
@@ -79,43 +79,54 @@ class CloudfrontV2LoggingStack(Stack):
             auto_delete_objects=True  # Clean up objects when stack is deleted
         )
 
-        # Deploy the static website content to the S3 bucket
-        s3_deploy = s3_deployment.BucketDeployment(
+        # Deploy the static website content to the S3 bucket with improved options
+        s3_deployment.BucketDeployment(
             self, "DeployWebsite",
             sources=[s3_deployment.Source.asset("website")],  # Directory containing your website files
-            destination_bucket=main_bucket
+            destination_bucket=main_bucket,
+            content_type="text/html",  # Set content type for HTML files
+            cache_control=[s3_deployment.CacheControl.max_age(Duration.days(7))],  # Cache for 7 days
+            prune=False
         )
         
-        # Add bucket policy to deny direct access to S3 objects
-        # This ensures content is only accessed through CloudFront
-        main_bucket.add_to_resource_policy(
-            iam.PolicyStatement(
-                effect=iam.Effect.DENY,
-                actions=["s3:GetObject"],
-                principals=[iam.AnyPrincipal()],
-                resources=[main_bucket.arn_for_objects("*")],
-                conditions={
-                    "StringNotEquals": {
-                        "aws:PrincipalServiceName": "cloudfront.amazonaws.com"
-                    }
-                }
-            )
+        # Create CloudWatch Logs group with configurable retention
+        log_group = logs.LogGroup(
+            self, 
+            "DistributionLogGroup",
+            retention=self._get_log_retention(cloudwatch_log_retention_days.value_as_number)
+        )
+        
+        # Create Kinesis Firehose delivery stream to buffer and deliver logs to S3 using L2 construct
+        # Define S3 destination for Firehose with dynamic prefixes
+        s3_destination = S3Bucket(
+            bucket=logging_bucket,
+            data_output_prefix="firehose_delivery/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/",
+            error_output_prefix="errors/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/!{firehose:error-output-type}/",
+            buffering_interval=Duration.seconds(300),  # Buffer for 5 minutes
+            buffering_size=Size.mebibytes(5),  # Or until 5MB is reached
+            compression=Compression.HADOOP_SNAPPY  # Compress data for efficiency
+        )
+        
+        # Create Kinesis Firehose delivery stream using L2 construct
+        firehose_stream = firehose.DeliveryStream(
+            self, "LoggingFirehose",
+            delivery_stream_name="cloudfront-logs-stream",
+            destination=s3_destination,
+            encryption=firehose.StreamEncryption.aws_owned_key()
         )
 
-        # Grant CloudFront permission to write logs to the S3 bucket
-        cloudfront_distribution_arn = Stack.of(self).format_arn(
-            service="cloudfront",
-            region="",  # CloudFront is a global service
-            resource="distribution",
-            resource_name="*"  # Wildcard for all distributions in the account
-        )
-        
+        # Grant permissions for the delivery service to write logs to the S3 bucket
         logging_bucket.add_to_resource_policy(
             iam.PolicyStatement(
                 sid="AllowCloudFrontLogDelivery",
                 actions=["s3:PutObject"],
                 principals=[iam.ServicePrincipal("delivery.logs.amazonaws.com")],
-                resources=[f"{logging_bucket.bucket_arn}/*"]
+                resources=[f"{logging_bucket.bucket_arn}/*"],
+                conditions={
+                    "StringEquals": {
+                        "aws:SourceAccount": Stack.of(self).account
+                    }
+                }
             )
         )
 
@@ -125,66 +136,29 @@ class CloudfrontV2LoggingStack(Stack):
                 sid="AllowCloudFrontLogDeliveryAcl",
                 actions=["s3:GetBucketAcl"],
                 principals=[iam.ServicePrincipal("delivery.logs.amazonaws.com")],
-                resources=[logging_bucket.bucket_arn]
-            )
-        )
-
-        # Create Origin Access Control for CloudFront to access S3
-        # This is the recommended approach instead of Origin Access Identity (OAI)
-        cloudfront_oac = cloudfront.CfnOriginAccessControl(
-            self, "CloudFrontOAC",
-            origin_access_control_config=cloudfront.CfnOriginAccessControl.OriginAccessControlConfigProperty(
-                name="S3OAC",
-                origin_access_control_origin_type="s3",
-                signing_behavior="always",
-                signing_protocol="sigv4"
-            )
-        )
-
-        # Configure the S3 origin for CloudFront
-        s3_origin_config = cloudfront.CfnDistribution.OriginProperty(
-            domain_name=main_bucket.bucket_regional_domain_name,
-            id="S3Origin",
-            s3_origin_config=cloudfront.CfnDistribution.S3OriginConfigProperty(
-                origin_access_identity=""
-            ),
-            origin_access_control_id=cloudfront_oac.ref
-        )
-
-        # Create CloudFront distribution to serve the website
-        distribution = cloudfront.CfnDistribution(
-            self, "LoggedDistribution",
-            distribution_config=cloudfront.CfnDistribution.DistributionConfigProperty(
-                enabled=True,
-                default_root_object="index.html",
-                origins=[s3_origin_config],
-                default_cache_behavior=cloudfront.CfnDistribution.DefaultCacheBehaviorProperty(
-                    target_origin_id="S3Origin",
-                    viewer_protocol_policy="redirect-to-https",
-                    cache_policy_id="658327ea-f89d-4fab-a63d-7e88639e58f6",  # CachingOptimized policy ID
-                    compress=True
-                ),
-                viewer_certificate=cloudfront.CfnDistribution.ViewerCertificateProperty(
-                    cloud_front_default_certificate=True,
-                    minimum_protocol_version="TLSv1.2_2021",
-                ),
-                http_version="http2"
-            )
-        )
-
-        # Add bucket policy to allow CloudFront access to S3 objects
-        main_bucket.add_to_resource_policy(
-            iam.PolicyStatement(
-                effect=iam.Effect.ALLOW,
-                actions=["s3:GetObject"],
-                principals=[iam.ServicePrincipal("cloudfront.amazonaws.com")],
-                resources=[main_bucket.arn_for_objects("*")],
+                resources=[logging_bucket.bucket_arn],
                 conditions={
                     "StringEquals": {
-                        "AWS:SourceArn": f"arn:aws:cloudfront::{self.account}:distribution/{distribution.ref}"
+                        "aws:SourceAccount": Stack.of(self).account
                     }
                 }
             )
+        )
+
+        # Create CloudFront distribution with S3BucketOrigin
+        distribution = cloudfront.Distribution(
+            self, "LoggedDistribution",
+            comment="CloudFront distribution with STD Logging V2 Configuration Examples",
+            default_behavior=cloudfront.BehaviorOptions(
+                origin=origins.S3BucketOrigin.with_origin_access_control(main_bucket),
+                viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+                cache_policy=cloudfront.CachePolicy.CACHING_OPTIMIZED,
+                compress=True
+            ),
+            default_root_object="index.html",
+            minimum_protocol_version=cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,  # Uses TLS 1.2 as minimum
+            http_version=cloudfront.HttpVersion.HTTP2,
+            enable_logging=False  # We're using CloudFront V2 logging instead of traditional logging
         )
 
         # SECTION: CLOUDFRONT STANDARD LOGGING V2 CONFIGURATION
@@ -200,30 +174,17 @@ class CloudfrontV2LoggingStack(Stack):
                 service="cloudfront",
                 region="",  # CloudFront is a global service
                 resource="distribution",
-                resource_name=distribution.attr_id
+                resource_name=distribution.distribution_id
             )
         )
 
         # 2. CLOUDWATCH LOGS DESTINATION
-        # Create a CloudWatch Logs group
-        # First, create the log group without specifying retention
-        log_group = logs.LogGroup(
-            self, 
-            "DistributionLogGroup"
-        )
-
-        # Convert the CloudWatch log retention parameter to RetentionDays enum
-        cfn_log_group = log_group.node.default_child
-        cfn_log_group.add_property_override(
-            "RetentionInDays", 
-            cloudwatch_log_retention_days.value_as_number
-        )
         
         # Create a CloudWatch delivery destination
         cf_distribution_delivery_destination = logs.CfnDeliveryDestination(
             self,
             "CloudWatchDeliveryDestination",
-            name="cloudwatch-destination",
+            name="cloudwatch-logs-destination",
             destination_resource_arn=log_group.log_group_arn,
             output_format="json"
         )
@@ -236,6 +197,7 @@ class CloudfrontV2LoggingStack(Stack):
             delivery_destination_arn=cf_distribution_delivery_destination.attr_arn
         )
         cf_delivery.node.add_dependency(distribution_delivery_source)
+        cf_delivery.node.add_dependency(cf_distribution_delivery_destination)
 
         # 3. S3 PARQUET DESTINATION
         # Configure S3 as a delivery destination with Parquet format
@@ -257,72 +219,33 @@ class CloudfrontV2LoggingStack(Stack):
             s3_suffix_path="s3_delivery/{DistributionId}/{yyyy}/{MM}/{dd}/{HH}"
         )
         s3_delivery.node.add_dependency(distribution_delivery_source)
+        s3_delivery.node.add_dependency(s3_distribution_delivery_destination)
+        s3_delivery.node.add_dependency(cf_delivery)  # Make S3 delivery depend on CloudWatch delivery
 
         # 4. KINESIS DATA FIREHOSE DESTINATION
-        # Create IAM role for Kinesis Firehose with permissions to write to S3
-        firehose_role = iam.Role(
-            self, "FirehoseRole",
-            assumed_by=iam.ServicePrincipal("firehose.amazonaws.com")
-        )
-
-        # Add required permissions for Firehose to write to S3
-        firehose_role.add_to_policy(iam.PolicyStatement(
-            actions=[
-                "s3:AbortMultipartUpload",
-                "s3:GetBucketLocation",
-                "s3:GetObject",
-                "s3:ListBucket",
-                "s3:ListBucketMultipartUploads",
-                "s3:PutObject"
-            ],
-            resources=[
-                logging_bucket.bucket_arn,
-                f"{logging_bucket.bucket_arn}/*"
-            ]
-        ))
-
-        # Create Kinesis Firehose delivery stream to buffer and deliver logs to S3
-        firehose_stream = firehose.CfnDeliveryStream(
-            self, "LoggingFirehose",
-            delivery_stream_name="cloudfront-logs-stream",
-            delivery_stream_type="DirectPut",
-            s3_destination_configuration=firehose.CfnDeliveryStream.S3DestinationConfigurationProperty(
-                bucket_arn=logging_bucket.bucket_arn,
-                role_arn=firehose_role.role_arn,
-                buffering_hints=firehose.CfnDeliveryStream.BufferingHintsProperty(
-                    interval_in_seconds=300,  # Buffer for 5 minutes
-                    size_in_m_bs=5  # Or until 5MB is reached
-                ),
-                compression_format="HADOOP_SNAPPY",  # Compress data for efficiency
-                prefix="firehose_delivery/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/",
-                error_output_prefix="errors/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/!{firehose:error-output-type}/"
-            ),
-            delivery_stream_encryption_configuration_input=firehose.CfnDeliveryStream.DeliveryStreamEncryptionConfigurationInputProperty(
-                key_type="AWS_OWNED_CMK"
-            )
-        )
-
         # Configure Firehose as a delivery destination for CloudFront logs
         firehose_delivery_destination = logs.CfnDeliveryDestination(
             self, "FirehoseDeliveryDestination",
             name="cloudfront-logs-destination",
-            destination_resource_arn=firehose_stream.attr_arn,
+            destination_resource_arn=firehose_stream.delivery_stream_arn,
             output_format="json"
         )
 
         # Create the Firehose delivery configuration
         delivery = logs.CfnDelivery(
             self,
-            "KinesisDelivery",
+            "Delivery",
             delivery_source_name=distribution_delivery_source.name,
             delivery_destination_arn=firehose_delivery_destination.attr_arn
         )
         delivery.node.add_dependency(distribution_delivery_source)
+        delivery.node.add_dependency(firehose_delivery_destination)
+        delivery.node.add_dependency(s3_delivery)  # Make Firehose delivery depend on S3 delivery
 
         # Output the CloudFront distribution domain name for easy access
         CfnOutput(
             self, "DistributionDomainName",
-            value=distribution.attr_domain_name,
+            value=distribution.distribution_domain_name,
             description="CloudFront distribution domain name"
         )
         
@@ -339,4 +262,27 @@ class CloudfrontV2LoggingStack(Stack):
             value=f"{log_group.log_group_name} (retention: {cloudwatch_log_retention_days.value_as_number} days)",
             description="CloudWatch log group for CloudFront logs"
         )
-        
+    
+    def _get_log_retention(self, days):
+        """Convert numeric days to logs.RetentionDays enum value"""
+        retention_map = {
+            0: logs.RetentionDays.INFINITE,
+            1: logs.RetentionDays.ONE_DAY,
+            3: logs.RetentionDays.THREE_DAYS,
+            5: logs.RetentionDays.FIVE_DAYS,
+            7: logs.RetentionDays.ONE_WEEK,
+            14: logs.RetentionDays.TWO_WEEKS,
+            30: logs.RetentionDays.ONE_MONTH,
+            60: logs.RetentionDays.TWO_MONTHS,
+            90: logs.RetentionDays.THREE_MONTHS,
+            120: logs.RetentionDays.FOUR_MONTHS,
+            150: logs.RetentionDays.FIVE_MONTHS,
+            180: logs.RetentionDays.SIX_MONTHS,
+            365: logs.RetentionDays.ONE_YEAR,
+            400: logs.RetentionDays.THIRTEEN_MONTHS,
+            545: logs.RetentionDays.EIGHTEEN_MONTHS,
+            731: logs.RetentionDays.TWO_YEARS,
+            1827: logs.RetentionDays.FIVE_YEARS,
+            3653: logs.RetentionDays.TEN_YEARS
+        }
+        return retention_map.get(int(days), logs.RetentionDays.ONE_MONTH)

@@ -46,7 +46,7 @@ NagSuppressions.add_stack_suppressions(
         },
         {
             "id": "AwsSolutions-CFR4",
-            "reason": "Using TLSv1.2_2021 security policy which is the latest supported version."
+            "reason": "We're making use of the highest currently available viewer certificate.  This flag is due to our use of the default viewer certificate which is not an issue in this demonstration case."
         }
     ]
 )
