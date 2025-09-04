@@ -302,7 +302,17 @@ export class Aurora extends Stack {
         retention: Duration.days(backupRetentionDays),
       },
       parameterGroup: auroraParameterGroup,
-      instances: replicaInstances,
+      writer: rds.ClusterInstance.provisioned('writer', {
+        instanceType: instanceType,
+      }),
+      readers: Array.from({ length: replicaInstances - 1 }, (_, i) =>
+        rds.ClusterInstance.provisioned(`reader${i + 1}`, {
+          instanceType: instanceType,
+        })
+      ),
+      vpc: vpc,
+      vpcSubnets: vpcSubnets,
+      securityGroups: [dbsg],
       iamAuthentication: true,
       storageEncrypted: true,
       storageEncryptionKey: kmsKey,
@@ -312,13 +322,7 @@ export class Aurora extends Stack {
       cloudwatchLogsExports: cloudwatchLogsExports,
       cloudwatchLogsRetention: logs.RetentionDays.ONE_MONTH,
       preferredMaintenanceWindow: props.preferredMaintenanceWindow,
-      instanceIdentifierBase: props.dbName,
-      instanceProps: {
-        instanceType: instanceType,
-        vpcSubnets: vpcSubnets,
-        vpc: vpc,
-        securityGroups: [dbsg],
-      },
+      clusterIdentifier: props.dbName,
     });
 
     aurora_cluster.applyRemovalPolicy(RemovalPolicy.RETAIN);
@@ -521,8 +525,8 @@ const app = new App();
 
 new Aurora(app, 'AuroraStack', {
   env:{region:"us-east-2"}, description:"Aurora Stack",
-  vpcId:"vpc-xxx",
-  subnetIds:["subnet-xxx", "subnet-xxxxSS"],
+  vpcId:"vpc-xxxxxxxxxx",
+  subnetIds:["subnet-xxxxxx", "subnet-xxxxxx"],
   dbName:"sampledb",
   engine:"postgresql"
 });
