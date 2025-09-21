@@ -526,7 +526,7 @@ const app = new App();
 new Aurora(app, 'AuroraStack', {
   env:{region:"us-east-2"}, description:"Aurora Stack",
   vpcId:"vpc-xxxxxxxxxx",
-  subnetIds:["subnet-xxxxxx", "subnet-xxxxxx"],
+  subnetIds:["subnet-xxxxxx", "subnet-yyyyyyyy"],
   dbName:"sampledb",
   engine:"postgresql"
 });
