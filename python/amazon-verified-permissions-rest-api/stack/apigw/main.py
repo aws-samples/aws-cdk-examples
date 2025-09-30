@@ -26,6 +26,16 @@ class API(NestedStack):
         authorizer = create_authorizer(self, authorizer)
 
         # Create API resources and methods
+        
+        # ("/") resource
+        self.api.root.add_method(
+            "GET",
+            lambda_integration(user_lambda),
+            authorizer=authorizer,
+            authorization_type=apigw.AuthorizationType.CUSTOM,
+        )
+
+        # ("/admin") resource
         admin_resource = self.api.root.add_resource("admin")
         admin_resource.add_method(
             "GET",
@@ -34,6 +44,7 @@ class API(NestedStack):
             authorization_type=apigw.AuthorizationType.CUSTOM,
         )
 
+        # ("/user") resource
         user_resource = self.api.root.add_resource("user")
         user_resource.add_method(
             "GET",
