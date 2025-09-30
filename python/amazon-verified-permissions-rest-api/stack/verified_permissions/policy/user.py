@@ -20,7 +20,10 @@ def create_user_policy(construct, policy_store, user_pool_id):
                 statement=f"""permit (
                     principal in amazonverified::UserGroup::"{user_pool_id}|user",
                     action in
-                        [amazonverified::Action::"get /user"],
+                    [
+                        amazonverified::Action::"get /user",
+                        amazonverified::Action::"get /"
+                    ],
                     resource
                 );""",
                 description="Policy defining permissions for user group",
