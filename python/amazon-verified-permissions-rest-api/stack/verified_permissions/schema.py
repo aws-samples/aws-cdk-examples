@@ -25,6 +25,13 @@ cedar_json_schema = {
                     "resourceTypes": ["Application"],
                 }
             },
+            "get /": {
+                "appliesTo": {
+                    "context": {"type": "Record", "attributes": {}},
+                    "principalTypes": ["User"],
+                    "resourceTypes": ["Application"],
+                }
+            },
         },
     }
 }

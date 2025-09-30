@@ -19,7 +19,12 @@ def create_admin_policy(construct, policy_store, user_pool_id):
             static=StaticPolicyDefinitionProperty(
                 statement=f"""permit (
                 principal in amazonverified::UserGroup::"{user_pool_id}|admin",
-                action in [amazonverified::Action::"get /admin", amazonverified::Action::"get /user"],
+                action in 
+                [
+                    amazonverified::Action::"get /admin",
+                    amazonverified::Action::"get /user",
+                    amazonverified::Action::"get /"
+                ],
                 resource
                 );""",
                 description="Policy defining permissions for admin group",
