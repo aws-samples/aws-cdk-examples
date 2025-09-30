@@ -1,6 +1,8 @@
 from aws_cdk import (
     Stack,
+    aws_iam,
     aws_lambda as _lambda,
+    CfnOutput,
 )
 from constructs import Construct
 
@@ -37,6 +39,18 @@ class Backend(Stack):
                 "TOKEN_TYPE": "accessToken",
             },
         )
+        policy_statement = aws_iam.PolicyStatement(
+            actions=[
+                "verifiedpermissions:isAuthorizedWithToken",
+                "logs:PutLogEvents",
+            ],
+            resources=["*"],
+            effect=aws_iam.Effect.ALLOW,
+        )
+
+        # Grant the Lambda function permissions to call Verified Permissions and write logs
+        authorizer.role.add_to_policy(policy_statement)
+
         # Create Lambda functions
         admin_lambda = _lambda.Function(
             self,
@@ -54,9 +68,8 @@ class Backend(Stack):
             handler="main.handler",
         )
 
-
         # Create REST API
-        API(
+        apigw = API(
             self,
             "API",
             authorizer=authorizer,
@@ -64,3 +77,10 @@ class Backend(Stack):
             user_lambda=user_lambda,
         )
 
+        # Output the API endpoint
+        CfnOutput(
+            self,
+            "ApiEndpoint",
+            value=apigw.api.url,
+            description="API Gateway endpoint URL",
+        )
