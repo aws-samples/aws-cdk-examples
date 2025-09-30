@@ -20,7 +20,7 @@ class Cognito(NestedStack):
             feature_plan=cognito.FeaturePlan.LITE,
             sign_in_aliases=cognito.SignInAliases(email=True, username=False),
             self_sign_up_enabled=True,
-            removal_policy=RemovalPolicy.DESTROY, # Remove this line for production use
+            removal_policy=RemovalPolicy.DESTROY,  # Remove this line for production use
         )
 
         cognito.UserPoolGroup(
@@ -45,5 +45,7 @@ class Cognito(NestedStack):
             self,
             "UserPoolClient",
             user_pool=self.user_pool,
-            auth_flows=cognito.AuthFlow(user_srp=True),
+            auth_flows=cognito.AuthFlow(
+                user_password=True,
+            ),
         )
