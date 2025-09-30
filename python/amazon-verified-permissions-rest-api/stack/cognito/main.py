@@ -1,5 +1,6 @@
 from aws_cdk import (
     NestedStack,
+    RemovalPolicy,
     aws_cognito as cognito,
 )
 from constructs import Construct
@@ -17,6 +18,9 @@ class Cognito(NestedStack):
             self,
             "UserPool",
             feature_plan=cognito.FeaturePlan.LITE,
+            sign_in_aliases=cognito.SignInAliases(email=True, username=False),
+            self_sign_up_enabled=True,
+            removal_policy=RemovalPolicy.DESTROY, # Remove this line for production use
         )
 
         cognito.UserPoolGroup(
