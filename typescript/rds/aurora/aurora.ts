@@ -137,12 +137,18 @@ export class Aurora extends Stack {
 //export class Aurora extends Construct {
   constructor(scope: Construct, id: string, props:AuroraProps) {
   //constructor(scope: Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id);
+    super(scope, id, props);
+
+    // Validate required props
+    if (!props.vpcId || !props.subnetIds?.length) {
+      throw new Error('vpcId and subnetIds are required');
+    }
 
     let subnetIds = props.subnetIds;
     let instanceType = props.instanceType;
     let replicaInstances = props.replicaInstances ?? 1;
     let backupRetentionDays = props.backupRetentionDays ?? 14;
+    let auroraClusterUsername = props.auroraClusterUsername ?? 'clusteradmin';
 
     let ingressSources = [];
     if (typeof props.ingressSources !== 'undefined') {
@@ -223,12 +229,12 @@ export class Aurora extends Stack {
 
     // Declaring postgres engine
     let auroraEngine = rds.DatabaseClusterEngine.auroraPostgres({
-      version: rds.AuroraPostgresEngineVersion.VER_13_4,
+      version: rds.AuroraPostgresEngineVersion.VER_15_4,
     });
 
     if (props.engine == 'mysql') {
       auroraEngine = rds.DatabaseClusterEngine.auroraMysql({
-        version: rds.AuroraMysqlEngineVersion.VER_2_10_1,
+        version: rds.AuroraMysqlEngineVersion.VER_3_04_0,
       });
     }
 
@@ -254,12 +260,12 @@ export class Aurora extends Stack {
       'AuroraClusterCredentials',
       {
         secretName: props.dbName + 'AuroraClusterCredentials',
-        description: props.dbName + 'AuroraClusterCrendetials',
+        description: props.dbName + 'AuroraClusterCredentials',
         generateSecretString: {
           excludeCharacters: "\"@/\\ '",
           generateStringKey: 'password',
           passwordLength: 30,
-          secretStringTemplate: JSON.stringify({username: props.auroraClusterUsername}),
+          secretStringTemplate: JSON.stringify({username: auroraClusterUsername}),
         },
       },
     );
@@ -267,7 +273,7 @@ export class Aurora extends Stack {
     // aurora credentials
     const auroraClusterCrendentials= rds.Credentials.fromSecret(
       auroraClusterSecret,
-      props.auroraClusterUsername,
+      auroraClusterUsername,
     );
 
     if (instanceType == null || instanceType == undefined) {
@@ -296,7 +302,17 @@ export class Aurora extends Stack {
         retention: Duration.days(backupRetentionDays),
       },
       parameterGroup: auroraParameterGroup,
-      instances: replicaInstances,
+      writer: rds.ClusterInstance.provisioned('writer', {
+        instanceType: instanceType,
+      }),
+      readers: Array.from({ length: replicaInstances - 1 }, (_, i) =>
+        rds.ClusterInstance.provisioned(`reader${i + 1}`, {
+          instanceType: instanceType,
+        })
+      ),
+      vpc: vpc,
+      vpcSubnets: vpcSubnets,
+      securityGroups: [dbsg],
       iamAuthentication: true,
       storageEncrypted: true,
       storageEncryptionKey: kmsKey,
@@ -306,13 +322,7 @@ export class Aurora extends Stack {
       cloudwatchLogsExports: cloudwatchLogsExports,
       cloudwatchLogsRetention: logs.RetentionDays.ONE_MONTH,
       preferredMaintenanceWindow: props.preferredMaintenanceWindow,
-      instanceIdentifierBase: props.dbName,
-      instanceProps: {
-        instanceType: props.instanceType,
-        vpcSubnets: vpcSubnets,
-        vpc: vpc,
-        securityGroups: [dbsg],
-      },
+      clusterIdentifier: props.dbName,
     });
 
     aurora_cluster.applyRemovalPolicy(RemovalPolicy.RETAIN);
@@ -515,11 +525,13 @@ const app = new App();
 
 new Aurora(app, 'AuroraStack', {
   env:{region:"us-east-2"}, description:"Aurora Stack",
-  vpcId:"vpc-xxx",
-  subnetIds:["subnet-xxx", "subnet-xxxxSS"],
+  vpcId:"vpc-xxxxxxxxxx",
+  subnetIds:["subnet-xxxxxx", "subnet-yyyyyyyy"],
   dbName:"sampledb",
   engine:"postgresql"
 });
+
+app.synth();
 
 
 
