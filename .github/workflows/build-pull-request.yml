@@ -8,6 +8,9 @@ on:
     paths:
       - '**'
 
+permissions:
+  contents: read
+
 jobs:
 
   build:
