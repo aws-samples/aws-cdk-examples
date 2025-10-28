@@ -20,6 +20,7 @@ downloads/
 eggs/
 .eggs/
 lib/
+!lib/*.ts
 lib64/
 parts/
 sdist/
