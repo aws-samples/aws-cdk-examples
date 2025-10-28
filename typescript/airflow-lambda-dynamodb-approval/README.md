@@ -80,15 +80,20 @@ cdk deploy
 
 **Note:** MWAA requires AWS authentication even with `PUBLIC_ONLY` access mode. You must be logged into the AWS Console to access the Airflow web interface.
 
+### Test Basic Workflow
+1. Trigger the `example_dag` DAG from the Airflow UI
+2. Watch it execute the simple "Hello" and "Goodbye" tasks
+3. Verify successful completion in the DAG run logs
+
+### Test Lambda Integration
+1. Trigger the `lambda_invoke_example` DAG from the Airflow UI
+2. View logs to see Lambda function listing and invocation results
+
 ### Test Human Approval Workflow
-1. Trigger the `dynamodb_human_approval_pipeline` DAG
+1. Trigger the `dynamodb_human_approval_pipeline` DAG from the Airflow UI
 2. Go to AWS Console → DynamoDB → Tables → `mwaa-approval-table-{region}`
 3. Find your process record and change `approval_status` from `PENDING` to `APPROVED`
 4. Watch the workflow complete automatically
-
-### Test Lambda Integration
-1. Trigger the `lambda_invoke_example` DAG
-2. View logs to see Lambda function listing and invocation results
 
 ## Clean up
 
