@@ -92,6 +92,80 @@ After a successful deployment, CDK will output a public endpoint for:
 
 - Application Load Balancer (ALB)
 
+## Working with the Pipeline
+
+After deploying the CI/CD pipeline, you can update your application code and trigger automatic builds and deployments:
+
+### Setting Up Your Local Repository
+
+1. **Navigate to the app directory**:
+   ```bash
+   cd app
+   ```
+
+2. **Initialize git if not already done**:
+   ```bash
+   git init
+   git add .
+   git commit -m "Initial commit"
+   ```
+
+3. **Add your GitHub repository as a remote**:
+   ```bash
+   git remote add origin <your-github-repository-url>
+   ```
+   
+   Example:
+   ```bash
+   git remote add origin https://github.com/yourusername/your-repo.git
+   ```
+
+4. **Configure GitHub connection**:
+   - Ensure your GitHub personal access token is configured in AWS Secrets Manager
+   - The pipeline will automatically detect changes pushed to your GitHub repository
+
+### Making Changes and Triggering the Pipeline
+
+1. **Modify your application code** in the `app` directory
+
+2. **Commit your changes**:
+   ```bash
+   git add .
+   git commit -m "Update application"
+   ```
+
+3. **Push to GitHub**:
+   ```bash
+   git push origin main
+   ```
+
+4. **Monitor the pipeline**:
+   - Navigate to the [AWS CodePipeline console](https://console.aws.amazon.com/codesuite/codepipeline/pipelines)
+   - Select `ImageBuildDeployPipeline`
+   - Watch the pipeline automatically:
+     - Pull your code from GitHub
+     - Build the Docker image with CodeBuild
+     - Push the image to ECR
+     - Deploy to ECS with CodeDeploy
+
+### Alternative: Working with a New Repository
+
+If you're starting fresh:
+
+1. **Create a new GitHub repository**
+
+2. **Clone it locally**:
+   ```bash
+   git clone <your-github-repository-url> my-app
+   cd my-app
+   ```
+
+3. **Copy your application files** to this directory
+
+4. **Commit and push** as shown above
+
+5. **Update the CDK stack** with your new repository details and redeploy
+
 ## Testing
 
 - To test that the Docker image was built and deployed successfully to ECS, we can use the Application Load Balancer (ALB) public endpoint, e.g. `http://xyz123.us-east-1.elb.amazonaws.com`.
