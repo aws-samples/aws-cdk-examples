@@ -1,0 +1,45 @@
+[project]
+name = "Lambda-CloudWatch-Dashboard"
+version = "0.0.2"
+description = "CloudWatch Dashboard Sample"
+readme = "README.md"
+dependencies = [
+    "aws-cdk-lib>=2.0.0,<3",
+    "constructs>=10.0.0,<11"
+]
+requires-python = ">=3.9,<4"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+
+[tool.ruff]
+target-version = "py39"
+
+[tool.ruff.lint]
+ignore = []
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]
