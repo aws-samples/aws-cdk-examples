@@ -51,6 +51,7 @@ $ cdk destroy
 
 | Example | Description |
 |---------|-------------|
+| [amazon-verified-permissions-rest-api](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/amazon-verified-permissions-rest-api/) | Creating a REST API Gateway with Amazon Verified Permissions for fine-grained authorization |
 | [api-cors-lambda](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/api-cors-lambda/) | Shows creation of Rest API (GW) with an /example GET endpoint, with CORS enabled |
 | [application-load-balancer](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/application-load-balancer/) | Using an AutoScalingGroup with an Application Load Balancer |
 | [appsync-graphql-dynamodb](https://github.com/aws-samples/aws-cdk-examples/tree/master/python/appsync-graphql-dynamodb/) | Creating a single GraphQL API with an API Key, and four Resolvers doing CRUD operations over a single DynamoDB |
