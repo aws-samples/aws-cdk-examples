@@ -6,7 +6,28 @@
 
 Creates an [AWS Lambda](https://aws.amazon.com/lambda/) function writing to [Amazon DynamoDB](https://aws.amazon.com/dynamodb/) and invoked by [Amazon API Gateway](https://aws.amazon.com/api-gateway/) REST API. 
 
+This implementation follows AWS Well-Architected Framework best practices with comprehensive logging and monitoring capabilities.
+
 ![architecture](docs/architecture.png)
+
+## Security & Compliance Features
+
+This stack implements **SEC04-BP01: Configure service and application logging** from the AWS Well-Architected Framework:
+
+- **API Gateway Logging**: Access logs and execution logs with 1-year retention
+- **Lambda Logging**: CloudWatch Logs with 1-year retention policy
+- **VPC Flow Logs**: Network traffic monitoring with 1-month retention
+- **DynamoDB PITR**: Point-in-time recovery enabled for data protection
+- **CloudWatch Metrics**: API Gateway metrics enabled for monitoring
+
+### Log Retention Policies
+
+| Service | Log Type | Retention Period |
+|---------|----------|------------------|
+| API Gateway | Access Logs | 1 Year |
+| API Gateway | Execution Logs | 1 Year |
+| Lambda | Function Logs | 1 Year |
+| VPC | Flow Logs | 1 Month |
 
 ## Setup
 
@@ -83,6 +104,30 @@ You should get below response
 
 ```json
 {"message": "Successfully inserted data!"}
+```
+
+## Monitoring and Logs
+
+After deployment, you can access logs and metrics:
+
+### CloudWatch Logs
+- **API Gateway Access Logs**: Navigate to CloudWatch Logs → Log group `/aws/apigateway/ApigwHttpApiLambdaDynamodbPythonCdkStack-ApiGatewayAccessLogs`
+- **Lambda Function Logs**: Navigate to CloudWatch Logs → Log group `/aws/lambda/apigw_handler`
+- **VPC Flow Logs**: Navigate to CloudWatch Logs → Log group for VPC Flow Logs
+
+### CloudWatch Insights Queries
+Use CloudWatch Logs Insights to query logs:
+
+```sql
+# API Gateway - Find errors
+fields @timestamp, status, ip, requestId
+| filter status >= 400
+| sort @timestamp desc
+
+# Lambda - Find slow requests
+fields @timestamp, @duration
+| filter @duration > 1000
+| sort @duration desc
 ```
 
 ## Cleanup 
