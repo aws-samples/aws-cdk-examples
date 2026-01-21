@@ -2,7 +2,7 @@ package com.amazonaws.cdk;
 
 import software.amazon.awscdk.CfnOutput;
 import software.amazon.awscdk.Stack;
-import software.amazon.awscdk.cdk.lambdalayer.kubectl.v32.KubectlV32Layer;
+import software.amazon.awscdk.cdk.lambdalayer.kubectl.v34.KubectlV34Layer;
 import software.amazon.awscdk.services.ec2.SubnetSelection;
 import software.amazon.awscdk.services.ec2.SubnetType;
 import software.amazon.awscdk.services.eks.*;
@@ -43,9 +43,9 @@ public class EksFargateStack extends Stack {
                 .mastersRole(clusterAdminRole)
                 .role(clusterAdminRole)
                 .endpointAccess(EndpointAccess.PUBLIC)
-                .version(KubernetesVersion.V1_32)
+                .version(KubernetesVersion.V1_34)
                 .vpc(props.getVpc())
-                .kubectlLayer(new KubectlV32Layer(this, "KubectlLayer"))
+                .kubectlLayer(new KubectlV34Layer(this, "KubectlLayer"))
                 .vpcSubnets(List.of(SubnetSelection.builder()
                         .subnetType(SubnetType.PRIVATE_WITH_EGRESS)
                         .build()))
@@ -65,14 +65,14 @@ public class EksFargateStack extends Stack {
         new CfnAddon(this, "eks-vpc-cni-addon", CfnAddonProps.builder()
                 .clusterName(eksCluster.getClusterName())
                 .addonName("vpc-cni")
-                .addonVersion("v1.19.2-eksbuild.1")
+                .addonVersion("v1.21.1-eksbuild.1")
                 .resolveConflicts("OVERWRITE")
                 .build());
 
         new CfnAddon(this, "eks-kube-proxy-addon", CfnAddonProps.builder()
                 .clusterName(eksCluster.getClusterName())
                 .addonName("kube-proxy")
-                .addonVersion("v1.32.3-eksbuild.7")
+                .addonVersion("v1.34.1-eksbuild.2")
                 .resolveConflicts("OVERWRITE")
                 .build());
 
