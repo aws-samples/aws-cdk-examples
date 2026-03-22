@@ -1,5 +1,7 @@
 # AWS CDK Examples
 
+[![gitcgr](https://gitcgr.com/badge/aws-samples/aws-cdk-examples.svg)](https://gitcgr.com/aws-samples/aws-cdk-examples)
+
 This repository contains a set of example projects for the [AWS Cloud Development
 Kit](https://github.com/aws/aws-cdk).
 
