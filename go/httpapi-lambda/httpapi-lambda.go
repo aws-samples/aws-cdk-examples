@@ -23,7 +23,7 @@ func NewHttpapiLambdaStack(scope constructs.Construct, id string, props *Httpapi
 
 	// create Lambda function
 	getHandler := awscdklambdagoalpha.NewGoFunction(stack, jsii.String("myGoHandler"), &awscdklambdagoalpha.GoFunctionProps{
-		Runtime: awslambda.Runtime_GO_1_X(),
+		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
 		Entry:   jsii.String("./lambda-handler"),
 		Bundling: &awscdklambdagoalpha.BundlingOptions{
 			GoBuildFlags: jsii.Strings(`-ldflags "-s -w"`),

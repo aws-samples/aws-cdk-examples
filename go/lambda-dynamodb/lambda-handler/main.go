@@ -5,10 +5,10 @@ import (
 	"log"
 
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
+	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 )
 
 type Item struct {
@@ -25,13 +25,14 @@ func init() {
 
 func handleRequest(ctx context.Context, event MyEvent) {
 
-	sess := session.Must(session.NewSessionWithOptions(session.Options{
-		SharedConfigState: session.SharedConfigEnable,
-	}))
+	cfg, err := config.LoadDefaultConfig(ctx)
+	if err != nil {
+		log.Fatalf("Got error loading config: %s", err)
+	}
 
-	svc := dynamodb.New(sess)
+	svc := dynamodb.NewFromConfig(cfg)
 
-	av, err := dynamodbattribute.MarshalMap(event)
+	av, err := attributevalue.MarshalMap(event)
 	if err != nil {
 		log.Fatalf("Got error marshalling new movie item: %s", err)
 	}
@@ -43,7 +44,7 @@ func handleRequest(ctx context.Context, event MyEvent) {
 		TableName: aws.String(tableName),
 	}
 
-	_, err = svc.PutItem(input)
+	_, err = svc.PutItem(ctx, input)
 	if err != nil {
 		log.Fatalf("Got error calling PutItem: %s", err)
 	} else {

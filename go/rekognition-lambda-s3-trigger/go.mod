@@ -1,14 +1,11 @@
 module rekognition-lambda-s3-trigger
 
-go 1.22.0
-
-toolchain go1.22.5
+go 1.23
 
 require (
 	github.com/aws/aws-cdk-go/awscdk/v2 v2.167.1
 	github.com/aws/aws-cdk-go/awscdklambdagoalpha/v2 v2.167.1-alpha.0
 	github.com/aws/aws-lambda-go v1.47.0
-	github.com/aws/aws-sdk-go v1.55.5
 	github.com/aws/aws-sdk-go-v2 v1.32.5
 	github.com/aws/aws-sdk-go-v2/config v1.28.5
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.37.1
