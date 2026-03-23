@@ -1,6 +1,6 @@
 module static-site
 
-go 1.23
+go 1.24
 
 require (
 	github.com/aws/aws-cdk-go/awscdk/v2 v2.68.0

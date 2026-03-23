@@ -9,7 +9,6 @@ import (
 	"github.com/aws/aws-cdk-go/awscdk/v2/awseventstargets"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsiam"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslogs"
-	"github.com/aws/aws-cdk-go/awscdkapigatewayv2alpha/v2"
 	"github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
 )
@@ -48,7 +47,7 @@ func NewHttpApiEventbridgeStack(scope constructs.Construct, id string, props *Ht
 	eventLoggerRule.AddTarget(awseventstargets.NewCloudWatchLogGroup(logGroup, &awseventstargets.LogGroupProps{}))
 
 	// create HTTP API
-	httpApi := awscdkapigatewayv2alpha.NewHttpApi(stack, jsii.String("myHttpApi"), &awscdkapigatewayv2alpha.HttpApiProps{
+	httpApi := awsapigatewayv2.NewHttpApi(stack, jsii.String("myHttpApi"), &awsapigatewayv2.HttpApiProps{
 		ApiName: jsii.String("myHttpApi"),
 	})
 
