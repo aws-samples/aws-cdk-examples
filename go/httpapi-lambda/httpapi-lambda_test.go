@@ -21,7 +21,7 @@ func TestHttpapiLambdaStack(t *testing.T) {
 	template.HasResourceProperties(jsii.String("AWS::ApiGatewayV2::Api"), map[string]interface{}{})
 
 	template.HasResourceProperties(jsii.String("AWS::Lambda::Function"), map[string]interface{}{
-		"Runtime": "go1.x",
+		"Runtime": "provided.al2023",
 	})
 
 	template.HasResourceProperties(jsii.String("AWS::ApiGatewayV2::Route"), map[string]interface{}{

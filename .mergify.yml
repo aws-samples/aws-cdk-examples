@@ -7,7 +7,6 @@ pull_request_rules:
         message: Thank you for contributing! Your pull request is now being automatically merged.
       merge:
         method: squash
-      delete_head_branch: {}
       dismiss_reviews: {}
     conditions:
       - -title~=(WIP|wip)

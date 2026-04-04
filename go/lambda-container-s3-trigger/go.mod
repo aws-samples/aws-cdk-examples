@@ -1,6 +1,6 @@
 module lambda-container-s3-trigger
 
-go 1.20
+go 1.24
 
 require (
 	github.com/aws/aws-cdk-go/awscdk/v2 v2.38.0
@@ -10,8 +10,6 @@ require (
 
 require (
 	github.com/Masterminds/semver/v3 v3.2.0 // indirect
-	github.com/aws/aws-lambda-go v1.38.0
-	github.com/aws/aws-lambda-go v1.38.0
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/yuin/goldmark v1.4.13 // indirect
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect
