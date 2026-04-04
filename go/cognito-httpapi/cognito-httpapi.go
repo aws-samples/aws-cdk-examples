@@ -5,7 +5,7 @@ import (
 
 	"github.com/aws/aws-cdk-go/awscdk/v2"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awscognito"
-	"github.com/aws/aws-cdk-go/awscdkapigatewayv2alpha/v2"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awsapigatewayv2"
 	"github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
 )
@@ -79,19 +79,19 @@ func NewCognitoHttpapiStack(scope constructs.Construct, id string, props *Cognit
 	})
 
 	// create HTTP API
-	httpApi := awscdkapigatewayv2alpha.NewHttpApi(stack, jsii.String("MyHttpApi"), &awscdkapigatewayv2alpha.HttpApiProps{
+	httpApi := awsapigatewayv2.NewHttpApi(stack, jsii.String("MyHttpApi"), &awsapigatewayv2.HttpApiProps{
 		ApiName: jsii.String("MyHttpApi"),
-		CorsPreflight: &awscdkapigatewayv2alpha.CorsPreflightOptions{
-			AllowMethods: &[]awscdkapigatewayv2alpha.CorsHttpMethod{
-				awscdkapigatewayv2alpha.CorsHttpMethod_GET,
+		CorsPreflight: &awsapigatewayv2.CorsPreflightOptions{
+			AllowMethods: &[]awsapigatewayv2.CorsHttpMethod{
+				awsapigatewayv2.CorsHttpMethod_GET,
 			},
 		},
 	})
 
 	// add JWT authorizer to previously created HTTP API
-	awscdkapigatewayv2alpha.NewHttpAuthorizer(stack, jsii.String("MyHttpAuthorizer"), &awscdkapigatewayv2alpha.HttpAuthorizerProps{
+	awsapigatewayv2.NewHttpAuthorizer(stack, jsii.String("MyHttpAuthorizer"), &awsapigatewayv2.HttpAuthorizerProps{
 		AuthorizerName: jsii.String("MyHttpAuthorizer"),
-		Type:           awscdkapigatewayv2alpha.HttpAuthorizerType_JWT,
+		Type:           awsapigatewayv2.HttpAuthorizerType_JWT,
 		HttpApi:        httpApi,
 		JwtIssuer:      jsii.String("https://cognito-idp." + *props.Env.Region + ".amazonaws.com/" + *userpool.UserPoolId()),
 		JwtAudience:    jsii.Strings(*userpool.UserPoolId()),

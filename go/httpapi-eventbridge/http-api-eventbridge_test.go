@@ -20,7 +20,7 @@ func TestHttpApiEventbridgeStack(t *testing.T) {
 	})
 
 	// THEN
-	template := assertions.Template_FromStack(stack)
+	template := assertions.Template_FromStack(stack, nil)
 
 	template.HasResourceProperties(jsii.String("AWS::Events::EventBus"), map[string]interface{}{})
 

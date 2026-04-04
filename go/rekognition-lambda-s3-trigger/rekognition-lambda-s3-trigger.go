@@ -11,7 +11,6 @@ import (
 	"github.com/aws/aws-cdk-go/awscdk/v2/awss3"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awss3notifications"
 	"github.com/aws/aws-cdk-go/awscdklambdagoalpha/v2"
-	"github.com/aws/aws-sdk-go/aws"
 
 	"github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
@@ -33,14 +32,14 @@ func NewRekognitionLambdaS3TriggerStack(scope constructs.Construct, id string, p
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
 	// Create S3 Bucket
-	bucket := awss3.NewBucket(stack, aws.String("Bucket"), &awss3.BucketProps{
+	bucket := awss3.NewBucket(stack, jsii.String("Bucket"), &awss3.BucketProps{
 		RemovalPolicy: awscdk.RemovalPolicy_DESTROY,
 	})
 
 	// Create DynamoDb table
-	table := awsdynamodb.NewTable(stack, aws.String("Classifications"), &awsdynamodb.TableProps{
+	table := awsdynamodb.NewTable(stack, jsii.String("Classifications"), &awsdynamodb.TableProps{
 		PartitionKey: &awsdynamodb.Attribute{
-			Name: aws.String("image_name"),
+			Name: jsii.String("image_name"),
 			Type: awsdynamodb.AttributeType_STRING,
 		},
 		RemovalPolicy: awscdk.RemovalPolicy_DESTROY,
@@ -82,7 +81,7 @@ func NewRekognitionLambdaS3TriggerStack(scope constructs.Construct, id string, p
 
 	// Create CloudFormation outputs
 	awscdk.NewCfnOutput(stack, jsii.String("UploadImageToS3"), &awscdk.CfnOutputProps{
-		Value:       jsii.Sprintf("aws s3 cp <local-path-to-image> s3://%s/", aws.StringValue(bucket.BucketName())),
+		Value:       jsii.Sprintf("aws s3 cp <local-path-to-image> s3://%s/", *bucket.BucketName()),
 		Description: jsii.String("Upload an image to S3 (using AWS CLI) to trigger Rekognition"),
 	})
 	awscdk.NewCfnOutput(stack, jsii.String("DynamoDBTable"), &awscdk.CfnOutputProps{

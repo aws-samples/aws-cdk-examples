@@ -20,7 +20,7 @@ func TestCognitoHttpapiStack(t *testing.T) {
 	})
 
 	// THEN
-	template := assertions.Template_FromStack(stack)
+	template := assertions.Template_FromStack(stack, nil)
 
 	template.HasResourceProperties(jsii.String("AWS::ApiGatewayV2::Api"), map[string]interface{}{
 		"ProtocolType": "HTTP",

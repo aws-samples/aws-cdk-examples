@@ -16,7 +16,7 @@ func TestStepFunctionStack(t *testing.T) {
 	stack := NewStepFunctionStack(app, "MyStack", nil)
 
 	// THEN
-	template := assertions.Template_FromStack(stack)
+	template := assertions.Template_FromStack(stack, nil)
 
 	template.HasResourceProperties(jsii.String("AWS::Lambda::Function"), map[string]interface{}{
 		"Runtime": "python3.9",
