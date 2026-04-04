@@ -16,10 +16,10 @@ func TestLambdaDynamodbStack(t *testing.T) {
 	stack := NewLambdaDynamodbStack(app, "MyStack", nil)
 
 	// THEN
-	template := assertions.Template_FromStack(stack)
+	template := assertions.Template_FromStack(stack, nil)
 
 	template.HasResourceProperties(jsii.String("AWS::Lambda::Function"), map[string]interface{}{
-		"Runtime": "go1.x",
+		"Runtime": "provided.al2023",
 	})
 
 	template.HasResourceProperties(jsii.String("AWS::DynamoDB::Table"), map[string]interface{}{

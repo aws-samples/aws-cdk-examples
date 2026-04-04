@@ -64,15 +64,15 @@ func NewStepFunctionStack(scope constructs.Construct, id string, props *StepFunc
 	definition := submit_job.Next(wait_job).
 		Next(status_job).
 		Next(awsstepfunctions.NewChoice(stack, jsii.String("jobComplete?"), &awsstepfunctions.ChoiceProps{}).
-			When(awsstepfunctions.Condition_StringEquals(jsii.String("$.status"), jsii.String("FAILED")), fail_job).
-			When(awsstepfunctions.Condition_StringEquals(jsii.String("$.status"), jsii.String("SUCCEEDED")), succeed_job).
+			When(awsstepfunctions.Condition_StringEquals(jsii.String("$.status"), jsii.String("FAILED")), fail_job, nil).
+			When(awsstepfunctions.Condition_StringEquals(jsii.String("$.status"), jsii.String("SUCCEEDED")), succeed_job, nil).
 			Otherwise(wait_job))
 
 	// Create Step Function
 
 	state_machine := awsstepfunctions.NewStateMachine(stack, jsii.String("stateMachine"), &awsstepfunctions.StateMachineProps{
 		StateMachineName: jsii.String("MyStateMachine"),
-		Definition:       definition,
+		DefinitionBody:   awsstepfunctions.DefinitionBody_FromChainable(definition),
 		Timeout:          awscdk.Duration_Seconds(jsii.Number(300)),
 	})
 

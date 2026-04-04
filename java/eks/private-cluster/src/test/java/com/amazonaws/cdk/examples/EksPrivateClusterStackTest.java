@@ -29,7 +29,7 @@ public class EksPrivateClusterStackTest {
                 "Config",
                 Map.of(
                     "name", "eks-private",
-                    "version", "1.32"))),
+                    "version", "1.34"))),
         1);
   }
 
