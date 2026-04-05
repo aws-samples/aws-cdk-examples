@@ -16,7 +16,7 @@ func TestHttpapiLambdaStack(t *testing.T) {
 	stack := NewHttpapiLambdaStack(app, "MyStack", nil)
 
 	// THEN
-	template := assertions.Template_FromStack(stack)
+	template := assertions.Template_FromStack(stack, nil)
 
 	template.HasResourceProperties(jsii.String("AWS::ApiGatewayV2::Api"), map[string]interface{}{})
 
