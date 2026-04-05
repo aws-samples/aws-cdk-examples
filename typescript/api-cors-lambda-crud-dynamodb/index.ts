@@ -27,7 +27,7 @@ export class ApiLambdaCrudDynamoDBStack extends Stack {
     const nodeJsFunctionProps: NodejsFunctionProps = {
       bundling: {
         externalModules: [
-          'aws-sdk', // Use the 'aws-sdk' available in the Lambda runtime
+          '@aws-sdk/*', // Use the '@aws-sdk' available in the Lambda runtime
         ],
       },
       depsLockFilePath: join(__dirname, 'lambdas', 'package-lock.json'),

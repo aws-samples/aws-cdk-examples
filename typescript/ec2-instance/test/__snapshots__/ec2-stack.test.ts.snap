@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`EC2Stack Snapshot test 1`] = `
 {
@@ -75,7 +75,7 @@ exports[`EC2Stack Snapshot test 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "python3.11",
+        "Runtime": "python3.13",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -236,7 +236,7 @@ exports[`EC2Stack Snapshot test 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs20.x",
+        "Runtime": "nodejs22.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -554,6 +554,7 @@ aws s3 cp s3://",
         "SourceObjectKeys": [
           "906c472a7a70d98f9ddd319c5286b06cc53be23c17afba3dba925f37cd89ba0a.zip",
         ],
+        "WaitForDistributionInvalidation": true,
       },
       "Type": "Custom::CDKBucketDeployment",
       "UpdateReplacePolicy": "Delete",

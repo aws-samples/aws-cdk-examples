@@ -1,3 +1,6 @@
 {
-  "app": "node index"
+  "app": "node index",
+  "context": {
+    "@aws-cdk/aws-lambda-nodejs:sdkV2NotInRuntime": true
+  }
 }
