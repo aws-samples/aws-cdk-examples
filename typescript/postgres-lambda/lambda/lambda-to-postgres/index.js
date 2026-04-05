@@ -28,7 +28,7 @@ exports.handler = async (event) => {
       user: secret.username,
       password: secret.password,
       ssl: {
-        rejectUnauthorized: false, // For demo purposes only, consider proper SSL setup in production
+        rejectUnauthorized: true,
       },
       connectionTimeoutMillis: 10000,
     });

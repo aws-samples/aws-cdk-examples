@@ -28,6 +28,8 @@ export class PostgresLambdaStack extends cdk.Stack {
       serverlessV2MaxCapacity: 1,
       defaultDatabaseName: 'demodb',
       credentials: rds.Credentials.fromGeneratedSecret('postgres'),
+      deletionProtection: true,
+      storageEncrypted: true,
     });
 
 

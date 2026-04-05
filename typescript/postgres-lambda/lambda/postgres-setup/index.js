@@ -56,7 +56,7 @@ exports.handler = async (event, context) => {
       database: DB_NAME,
       user: secret.username,
       password: secret.password,
-      ssl: { rejectUnauthorized: false },
+      ssl: { rejectUnauthorized: true },
       // Add connection timeout for better error handling
       connectionTimeoutMillis: 10000
     });
