@@ -11,7 +11,7 @@ namespace CapitalizeString
             Function fn = new Function(this, "capitalizestring", new FunctionProps
             {
                 Runtime = Runtime.DOTNET_8,
-                Code = Code.FromAsset("./CapitalizeStringHandler/src/CapitalizeStringHandler/bin/Release/net6.0/publish"),
+                Code = Code.FromAsset("./CapitalizeStringHandler/src/CapitalizeStringHandler/bin/Release/net8.0/publish"),
                 Handler = "CapitalizeStringHandler::CapitalizeStringHandler.Function::FunctionHandler"
             });
         }

@@ -289,6 +289,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
     // Creates an AWS CodePipeline with source, build, and deploy stages
     new pipeline.Pipeline(this, "BuildDeployPipeline", {
       pipelineName: "ImageBuildDeployPipeline",
+      pipelineType: pipeline.PipelineType.V2,
       stages: [sourceStage, testStage, buildStage, deployStage],
     });
 

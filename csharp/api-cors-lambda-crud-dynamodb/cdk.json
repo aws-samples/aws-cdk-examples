@@ -1,5 +1,5 @@
 {
-  "app": "dotnet run -p src/ApiCorsLambdaCrudDynamodb/ApiCorsLambdaCrudDynamodb.csproj",
+  "app": "dotnet run --project src/ApiCorsLambdaCrudDynamodb/ApiCorsLambdaCrudDynamodb.csproj",
   "watch": {
     "include": [
       "**"

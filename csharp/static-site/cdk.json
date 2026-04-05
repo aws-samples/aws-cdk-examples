@@ -3,5 +3,5 @@
      "domain": "mystaticsite.com",
      "subdomain": "www"
   },
-  "app": "dotnet run -p src/StaticSite/StaticSite.csproj"
+  "app": "dotnet run --project src/StaticSite/StaticSite.csproj"
 }

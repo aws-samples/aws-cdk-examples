@@ -2,7 +2,7 @@ import { CodeCommitSourceAction, CodeBuildAction } from "aws-cdk-lib/aws-codepip
 import { PolicyStatement } from "aws-cdk-lib/aws-iam"
 import { ArnFormat, Stack, StackProps } from "aws-cdk-lib"
 import { PipelineProject, LinuxBuildImage } from "aws-cdk-lib/aws-codebuild"
-import { Artifact, Pipeline } from "aws-cdk-lib/aws-codepipeline"
+import { Artifact, Pipeline, PipelineType } from "aws-cdk-lib/aws-codepipeline"
 import { Repository } from "aws-cdk-lib/aws-codecommit"
 import { Construct } from "constructs"
 import { lambdaApiStackName, lambdaFunctionName } from "../bin/lambda"
@@ -15,7 +15,9 @@ export class CIStack extends Stack {
     constructor(scope: Construct, name: string, props: CIStackProps) {
         super(scope, name, props)
 
-        const pipeline = new Pipeline(this, "Pipeline", {})
+        const pipeline = new Pipeline(this, "Pipeline", {
+            pipelineType: PipelineType.V2,
+        })
 
         const repo = Repository.fromRepositoryName(
             this,

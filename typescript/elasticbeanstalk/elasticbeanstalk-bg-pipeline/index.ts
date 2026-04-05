@@ -24,7 +24,7 @@ export class CdkStack extends cdk.Stack {
     });
 
     const handler = new lambda.Function(this, 'BlueGreenLambda', {
-      runtime: lambda.Runtime.PYTHON_3_6,
+      runtime: lambda.Runtime.PYTHON_3_12,
       code: lambda.Code.fromAsset('resources'),
       handler: 'blue_green.lambda_handler',
       environment: {
@@ -38,7 +38,9 @@ export class CdkStack extends cdk.Stack {
       repositoryName: 'MyRepositoryName',
     });
 
-    const pipeline = new cp.Pipeline(this, 'MyFirstPipeline');
+    const pipeline = new cp.Pipeline(this, 'MyFirstPipeline', {
+      pipelineType: cp.PipelineType.V2,
+    });
 
     const sourceStage = pipeline.addStage({
       stageName: 'Source'

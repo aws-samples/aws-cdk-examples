@@ -1,0 +1,19 @@
+{
+  "name": "build-toolkit",
+  "version": "1.0.0",
+  "description": "CDK Toolkit Library build runner for all TypeScript CDK projects",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@aws-cdk/toolkit-lib": "^1.21.0",
+    "p-limit": "^3.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.7.1",
+    "typescript": "~5.9.3"
+  }
+}
