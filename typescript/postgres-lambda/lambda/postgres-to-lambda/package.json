@@ -4,6 +4,5 @@
   "description": "Lambda function called by PostgreSQL",
   "main": "index.js",
   "dependencies": {
-    "aws-sdk": "^2.1377.0"
   }
 }
