@@ -82,15 +82,9 @@ export class ImagebuilderStack extends cdk.Stack {
     const iamRoleForImageBuilder = new iam.Role(this, 'EC2InstanceProfileForImageBuilder', {
       assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com'),
       managedPolicies: [
-        {
-          managedPolicyArn: "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-        },
-        {
-          managedPolicyArn: "arn:aws:iam::aws:policy/EC2InstanceProfileForImageBuilder"
-        },
-        {
-          managedPolicyArn: "arn:aws:iam::aws:policy/EC2InstanceProfileForImageBuilderECRContainerBuilds"
-        }
+        iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMManagedInstanceCore"),
+        iam.ManagedPolicy.fromAwsManagedPolicyName("EC2InstanceProfileForImageBuilder"),
+        iam.ManagedPolicy.fromAwsManagedPolicyName("EC2InstanceProfileForImageBuilderECRContainerBuilds"),
       ]
     })
     // Suppress cdk_nag warning on use of managed policies

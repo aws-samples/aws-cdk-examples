@@ -51,7 +51,7 @@ describe('EC2Stack', () => {
         instanceSize: 'BAD_SIZE',
         env: devEnv,
       });
-    }).toThrowError(`Invalid instance size. Valid sizes are: ${validSizes}`);
+    }).toThrow(`Invalid instance size. Valid sizes are: ${validSizes}`);
   });
 
   test('CPU type validation', () => {
@@ -76,6 +76,6 @@ describe('EC2Stack', () => {
         cpuType: 'BAD_CPU',
         env: devEnv,
       });
-    }).toThrowError(`Invalid CPU type. Valid CPU Types are ${validCpuTypes}`);
+    }).toThrow(`Invalid CPU type. Valid CPU Types are ${validCpuTypes}`);
   });
 });

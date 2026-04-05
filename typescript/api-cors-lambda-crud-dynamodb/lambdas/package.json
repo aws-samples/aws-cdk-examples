@@ -5,7 +5,7 @@
   "private": true,
   "license": "Apache-2.0",
   "devDependencies": {
-    "@types/node": "22.7.9",
+    "@types/node": "^24.10.1",
     "@types/uuid": "*"
   },
   "dependencies": {
