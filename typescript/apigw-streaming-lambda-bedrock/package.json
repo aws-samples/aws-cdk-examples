@@ -1,0 +1,11 @@
+{
+  "name": "apigw-streaming-lambda-bedrock",
+  "version": "1.0.0",
+  "description": "API Gateway REST streaming with Lambda and Amazon Bedrock",
+  "private": true,
+  "scripts": { "build": "tsc", "watch": "tsc -w", "cdk": "cdk" },
+  "author": { "name": "Amazon Web Services", "url": "https://aws.amazon.com", "organization": true },
+  "license": "Apache-2.0",
+  "devDependencies": { "@types/node": "^22.0.0", "aws-cdk": "2.1119.0", "typescript": "~5.7.0" },
+  "dependencies": { "aws-cdk-lib": "2.250.0", "constructs": "^10.0.0" }
+}
