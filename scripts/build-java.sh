@@ -1,15 +1,19 @@
 #!/bin/bash
 set -euxo pipefail
-scriptdir=$(cd $(dirname $0) && pwd)
-projFile=$1
+
+scriptdir="$(cd "$(dirname "$0")" && pwd)"
+projFile="${1:?Usage: $0 <project-file>}"
 
 echo "=============================="
-echo "building project: $(dirname $projFile)"
+echo "building project: $(dirname "$projFile")"
 echo "=============================="
 
-cd $scriptdir/../$(dirname $projFile)
-if [[ -f DO_NOT_AUTOTEST ]]; then exit 0; fi
+cd "$scriptdir/../$(dirname "$projFile")"
+
+if [[ -f DO_NOT_AUTOTEST ]]; then
+  exit 0
+fi
 
 mvn -q compile test
 
-$scriptdir/synth.sh
+"$scriptdir/synth.sh"
