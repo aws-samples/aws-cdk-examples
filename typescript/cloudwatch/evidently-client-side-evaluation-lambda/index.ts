@@ -78,7 +78,7 @@ export class EvidentlyClientSideEvaluationLambdaStack extends cdk.Stack {
         }
       ]
     })
-    feature.addDependsOn(project)
+    feature.addDependency(project)
 
     const launch = new evidently.CfnLaunch(this, 'EvidentlyLaunch', {
       project: project.name,
@@ -114,7 +114,7 @@ export class EvidentlyClientSideEvaluationLambdaStack extends cdk.Stack {
         ]
       }]
     })
-    launch.addDependsOn(feature)
+    launch.addDependency(feature)
 
     // Create Lambda resources
     const configuration = `applications/${application.ref}/environments/${environment.ref}/configurations/${project.name}`
@@ -122,7 +122,7 @@ export class EvidentlyClientSideEvaluationLambdaStack extends cdk.Stack {
       code: new lambda.InlineCode(fs.readFileSync('lambda-handler.py', { encoding: 'utf-8' })),
       handler: 'index.main',
       timeout: cdk.Duration.seconds(300),
-      runtime: lambda.Runtime.PYTHON_3_9,
+      runtime: lambda.Runtime.PYTHON_3_12,
       layers: [
         lambda.LayerVersion.fromLayerVersionArn(this, 'ClientSideEvaluationLayer', APP_CONFIG_EXTENSION_ARNS[AWS_REGION])
       ],
