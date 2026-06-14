@@ -211,6 +211,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       deploymentController: {
         type: ecs.DeploymentControllerType.CODE_DEPLOY,
       },
+      minHealthyPercent: 100,
     });
 
     // Adds the ECS Fargate service to the ALB target group
