@@ -5,12 +5,11 @@
   "private": true,
   "license": "Apache-2.0",
   "devDependencies": {
-    "@types/node": "^24.10.1",
-    "@types/uuid": "*"
+    "@types/node": "^24.10.1"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.538.0",
     "@aws-sdk/lib-dynamodb": "^3.538.0",
-    "uuid": "*"
+    "uuid": "^14.0.0"
   }
 }

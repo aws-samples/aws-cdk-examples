@@ -17,7 +17,7 @@
   "devDependencies": {
     "@types/node": "^24.10.1",
     "aws-cdk": "2.1114.1",
-    "esbuild": "^0.25.0",
+    "esbuild": "^0.28.1",
     "typescript": "~5.9.3"
   },
   "dependencies": {
