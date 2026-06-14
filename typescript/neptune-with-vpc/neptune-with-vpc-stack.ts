@@ -10,7 +10,7 @@ export class NeptuneWithVpcStack extends cdk.Stack {
 
     // Create VPC for use with Neptune
     const neptuneVpc = new ec2.Vpc(this, "NeptuneVpc", {
-      cidr: "10.192.0.0/16",
+      ipAddresses: ec2.IpAddresses.cidr("10.192.0.0/16"),
       maxAzs: 2,
       natGateways: 0,
       enableDnsHostnames: true,
@@ -74,8 +74,11 @@ export class NeptuneWithVpcStack extends cdk.Stack {
       removalPolicy: cdk.RemovalPolicy.DESTROY, // Not recommended for production clusters. This is enabled to easily delete the example stack.
     });
 
-    // Update Neptune Security Group to allow-all-in
-    neptuneCluster.connections.allowDefaultPortFromAnyIpv4('Allow From All');
+    // Allow access to Neptune from within the VPC only
+    neptuneCluster.connections.allowDefaultPortFrom(
+      ec2.Peer.ipv4(neptuneVpc.vpcCidrBlock),
+      'Allow from VPC CIDR'
+    );
 
     // Add tags to all assets within this stack
     cdk.Tags.of(this).add("CreatedBy", "CDK", { priority: 300 })

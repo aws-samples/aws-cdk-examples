@@ -29,7 +29,6 @@ export class CommonResources extends Construct {
     // Create Cognito User Pool
     const userPool = new cognito.UserPool(this, 'CognitoUserPool', {
       accountRecovery: cognito.AccountRecovery.EMAIL_ONLY,
-      advancedSecurityMode: cognito.AdvancedSecurityMode.OFF,
       autoVerify: {
         email: true,
       },

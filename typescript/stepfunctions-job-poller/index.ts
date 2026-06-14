@@ -16,14 +16,14 @@ class JobPollerStack extends cdk.Stack {
       code: new lambda.InlineCode(fs.readFileSync('lambdas/check_status.py', { encoding: 'utf-8' })),
       handler: 'index.main',
       timeout: cdk.Duration.seconds(30),
-      runtime: lambda.Runtime.PYTHON_3_9,
+      runtime: lambda.Runtime.PYTHON_3_12,
     });
 
     const submitLambda = new lambda.Function(this, 'SubmitLambda', {
       code: new lambda.InlineCode(fs.readFileSync('lambdas/submit.py', { encoding: 'utf-8' })),
       handler: 'index.main',
       timeout: cdk.Duration.seconds(30),
-      runtime: lambda.Runtime.PYTHON_3_9,
+      runtime: lambda.Runtime.PYTHON_3_12,
     });
 
     /** ------------------ Step functions Definition ------------------ */
@@ -67,7 +67,7 @@ class JobPollerStack extends cdk.Stack {
 
     // Create state machine
     const stateMachine = new sfn.StateMachine(this, 'CronStateMachine', {
-      definition,
+      definitionBody: sfn.DefinitionBody.fromChainable(definition),
       timeout: cdk.Duration.minutes(5),
     });
 
