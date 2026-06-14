@@ -1,0 +1,26 @@
+{
+  "name": "appconfig-hosted-lambda",
+  "version": "1.0.0",
+  "description": "AppConfig hosted configuration with Lambda Extension for feature flags",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "author": {
+    "name": "Amazon Web Services",
+    "url": "https://aws.amazon.com",
+    "organization": true
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "aws-cdk": "2.1126.0",
+    "typescript": "~5.7.0"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "2.259.0",
+    "constructs": "^10.0.0"
+  }
+}
