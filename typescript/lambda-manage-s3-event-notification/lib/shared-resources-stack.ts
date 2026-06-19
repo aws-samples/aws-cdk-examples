@@ -14,12 +14,13 @@ export class SharedStack extends cdk.Stack {
     super(scope, id, props);
 
     const bucket = new s3.Bucket(this, 'SampleBucket', {
-      removalPolicy: cdk.RemovalPolicy.DESTROY
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      autoDeleteObjects: true
     });
     this.bucketName = bucket.bucketName;
 
     const fn = new lambda.Function(this, 'S3EventNotificationsLambda', {
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_24_X,
       functionName: 'S3EventNotificationsManager',
       handler: 'manage-s3-event-notifications.handler',
       code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),

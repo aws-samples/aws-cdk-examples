@@ -1,4 +1,4 @@
-import { Stack, StackProps, CfnOutput, Aws } from 'aws-cdk-lib';
+import { Stack, StackProps, CfnOutput, Aws, RemovalPolicy } from 'aws-cdk-lib';
 import {
   aws_iam as iam,
   aws_s3 as s3,
@@ -21,7 +21,9 @@ export class S3ObjectLambdaStack extends Stack {
     const bucket = new s3.Bucket(this, 'example-bucket', {
       accessControl: s3.BucketAccessControl.BUCKET_OWNER_FULL_CONTROL,
       encryption: s3.BucketEncryption.S3_MANAGED,
-      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      removalPolicy: RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
     });
 
     // Delegating access control to access points
@@ -44,7 +46,7 @@ export class S3ObjectLambdaStack extends Stack {
 
     // lambda to process our objects during retrieval
     const retrieveTransformedObjectLambda = new lambda.Function(this, 'retrieveTransformedObjectLambda', {
-      runtime: lambda.Runtime.NODEJS_20_X,
+      runtime: lambda.Runtime.NODEJS_24_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('resources/retrieve-transformed-object-lambda')
     }

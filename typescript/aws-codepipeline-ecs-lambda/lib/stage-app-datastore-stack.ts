@@ -1,4 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
+import { RemovalPolicy } from 'aws-cdk-lib';
 import { InstanceClass, InstanceSize, InstanceType, Vpc } from 'aws-cdk-lib/aws-ec2';
 import { Key } from 'aws-cdk-lib/aws-kms';
 import { AuroraMysqlEngineVersion, ClusterInstance, DatabaseCluster, DatabaseClusterEngine } from 'aws-cdk-lib/aws-rds';
@@ -34,7 +35,8 @@ export class rdsAuroraStack extends cdk.Stack {
             cloudwatchLogsExports: ["error"],
             vpc: props.vpc,
             storageEncrypted: true,
-            storageEncryptionKey: kmskey
+            storageEncryptionKey: kmskey,
+            removalPolicy: RemovalPolicy.DESTROY,
           });
 }
 }

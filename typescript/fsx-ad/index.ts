@@ -21,7 +21,7 @@ class AdFsxStack extends cdk.Stack {
 
     const mad = new ad.CfnMicrosoftAD(this, 'ad', {
       name: adDnsDomainName,
-      password: templatedSecret.secretValueFromJson('password').toString(),
+      password: templatedSecret.secretValueFromJson('password').unsafeUnwrap(),
       vpcSettings: {
         vpcId: vpc.vpcId,
         subnetIds: privateSubnets

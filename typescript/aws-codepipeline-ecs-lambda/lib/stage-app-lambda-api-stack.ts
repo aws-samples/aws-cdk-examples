@@ -9,7 +9,7 @@ export class lambdaApiStack extends cdk.Stack {
 
         //  create a lambda function
         const lambdaFunction = new Function(this, 'lambdaFunction', {
-            runtime: Runtime.NODEJS_20_X,
+            runtime: Runtime.NODEJS_24_X,
             handler: 'index.handler',
             code: new InlineCode(`exports.handler = async (event) => {
     const response = {

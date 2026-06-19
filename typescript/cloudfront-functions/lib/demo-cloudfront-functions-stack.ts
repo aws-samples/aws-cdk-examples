@@ -25,7 +25,8 @@ export class DemoCloudfrontFunctionsStack extends cdk.Stack {
       versioned: true,
       enforceSSL: true,
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
-      removalPolicy: RemovalPolicy.DESTROY
+      removalPolicy: RemovalPolicy.DESTROY,
+      autoDeleteObjects: true
     });
 
     // create a s3 bucket deployment to deploy the website directory's files to the website bucket

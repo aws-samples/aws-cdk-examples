@@ -29,7 +29,7 @@ export class ApiGatewayAsyncLambdaStack extends cdk.Stack {
 
     //  create a lambda function
     const jobHandler = new Function(this, `${props.prefix}-fn`, {
-      runtime: Runtime.NODEJS_20_X,
+      runtime: Runtime.NODEJS_24_X,
       handler: 'job_handler.handler',
       code: Code.fromAsset(path.join(__dirname, '../assets/lambda-functions')),
       environment: {

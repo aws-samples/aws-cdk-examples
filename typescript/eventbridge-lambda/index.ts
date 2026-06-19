@@ -32,7 +32,7 @@ export class EventBridgeLambdaStack extends cdk.Stack {
       code: new lambda.InlineCode(fs.readFileSync('lambda-handler.py', { encoding: 'utf-8' })),
       handler: 'index.main',
       timeout: cdk.Duration.seconds(300),
-      runtime: lambda.Runtime.PYTHON_3_9,
+      runtime: lambda.Runtime.PYTHON_3_12,
       environment: {'TOPIC_ARN': topic.topicArn}
       
     });

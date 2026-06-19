@@ -1,4 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
+import { RemovalPolicy } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as rds from 'aws-cdk-lib/aws-rds';
@@ -30,6 +31,7 @@ export class PostgresLambdaStack extends cdk.Stack {
       credentials: rds.Credentials.fromGeneratedSecret('postgres'),
       deletionProtection: true,
       storageEncrypted: true,
+      removalPolicy: RemovalPolicy.DESTROY,
     });
 
 

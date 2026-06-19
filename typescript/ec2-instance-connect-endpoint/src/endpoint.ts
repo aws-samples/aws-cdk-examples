@@ -82,7 +82,7 @@ export class InstanceConnectEndpoint extends Construct {
 
     // Common properties for Lambda functions
     const commonProps = {
-      runtime: lambda.Runtime.PYTHON_3_9,
+      runtime: lambda.Runtime.PYTHON_3_12,
       memorySize: 256,
       timeout: Duration.minutes(10),
       role,

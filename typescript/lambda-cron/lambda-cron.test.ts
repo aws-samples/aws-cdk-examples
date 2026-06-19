@@ -20,7 +20,7 @@ describe('lambda tests', () => {
           ZipFile: `def main(event, context):\n    print(\"I'm running!\")`,
         },
         Handler: 'index.main',
-        Runtime: 'python3.9',
+        Runtime: 'python3.12',
         Timeout: 300,
       },
       DependsOn: [ dependencyCapture ],

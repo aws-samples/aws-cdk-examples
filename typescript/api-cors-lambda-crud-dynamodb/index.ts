@@ -35,7 +35,7 @@ export class ApiLambdaCrudDynamoDBStack extends Stack {
         PRIMARY_KEY: 'itemId',
         TABLE_NAME: dynamoTable.tableName,
       },
-      runtime: Runtime.NODEJS_20_X,
+      runtime: Runtime.NODEJS_24_X,
     }
 
     // Create a Lambda function for each of the CRUD operations

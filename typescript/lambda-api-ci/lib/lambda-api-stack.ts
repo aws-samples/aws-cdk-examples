@@ -1,7 +1,7 @@
 import { LambdaIntegration, MethodLoggingLevel, RestApi } from "aws-cdk-lib/aws-apigateway"
 import { PolicyStatement } from "aws-cdk-lib/aws-iam"
 import { Function, Runtime, AssetCode, Code } from "aws-cdk-lib/aws-lambda"
-import { Duration, Stack, StackProps } from "aws-cdk-lib"
+import { Duration, RemovalPolicy, Stack, StackProps } from "aws-cdk-lib"
 import s3 = require("aws-cdk-lib/aws-s3")
 import { Construct } from "constructs"
 
@@ -17,7 +17,10 @@ export class CDKExampleLambdaApiStack extends Stack {
     constructor(scope: Construct, id: string, props: LambdaApiStackProps) {
         super(scope, id, props)
 
-        this.bucket = new s3.Bucket(this, "WidgetStore")
+        this.bucket = new s3.Bucket(this, "WidgetStore", {
+            removalPolicy: RemovalPolicy.DESTROY,
+            autoDeleteObjects: true,
+        })
 
         this.restApi = new RestApi(this, this.stackName + "RestApi", {
             deployOptions: {
@@ -36,7 +39,7 @@ export class CDKExampleLambdaApiStack extends Stack {
         this.lambdaFunction = new Function(this, props.functionName, {
             functionName: props.functionName,
             handler: "handler.handler",
-            runtime: Runtime.NODEJS_18_X,
+            runtime: Runtime.NODEJS_24_X,
             code: new AssetCode(`./src`),
             memorySize: 512,
             timeout: Duration.seconds(10),

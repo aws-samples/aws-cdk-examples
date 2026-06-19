@@ -3,7 +3,7 @@ import {BlockPublicAccess, Bucket, BucketAccessControl, BucketEncryption} from '
 import {BucketDeployment, Source} from 'aws-cdk-lib/aws-s3-deployment';
 import {CfnDataSet, CfnDataSource, CfnTemplate} from 'aws-cdk-lib/aws-quicksight';
 import {CfnManagedPolicy} from 'aws-cdk-lib/aws-iam';
-import {Stack} from 'aws-cdk-lib';
+import {RemovalPolicy, Stack} from 'aws-cdk-lib';
 import {dataTransforms} from './data-transforms';
 import {inputColumns} from './input-columns';
 
@@ -44,7 +44,9 @@ export class QuicksightExampleStack extends Stack {
     const bucket = new Bucket(this, bucketName, {
       accessControl: BucketAccessControl.BUCKET_OWNER_FULL_CONTROL,
       encryption: BucketEncryption.S3_MANAGED,
-      blockPublicAccess: BlockPublicAccess.BLOCK_ALL
+      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
+      removalPolicy: RemovalPolicy.DESTROY,
+      autoDeleteObjects: true
     });
 
     const manifest = {

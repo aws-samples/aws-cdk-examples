@@ -14,7 +14,7 @@ export class LambdaDurableBedrockStack extends cdk.Stack {
     });
 
     const fn = new lambda.Function(this, "DurableBedrockFn", {
-      runtime: lambda.Runtime.NODEJS_20_X,
+      runtime: lambda.Runtime.NODEJS_24_X,
       handler: "index.handler",
       code: lambda.Code.fromAsset("src"),
       timeout: cdk.Duration.minutes(15),

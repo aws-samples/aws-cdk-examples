@@ -26,7 +26,7 @@ export class LambdaPCScalingTargetStack extends Stack {
     this.lambdaFunction = new NodejsFunction(this, 'LambdaFunction', {
       functionName: this.lambdaFunctionName,
       entry: `./lambda/lambda-handler.ts`,
-      runtime: Runtime.NODEJS_18_X,
+      runtime: Runtime.NODEJS_24_X,
       memorySize: 512,
       timeout: Duration.seconds(6),
     });
