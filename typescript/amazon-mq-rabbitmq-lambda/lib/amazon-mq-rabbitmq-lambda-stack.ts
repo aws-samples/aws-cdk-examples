@@ -50,7 +50,7 @@ export class AmazonMqRabbitmqLambdaStack extends Stack {
 
     // Define the consumer Lambda function which will handle messages from RabbitMQ
     const consumer_lambda = new Function(this, 'consumer_lambdaFunction', {
-      runtime: Runtime.NODEJS_20_X,       // Use Node.js 20.x runtime for the Lambda function
+      runtime: Runtime.NODEJS_24_X,       // Use Node.js 20.x runtime for the Lambda function
       code: Code.fromAsset('lambda'),     // Path to Lambda function code directory
       handler: 'consumer.handler',        // The entry point (handler) for the Lambda function
       memorySize: 128,                    // Set memory size to 128 MB

@@ -39,6 +39,7 @@ export class CodepipelineGlueDeployStack extends Stack {
     // and server access logs enabled for the bucket
     const pipelineArtifactStoreBucket = new Bucket(this, 'XXXXXXXXXXXXXXXXXXXXXXXXXXX', {
       removalPolicy: RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
       encryption: BucketEncryption.KMS,
       encryptionKey: pipelineArtifactStoreEncryptionKey,
       serverAccessLogsPrefix: 'access-logs',
@@ -102,6 +103,7 @@ export class CodepipelineGlueDeployStack extends Stack {
     const pipeline = new Pipeline(this, 'Pipeline', {
       pipelineName: 'pipeline',
       artifactBucket: pipelineArtifactStoreBucket,
+      crossAccountKeys: true,
       enableKeyRotation: true,
       pipelineType: PipelineType.V2,
       stages: [

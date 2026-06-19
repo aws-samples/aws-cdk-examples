@@ -17,7 +17,7 @@ export class LambdaCloudwatchDashboardStack extends Stack {
     // Create Sample Lambda Function which will create metrics
     this.lambdaFunction = new Function(this, "SampleLambda", {
       handler: "lambda-handler.handler",
-      runtime: Runtime.PYTHON_3_7,
+      runtime: Runtime.PYTHON_3_14,
       code: new AssetCode(`./lambda`),
       memorySize: 512,
       timeout: Duration.seconds(10)

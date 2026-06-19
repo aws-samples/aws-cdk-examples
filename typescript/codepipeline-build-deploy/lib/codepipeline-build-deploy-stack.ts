@@ -90,7 +90,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       architecture: lambda.Architecture.ARM_64,
       code: lambda.Code.fromAsset("./lambda"),
       handler: "trigger-build.handler",
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_24_X,
       environment: {
         REGION: process.env.CDK_DEFAULT_REGION!,
         CODEBUILD_PROJECT_NAME: buildImage.projectName,

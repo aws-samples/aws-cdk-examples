@@ -2,6 +2,7 @@ import {
   aws_backup,
   aws_iam,
   aws_s3,
+  RemovalPolicy,
   Stack,
   StackProps,
   Tags,
@@ -23,6 +24,8 @@ export class AwsBackupS3Stack extends Stack {
       publicReadAccess: false,
       encryption: aws_s3.BucketEncryption.S3_MANAGED,
       versioned: true,
+      removalPolicy: RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
     });
     Tags.of(bucket).add("daily-backup", "true");
 

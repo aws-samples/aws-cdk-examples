@@ -8,11 +8,16 @@ class ResourceOverridesExample extends cdk.Stack {
     constructor(scope: cdk.App, id: string) {
         super(scope, id);
 
-        const otherBucket = new s3.Bucket(this, 'Other');
+        const otherBucket = new s3.Bucket(this, 'Other', {
+            removalPolicy: cdk.RemovalPolicy.DESTROY,
+            autoDeleteObjects: true,
+        });
 
         const bucket = new s3.Bucket(this, 'MyBucket', {
             versioned: true,
-            encryption: s3.BucketEncryption.KMS_MANAGED
+            encryption: s3.BucketEncryption.KMS_MANAGED,
+            removalPolicy: cdk.RemovalPolicy.DESTROY,
+            autoDeleteObjects: true,
         });
 
         const bucketResource2 = bucket.node.defaultChild as s3.CfnBucket;
@@ -101,8 +106,9 @@ class ResourceOverridesExample extends cdk.Stack {
         // need to consule the codebase or use the `.map.find` method above
         //
 
-        const lc = asg.node.findChild('LaunchConfig') as autoscaling.CfnLaunchConfiguration;
-        lc.addPropertyOverride('Foo.Bar', 'Hello');
+        const lt = asg.node.findChild('LaunchTemplate') as ec2.LaunchTemplate;
+        const ltResource = lt.node.defaultChild as ec2.CfnLaunchTemplate;
+        ltResource.addPropertyOverride('Foo.Bar', 'Hello');
     }
 }
 

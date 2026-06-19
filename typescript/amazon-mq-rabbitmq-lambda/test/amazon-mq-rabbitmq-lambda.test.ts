@@ -18,7 +18,7 @@ test('RabbitMQ Broker and Lambda Function Created', () => {
 
   // Check that a Lambda function is created
   template.hasResourceProperties('AWS::Lambda::Function', {
-    Runtime: 'nodejs20.x',
+    Runtime: 'nodejs24.x',
     MemorySize: 128,
     Timeout: 30,
   });

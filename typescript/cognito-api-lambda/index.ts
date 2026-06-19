@@ -1,6 +1,6 @@
 import { LambdaRestApi, CfnAuthorizer, LambdaIntegration, AuthorizationType } from 'aws-cdk-lib/aws-apigateway';
 import { AssetCode, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
-import { App, Stack } from 'aws-cdk-lib';
+import { App, Stack, RemovalPolicy } from 'aws-cdk-lib';
 import { UserPool } from 'aws-cdk-lib/aws-cognito'
 
 export class CognitoProtectedApi extends Stack {
@@ -11,7 +11,7 @@ export class CognitoProtectedApi extends Stack {
     const helloWorldFunction = new Function(this, 'helloWorldFunction', {
       code: new AssetCode('src'),
       handler: 'helloworld.handler',
-      runtime: Runtime.NODEJS_18_X
+      runtime: Runtime.NODEJS_24_X
     });
 
     // Rest API backed by the helloWorldFunction
@@ -25,7 +25,8 @@ export class CognitoProtectedApi extends Stack {
     const userPool = new UserPool(this, 'userPool', {
       signInAliases: {
         email: true
-      }
+      },
+      removalPolicy: RemovalPolicy.DESTROY
     })
 
     // Authorizer for the Hello World API that uses the

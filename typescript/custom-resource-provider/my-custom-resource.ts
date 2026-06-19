@@ -24,7 +24,7 @@ export class MyCustomResource extends Construct {
       code: new lambda.InlineCode(fs.readFileSync('custom-resource-handler.py', { encoding: 'utf-8' })),
       handler: 'index.on_event',
       timeout: cdk.Duration.seconds(300),
-      runtime: lambda.Runtime.PYTHON_3_6,
+      runtime: lambda.Runtime.PYTHON_3_14,
     });
 
     const myProvider = new cr.Provider(this, 'MyProvider', {

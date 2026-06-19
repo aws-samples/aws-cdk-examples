@@ -14,6 +14,7 @@ export class RekognitionLambdaS3TriggerStack extends cdk.Stack {
     // Create S3 Bucket
     const bucket = new s3.Bucket(this, 'Bucket', {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
     });
 
     // create DynamoDB table to hold Rekognition results
@@ -29,7 +30,7 @@ export class RekognitionLambdaS3TriggerStack extends cdk.Stack {
     // create Lambda function
     const lambdaFunction = new lambda.Function(this, 'RekFunction', {
       handler: 'rekfunction.handler',
-      runtime: lambda.Runtime.NODEJS_20_X,
+      runtime: lambda.Runtime.NODEJS_24_X,
       code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
       environment: {
         'BUCKET_NAME': bucket.bucketName,

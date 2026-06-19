@@ -24,7 +24,7 @@ export class asyncLambdaStack extends cdk.Stack {
 
         // Lambda Function that will be invoked asynchronously when there is any event that matches the rule
         const eventsFunction = new Function(this, 'EventFunction', {
-            runtime: Runtime.NODEJS_20_X,
+            runtime: Runtime.NODEJS_24_X,
             code,
             handler: 'events_handler.handler'
         });
@@ -44,7 +44,7 @@ export class asyncLambdaStack extends cdk.Stack {
         }));
 
         const topicFunction = new Function(this, 'TopicLambdaFunction', {
-            runtime: Runtime.NODEJS_20_X,
+            runtime: Runtime.NODEJS_24_X,
             code,
             handler: 'topic_message_handler.handler'
         });
@@ -62,7 +62,7 @@ export class asyncLambdaStack extends cdk.Stack {
         }));
 
         const queueFunction = new Function(this, 'QueueLambdaFunction', {
-            runtime: Runtime.NODEJS_20_X,
+            runtime: Runtime.NODEJS_24_X,
             code,
             handler: 'queue_message_handler.handler'
         });

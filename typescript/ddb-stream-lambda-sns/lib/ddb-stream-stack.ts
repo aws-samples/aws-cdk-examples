@@ -41,7 +41,7 @@ export class DdbStreamStack extends cdk.Stack {
     });
 
     const itemL2TableLambdaFunction = new lambda.Function(this, 'itemL2TableLambdaFunction', {
-      runtime: lambda.Runtime.NODEJS_20_X,
+      runtime: lambda.Runtime.NODEJS_24_X,
       handler: 'index.handler',
       tracing: lambda.Tracing.ACTIVE,
       code: lambda.Code.fromAsset('resources/lambda'),
@@ -72,7 +72,7 @@ export class DdbStreamStack extends cdk.Stack {
       },
       lambdaFunctionProps: {
         code: lambda.Code.fromAsset('resources/lambda'),
-        runtime: lambda.Runtime.NODEJS_20_X,
+        runtime: lambda.Runtime.NODEJS_24_X,
         handler: 'index.handler',
         environment: {
           SNS_TOPIC_ARN: snsTopic.topicArn,

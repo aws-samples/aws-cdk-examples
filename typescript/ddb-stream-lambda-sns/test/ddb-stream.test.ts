@@ -13,7 +13,7 @@ test('DynamoDB Table, Lambda Function, and SNS Topic Created', () => {
         }
     });
     template.hasResourceProperties('AWS::Lambda::Function', {
-        Runtime: 'nodejs20.x',
+        Runtime: 'nodejs24.x',
         Handler: 'index.handler',
 
     });

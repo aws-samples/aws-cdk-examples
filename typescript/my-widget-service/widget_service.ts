@@ -42,10 +42,11 @@ export class WidgetService extends Construct {
       // the new bucket, and it will remain in your account until manually deleted. By setting the policy to
       // DESTROY, cdk destroy will attempt to delete the bucket, but will error if the bucket is not empty.
       removalPolicy: cdk.RemovalPolicy.DESTROY, // NOT recommended for production code
+      autoDeleteObjects: true,
     });
 
     const handler = new lambda.Function(this, "WidgetHandler", {
-      runtime: lambda.Runtime.NODEJS_20_X, // So we can use async in widget.js
+      runtime: lambda.Runtime.NODEJS_24_X, // So we can use async in widget.js
       code: lambda.AssetCode.fromAsset("resources"),
       handler: "widgets.main",
       environment: {

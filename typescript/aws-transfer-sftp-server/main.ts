@@ -31,6 +31,7 @@ const bucket = new s3.Bucket(bucketStack, 'IncomingDataBucket', {
   enforceSSL: true,
   // Do not use for production!
   removalPolicy: cdk.RemovalPolicy.DESTROY,
+  autoDeleteObjects: true,
 });
 
 const userPublicKeys = publicKeysContext ? publicKeysContext.split(',') : [];

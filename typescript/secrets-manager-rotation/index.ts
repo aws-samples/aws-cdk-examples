@@ -158,17 +158,14 @@ export class SecretsManagerCustomRotationStack extends Stack {
     const redisPyLayer = new pyLambda.PythonLayerVersion(this, "RedisPyLayer", {
       entry: path.join(__dirname, "lambda", "layer", "redis-py"),
       compatibleRuntimes: [
-        lambda.Runtime.PYTHON_3_9,
-        lambda.Runtime.PYTHON_3_8,
-        lambda.Runtime.PYTHON_3_7,
-        lambda.Runtime.PYTHON_3_6,
+        lambda.Runtime.PYTHON_3_14,
       ],
       description: "A layer that contains the redis-py module",
       license: "MIT License",
     });
 
     const fn = new pyLambda.PythonFunction(this, "SecretRotationFunction", {
-      runtime: lambda.Runtime.PYTHON_3_9,
+      runtime: lambda.Runtime.PYTHON_3_14,
       entry: path.join(__dirname, "lambda"),
       handler: "lambda_handler",
       index: "index.py",

@@ -42,13 +42,13 @@ export class Inspector2MonitoringResource extends cdk.Resource {
 
     const inspector2InitialScanHandler = new lambda_nodejs.NodejsFunction(scope, 'Inspector2InitialScanHandler', {
       timeout: cdk.Duration.minutes(15),
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_24_X,
       logRetention: logs.RetentionDays.ONE_DAY,
     });
 
     const inspector2FindingHandler = new lambda_nodejs.NodejsFunction(scope, 'Inspector2FindingHandler', {
       timeout: cdk.Duration.minutes(15),
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_24_X,
       logRetention: logs.RetentionDays.ONE_DAY,
     });
 

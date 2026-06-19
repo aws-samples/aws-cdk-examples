@@ -44,7 +44,7 @@ export class S3VectorsLambdaBedrockStack extends cdk.Stack {
     };
 
     const ingestFn = new lambda.Function(this, "IngestFn", {
-      runtime: lambda.Runtime.NODEJS_20_X,
+      runtime: lambda.Runtime.NODEJS_24_X,
       handler: "ingest.handler",
       code: lambda.Code.fromAsset("src"),
       timeout: cdk.Duration.minutes(5),
@@ -56,7 +56,7 @@ export class S3VectorsLambdaBedrockStack extends cdk.Stack {
     ingestFn.addToRolePolicy(bedrockPolicy);
 
     const queryFn = new lambda.Function(this, "QueryFn", {
-      runtime: lambda.Runtime.NODEJS_20_X,
+      runtime: lambda.Runtime.NODEJS_24_X,
       handler: "query.handler",
       code: lambda.Code.fromAsset("src"),
       timeout: cdk.Duration.minutes(2),
