@@ -17,7 +17,7 @@
     <aws-lambda-java-events.version>3.11.0</aws-lambda-java-events.version>
     <awssdk-s3>2.29.43</awssdk-s3>
     <commons-codec>1.17.1</commons-codec>
-    <jackson-databind.version>2.18.0</jackson-databind.version>
+    <jackson-databind.version>2.22.0</jackson-databind.version>
     <lombok.version>1.18.34</lombok.version>
     <junit.version>5.7.1</junit.version>
     <mockito.version>5.14.2</mockito.version>
