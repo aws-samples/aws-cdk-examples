@@ -1,9 +1,6 @@
 {
   "name": "lambda-provision-concurrenced-autoscaling",
   "version": "0.1.0",
-  "bin": {
-    "lambda-pc-autoscaling": "bin/lambda-pc-autoscaling.js"
-  },
   "author": {
     "name": "Amazon Web Services",
     "url": "https://aws.amazon.com",
@@ -18,14 +15,16 @@
   "devDependencies": {
     "@aws-cdk/assert": "*",
     "@types/node": "^24.10.1",
-    "aws-cdk": "2.1114.1",
-    "ts-node": "^10.9.2",
+    "aws-cdk": "2.1133.0",
     "@types/jest": "^30",
     "jest": "^30",
-    "typescript": "~5.9.3"
+    "typescript": "~7.0.2",
+    "@swc/core": "^1.15.0",
+    "@swc/jest": "^0.2.39",
+    "tsx": "^4.23.0"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.248.0",
+    "aws-cdk-lib": "2.262.1",
     "constructs": "^10.0.0"
   }
 }

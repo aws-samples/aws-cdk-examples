@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "commonjs",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "lib": [
-      "ES2022"
+      "es2022"
     ],
     "declaration": true,
     "strict": true,
@@ -19,8 +20,15 @@
     "inlineSources": true,
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
+    "skipLibCheck": true,
     "typeRoots": [
       "./node_modules/@types"
+    ],
+    "noEmit": true,
+    "isolatedModules": true,
+    "types": [
+      "jest",
+      "node"
     ]
   },
   "exclude": [

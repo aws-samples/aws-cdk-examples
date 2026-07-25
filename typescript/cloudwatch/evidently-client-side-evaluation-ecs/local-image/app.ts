@@ -1,5 +1,5 @@
 
-import * as express from 'express'
+import express from 'express'
 import {Evidently} from "@aws-sdk/client-evidently";
 
 const app = express();
@@ -12,7 +12,7 @@ const evidently = new Evidently({
   disableHostPrefix: true
 });
 
-app.get("/", async (_, res) => {
+app.get("/", async (_: any, res: any) => {
   try {
     console.time('latency')
     const evaluation = await evidently.evaluateFeature({

@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/aws_backup_s3.ts",
+  "app": "npx tsc && npx tsx bin/aws_backup_s3.ts",
   "watch": {
     "include": [
       "**"

@@ -1,10 +1,9 @@
-import cdk = require('aws-cdk-lib');
-import customResources = require('aws-cdk-lib/custom-resources');
-import lambda = require('aws-cdk-lib/aws-lambda');
+import * as cdk from 'aws-cdk-lib';
+import * as customResources from 'aws-cdk-lib/custom-resources';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 
-import fs = require('fs');
-
+import * as fs from 'fs';
 export interface MyCustomResourceProps {
   /**
    * Message to echo

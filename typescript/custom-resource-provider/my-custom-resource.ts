@@ -3,8 +3,7 @@ import * as logs from 'aws-cdk-lib/aws-logs';
 import * as cr from 'aws-cdk-lib/custom-resources';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
-import fs = require('fs');
-
+import * as fs from 'fs';
 export interface MyCustomResourceProps {
   /**
    * Message to echo

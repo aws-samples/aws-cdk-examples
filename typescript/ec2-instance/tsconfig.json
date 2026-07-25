@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "target": "ES2018",
-    "module": "commonjs",
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "lib": [
-      "es2018"
+      "es2022"
     ],
     "declaration": true,
     "strict": true,
@@ -14,28 +15,24 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
+    "noFallthroughCasesInSwitch": false,
     "inlineSourceMap": true,
     "inlineSources": true,
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
+    "skipLibCheck": true,
     "typeRoots": [
       "./node_modules/@types"
     ],
-    "outDir": "lib",
-    "rootDir": "../..",
-    "baseUrl": ".",
-    "paths": {
-      "../../test-utils/*": ["../../test-utils/*"]
-    }
+    "noEmit": true,
+    "isolatedModules": true,
+    "types": [
+      "jest",
+      "node"
+    ]
   },
   "exclude": [
     "node_modules",
-    "cdk.out",
-    "lib"
-  ],
-  "include": [
-    "**/*.ts",
-    "../../test-utils/**/*.ts"
+    "cdk.out"
   ]
 }

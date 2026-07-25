@@ -1,8 +1,7 @@
-import ecs = require('aws-cdk-lib/aws-ecs');
-import ec2 = require('aws-cdk-lib/aws-ec2');
-import elbv2 = require('aws-cdk-lib/aws-elasticloadbalancingv2');
-import cdk = require('aws-cdk-lib');
-
+import * as ecs from 'aws-cdk-lib/aws-ecs';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
+import * as cdk from 'aws-cdk-lib';
 const app = new cdk.App();
 const stack = new cdk.Stack(app, 'sample-aws-ecs-integ-ecs');
 

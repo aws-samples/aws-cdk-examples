@@ -1,6 +1,5 @@
 #!/usr/bin/env node
-import "source-map-support/register"
-import cdk = require("aws-cdk-lib")
+import * as cdk from "aws-cdk-lib"
 import { CDKExampleLambdaApiStack } from "../lib/lambda-api-stack"
 
 export const lambdaApiStackName = "CDKExampleLambdaApiStack"

@@ -1,9 +1,6 @@
 {
   "name": "aspects-overrides",
   "version": "0.1.0",
-  "bin": {
-    "aspects-overrides": "bin/aspects-overrides.js"
-  },
   "scripts": {
     "build": "tsc",
     "clean": "tsc --build --clean",
@@ -15,20 +12,20 @@
     "@types/jest": "^30",
     "@types/node": "^24.10.1",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
-    "aws-cdk": "2.1114.1",
+    "aws-cdk": "2.1133.0",
     "eslint": "^8.54.0",
     "eslint-config-standard-with-typescript": "^40.0.0",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-n": "^16.3.1",
     "eslint-plugin-promise": "^6.1.1",
     "jest": "^30",
-    "ts-jest": "^29",
-    "ts-node": "^10.9.2",
-    "typescript": "~5.9.3"
+    "typescript": "~7.0.2",
+    "@swc/core": "^1.15.0",
+    "@swc/jest": "^0.2.39",
+    "tsx": "^4.23.0"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.248.0",
-    "constructs": "^10.0.0",
-    "source-map-support": "^0.5.21"
+    "aws-cdk-lib": "2.262.1",
+    "constructs": "^10.0.0"
   }
 }

@@ -27,10 +27,10 @@
 // OF ANY KIND, either express or implied. See the License for the specific
 // language governing permissions and limitations under the License.
 // snippet-start:[cdk.typescript.widget_service]
-import cdk = require("aws-cdk-lib");
-import apigateway = require("aws-cdk-lib/aws-apigateway");
-import lambda = require("aws-cdk-lib/aws-lambda");
-import s3 = require("aws-cdk-lib/aws-s3");
+import * as cdk from "aws-cdk-lib";
+import * as apigateway from "aws-cdk-lib/aws-apigateway";
+import * as lambda from "aws-cdk-lib/aws-lambda";
+import * as s3 from "aws-cdk-lib/aws-s3";
 import { Construct } from 'constructs';
 
 export class WidgetService extends Construct {

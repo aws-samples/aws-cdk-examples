@@ -1,10 +1,9 @@
-import cdk = require('aws-cdk-lib');
-import cpactions = require('aws-cdk-lib/aws-codepipeline-actions');
-import cp = require('aws-cdk-lib/aws-codepipeline');
-import cc = require('aws-cdk-lib/aws-codecommit');
-import lambda = require('aws-cdk-lib/aws-lambda');
-import s3 = require('aws-cdk-lib/aws-s3');
-
+import * as cdk from 'aws-cdk-lib';
+import * as cpactions from 'aws-cdk-lib/aws-codepipeline-actions';
+import * as cp from 'aws-cdk-lib/aws-codepipeline';
+import * as cc from 'aws-cdk-lib/aws-codecommit';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as s3 from 'aws-cdk-lib/aws-s3';
 export class CdkStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props);

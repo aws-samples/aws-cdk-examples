@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/os_vpc_provision.ts",
+  "app": "npx tsc && npx tsx bin/os_vpc_provision.ts",
   "watch": {
     "include": [
       "**"

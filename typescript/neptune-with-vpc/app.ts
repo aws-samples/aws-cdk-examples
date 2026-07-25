@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 
 import { NeptuneWithVpcStack } from './neptune-with-vpc-stack';

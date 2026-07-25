@@ -12,7 +12,7 @@ import {
   FunctionRuntime,
   OriginAccessIdentity
 } from "aws-cdk-lib/aws-cloudfront";
-import {BehaviorOptions} from "aws-cdk-lib/aws-cloudfront/lib/distribution";
+
 import {S3BucketOrigin} from "aws-cdk-lib/aws-cloudfront-origins";
 
 export class DemoCloudfrontFunctionsStack extends cdk.Stack {
@@ -64,7 +64,7 @@ export class DemoCloudfrontFunctionsStack extends cdk.Stack {
     });
 
     // create a CloudFront behavior with origin of my website bucket and both request and response functions
-    const defaultBehavior: BehaviorOptions = {
+    const defaultBehavior = {
       origin: S3BucketOrigin.withOriginAccessControl(bucket),
       compress: true,
       allowedMethods: AllowedMethods.ALLOW_ALL,

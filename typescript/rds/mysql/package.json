@@ -1,9 +1,6 @@
 {
   "name": "mysql",
   "version": "0.1.0",
-  "bin": {
-    "cdk": "npx ts-node --prefer-ts-exts mysql.ts"
-  },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
@@ -13,15 +10,15 @@
     "@types/jest": "^30",
     "@types/node": "^24.10.1",
     "jest": "^30",
-    "ts-jest": "^29",
-    "ts-node": "^10.9.2",
-    "aws-cdk": "2.1114.1",
-    "typescript": "~5.9.3"
+    "aws-cdk": "2.1133.0",
+    "typescript": "~7.0.2",
+    "@swc/core": "^1.15.0",
+    "@swc/jest": "^0.2.39",
+    "tsx": "^4.23.0"
   },
   "esModuleInterop": true,
   "dependencies": {
-    "aws-cdk-lib": "2.248.0",
-    "constructs": "^10.0.0",
-    "source-map-support": "^0.5.21"
+    "aws-cdk-lib": "2.262.1",
+    "constructs": "^10.0.0"
   }
 }

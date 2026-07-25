@@ -1,7 +1,6 @@
-import cdk = require('aws-cdk-lib');
-import ec2 = require('aws-cdk-lib/aws-ec2');
-import ecs = require('aws-cdk-lib/aws-ecs');
-
+import * as cdk from 'aws-cdk-lib';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as ecs from 'aws-cdk-lib/aws-ecs';
 // Based on https://aws.amazon.com/blogs/compute/introducing-cloud-native-networking-for-ecs-containers/
 const app = new cdk.App();
 const stack = new cdk.Stack(app, 'ec2-service-with-task-networking');

@@ -184,8 +184,7 @@ function isOldFormat(content: PackageJson): boolean {
     ...content.dependencies,
     ...content.devDependencies
   };
-  // Old format if has legacy deps OR is missing new tooling (tsx)
-  return !!(allDeps['ts-jest'] || allDeps['ts-node'] || allDeps['source-map-support'] || !allDeps['tsx']);
+  return !!(allDeps['ts-jest'] || allDeps['ts-node'] || allDeps['source-map-support']);
 }
 
 // Check if a package.json is a CDK TypeScript project (has aws-cdk-lib or aws-cdk)
@@ -380,31 +379,17 @@ async function migrateCdkJson(projectDir: string): Promise<boolean> {
   }
 
   const app = cdkJson.app as string | undefined;
-  if (!app) return false;
-
-  // Already in target format
-  if (app.includes('npx tsc && npx tsx')) return false;
-
-  // Determine entry file based on pattern
-  let entryFile: string;
-  if (app.includes('ts-node')) {
-    // "npx ts-node --prefer-ts-exts bin/app.ts" -> "bin/app.ts"
-    entryFile = app.replace(/npx ts-node(?:\s+--prefer-ts-exts)?\s+/, '').trim();
-  } else if (app.match(/^npx node -r ts-node\/register\s+/)) {
-    // "npx node -r ts-node/register main.ts" -> "main.ts"
-    entryFile = app.replace(/^npx node -r ts-node\/register\s+/, '').trim();
-  } else if (app.startsWith('npx tsx ')) {
-    // Already using tsx but without tsc prefix
-    entryFile = app.replace('npx tsx ', '').trim();
-  } else if (app.startsWith('node ')) {
-    // "node index" -> "index.ts" (old compiled JS pattern)
-    const jsFile = app.replace('node ', '').trim();
-    entryFile = jsFile.endsWith('.js') ? jsFile.replace('.js', '.ts') : jsFile + '.ts';
-  } else {
-    return false; // Unknown format, skip
+  if (!app || !app.includes('ts-node')) {
+    return false;
   }
 
-  cdkJson.app = `npx tsc && npx tsx ${entryFile}`;
+  // Replace ts-node command with tsx
+  // Common patterns:
+  //   "npx ts-node --prefer-ts-exts bin/app.ts"
+  //   "npx ts-node bin/app.ts"
+  //   "npx ts-node index.ts"
+  const newApp = app.replace(/npx ts-node(?:\s+--prefer-ts-exts)?\s+/, 'npx tsx ');
+  cdkJson.app = newApp;
 
   await writeFile(cdkJsonPath, JSON.stringify(cdkJson, null, 2) + '\n');
   console.log(`  Migrated cdk.json app command to tsx`);

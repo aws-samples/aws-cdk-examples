@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import "source-map-support/register";
 import * as cdk from "aws-cdk-lib";
 import { Config } from "./config/Config";
 import { Step1SourceAccount } from "./stacks/step1-source-account";

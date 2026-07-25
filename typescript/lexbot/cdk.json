@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/lexbot.ts",
+  "app": "npx tsc && npx tsx bin/lexbot.ts",
   "watch": {
     "include": [
       "**"

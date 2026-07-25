@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/route53-resolver-dns-firewall.ts",
+  "app": "npx tsc && npx tsx bin/route53-resolver-dns-firewall.ts",
   "watch": {
     "include": [
       "**"
