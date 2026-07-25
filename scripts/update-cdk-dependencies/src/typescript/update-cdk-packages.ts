@@ -1,6 +1,7 @@
 #!/usr/bin/env tsx
 
 import { readFile, writeFile } from 'node:fs/promises';
+import { exec } from 'node:child_process';
 import { opendir, access } from 'node:fs/promises';
 import { resolve, join, dirname } from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
@@ -92,7 +93,6 @@ const NEW_JEST_CONFIG = `module.exports = {
 // Utility function to get CDK CLI version
 async function getCdkCliVersion(): Promise<string> {
   try {
-    const { exec } = require('child_process');
     return new Promise((resolve, reject) => {
       exec('cdk --version', (error: Error | null, stdout: string) => {
         if (error) {
