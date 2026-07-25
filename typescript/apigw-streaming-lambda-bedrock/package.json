@@ -3,9 +3,29 @@
   "version": "1.0.0",
   "description": "API Gateway REST streaming with Lambda and Amazon Bedrock",
   "private": true,
-  "scripts": { "build": "tsc", "watch": "tsc -w", "cdk": "cdk" },
-  "author": { "name": "Amazon Web Services", "url": "https://aws.amazon.com", "organization": true },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
+  },
+  "author": {
+    "name": "Amazon Web Services",
+    "url": "https://aws.amazon.com",
+    "organization": true
+  },
   "license": "Apache-2.0",
-  "devDependencies": { "@types/node": "^22.0.0", "aws-cdk": "2.1119.0", "typescript": "~5.7.0" },
-  "dependencies": { "aws-cdk-lib": "2.250.0", "constructs": "^10.0.0" }
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "aws-cdk": "2.1133.0",
+    "typescript": "~7.0.2",
+    "@swc/core": "^1.15.0",
+    "@swc/jest": "^0.2.39",
+    "@types/jest": "^30",
+    "jest": "^30",
+    "tsx": "^4.23.0"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "2.262.1",
+    "constructs": "^10.0.0"
+  }
 }

@@ -1,4 +1,4 @@
-import cdk = require('aws-cdk-lib');
+import * as cdk from 'aws-cdk-lib';
 import { CfnApp, CfnBranch } from 'aws-cdk-lib/aws-amplify';
 import { Construct } from 'constructs';
 

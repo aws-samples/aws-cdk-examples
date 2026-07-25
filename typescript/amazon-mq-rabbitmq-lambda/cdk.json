@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/amazon-mq-rabbitmq-lambda.ts",
+  "app": "npx tsc && npx tsx bin/amazon-mq-rabbitmq-lambda.ts",
   "watch": {
     "include": [
       "**"

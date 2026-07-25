@@ -1,11 +1,11 @@
-import events = require('aws-cdk-lib/aws-events');
-import targets = require('aws-cdk-lib/aws-events-targets');
-import lambda = require('aws-cdk-lib/aws-lambda');
-import cdk = require('aws-cdk-lib');
-import fs = require('fs');
-import sns = require('aws-cdk-lib/aws-sns');
-import subscriptions = require('aws-cdk-lib/aws-sns-subscriptions');
-import iam = require('aws-cdk-lib/aws-iam');
+import * as events from 'aws-cdk-lib/aws-events';
+import * as targets from 'aws-cdk-lib/aws-events-targets';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as cdk from 'aws-cdk-lib';
+import * as fs from 'fs';
+import * as sns from 'aws-cdk-lib/aws-sns';
+import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
+import * as iam from 'aws-cdk-lib/aws-iam';
 import { CfnParameter } from 'aws-cdk-lib';
 
 

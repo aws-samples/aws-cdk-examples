@@ -21,8 +21,9 @@
     "esbuild": "^0.28.1",
     "eslint": "^8.43.0",
     "jest": "^30",
-    "ts-jest": "^29",
     "ts-node": "^10.9.2",
-    "typescript": "~5.9.3"
+    "typescript": "~5.9.3",
+    "@swc/core": "^1.15.0",
+    "@swc/jest": "^0.2.39"
   }
 }

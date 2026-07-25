@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "Sends events to Event Bridge via an AppSync GraphQL API",
   "private": true,
-  "bin": {
-    "cdk": "bin/cdk.js"
-  },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
@@ -14,13 +11,16 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/node": "^24.10.1",
-    "aws-cdk": "2.1114.1",
-    "typescript": "~5.9.3",
-    "ts-node": "^10.9.2"
+    "aws-cdk": "2.1133.0",
+    "typescript": "~7.0.2",
+    "@swc/core": "^1.15.0",
+    "@swc/jest": "^0.2.39",
+    "@types/jest": "^30",
+    "jest": "^30",
+    "tsx": "^4.23.0"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.248.0",
-    "constructs": "^10.0.0",
-    "source-map-support": "^0.5.9"
+    "aws-cdk-lib": "2.262.1",
+    "constructs": "^10.0.0"
   }
 }

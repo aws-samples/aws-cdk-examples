@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { S3ObjectLambdaStack } from '../lib/s3-object-lambda-stack';
 

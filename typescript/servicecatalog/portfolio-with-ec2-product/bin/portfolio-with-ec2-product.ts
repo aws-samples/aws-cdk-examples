@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import 'source-map-support/register';
 import { App } from 'aws-cdk-lib';
 import { Ec2CdkStack } from '../lib/portfolio-with-ec2-product';
 

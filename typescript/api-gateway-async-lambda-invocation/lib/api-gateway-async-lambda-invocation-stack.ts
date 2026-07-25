@@ -5,8 +5,7 @@ import { PolicyDocument, PolicyStatement, Role, ServicePrincipal } from 'aws-cdk
 import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
-import path = require('path');
-
+import * as path from 'path';
 export interface Properties extends cdk.StackProps {
   readonly prefix: string;
 }

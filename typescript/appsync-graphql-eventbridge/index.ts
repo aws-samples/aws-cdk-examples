@@ -1,4 +1,4 @@
-import cdk = require("aws-cdk-lib");
+import * as cdk from "aws-cdk-lib";
 import {
   CfnGraphQLApi,
   CfnApiKey,
@@ -8,8 +8,8 @@ import {
 } from "aws-cdk-lib/aws-appsync";
 import { Role, ServicePrincipal, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Rule } from "aws-cdk-lib/aws-events";
-import lambda = require("aws-cdk-lib/aws-lambda");
-import targets = require("aws-cdk-lib/aws-events-targets");
+import * as lambda from "aws-cdk-lib/aws-lambda";
+import * as targets from "aws-cdk-lib/aws-events-targets";
 import { Construct } from 'constructs';
 
 export class AppSyncCdkStack extends cdk.Stack {

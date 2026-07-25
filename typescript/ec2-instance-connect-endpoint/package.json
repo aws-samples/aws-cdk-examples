@@ -5,9 +5,6 @@
     "type": "git",
     "url": "https://github.com/aws-samples/aws-cdk-examples.git"
   },
-  "bin": {
-    "ec2-instance-connect-endpoint": "bin/app.js"
-  },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
@@ -19,15 +16,16 @@
     "@types/node": "^24.10.1",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
-    "aws-cdk": "2.1114.1",
+    "aws-cdk": "2.1133.0",
     "constructs": "^10.0.0",
     "eslint": "^8",
     "jest": "^30",
-    "ts-jest": "^29",
-    "ts-node": "^10.9.2",
-    "typescript": "~5.9.3"
+    "typescript": "~7.0.2",
+    "@swc/core": "^1.15.0",
+    "@swc/jest": "^0.2.39",
+    "tsx": "^4.23.0"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.248.0"
+    "aws-cdk-lib": "2.262.1"
   }
 }

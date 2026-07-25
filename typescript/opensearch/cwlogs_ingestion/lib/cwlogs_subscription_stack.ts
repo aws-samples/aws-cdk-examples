@@ -7,8 +7,7 @@ import { Code, Runtime, Function, Alias } from 'aws-cdk-lib/aws-lambda';
 import { FilterPattern, LogGroup, RetentionDays, SubscriptionFilter } from 'aws-cdk-lib/aws-logs';
 import { LambdaDestination } from 'aws-cdk-lib/aws-logs-destinations';
 import { Construct } from 'constructs';
-import path = require('path');
-
+import * as path from 'path';
 export interface CWLogsSubscriptionStackProps extends StackProps {
   ingestionEndpointURL: string
 }

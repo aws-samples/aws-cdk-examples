@@ -2,7 +2,7 @@ import { LambdaIntegration, MethodLoggingLevel, RestApi } from "aws-cdk-lib/aws-
 import { PolicyStatement } from "aws-cdk-lib/aws-iam"
 import { Function, Runtime, AssetCode, Code } from "aws-cdk-lib/aws-lambda"
 import { Duration, RemovalPolicy, Stack, StackProps } from "aws-cdk-lib"
-import s3 = require("aws-cdk-lib/aws-s3")
+import * as s3 from "aws-cdk-lib/aws-s3"
 import { Construct } from "constructs"
 
 interface LambdaApiStackProps extends StackProps {

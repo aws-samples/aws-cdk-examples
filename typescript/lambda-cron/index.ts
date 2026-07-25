@@ -1,10 +1,8 @@
-import events = require('aws-cdk-lib/aws-events');
-import targets = require('aws-cdk-lib/aws-events-targets');
-import lambda = require('aws-cdk-lib/aws-lambda');
-import cdk = require('aws-cdk-lib');
-
-import fs = require('fs');
-
+import * as events from 'aws-cdk-lib/aws-events';
+import * as targets from 'aws-cdk-lib/aws-events-targets';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as cdk from 'aws-cdk-lib';
+import * as fs from 'fs';
 export class LambdaCronStack extends cdk.Stack {
   constructor(app: cdk.App, id: string) {
     super(app, id);

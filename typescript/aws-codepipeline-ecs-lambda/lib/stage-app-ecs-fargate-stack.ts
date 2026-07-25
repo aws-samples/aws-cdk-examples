@@ -4,8 +4,7 @@ import { ApplicationLoadBalancedFargateService } from 'aws-cdk-lib/aws-ecs-patte
 import { IVpc, SubnetType, Vpc } from 'aws-cdk-lib/aws-ec2';
 import { Cluster, ContainerImage, EcrImage } from 'aws-cdk-lib/aws-ecs';
 import { DockerImageAsset } from 'aws-cdk-lib/aws-ecr-assets';
-import path = require('path');
-
+import * as path from 'path';
 interface vpcStackProps extends cdk.StackProps {
     readonly vpc: Vpc;
 }

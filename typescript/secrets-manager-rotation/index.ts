@@ -4,8 +4,7 @@ import {
     aws_secretsmanager as secretsmanager, Duration, Stack, StackProps, Tags
 } from 'aws-cdk-lib';
 
-import path = require("path");
-
+import * as path from "path";
 export class SecretsManagerCustomRotationStack extends Stack {
   constructor(scope: App, id: string, props?: StackProps) {
     super(scope, id, props);

@@ -1,9 +1,6 @@
 {
   "name": "aws-transfer-sftp-server",
   "version": "0.1.0",
-  "bin": {
-    "aws-transfer-sftp-server": "npx ts-node --prefer-ts-exts bin/main.ts"
-  },
   "description": "AWS CDK Example for deploying AWS Transfer SFTP Server",
   "private": true,
   "author": {
@@ -15,20 +12,21 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "test": "jest --config jest.config.ts",
+    "test": "jest --config jest.config.js",
     "cdk": "cdk"
   },
   "devDependencies": {
     "@types/jest": "^30",
     "@types/node": "^24.10.1",
-    "aws-cdk": "2.1114.1",
+    "aws-cdk": "2.1133.0",
     "jest": "^30",
-    "ts-jest": "^29",
-    "ts-node": "^10.9.2",
-    "typescript": "~5.9.3"
+    "typescript": "~7.0.2",
+    "@swc/core": "^1.15.0",
+    "@swc/jest": "^0.2.39",
+    "tsx": "^4.23.0"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.248.0",
+    "aws-cdk-lib": "2.262.1",
     "constructs": "^10.0.0"
   }
 }

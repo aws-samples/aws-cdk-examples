@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/aws-batch-openmp-benchmark.ts",
+  "app": "npx tsc && npx tsx bin/aws-batch-openmp-benchmark.ts",
   "watch": {
     "include": [
       "**"

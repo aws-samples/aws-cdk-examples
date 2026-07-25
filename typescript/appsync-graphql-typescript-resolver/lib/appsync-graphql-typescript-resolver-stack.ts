@@ -22,7 +22,7 @@ export class AppsyncGraphqlTypescriptResolverStack extends cdk.Stack {
 
     const noneDS = api.addNoneDataSource('NoneDS');
 
-    const execOptions: ExecSyncOptions = { stdio: ['ignore', process.stderr, 'inherit'] };
+    const execOptions: ExecSyncOptions = { stdio: ['ignore', process.stderr, 'inherit'], cwd: path.join(__dirname, '..', 'resolvers') };
 
     api.createResolver('GetTodoResolver', {
       typeName: 'Query',
@@ -45,8 +45,9 @@ export class AppsyncGraphqlTypescriptResolverStack extends cdk.Stack {
                 console.log("esbuild not found locally, using docker build")
                 return false;
               }
+              execSync('npm install', execOptions);
               execSync('npm run dist', execOptions);
-              fs.copyFileSync(path.join(__dirname, '..', 'resolvers', 'dist', '*'), outputDir );
+              fs.cpSync(path.join(__dirname, '..', 'resolvers', 'dist', 'appsync'), outputDir, { recursive: true });
               return true;
             },
           },

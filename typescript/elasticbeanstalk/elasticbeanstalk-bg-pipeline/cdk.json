@@ -4,5 +4,5 @@
     "green_env": "green",
     "app_name": "myapp"
   },
-  "app": "node index"
+  "app": "npx tsc && npx tsx index.ts"
 }

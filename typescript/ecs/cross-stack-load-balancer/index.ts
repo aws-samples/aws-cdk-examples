@@ -1,5 +1,5 @@
-import ecs = require('aws-cdk-lib/aws-ecs');
-import ec2 = require('aws-cdk-lib/aws-ec2');
+import * as ecs from 'aws-cdk-lib/aws-ecs';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import { Stack, StackProps, App } from 'aws-cdk-lib';
 import { SplitAtListener_LoadBalancerStack, SplitAtListener_ServiceStack } from './split-at-listener';
 import { SplitAtTargetGroup_LoadBalancerStack, SplitAtTargetGroup_ServiceStack } from './split-at-targetgroup';

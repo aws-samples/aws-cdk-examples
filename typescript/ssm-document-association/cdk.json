@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/ssm-document-association.ts",
+  "app": "npx tsc && npx tsx bin/ssm-document-association.ts",
   "watch": {
     "include": [
       "**"

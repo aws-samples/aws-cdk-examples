@@ -1,5 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
-import fs = require('fs');
+import * as fs from 'fs';
 import * as path from 'path'
 
 import * as imagebuilder from 'aws-cdk-lib/aws-imagebuilder';

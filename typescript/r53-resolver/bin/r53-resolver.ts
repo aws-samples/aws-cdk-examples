@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import "source-map-support/register";
 import * as cdk from "aws-cdk-lib";
 import { R53ResolverStack } from "../lib/r53-resolver-stack";
 

@@ -2,8 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import { AppsyncFunction, AuthorizationType, Code, Definition, FunctionRuntime, GraphqlApi, Resolver } from 'aws-cdk-lib/aws-appsync';
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Construct } from 'constructs';
-import path = require('path');
-
+import * as path from 'path';
 export class CdkAppsyncDemoStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);

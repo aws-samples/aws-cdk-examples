@@ -1,9 +1,6 @@
 {
   "name": "lambda-manage-s3-event-notifications",
   "version": "0.1.0",
-  "bin": {
-    "lambda-manage-s3-event-notifications": "bin/lambda-manage-s3-event-notifications.js"
-  },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
@@ -12,14 +9,17 @@
   "devDependencies": {
     "@aws-cdk/assert": "*",
     "@types/node": "^24.10.1",
-    "aws-cdk": "2.1114.1",
-    "ts-node": "^10.9.2",
-    "typescript": "~5.9.3"
+    "aws-cdk": "2.1133.0",
+    "typescript": "~7.0.2",
+    "@swc/core": "^1.15.0",
+    "@swc/jest": "^0.2.39",
+    "@types/jest": "^30",
+    "jest": "^30",
+    "tsx": "^4.23.0"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.427.0",
-    "aws-cdk-lib": "2.248.0",
-    "constructs": "^10.0.0",
-    "source-map-support": "^0.5.16"
+    "aws-cdk-lib": "2.262.1",
+    "constructs": "^10.0.0"
   }
 }

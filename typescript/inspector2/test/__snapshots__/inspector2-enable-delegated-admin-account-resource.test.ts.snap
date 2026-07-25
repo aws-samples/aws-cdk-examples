@@ -29,7 +29,7 @@ exports[`Inspector2EnableDelegatedAdminAccountResource creates required resource
             "Arn",
           ],
         },
-        "Runtime": "nodejs22.x",
+        "Runtime": "nodejs24.x",
         "Timeout": 120,
       },
       "Type": "AWS::Lambda::Function",
