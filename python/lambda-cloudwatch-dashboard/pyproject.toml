@@ -4,8 +4,8 @@ version = "0.0.2"
 description = "CloudWatch Dashboard Sample"
 readme = "README.md"
 dependencies = [
-    "aws-cdk-lib>=2.0.0,<3",
-    "constructs>=10.0.0,<11"
+    "aws-cdk-lib>=2.262.0,<3.0.0",
+    "constructs>=10.5.0,<11.0.0"
 ]
 requires-python = ">=3.9,<4"
 classifiers = [

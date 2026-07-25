@@ -65,7 +65,7 @@ class ConsumerStack(Stack):
         lambda_function = _lambda.Function(
             self,
             "ConsumerLambda",
-            runtime=_lambda.Runtime.PYTHON_3_12,
+            runtime=_lambda.Runtime.PYTHON_3_14,
             handler="consumer.handler",
             timeout=Duration.seconds(30),
             code=_lambda.Code.from_asset("./lambda/consumer"),

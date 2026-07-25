@@ -110,7 +110,7 @@ class ProducerStack(Stack):
         lambda_function = _lambda.Function(
             self,
             "ProducerLambda",
-            runtime=_lambda.Runtime.PYTHON_3_12,
+            runtime=_lambda.Runtime.PYTHON_3_14,
             handler="producer.handler",
             timeout=Duration.seconds(30),
             code=_lambda.Code.from_asset("./lambda/producer"),
