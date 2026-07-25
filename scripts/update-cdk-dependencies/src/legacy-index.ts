@@ -5,7 +5,7 @@
  * A utility for updating package.json files
  */
 
-import { updatePackages } from './update-cdk-packages';
+import { updatePackages } from './typescript/update-cdk-packages';
 
 /**
  * Main function to update package.json files
@@ -14,7 +14,7 @@ async function main(): Promise<void> {
   try {
     // Get the repository root path from command line arguments
     const repoRoot = process.argv[2];
-    
+
     if (!repoRoot) {
       console.error('Error: Repository root path is required');
       console.error('Usage: update-packagejson <repository-root-path>');
