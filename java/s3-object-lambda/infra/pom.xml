@@ -12,8 +12,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>17</maven.compiler.release>
     <java.version>17</java.version>
-    <cdk.version>2.171.1</cdk.version>
-    <constructs.version>[10.0.0,11.0.0)</constructs.version>
+    <cdk.version>[2.262.0,3.0.0)</cdk.version>
+    <constructs.version>[10.5.0,11.0.0)</constructs.version>
     <junit.version>5.7.1</junit.version>
     <lombok.version>1.18.34</lombok.version>
   </properties>

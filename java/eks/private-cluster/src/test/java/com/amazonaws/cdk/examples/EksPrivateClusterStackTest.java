@@ -1,27 +1,21 @@
 package com.amazonaws.cdk.examples;
 
 import java.util.Map;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import software.amazon.awscdk.App;
 import software.amazon.awscdk.assertions.Match;
 import software.amazon.awscdk.assertions.Template;
 
 public class EksPrivateClusterStackTest {
-  private static Template template;
-
-  @BeforeAll
-  static void setUp() {
+  private static Template synthesizeTemplate() {
     final App app = new App();
     final EksPrivateClusterStack stack = new EksPrivateClusterStack(app, "EksPrivateCluster");
-    template = Template.fromStack(stack);
+    return Template.fromStack(stack);
   }
 
   @Test
   public void testEksClusterNameVersion() {
-    final App app = new App();
-    final EksPrivateClusterStack stack = new EksPrivateClusterStack(app, "EksPrivateCluster");
-    template = Template.fromStack(stack);
+    final Template template = synthesizeTemplate();
     template.resourcePropertiesCountIs(
         "Custom::AWSCDK-EKS-Cluster",
         Match.objectLike(
@@ -35,9 +29,7 @@ public class EksPrivateClusterStackTest {
 
   @Test
   public void testEksClusterEndpointAccess() {
-    final App app = new App();
-    final EksPrivateClusterStack stack = new EksPrivateClusterStack(app, "EksPrivateCluster");
-    template = Template.fromStack(stack);
+    final Template template = synthesizeTemplate();
     template.resourcePropertiesCountIs(
         "Custom::AWSCDK-EKS-Cluster",
         Match.objectLike(
@@ -53,11 +45,13 @@ public class EksPrivateClusterStackTest {
 
   @Test
   public void testNoInternetGateway() {
+    final Template template = synthesizeTemplate();
     template.resourceCountIs("AWS::EC2::InternetGateway", 0);
   }
 
   @Test
   public void testNoNatGateway() {
+    final Template template = synthesizeTemplate();
     template.resourceCountIs("AWS::EC2::NatGateway", 0);
   }
 }
