@@ -225,8 +225,8 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 	fargateService.AttachToApplicationTargetGroup(targetGroupBlue)
 
 	// Creates new pipeline artifacts
-	sourceArtifact := pipeline.NewArtifact(jsii.String("SourceArtifact"))
-	buildArtifact := pipeline.NewArtifact(jsii.String("BuildArtifact"))
+	sourceArtifact := pipeline.NewArtifact(jsii.String("SourceArtifact"), nil)
+	buildArtifact := pipeline.NewArtifact(jsii.String("BuildArtifact"), nil)
 
 	// Creates the source stage for CodePipeline
 	sourceStage := &pipeline.StageProps{
@@ -247,7 +247,7 @@ func NewCodePipelineBuildDeployStack(scope constructs.Construct, id string, prop
 		Actions: &[]pipeline.IAction{
 			pipelineactions.NewCodeBuildAction(&pipelineactions.CodeBuildActionProps{
 				ActionName: jsii.String("DockerBuildPush"),
-				Input:      pipeline.NewArtifact(jsii.String("SourceArtifact")),
+				Input:      pipeline.NewArtifact(jsii.String("SourceArtifact"), nil),
 				Project:    buildImage,
 				Outputs: &[]pipeline.Artifact{
 					buildArtifact,
