@@ -28,7 +28,7 @@ namespace ElasticbeanstalkBgPipeline
             var handler = new Function(this, "BlueGreenLambda", new FunctionProps
             {
                 Runtime = Runtime.PYTHON_3_7,
-                Code = Code.FromAsset("resources"),
+                Code = Amazon.CDK.AWS.Lambda.Code.FromAsset("resources"),
                 Handler = "blue_green.lambda_handler",
                 Environment = new Dictionary<string, string>
                 {

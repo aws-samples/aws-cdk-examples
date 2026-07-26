@@ -4,6 +4,7 @@ using Amazon.CDK.AWS.DynamoDB;
 using Amazon.CDK.AWS.Events;
 using Amazon.CDK.AWS.Events.Targets;
 using Amazon.CDK.AWS.Lambda;
+using Amazon.CDK.Interfaces.Events;
 using Constructs;
 
 namespace RandomWriter
@@ -52,7 +53,7 @@ namespace RandomWriter
             table.GrantReadWriteData(Function);
         }
 
-        public IRuleTargetConfig Bind(IRule rule, string id = null)
+        public IRuleTargetConfig Bind(IRuleRef rule, string id = null)
         {
             return new LambdaFunction(Function).Bind(rule, id);
         }

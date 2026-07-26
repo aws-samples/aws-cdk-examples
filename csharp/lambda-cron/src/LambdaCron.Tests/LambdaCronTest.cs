@@ -38,7 +38,7 @@ namespace LambdaCron.UnitTests
                       {"ZipFile", "def main(event, context):\n" + "    print(\"I'm running!\")\n"}
                   }},
                   {"Handler", "index.main"},
-                  {"Runtime", "python3.6"},
+                  {"Runtime", "python3.14"},
                   {"Timeout", 300}
                 }},
                 {"DependsOn", new [] { dependencyCapture }}

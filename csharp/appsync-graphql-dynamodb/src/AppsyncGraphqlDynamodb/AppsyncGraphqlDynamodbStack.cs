@@ -53,9 +53,9 @@ namespace AppsyncGraphqlDynamodb
                 ApiId = itemsGraphQLApi.AttrApiId,
                 Name = "ItemsDynamoDataSource",
                 Type = "AMAZON_DYNAMODB",
-                DynamoDbConfig = new Dictionary<string, string>() {
-                    {"tableName", itemsTable.TableName},
-                    {"awsRegion", this.Region}
+                DynamoDbConfig = new CfnDataSource.DynamoDBConfigProperty {
+                    TableName = itemsTable.TableName,
+                    AwsRegion = this.Region
                 },
                 ServiceRoleArn = itemsTableRole.RoleArn
             });
