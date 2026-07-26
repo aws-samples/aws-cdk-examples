@@ -52,26 +52,25 @@ namespace StaticSite
                 Value = siteBucket.BucketName
             });
 
-            var certificateArn = new DnsValidatedCertificate(this, "SiteCertificate", new DnsValidatedCertificateProps
+            var certificate = new DnsValidatedCertificate(this, "SiteCertificate", new DnsValidatedCertificateProps
             {
                 DomainName = siteDomain,
                 HostedZone = zone
-            }).CertificateArn;
+            });
 
-            new CfnOutput(this, "Certificate", new CfnOutputProps{Value = certificateArn});
+            new CfnOutput(this, "Certificate", new CfnOutputProps{Value = certificate.CertificateArn});
 
             var behavior = new Behavior();
             behavior.IsDefaultBehavior = true;
 
             var distribution = new CloudFrontWebDistribution(this, "SiteDistribution", new CloudFrontWebDistributionProps
             {
-                AliasConfiguration = new AliasConfiguration
+                ViewerCertificate = ViewerCertificate.FromAcmCertificate(certificate, new ViewerCertificateOptions
                 {
-                    AcmCertRef = certificateArn,
-                    Names = new string[] {siteDomain},
+                    Aliases = new string[] {siteDomain},
                     SslMethod = SSLMethod.SNI,
                     SecurityPolicy = SecurityPolicyProtocol.TLS_V1_2016
-                },
+                }),
                 OriginConfigs = new ISourceConfiguration[]
                 {
                     new SourceConfiguration
