@@ -23,7 +23,7 @@ class DynamodbLambdaStack(Stack):
 
         # create producer lambda function
         producer_lambda = aws_lambda.Function(self, "producer_lambda_function",
-                                              runtime=aws_lambda.Runtime.PYTHON_3_6,
+                                              runtime=aws_lambda.Runtime.PYTHON_3_11,
                                               handler="lambda_function.lambda_handler",
                                               code=aws_lambda.Code.from_asset("./lambda/producer"))
 
@@ -34,7 +34,7 @@ class DynamodbLambdaStack(Stack):
 
         # create consumer lambda function
         consumer_lambda = aws_lambda.Function(self, "consumer_lambda_function",
-                                              runtime=aws_lambda.Runtime.PYTHON_3_6,
+                                              runtime=aws_lambda.Runtime.PYTHON_3_11,
                                               handler="lambda_function.lambda_handler",
                                               code=aws_lambda.Code.from_asset("./lambda/consumer"))
 

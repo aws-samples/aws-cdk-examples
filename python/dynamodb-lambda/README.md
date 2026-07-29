@@ -13,8 +13,7 @@ This project is set up like a standard Python project.  The initialization
 process also creates a virtualenv within this project, stored under the .env
 directory.  To create the virtualenv it assumes that there is a `python3`
 (or `python` for Windows) executable in your path with access to the `venv`
-package. It requires you to use Pythn 3.6 as Lambda runtime is set to Python 3.6. 
-For other python versions, please update runtime for consumer and producer functions under dynamodb_lambda/dynamodb_lambda_stack.py
+package. It requires you to use Python 3.11 as Lambda runtime is set to Python 3.11.
 If for any reason the automatic creation of the virtualenv fails,
 you can create the virtualenv manually.
 

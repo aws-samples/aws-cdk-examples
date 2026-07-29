@@ -29,7 +29,7 @@ setuptools.setup(
         "aws-cdk.aws_events_targets"
     ],
 
-    python_requires=">=3.6",
+    python_requires=">=3.11",
 
     classifiers=[
         "Development Status :: 4 - Beta",
@@ -40,9 +40,7 @@ setuptools.setup(
 
         "Programming Language :: JavaScript",
         "Programming Language :: Python :: 3 :: Only",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.11",
 
         "Topic :: Software Development :: Code Generators",
         "Topic :: Utilities",
