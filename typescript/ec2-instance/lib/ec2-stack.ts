@@ -10,32 +10,26 @@ export class EC2Stack extends Stack {
   constructor(scope: Construct, id: string, props: EC2StackProps) {
     super(scope, id, props);
 
-    const { logLevel, sshPubKey, cpuType, instanceSize } = props;
+    const { logLevel, cpuType, instanceSize } = props;
 
     // Validate environment variables
     envValidator(props);
 
-    // Create VPC and Security Group
+    // Create VPC
     const vpcResources = new VPCResources(this, 'VPC');
 
     // Create EC2 Instance
     const serverResources = new ServerResources(this, 'EC2', {
       vpc: vpcResources.vpc,
-      sshSecurityGroup: vpcResources.sshSecurityGroup,
       logLevel: logLevel,
-      sshPubKey: sshPubKey,
       cpuType: cpuType,
       instanceSize: instanceSize.toLowerCase(),
     });
 
-    // SSM Command to start a session
+    // SSM command to start a session on the instance. Session Manager is the
+    // access path: it needs no open inbound ports and no SSH key.
     new CfnOutput(this, 'ssmCommand', {
       value: `aws ssm start-session --target ${serverResources.instance.instanceId}`,
-    });
-
-    // SSH Command to connect to the EC2 Instance
-    new CfnOutput(this, 'sshCommand', {
-      value: `ssh ec2-user@${serverResources.instance.instancePublicDnsName}`,
     });
   }
 }

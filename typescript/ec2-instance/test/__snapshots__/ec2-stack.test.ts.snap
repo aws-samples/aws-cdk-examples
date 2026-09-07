@@ -3,22 +3,6 @@
 exports[`EC2Stack Snapshot test 1`] = `
 {
   "Outputs": {
-    "sshCommand": {
-      "Value": {
-        "Fn::Join": [
-          "",
-          [
-            "ssh ec2-user@",
-            {
-              "Fn::GetAtt": [
-                "EC2Instance1F00751C93ecacd2478e7d47",
-                "PublicDnsName",
-              ],
-            },
-          ],
-        ],
-      },
-    },
     "ssmCommand": {
       "Value": {
         "Fn::Join": [
@@ -26,7 +10,7 @@ exports[`EC2Stack Snapshot test 1`] = `
           [
             "aws ssm start-session --target ",
             {
-              "Ref": "EC2Instance1F00751C93ecacd2478e7d47",
+              "Ref": "EC2Instance1F00751C11d3440e276f36bf",
             },
           ],
         ],
@@ -263,7 +247,7 @@ exports[`EC2Stack Snapshot test 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "EC2Instance1F00751C93ecacd2478e7d47": {
+    "EC2Instance1F00751C11d3440e276f36bf": {
       "CreationPolicy": {
         "ResourceSignal": {
           "Count": 1,
@@ -297,14 +281,6 @@ exports[`EC2Stack Snapshot test 1`] = `
               "/etc/config.sh": {
                 "content": "#!/bin/bash -xe
 /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/tmp/amazon-cloudwatch-agent.json
-",
-                "encoding": "plain",
-                "group": "root",
-                "mode": "000644",
-                "owner": "root",
-              },
-              "/home/ec2-user/.ssh/authorized_keys": {
-                "content": "
 ",
                 "encoding": "plain",
                 "group": "root",
@@ -374,12 +350,6 @@ exports[`EC2Stack Snapshot test 1`] = `
               "GroupId",
             ],
           },
-          {
-            "Fn::GetAtt": [
-              "VPCSSHSecurityGroup0495A24F",
-              "GroupId",
-            ],
-          },
         ],
         "SubnetId": {
           "Ref": "VPCServerPublicSubnet1SubnetF3987995",
@@ -408,7 +378,7 @@ aws s3 cp s3://",
                   "Ref": "EC2assetBucketC584B4AB",
                 },
                 "/sample /home/ec2-user/sample --recursive
-# fingerprint: 32d640a23cf42eea
+# fingerprint: 27a9995640ed65ef
 (
   set +e
   /opt/aws/bin/cfn-init -v --region ",
@@ -419,7 +389,7 @@ aws s3 cp s3://",
                 {
                   "Ref": "AWS::StackName",
                 },
-                " --resource EC2Instance1F00751C93ecacd2478e7d47 --url https://cloudformation.",
+                " --resource EC2Instance1F00751C11d3440e276f36bf --url https://cloudformation.",
                 {
                   "Ref": "AWS::Region",
                 },
@@ -440,7 +410,7 @@ aws s3 cp s3://",
                 {
                   "Ref": "AWS::StackName",
                 },
-                " --resource EC2Instance1F00751C93ecacd2478e7d47 --url https://cloudformation.",
+                " --resource EC2Instance1F00751C11d3440e276f36bf --url https://cloudformation.",
                 {
                   "Ref": "AWS::Region",
                 },
@@ -773,31 +743,6 @@ aws s3 cp s3://",
         ],
       },
       "Type": "AWS::EC2::InternetGateway",
-    },
-    "VPCSSHSecurityGroup0495A24F": {
-      "Properties": {
-        "GroupDescription": "Security Group for SSH",
-        "SecurityGroupEgress": [
-          {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow all outbound traffic by default",
-            "IpProtocol": "-1",
-          },
-        ],
-        "SecurityGroupIngress": [
-          {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "from 0.0.0.0/0:22",
-            "FromPort": 22,
-            "IpProtocol": "tcp",
-            "ToPort": 22,
-          },
-        ],
-        "VpcId": {
-          "Ref": "VPC61AD6880",
-        },
-      },
-      "Type": "AWS::EC2::SecurityGroup",
     },
     "VPCServerPublicSubnet1DefaultRoute0DEC8857": {
       "DependsOn": [

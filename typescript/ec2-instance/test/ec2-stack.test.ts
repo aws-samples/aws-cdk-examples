@@ -11,7 +11,6 @@ const devEnv = {
 
 const stackProps = {
   logLevel: 'INFO',
-  sshPubKey: '',
   cpuType: 'ARM64',
   instanceSize: 'LARGE',
 };
