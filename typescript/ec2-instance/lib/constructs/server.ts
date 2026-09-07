@@ -27,16 +27,10 @@ import { Construct } from 'constructs';
 
 interface ServerProps {
   vpc: Vpc;
-  sshSecurityGroup: SecurityGroup;
   logLevel: string;
-  sshPubKey: string;
   cpuType: string;
   instanceSize: string;
 }
-
-let cpuType: AmazonLinuxCpuType;
-let instanceClass: InstanceClass;
-let instanceSize: InstanceSize;
 
 export class ServerResources extends Construct {
   public instance: Instance;
@@ -99,7 +93,8 @@ export class ServerResources extends Construct {
         '/sample /home/ec2-user/sample --recursive',
     );
 
-    // Create a Security Group for the EC2 instance.  This group will allow SSH access to the EC2 instance
+    // Create a Security Group for the EC2 instance. It has no inbound rules;
+    // access is via AWS Systems Manager Session Manager, which needs none.
     const ec2InstanceSecurityGroup = new SecurityGroup(
       this,
       'ec2InstanceSecurityGroup',
@@ -107,6 +102,8 @@ export class ServerResources extends Construct {
     );
 
     // Determine the correct CPUType and Instance Class based on the props passed in
+    let cpuType: AmazonLinuxCpuType;
+    let instanceClass: InstanceClass;
     if (props.cpuType == 'ARM64') {
       cpuType = AmazonLinuxCpuType.ARM_64;
       instanceClass = InstanceClass.M7G;
@@ -116,6 +113,7 @@ export class ServerResources extends Construct {
     }
 
     // Determine the correct InstanceSize based on the props passed in
+    let instanceSize: InstanceSize;
     switch (props.instanceSize) {
       case 'large':
         instanceSize = InstanceSize.LARGE;
@@ -162,11 +160,6 @@ export class ServerResources extends Construct {
               '/etc/config.sh',
               'lib/resources/server/config/config.sh',
             ),
-            InitFile.fromString(
-              // Use CloudformationInit to write a string to the EC2 instance
-              '/home/ec2-user/.ssh/authorized_keys',
-              props.sshPubKey + '\n',
-            ),
             InitCommand.shellCommand('chmod +x /etc/config.sh'), // Use CloudformationInit to run a shell command on the EC2 instance
             InitCommand.shellCommand('/etc/config.sh'),
           ]),
@@ -181,8 +174,5 @@ export class ServerResources extends Construct {
       },
       role: serverRole,
     });
-
-    // Add the SSH Security Group to the EC2 instance
-    this.instance.addSecurityGroup(props.sshSecurityGroup);
   }
 }

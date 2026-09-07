@@ -3,8 +3,8 @@
 This project demonstrates how to create an EC2 instance with AWS CDK, including:
 
 - VPC with public subnets
-- Security groups for SSH access
 - EC2 instance with Amazon Linux 2023
+- Access via AWS Systems Manager Session Manager (no open inbound ports)
 - CloudFormation Init for instance configuration
 - Asset deployment via S3
 - CloudWatch integration
@@ -22,7 +22,6 @@ You can customize the deployment with these environment variables:
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `LOG_LEVEL` | Logging level | `INFO` |
-| `SSH_PUB_KEY` | Your SSH public key for instance access | ` ` (empty) |
 | `CPU_TYPE` | CPU architecture (`ARM64` or `X86`) | `ARM64` |
 | `INSTANCE_SIZE` | Instance size (`LARGE`, `XLARGE`, `XLARGE2`, `XLARGE4`) | `LARGE` |
 
@@ -41,10 +40,15 @@ npx cdk deploy
 
 ## Connecting to the Instance
 
-After deployment, the CDK will output commands to connect to your instance:
+The instance is reached with AWS Systems Manager Session Manager, not SSH. It has no open inbound ports. The instance role includes `AmazonSSMManagedInstanceCore`, so Session Manager works out of the box.
 
-- Using SSH: `ssh ec2-user@<public-dns-name>`
-- Using SSM: `aws ssm start-session --target <instance-id>`
+After deployment, the stack outputs an `ssmCommand`. Run it to open a shell on the instance (replace `<instance-id>` with the value from the output):
+
+```bash
+aws ssm start-session --target <instance-id>
+```
+
+This needs the [Session Manager plugin](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html) for the AWS CLI. Session Manager gives an audited shell without opening port 22 or managing SSH keys.
 
 ## Testing
 

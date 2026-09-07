@@ -1,6 +1,5 @@
 export interface EC2ExampleProps {
   logLevel: string;
-  sshPubKey: string;
   cpuType: string;
   instanceSize: string;
 }
