@@ -72,6 +72,36 @@ After a successful deployment, CDK will output a public endpoint for:
   - ECR image repository
   - Lambda functions
 
+## Updating the Application Code
+
+The pipeline's source is the AWS CodeCommit repository the stack creates (`simple-code-repo`), **not** this `codepipeline-build-deploy` directory. At deploy time, the stack seeds that repository with the contents of the local `app/` folder on the `main` branch. To change the application and trigger a new pipeline run, work against that CodeCommit repository:
+
+1. Set up Git credentials for CodeCommit. The simplest option is [`git-remote-codecommit`](https://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-git-remote-codecommit.html):
+
+   ```sh
+   pip install git-remote-codecommit
+   ```
+
+2. Clone the seeded repository (replace `<region>` with the Region you deployed to):
+
+   ```sh
+   git clone codecommit::<region>://simple-code-repo
+   cd simple-code-repo
+   ```
+
+3. Edit the application code, then commit and push to the `main` branch:
+
+   ```sh
+   # make your changes
+   git add .
+   git commit -m "Update application"
+   git push origin main
+   ```
+
+4. The push to `main` automatically triggers the pipeline. Open the AWS CodePipeline console and select `ImageBuildDeployPipeline` to watch the build and deploy stages run. You do **not** need to click `Release change` for a normal code update - that button is only for manually re-running the pipeline against the current source.
+
+> **Note:** Clone the CodeCommit repository the stack created rather than adding it as a remote of this example directory. The example directory contains the CDK app, while the CodeCommit repository contains only the seeded `app/` contents that the pipeline builds.
+
 ## Further Improvements
 
 - Add [manual approval actions](https://docs.aws.amazon.com/codepipeline/latest/userguide/approvals-action-add.html) to the CodePipeline workflow.
