@@ -9,11 +9,11 @@ from aws_cdk import (
     aws_ec2 as ec2,
     aws_sns as sns,
     aws_sns_subscriptions as subscriptions,
+    aws_secretsmanager as secretsmanager,
     Aws,
     CfnOutput,
     Stack,
     RemovalPolicy,
-    SecretValue,
     Duration,
 )
 from aws_cdk.aws_s3_assets import Asset
@@ -21,8 +21,6 @@ from constructs import Construct
 import fileinput
 import json
 import os
-import random
-import string
 import sys
 
 # Jump host specific settings to run nginx proxy
@@ -34,16 +32,8 @@ SNS_NOTIFICATION_EMAIL = "user@example.com"
 # OpenSearch specific constants, change this config if you would like you to change instance type, count and size
 DOMAIN_NAME = "opensearch-stack-demo"
 DOMAIN_ADMIN_UNAME = "opensearch"
-DOMAIN_ADMIN_PW = (
-    "".join(
-        random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits)
-        for i in range(13)
-    )
-    + random.choice(string.ascii_lowercase)
-    + random.choice(string.ascii_uppercase)
-    + random.choice(string.digits)
-    + "!"
-)
+# The master user password is generated in and read from AWS Secrets Manager
+# (see OpenSearchMasterUserSecret below) rather than being defined here.
 DOMAIN_DATA_NODE_INSTANCE_TYPE = "m6g.large.search"
 DOMAIN_DATA_NODE_INSTANCE_COUNT = 2
 DOMAIN_INSTANCE_VOLUME_SIZE = 100
@@ -68,6 +58,26 @@ class OpenSearchVpcProvisionStack(Stack):
         ################################################################################
         # VPC
         vpc = ec2.Vpc(self, "OpenSearch VPC", max_azs=3)
+
+        ################################################################################
+        # Master user credential
+        # Generate the OpenSearch master user password in AWS Secrets Manager and
+        # reference it dynamically. This keeps the credential out of the synthesized
+        # CloudFormation template, the stack outputs, and the EC2 instance user data.
+        # The excluded characters keep the value safe for HTTP basic-auth and for the
+        # sed substitution used by the post-deployment script below.
+        master_user_secret = secretsmanager.Secret(
+            self,
+            "OpenSearchMasterUserSecret",
+            secret_name=f"{DOMAIN_NAME}-master-user",
+            description="OpenSearch master user password",
+            generate_secret_string=secretsmanager.SecretStringGenerator(
+                password_length=16,
+                require_each_included_type=True,
+                exclude_characters="\"'@/\\=:${}&`",
+            ),
+            removal_policy=RemovalPolicy.DESTROY,
+        )
 
         ################################################################################
         # Amazon OpenSearch Service domain
@@ -111,7 +121,7 @@ class OpenSearchVpcProvisionStack(Stack):
             use_unsigned_basic_auth=True,
             fine_grained_access_control={
                 "master_user_name": DOMAIN_ADMIN_UNAME,
-                "master_user_password": SecretValue.unsafe_plain_text(DOMAIN_ADMIN_PW),
+                "master_user_password": master_user_secret.secret_value,
             },
         )
 
@@ -124,9 +134,9 @@ class OpenSearchVpcProvisionStack(Stack):
 
         CfnOutput(
             self,
-            "MasterPW",
-            value=DOMAIN_ADMIN_PW,
-            description="Master User Password for Amazon OpenSearch Service",
+            "MasterUserSecretArn",
+            value=master_user_secret.secret_arn,
+            description="Secrets Manager ARN holding the master user password for Amazon OpenSearch Service",
         )
 
         ################################################################################
@@ -155,6 +165,8 @@ class OpenSearchVpcProvisionStack(Stack):
                 "AmazonSSMManagedInstanceCore"
             )
         )
+        # Allow the proxy instance to read the master user password at boot time.
+        master_user_secret.grant_read(role)
 
         proxy_instance_sec_grp = ec2.SecurityGroup(
             self,
@@ -278,9 +290,15 @@ class OpenSearchVpcProvisionStack(Stack):
             "sed -i 's=DOMAIN_ADMIN_UNAME="
             + DOMAIN_ADMIN_UNAME
             + "=g' /home/ec2-user/assets/post_deployment_objects.sh",
-            "sed -i 's=DOMAIN_ADMIN_PW="
-            + DOMAIN_ADMIN_PW
-            + "=g' /home/ec2-user/assets/post_deployment_objects.sh",
+            # Read the master user password from Secrets Manager at boot time and
+            # substitute it into the post-deployment script. The password is never
+            # written to the CloudFormation template, stack outputs, or user data.
+            "DOMAIN_ADMIN_PW=$(aws secretsmanager get-secret-value --secret-id "
+            + master_user_secret.secret_arn
+            + " --query SecretString --output text --region "
+            + Aws.REGION
+            + ")",
+            'sed -i "s=DOMAIN_ADMIN_PW=${DOMAIN_ADMIN_PW}=g" /home/ec2-user/assets/post_deployment_objects.sh',
             "systemctl restart nginx.service",
             "chmod 500 post_deployment_objects.sh",
             "sleep 5",
