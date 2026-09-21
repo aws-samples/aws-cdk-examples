@@ -189,7 +189,10 @@ class OpenSearchVpcProvisionStack(Stack):
             machine_image=amzn_linux,
             vpc_subnets=sn_public,
             role=role,
-            security_group=proxy_instance_sec_grp
+            security_group=proxy_instance_sec_grp,
+            # Require IMDSv2 (token-backed metadata) so instance credentials cannot
+            # be retrieved via a simple SSRF against the instance metadata service.
+            require_imdsv2=True,
 
         )
 
