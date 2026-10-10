@@ -27,11 +27,13 @@ export class S3VectorsLambdaBedrockStack extends cdk.Stack {
       resources: ["*"], // s3vectors does not support resource-level ARNs yet
     });
 
+    const generationModelId = "us.anthropic.claude-sonnet-4-6";
+
     const bedrockPolicy = new iam.PolicyStatement({
       actions: ["bedrock:InvokeModel"],
       resources: [
         `arn:aws:bedrock:${this.region}::foundation-model/amazon.titan-embed-text-v2:0`,
-        `arn:aws:bedrock:${this.region}:${this.account}:inference-profile/us.anthropic.claude-sonnet-4-20250514-v1:0`,
+        `arn:aws:bedrock:${this.region}:${this.account}:inference-profile/${generationModelId}`,
         "arn:aws:bedrock:*::foundation-model/*",
       ],
     });
@@ -40,7 +42,7 @@ export class S3VectorsLambdaBedrockStack extends cdk.Stack {
       VECTOR_BUCKET_NAME: vectorBucketName.valueAsString,
       INDEX_NAME: indexName,
       EMBED_MODEL_ID: "amazon.titan-embed-text-v2:0",
-      GENERATION_MODEL_ID: "us.anthropic.claude-sonnet-4-20250514-v1:0",
+      GENERATION_MODEL_ID: generationModelId,
     };
 
     const ingestFn = new lambda.Function(this, "IngestFn", {
