@@ -20,18 +20,20 @@ export class S3VectorsLambdaBedrockStack extends cdk.Stack {
     const s3VectorsPolicy = new iam.PolicyStatement({
       actions: [
         "s3vectors:CreateVectorBucket", "s3vectors:DeleteVectorBucket",
-        "s3vectors:CreateVectorIndex", "s3vectors:DeleteVectorIndex",
+        "s3vectors:CreateIndex", "s3vectors:DeleteIndex",
         "s3vectors:PutVectors", "s3vectors:QueryVectors",
         "s3vectors:GetVectors", "s3vectors:DeleteVectors",
       ],
       resources: ["*"], // s3vectors does not support resource-level ARNs yet
     });
 
+    const generationModelId = "us.anthropic.claude-sonnet-4-6";
+
     const bedrockPolicy = new iam.PolicyStatement({
       actions: ["bedrock:InvokeModel"],
       resources: [
         `arn:aws:bedrock:${this.region}::foundation-model/amazon.titan-embed-text-v2:0`,
-        `arn:aws:bedrock:${this.region}:${this.account}:inference-profile/us.anthropic.claude-sonnet-4-20250514-v1:0`,
+        `arn:aws:bedrock:${this.region}:${this.account}:inference-profile/${generationModelId}`,
         "arn:aws:bedrock:*::foundation-model/*",
       ],
     });
@@ -40,7 +42,7 @@ export class S3VectorsLambdaBedrockStack extends cdk.Stack {
       VECTOR_BUCKET_NAME: vectorBucketName.valueAsString,
       INDEX_NAME: indexName,
       EMBED_MODEL_ID: "amazon.titan-embed-text-v2:0",
-      GENERATION_MODEL_ID: "us.anthropic.claude-sonnet-4-20250514-v1:0",
+      GENERATION_MODEL_ID: generationModelId,
     };
 
     const ingestFn = new lambda.Function(this, "IngestFn", {
@@ -95,10 +97,11 @@ export class S3VectorsLambdaBedrockStack extends cdk.Stack {
     const createIndex = new cr.AwsCustomResource(this, "CreateVectorIndex", {
       onCreate: {
         service: "S3Vectors",
-        action: "createVectorIndex",
+        action: "createIndex",
         parameters: {
           vectorBucketName: vectorBucketName.valueAsString,
           indexName,
+          dataType: "float32",
           dimension: 1024,
           distanceMetric: "cosine",
         },
@@ -106,7 +109,7 @@ export class S3VectorsLambdaBedrockStack extends cdk.Stack {
       },
       onDelete: {
         service: "S3Vectors",
-        action: "deleteVectorIndex",
+        action: "deleteIndex",
         parameters: { vectorBucketName: vectorBucketName.valueAsString, indexName },
       },
       role: setupRole,
