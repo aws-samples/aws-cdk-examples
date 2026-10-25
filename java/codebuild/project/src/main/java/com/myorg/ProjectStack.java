@@ -40,7 +40,7 @@ public class ProjectStack extends Stack {
         Map<String, BuildEnvironmentVariable> environmentVariableMap = new HashMap<>();
         environmentVariableMap.put("varName", buildEnvironmentVariable);
         BuildEnvironment environment = BuildEnvironment.builder()
-                .buildImage(LinuxBuildImage.AMAZON_LINUX_2_2)
+                .buildImage(LinuxBuildImage.AMAZON_LINUX_2023_5)
                 .computeType(ComputeType.SMALL)
                 .environmentVariables(environmentVariableMap).build();
 

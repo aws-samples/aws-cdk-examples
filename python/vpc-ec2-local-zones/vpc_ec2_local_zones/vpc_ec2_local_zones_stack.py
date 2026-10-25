@@ -49,7 +49,7 @@ class VpcEc2LocalZonesStack(Stack):
     # see user_data/nat_instance txt file to see the User Data script
     # used to configured the NAT rules
     def create_nat_instance(self, vpc):
-        amzn_linux = ec2.MachineImage.latest_amazon_linux(generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2)
+        amzn_linux = ec2.MachineImage.latest_amazon_linux2023()
         user_data = self.get_user_data("nat_instance")
         nat = ec2.Instance(self, "NATInstanceInLZ",
                  vpc=vpc,
@@ -125,7 +125,7 @@ class VpcEc2LocalZonesStack(Stack):
     # method to create a new EC2 instance with MySQL installed through User Data script
     # see user_data/db_mysql txt file to see the User Data script
     def create_db_mysql(self, vpc):
-        amzn_linux = ec2.MachineImage.latest_amazon_linux(generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2)
+        amzn_linux = ec2.MachineImage.latest_amazon_linux2023()
         user_data = self.get_user_data("db_mysql")
         db = ec2.Instance(self, "DBInLZ",
                  vpc=vpc,
@@ -139,7 +139,7 @@ class VpcEc2LocalZonesStack(Stack):
     # method to create a new AutoScaling group for managing WordPress instances.
     # see user_data/wp_webserver txt file to see the User Data script
     def create_wp_webserver(self, vpc, db):
-        amzn_linux = ec2.MachineImage.latest_amazon_linux(generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2)
+        amzn_linux = ec2.MachineImage.latest_amazon_linux2023()
         user_data = self.get_user_data("wp_webserver")
         # we need to modify the user data script to provide the dns name of the
         # mysql database installed in the private subnet.

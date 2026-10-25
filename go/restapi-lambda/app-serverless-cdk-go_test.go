@@ -19,7 +19,7 @@ func TestAppServerlessCdkGoStack(t *testing.T) {
 	template := assertions.Template_FromStack(stack, nil)
 
 	template.HasResourceProperties(jsii.String("AWS::Lambda::Function"), map[string]interface{}{
-		"Runtime": "provided.al2",
+		"Runtime": "provided.al2023",
 	})
 
 	template.HasResourceProperties(jsii.String("AWS::ApiGateway::RestApi"), map[string]interface{}{

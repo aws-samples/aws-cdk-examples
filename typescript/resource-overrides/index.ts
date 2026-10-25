@@ -95,7 +95,7 @@ class ResourceOverridesExample extends cdk.Stack {
         const vpc = new ec2.Vpc(this, 'VPC', { maxAzs: 1 });
         const asg = new autoscaling.AutoScalingGroup(this, 'ASG', {
             instanceType: ec2.InstanceType.of(ec2.InstanceClass.M4, ec2.InstanceSize.XLARGE),
-            machineImage: new ec2.AmazonLinuxImage(),
+            machineImage: ec2.MachineImage.latestAmazonLinux2023(),
             vpc
         });
 

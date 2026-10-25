@@ -34,10 +34,7 @@ class Ec2CloudwatchStack(Stack):
         host_bastion.allow_ssh_access_from(aws_ec2.Peer.ipv4("1.2.3.4/32"))
 
         # use amazon linux as OS
-        amzn_linux = aws_ec2.MachineImage.latest_amazon_linux(generation=aws_ec2.AmazonLinuxGeneration.AMAZON_LINUX,
-                                                              edition=aws_ec2.AmazonLinuxEdition.STANDARD,
-                                                              virtualization=aws_ec2.AmazonLinuxVirt.HVM,
-                                                              storage=aws_ec2.AmazonLinuxStorage.GENERAL_PURPOSE)
+        amzn_linux = aws_ec2.MachineImage.latest_amazon_linux2023()
 
         # secure group
         my_security_group = aws_ec2.SecurityGroup(self, "SecurityGroup",

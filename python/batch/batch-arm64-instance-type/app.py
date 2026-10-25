@@ -27,6 +27,8 @@ class BatchEC2Stack(Stack):
                 spot_bid_percentage=75,
                 instance_types=[ec2.InstanceType("c7g.medium"),ec2.InstanceType("c7g.large")],
                 use_optimal_instance_classes=False,
+                # Use the ECS-optimized Amazon Linux 2023 AMI (Amazon Linux 2 reached end of support)
+                images=[batch.EcsMachineImage(image_type=batch.EcsMachineImageType.ECS_AL2023)],
                 vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE_WITH_NAT),
                 vpc=vpc
             )

@@ -142,12 +142,7 @@ class OpenSearchVpcProvisionStack(Stack):
         ################################################################################
         # Jump host to setup nginx proxy
         sn_public = ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC)
-        amzn_linux = ec2.MachineImage.latest_amazon_linux(
-            generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2,
-            edition=ec2.AmazonLinuxEdition.STANDARD,
-            virtualization=ec2.AmazonLinuxVirt.HVM,
-            storage=ec2.AmazonLinuxStorage.GENERAL_PURPOSE,
-        )
+        amzn_linux = ec2.MachineImage.latest_amazon_linux2023()
 
         # Instance Role and SSM Managed Policy
         role = iam.Role(
@@ -264,9 +259,8 @@ class OpenSearchVpcProvisionStack(Stack):
         )
 
         instance.user_data.add_commands(
-            "yum update -y",
-            "yum install jq -y",
-            "amazon-linux-extras install nginx1.12",
+            "dnf update -y",
+            "dnf install -y jq nginx python3-pip",
             "mkdir -p /home/ec2-user/assets",
             "cd /home/ec2-user/assets",
             "mv {} export_opensearch_dashboards_web_logs.ndjson".format(
@@ -274,7 +268,7 @@ class OpenSearchVpcProvisionStack(Stack):
             ),
             "mv {} nginx_opensearch.conf".format(nginx_asset_path),
             "mv {} post_deployment_objects.sh".format(post_deployment_asset_path),
-            "pip install opensearch-py==1.0.0",
+            "pip3 install opensearch-py==1.0.0",
             "wget https://raw.githubusercontent.com/aiven/demo-opensearch-python/main/full_format_recipes.json",
             "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/cert.key -out /etc/nginx/cert.crt -subj /C=US/ST=./L=./O=./CN=.\n"
             "cp nginx_opensearch.conf /etc/nginx/conf.d/",

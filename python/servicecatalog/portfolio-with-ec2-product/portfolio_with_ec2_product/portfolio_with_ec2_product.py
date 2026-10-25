@@ -31,8 +31,7 @@ class Ec2Product(sc.ProductStack):
         role.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name("AmazonSSMManagedInstanceCore"))
 
         # AMI
-        amzn_linux = ec2.MachineImage.latest_amazon_linux(
-            generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2,
+        amzn_linux = ec2.MachineImage.latest_amazon_linux2023(
             cpu_type=ec2.AmazonLinuxCpuType.ARM_64,
         )
 

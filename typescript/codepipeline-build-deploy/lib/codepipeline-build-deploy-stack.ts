@@ -78,7 +78,7 @@ export class CodepipelineBuildDeployStack extends cdk.Stack {
       buildSpec: codebuild.BuildSpec.fromSourceFilename("buildspec.yaml"),
       source: codebuild.Source.codeCommit({ repository: codeRepo }),
       environment: {
-        buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2_4,  
+        buildImage: codebuild.LinuxBuildImage.AMAZON_LINUX_2023_5,
       }
     });
 

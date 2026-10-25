@@ -115,7 +115,7 @@ class ResourceOverridesStack extends Stack {
         AutoScalingGroup.Builder.create(this, "ASG")
             .vpc(vpc)
             .instanceType(InstanceType.of(InstanceClass.MEMORY4, InstanceSize.XLARGE))
-            .machineImage(new AmazonLinuxImage())
+            .machineImage(MachineImage.latestAmazonLinux2023())
             .build();
 
     //

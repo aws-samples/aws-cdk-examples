@@ -18,7 +18,7 @@ class LoadBalancerStack(Stack):
             instance_type=ec2.InstanceType.of(
                 ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.MICRO
             ),
-            machine_image=ec2.AmazonLinuxImage(),
+            machine_image=ec2.MachineImage.latest_amazon_linux2023(),
         )
 
         lb = elb.LoadBalancer(

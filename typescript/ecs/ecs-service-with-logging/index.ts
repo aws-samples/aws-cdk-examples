@@ -9,7 +9,8 @@ class WillkommenECS extends cdk.Stack {
 
     const cluster = new ecs.Cluster(this, 'Ec2Cluster', { vpc });
     cluster.addCapacity('DefaultAutoScalingGroup', {
-      instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.MICRO)
+      instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.MICRO),
+      machineImage: ecs.EcsOptimizedImage.amazonLinux2023(),
     });
 
     // create a task definition with CloudWatch Logs

@@ -26,6 +26,8 @@ class BatchEC2Stack(Stack):
             batch_environment = batch.ManagedEc2EcsComputeEnvironment(self, name,
                 spot=True,
                 spot_bid_percentage=75,
+                # Use the ECS-optimized Amazon Linux 2023 AMI (Amazon Linux 2 reached end of support)
+                images=[batch.EcsMachineImage(image_type=batch.EcsMachineImageType.ECS_AL2023)],
                 vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PRIVATE_WITH_NAT),
                 vpc=vpc
             )

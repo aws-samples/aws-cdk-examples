@@ -16,7 +16,7 @@ namespace ClassicLoadBalancer
             {
                 Vpc = vpc,
                 InstanceType = InstanceType.Of(InstanceClass.BURSTABLE3, InstanceSize.MICRO),
-                MachineImage = new AmazonLinuxImage()
+                MachineImage = MachineImage.LatestAmazonLinux2023()
             });
 
             var lb = new LoadBalancer(this, "LB", new LoadBalancerProps

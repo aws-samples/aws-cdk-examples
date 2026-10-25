@@ -142,9 +142,7 @@ export class OSCluster extends Construct {
         ec2.InstanceClass.T3,
         ec2.InstanceSize.MEDIUM
       ),
-      machineImage: new ec2.AmazonLinuxImage({
-        generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX_2,
-      }),
+      machineImage: ec2.MachineImage.latestAmazonLinux2023(),
       vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
       securityGroup: securityGroup,
       init: ec2.CloudFormationInit.fromConfigSets({

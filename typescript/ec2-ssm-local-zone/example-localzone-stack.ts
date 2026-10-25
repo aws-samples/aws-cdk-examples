@@ -12,8 +12,8 @@ const LOCAL_ZONE_AZ = 'eu-north-1-hel-1a';
 const VPC_CIDR = '172.31.100.0/24';
 const SUBNET_SIZE = 26;
 
-// Amazon Linux 2022 https://docs.aws.amazon.com/linux/al2022/ug/what-is-amazon-linux.html
-const al2022Ami = ec2.MachineImage.fromSsmParameter('/aws/service/ami-amazon-linux-latest/al2022-ami-kernel-default-x86_64');
+// Amazon Linux 2023 https://docs.aws.amazon.com/linux/al2023/ug/what-is-amazon-linux.html
+const al2023Ami = ec2.MachineImage.latestAmazonLinux2023();
 
 // Choose an instance type that is supported in the chosen Local Zone
 // https://aws.amazon.com/about-aws/global-infrastructure/localzones/features/
@@ -113,7 +113,7 @@ export class ExampleLocalZoneStack extends Stack {
         availabilityZones: [LOCAL_ZONE_AZ],
       },
       instanceType,
-      machineImage: al2022Ami,
+      machineImage: al2023Ami,
       blockDevices: [{
           deviceName: '/dev/xvda',
           volume: ec2.BlockDeviceVolume.ebs(8, {
@@ -143,7 +143,7 @@ export class ExampleLocalZoneStack extends Stack {
       },
       sourceDestCheck: false,
       instanceType,
-      machineImage: al2022Ami,
+      machineImage: al2023Ami,
       blockDevices: [{
           deviceName: '/dev/xvda',
           volume: ec2.BlockDeviceVolume.ebs(8, {
@@ -172,7 +172,7 @@ export class ExampleLocalZoneStack extends Stack {
       vpc,
       vpcSubnets: isolatedSubnetsInLocalZone,
       instanceType,
-      machineImage: al2022Ami,
+      machineImage: al2023Ami,
       blockDevices: [
         {
           deviceName: '/dev/xvda',

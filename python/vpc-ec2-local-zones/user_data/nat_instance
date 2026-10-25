@@ -1,5 +1,15 @@
 #!/bin/bash
-sysctl -w net.ipv4.ip_forward=1
-/sbin/iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-yum install iptables-services
+# Amazon Linux 2023 does not ship iptables by default
+dnf install -y iptables-services
+
+# Enable IP forwarding (persist across reboots)
+echo "net.ipv4.ip_forward=1" > /etc/sysctl.d/90-nat.conf
+sysctl -p /etc/sysctl.d/90-nat.conf
+
+# AL2023 uses predictable interface names (e.g. ens5), so detect the primary interface
+PRIMARY_IF=$(ip route show default | awk '/default/ {print $5; exit}')
+/sbin/iptables -t nat -A POSTROUTING -o "$PRIMARY_IF" -j MASQUERADE
+
+# Persist the rules and restore them on boot
 service iptables save
+systemctl enable iptables

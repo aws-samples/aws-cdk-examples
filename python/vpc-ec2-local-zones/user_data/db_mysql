@@ -18,9 +18,9 @@ write_files:
           - db:/var/lib/mysql
     volumes:
       db:
-  path: /home/ec-2user/stack.yml
+  path: /home/ec2-user/stack.yml
 runcmd:
- - [ yum, update, aws-cfn-bootstrap ]
+ - [ dnf, update, -y, aws-cfn-bootstrap ]
  - [ service, docker, start ]
  - [ docker, swarm, init ]
- - [ docker, stack, deploy, -c, '/home/ec-2user/stack.yml', db_mysql ]
+ - [ docker, stack, deploy, -c, '/home/ec2-user/stack.yml', db_mysql ]

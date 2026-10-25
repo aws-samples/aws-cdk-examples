@@ -28,7 +28,7 @@ func NewClusterStack(scope constructs.Construct, id string, props *ClusterStackP
 
 	asg := awsautoscaling.NewAutoScalingGroup(stack, jsii.String("MyFleet"), &awsautoscaling.AutoScalingGroupProps{
 		InstanceType: awsec2.NewInstanceType(jsii.String("t2.xlarge")),
-		MachineImage: awsecs.EcsOptimizedImage_AmazonLinux2(awsecs.AmiHardwareType_STANDARD, &awsecs.EcsOptimizedImageOptions{}),
+		MachineImage: awsecs.EcsOptimizedImage_AmazonLinux2023(awsecs.AmiHardwareType_STANDARD, &awsecs.EcsOptimizedImageOptions{}),
 		DesiredCapacity: jsii.Number(3),
 		Vpc: vpc,
 	});

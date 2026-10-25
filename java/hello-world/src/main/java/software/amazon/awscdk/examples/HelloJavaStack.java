@@ -3,7 +3,7 @@ package software.amazon.awscdk.examples;
 import software.constructs.Construct;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.services.autoscaling.AutoScalingGroup;
-import software.amazon.awscdk.services.ec2.AmazonLinuxImage;
+import software.amazon.awscdk.services.ec2.MachineImage;
 import software.amazon.awscdk.services.ec2.InstanceType;
 import software.amazon.awscdk.services.ec2.Vpc;
 import software.amazon.awscdk.services.sns.Topic;
@@ -42,7 +42,7 @@ class HelloJavaStack extends Stack {
 
       AutoScalingGroup.Builder.create(this, "Compute")
           .instanceType(new InstanceType("t2.micro"))
-          .machineImage(new AmazonLinuxImage())
+          .machineImage(MachineImage.latestAmazonLinux2023())
           .vpc(props.vpc)
           .build();
     }

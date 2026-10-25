@@ -5,7 +5,6 @@ import java.util.Map;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.cdk.lambdalayer.kubectl.v34.KubectlV34Layer;
-import software.amazon.awscdk.services.autoscaling.AutoScalingGroup;
 import software.amazon.awscdk.services.ec2.BastionHostLinux;
 import software.amazon.awscdk.services.ec2.BlockDevice;
 import software.amazon.awscdk.services.ec2.BlockDeviceVolume;
@@ -22,10 +21,12 @@ import software.amazon.awscdk.services.ec2.SubnetConfiguration;
 import software.amazon.awscdk.services.ec2.SubnetSelection;
 import software.amazon.awscdk.services.ec2.SubnetType;
 import software.amazon.awscdk.services.ec2.Vpc;
-import software.amazon.awscdk.services.eks.AutoScalingGroupCapacityOptions;
 import software.amazon.awscdk.services.eks.Cluster;
 import software.amazon.awscdk.services.eks.EndpointAccess;
 import software.amazon.awscdk.services.eks.KubernetesVersion;
+import software.amazon.awscdk.services.eks.Nodegroup;
+import software.amazon.awscdk.services.eks.NodegroupAmiType;
+import software.amazon.awscdk.services.eks.NodegroupOptions;
 import software.amazon.awscdk.services.iam.AccountRootPrincipal;
 import software.amazon.awscdk.services.iam.Effect;
 import software.amazon.awscdk.services.iam.ManagedPolicy;
@@ -107,29 +108,25 @@ public class EksPrivateClusterStack extends Stack {
   }
 
   private void addNodes() {
-    AutoScalingGroup asg =
-        this.cluster.addAutoScalingGroupCapacity(
+    // Managed node group on Amazon Linux 2023 (Amazon Linux 2 reached end of support).
+    // Self-managed capacity via addAutoScalingGroupCapacity only supports AL2/Bottlerocket.
+    Nodegroup nodes =
+        this.cluster.addNodegroupCapacity(
             "nodes",
-            AutoScalingGroupCapacityOptions.builder()
-                .instanceType(InstanceType.of(InstanceClass.T3, InstanceSize.MEDIUM))
-                .minCapacity(1)
-                .vpcSubnets(
+            NodegroupOptions.builder()
+                .amiType(NodegroupAmiType.AL2023_X86_64_STANDARD)
+                .instanceTypes(List.of(InstanceType.of(InstanceClass.T3, InstanceSize.MEDIUM)))
+                .minSize(1)
+                .subnets(
                     SubnetSelection.builder().subnetType(SubnetType.PRIVATE_ISOLATED).build())
-                .ssmSessionPermissions(true)
-                .machineImageType(null)
                 .build());
 
-    asg.addToRolePolicy(
-        PolicyStatement.Builder.create()
-            .effect(Effect.ALLOW)
-            .actions(
-                List.of(
-                    "ecr:BatchCheckLayerAvailability",
-                    "ecr:BatchGetImage",
-                    "ecr:GetDownloadUrlForLayer",
-                    "ecr:GetAuthorizationToken"))
-            .resources(List.of("*"))
-            .build());
+    // Allow access to the nodes via SSM Session Manager.
+    // ECR pull permissions are granted to managed node group roles by default.
+    nodes
+        .getRole()
+        .addManagedPolicy(
+            ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMManagedInstanceCore"));
   }
 
   /**
