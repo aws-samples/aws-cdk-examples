@@ -45,12 +45,7 @@ func NewEc2InstanceStack(scope constructs.Construct, id string, props *Ec2Instan
 	})
 
 	// Define AMI
-	ami := ec2.NewAmazonLinuxImage(&ec2.AmazonLinuxImageProps{
-		Generation:     ec2.AmazonLinuxGeneration_AMAZON_LINUX_2,
-		Edition:        ec2.AmazonLinuxEdition_STANDARD,
-		Virtualization: ec2.AmazonLinuxVirt_HVM,
-		Storage:        ec2.AmazonLinuxStorage_GENERAL_PURPOSE,
-	})
+	ami := ec2.MachineImage_LatestAmazonLinux2023(&ec2.AmazonLinux2023ImageSsmParameterProps{})
 
 	// Instance Role and SSM managed policy
 	role := iam.NewRole(stack, jsii.String("InstanceSSM"), &iam.RoleProps{

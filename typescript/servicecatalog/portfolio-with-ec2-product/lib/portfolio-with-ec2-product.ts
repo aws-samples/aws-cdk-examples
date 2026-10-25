@@ -21,9 +21,8 @@ class Ec2CdkProductStack extends sc.ProductStack {
 
     role.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMManagedInstanceCore'))
 
-    // Use Latest Amazon Linux Image - CPU Type ARM64
-    const ami = new ec2.AmazonLinuxImage({
-      generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX_2,
+    // Use Latest Amazon Linux 2023 Image - CPU Type ARM64
+    const ami = ec2.MachineImage.latestAmazonLinux2023({
       cpuType: ec2.AmazonLinuxCpuType.ARM_64,
     });
 

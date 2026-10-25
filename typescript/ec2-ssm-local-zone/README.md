@@ -18,14 +18,14 @@ A new VPC will be created containing subnets in the parent region and in the Loc
 
 When deploying to a Local Zone, a supported instance type and EBS volume (`gp2` in most regions) type must be used.
 
-You can check the instance offering with AWS CLI: `aws ec2 describe-instance-type-offerings --location-type "availability-zone" --filters Name=location,Values=eu-north-1-hel-1a --region eu-north-1`. Replace the zone name and region name with your own. In the examples, Amazon Linux 2022 is being used as an image:
+You can check the instance offering with AWS CLI: `aws ec2 describe-instance-type-offerings --location-type "availability-zone" --filters Name=location,Values=eu-north-1-hel-1a --region eu-north-1`. Replace the zone name and region name with your own. In the examples, Amazon Linux 2023 is being used as an image:
 
 ```ts
 // Choose a supported instance type in example-localzone-stack.ts
 const instanceType = ec2.InstanceType.of(ec2.InstanceClass.COMPUTE5, ec2.InstanceSize.XLARGE2);
 ```
 
-Amazon Linux 2022 defaults to `gp3` volume, it needs to be replaced with `gp2` manually:
+Amazon Linux 2023 defaults to `gp3` volume, it needs to be replaced with `gp2` manually:
 
 ```ts
 blockDevices: [{

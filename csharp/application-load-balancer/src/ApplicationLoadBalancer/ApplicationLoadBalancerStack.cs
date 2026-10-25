@@ -15,7 +15,7 @@ namespace ApplicationLoadBalancer
             var asg = new AutoScalingGroup(this, "ASG", new AutoScalingGroupProps{
                 Vpc = vpc,
                 InstanceType = InstanceType.Of(InstanceClass.BURSTABLE3, InstanceSize.MICRO),
-                MachineImage = new AmazonLinuxImage()
+                MachineImage = MachineImage.LatestAmazonLinux2023()
             });
 
             var lb = new Amazon.CDK.AWS.ElasticLoadBalancingV2.ApplicationLoadBalancer(this, "LB", new ApplicationLoadBalancerProps{

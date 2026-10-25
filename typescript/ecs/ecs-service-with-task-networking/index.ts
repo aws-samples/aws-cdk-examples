@@ -10,7 +10,8 @@ const vpc = new ec2.Vpc(stack, 'Vpc', { maxAzs: 2 });
 
 const cluster = new ecs.Cluster(stack, 'awsvpc-ecs-demo-cluster', { vpc });
 cluster.addCapacity('DefaultAutoScalingGroup', {
-  instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.MICRO)
+  instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.MICRO),
+  machineImage: ecs.EcsOptimizedImage.amazonLinux2023(),
 });
 
 // Create a task definition with its own elastic network interface

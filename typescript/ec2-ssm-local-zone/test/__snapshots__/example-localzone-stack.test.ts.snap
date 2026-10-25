@@ -43,8 +43,8 @@ exports[`ExampleLocalZoneStack has required resources 1`] = `
       "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "SsmParameterValueawsserviceamiamazonlinuxlatestal2022amikerneldefaultx8664C96584B6F00A464EAD1953AFF4B05118Parameter": {
-      "Default": "/aws/service/ami-amazon-linux-latest/al2022-ami-kernel-default-x86_64",
+    "SsmParameterValueawsserviceamiamazonlinuxlatestal2023amikernel61x8664C96584B6F00A464EAD1953AFF4B05118Parameter": {
+      "Default": "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-x86_64",
       "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
     },
   },
@@ -69,7 +69,7 @@ exports[`ExampleLocalZoneStack has required resources 1`] = `
           "Ref": "InstanceLzInstanceProfileC47DF8F7",
         },
         "ImageId": {
-          "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestal2022amikerneldefaultx8664C96584B6F00A464EAD1953AFF4B05118Parameter",
+          "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestal2023amikernel61x8664C96584B6F00A464EAD1953AFF4B05118Parameter",
         },
         "InstanceType": "c5.2xlarge",
         "SecurityGroupIds": [
@@ -147,7 +147,7 @@ exports[`ExampleLocalZoneStack has required resources 1`] = `
           "Ref": "InstanceLzPublicInstanceProfile8631EF1C",
         },
         "ImageId": {
-          "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestal2022amikerneldefaultx8664C96584B6F00A464EAD1953AFF4B05118Parameter",
+          "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestal2023amikernel61x8664C96584B6F00A464EAD1953AFF4B05118Parameter",
         },
         "InstanceType": "c5.2xlarge",
         "SecurityGroupIds": [
@@ -237,7 +237,7 @@ service nginx start",
           "Ref": "NatInstanceLocalZoneInstanceProfile6AA4F644",
         },
         "ImageId": {
-          "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestal2022amikerneldefaultx8664C96584B6F00A464EAD1953AFF4B05118Parameter",
+          "Ref": "SsmParameterValueawsserviceamiamazonlinuxlatestal2023amikernel61x8664C96584B6F00A464EAD1953AFF4B05118Parameter",
         },
         "InstanceType": "c5.2xlarge",
         "SecurityGroupIds": [

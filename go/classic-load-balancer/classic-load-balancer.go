@@ -27,7 +27,7 @@ func NewClassicLoadBalancerStack(scope constructs.Construct, id string, props *C
 	asg := awsautoscaling.NewAutoScalingGroup(stack, jsii.String("ASG"), &awsautoscaling.AutoScalingGroupProps{
 		Vpc: vpc,
 		InstanceType: awsec2.NewInstanceType(jsii.String("t2.micro")),
-		MachineImage: awsec2.NewAmazonLinuxImage(nil),
+		MachineImage: awsec2.MachineImage_LatestAmazonLinux2023(nil),
 	});
 
 	lb := awselasticloadbalancing.NewLoadBalancer(stack, jsii.String("LB"), &awselasticloadbalancing.LoadBalancerProps{

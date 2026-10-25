@@ -96,9 +96,7 @@ export class AwsBatchOpenmpBenchmarkStack extends cdk.Stack {
     // Launch Template for compute environment
     const launchTemplate = new ec2.LaunchTemplate(this, 'BatchLaunchTemplate', {
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.C5, ec2.InstanceSize.LARGE),
-      machineImage: ec2.MachineImage.latestAmazonLinux2({
-        edition: ec2.AmazonLinuxEdition.STANDARD
-      }),
+      machineImage: ec2.MachineImage.latestAmazonLinux2023(),
       securityGroup: batchSecurityGroup,
       userData: ec2.UserData.forLinux(),
       role: instanceRole
@@ -116,7 +114,9 @@ export class AwsBatchOpenmpBenchmarkStack extends cdk.Stack {
         instanceTypes: ['c6i.large', 'c6i.xlarge', 'c6i.2xlarge', 'c5.large', 'c5.xlarge'],
         instanceRole: instanceProfile.attrArn,
         securityGroupIds: [batchSecurityGroup.securityGroupId],
-        subnets: vpc.privateSubnets.map(subnet => subnet.subnetId)
+        subnets: vpc.privateSubnets.map(subnet => subnet.subnetId),
+        // Use the ECS-optimized Amazon Linux 2023 AMI (Amazon Linux 2 reached end of support)
+        ec2Configuration: [{ imageType: 'ECS_AL2023' }]
       }
     });
 

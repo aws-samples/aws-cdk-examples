@@ -96,12 +96,7 @@ class MSKClient(NestedStack):
         super().__init__(scope, construct_id, **kwargs)
 
         # Amazon Linux AMI
-        amzn_linux = ec2.MachineImage.latest_amazon_linux(
-            generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2,
-            edition=ec2.AmazonLinuxEdition.STANDARD,
-            virtualization=ec2.AmazonLinuxVirt.HVM,
-            storage=ec2.AmazonLinuxStorage.GENERAL_PURPOSE
-        )
+        amzn_linux = ec2.MachineImage.latest_amazon_linux2023()
         
         # MSK client Role
         role = iam.Role(self, "InstanceSSM", assumed_by=iam.ServicePrincipal("ec2.amazonaws.com"))
@@ -131,7 +126,8 @@ class MSKClient(NestedStack):
 
         # Commands to install dependencies and create the kafka topic
         instance.user_data.add_commands(
-            "yum install java-1.8.0 -y",
+            # Kafka 2.8.x supports Java 8/11; AL2023 ships Amazon Corretto
+            "dnf install -y java-11-amazon-corretto-headless wget tar",
             f'wget https://archive.apache.org/dist/kafka/{constants["KAFKA_VERSION"]}/{constants["KAFKA_DOWNLOAD_VERSION"]}.tgz',
             f"tar -xzf {constants['KAFKA_DOWNLOAD_VERSION']}.tgz",
             f"./{constants['KAFKA_DOWNLOAD_VERSION']}/bin/kafka-topics.sh --create --zookeeper {zookeeper} --replication-factor 2 --partitions 1 --topic {constants['MSK_TOPIC']}",

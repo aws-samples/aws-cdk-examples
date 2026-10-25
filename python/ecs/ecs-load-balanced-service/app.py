@@ -26,7 +26,7 @@ class BonjourECS(Stack):
         asg = autoscaling.AutoScalingGroup(
             self, "DefaultAutoScalingGroup",
             instance_type=ec2.InstanceType("t2.micro"),
-            machine_image=ecs.EcsOptimizedImage.amazon_linux2(),
+            machine_image=ecs.EcsOptimizedImage.amazon_linux2023(),
             vpc=vpc,
         )
         capacity_provider = ecs.AsgCapacityProvider(self, "AsgCapacityProvider",

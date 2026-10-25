@@ -1,6 +1,6 @@
 #!/bin/bash -xe
 sudo su
-amazon-linux-extras install nginx1 -y
+dnf install -y nginx
 systemctl enable nginx
 ## Installing a self-signed certificate here.
 ## To-do: For Production - Get an SSL certificate from a certificate authority (CA) to configure SSL for NGINX

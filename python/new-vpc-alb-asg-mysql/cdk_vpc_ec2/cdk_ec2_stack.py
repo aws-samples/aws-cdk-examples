@@ -6,11 +6,7 @@ from constructs import Construct
 
 ec2_type = "t2.micro"
 key_name = "id_rsa"  # Setup key_name for EC2 instance login
-linux_ami = ec2.AmazonLinuxImage(generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX,
-                                 edition=ec2.AmazonLinuxEdition.STANDARD,
-                                 virtualization=ec2.AmazonLinuxVirt.HVM,
-                                 storage=ec2.AmazonLinuxStorage.GENERAL_PURPOSE
-                                 )  # Indicate your AMI, no need a specific id in the region
+linux_ami = ec2.MachineImage.latest_amazon_linux2023()  # Indicate your AMI, no need a specific id in the region
 with open("./user_data/user_data.sh") as f:
     user_data = f.read()
 

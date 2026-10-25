@@ -27,9 +27,7 @@ class ASGStack(Stack):
             instance_type=ec2.InstanceType.of(
                 ec2.InstanceClass.MEMORY5, ec2.InstanceSize.XLARGE
             ),
-            machine_image=ec2.AmazonLinuxImage(
-                generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2
-                ),
+            machine_image=ec2.MachineImage.latest_amazon_linux2023(),
             key_name="evan",
             vpc_subnets=ec2.SubnetSelection(subnet_type=SubnetType.PRIVATE_WITH_NAT),
             user_data=userdata,

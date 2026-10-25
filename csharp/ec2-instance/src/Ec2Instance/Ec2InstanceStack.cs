@@ -34,7 +34,7 @@ namespace Ec2Instance
 
       role.AddManagedPolicy(ManagedPolicy.FromAwsManagedPolicyName("AmazonSSMManagedInstanceCore"));
 
-      AmazonLinuxImage ami = GetLinuxImageConfig();
+      IMachineImage ami = GetLinuxImageConfig();
 
       // Create Ec2 Instance
       var ec2Instance = CreateEC2Instance(vpc, securityGroup, role, ami);
@@ -104,16 +104,14 @@ namespace Ec2Instance
       });
     }
 
-    private  AmazonLinuxImage GetLinuxImageConfig()
+    private  IMachineImage GetLinuxImageConfig()
     {
-      return new AmazonLinuxImage(new AmazonLinuxImageProps
+      return MachineImage.LatestAmazonLinux2023(new AmazonLinux2023ImageSsmParameterProps
       {
-        Generation = AmazonLinuxGeneration.AMAZON_LINUX_2,
         CpuType = AmazonLinuxCpuType.ARM_64
-
       });
     }
-  private Instance_  CreateEC2Instance(Vpc vpc, SecurityGroup securityGroup, Role role, AmazonLinuxImage ami)
+  private Instance_  CreateEC2Instance(Vpc vpc, SecurityGroup securityGroup, Role role, IMachineImage ami)
     {
       var ec2Instance = new Instance_(this, "Instance", new InstanceProps
       {

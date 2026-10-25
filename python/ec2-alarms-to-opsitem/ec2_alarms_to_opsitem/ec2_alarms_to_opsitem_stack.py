@@ -128,12 +128,7 @@ class Ec2AlarmsToOpsitemStack(Stack):
         )
 
         #define AMI properties
-        amzn_linux = ec2.MachineImage.latest_amazon_linux(
-            generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2,
-            edition=ec2.AmazonLinuxEdition.STANDARD,
-            virtualization=ec2.AmazonLinuxVirt.HVM,
-            storage=ec2.AmazonLinuxStorage.GENERAL_PURPOSE
-        )
+        amzn_linux = ec2.MachineImage.latest_amazon_linux2023()
         
         # Instance Role and SSM Managed Policy
         role = iam_.Role(self, "InstanceSSM", assumed_by=iam_.ServicePrincipal("ec2.amazonaws.com"))

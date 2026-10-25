@@ -1,6 +1,6 @@
 {
   "context": {
-    "platform": "arn:aws:elasticbeanstalk:us-east-1::platform/Tomcat 8 with Java 8 running on 64bit Amazon Linux"
+    "platform": "arn:aws:elasticbeanstalk:us-east-1::platform/Tomcat 10 with Corretto 21 running on 64bit Amazon Linux 2023"
   },
   "app": "dotnet run --project src/ElasticbeanstalkEnvironment"
 }

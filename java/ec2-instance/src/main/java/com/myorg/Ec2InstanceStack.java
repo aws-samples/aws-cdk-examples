@@ -6,10 +6,6 @@ import java.util.List;
 
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
-import software.amazon.awscdk.services.ec2.AmazonLinux2ImageSsmParameterProps;
-import software.amazon.awscdk.services.ec2.AmazonLinuxEdition;
-import software.amazon.awscdk.services.ec2.AmazonLinuxStorage;
-import software.amazon.awscdk.services.ec2.AmazonLinuxVirt;
 import software.amazon.awscdk.services.ec2.Instance;
 import software.amazon.awscdk.services.ec2.InstanceType;
 import software.amazon.awscdk.services.ec2.MachineImage;
@@ -48,11 +44,7 @@ public class Ec2InstanceStack extends Stack {
       // Launch an EC2 instance in the VPC
       Instance instance = Instance.Builder.create(this, "Ec2Instance")
         .instanceType(new InstanceType("t3.nano"))
-        .machineImage(MachineImage.latestAmazonLinux2(AmazonLinux2ImageSsmParameterProps.builder()
-          .edition(AmazonLinuxEdition.STANDARD)
-          .virtualization(AmazonLinuxVirt.HVM)
-          .storage(AmazonLinuxStorage.GENERAL_PURPOSE)
-          .build()))
+        .machineImage(MachineImage.latestAmazonLinux2023())
         .role(role)
         .vpc(vpc)
         .build();

@@ -84,7 +84,7 @@ class EmrPatternStack(Stack):
         ec2_instance = ec2.Instance(self, "ec2_instance",
             vpc=vpc,
             instance_type=ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.NANO),
-            machine_image=ec2.MachineImage.latest_amazon_linux(),
+            machine_image=ec2.MachineImage.latest_amazon_linux2023(),
             vpc_subnets=ec2.SubnetSelection(
                 subnet_type=ec2.SubnetType.PUBLIC
             ),

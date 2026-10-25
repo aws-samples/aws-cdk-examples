@@ -7,7 +7,7 @@ import java.util.List;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.autoscaling.AutoScalingGroup;
-import software.amazon.awscdk.services.ec2.AmazonLinuxImage;
+import software.amazon.awscdk.services.ec2.MachineImage;
 import software.amazon.awscdk.services.ec2.InstanceClass;
 import software.amazon.awscdk.services.ec2.InstanceSize;
 import software.amazon.awscdk.services.ec2.InstanceType;
@@ -45,7 +45,7 @@ public class ALBProjectStack extends Stack {
             .vpc(vpc)
             .instanceType(InstanceType.of(InstanceClass.BURSTABLE2, InstanceSize.MICRO))
             .userData(propertyLoad.getUserData())
-            .machineImage(new AmazonLinuxImage())
+            .machineImage(MachineImage.latestAmazonLinux2023())
             .build();
 
     ApplicationLoadBalancer lb =

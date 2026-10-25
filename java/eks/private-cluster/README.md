@@ -81,12 +81,12 @@ After deployment, as you add applications to the cluster requiring other service
 
 ## Installing tools and packages
 ### Docker
-Amazon Linux repositories are hosted in Amazon Simple Storage Service (Amazon S3) buckets. Installing or updating packages from these repositories will work even in an isolated environment. See this [AWS re:Post entry](https://repost.aws/knowledge-center/ec2-al1-al2-update-yum-without-internet). The CDK we just deployed used Amazon Linux instances and has an S3 VPC gateway endpoint. For example, we can access this repository to install docker.
+Amazon Linux repositories are hosted in Amazon Simple Storage Service (Amazon S3) buckets. Installing or updating packages from these repositories will work even in an isolated environment. See this [AWS re:Post entry](https://repost.aws/knowledge-center/ec2-al1-al2-update-yum-without-internet). The CDK we just deployed used Amazon Linux 2023 instances and has an S3 VPC gateway endpoint. For example, we can access this repository to install docker.
 
 ```
-sudo yum update -y
-sudo amazon-linux-extras install docker
-sudo service docker start
+sudo dnf update -y
+sudo dnf install -y docker
+sudo systemctl enable --now docker
 ```
 
 ### kubectl

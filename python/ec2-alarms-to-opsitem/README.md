@@ -21,7 +21,7 @@ Once the alarm is triggered another Eventbridge rule will kick-off the second la
   - **CDK CLI Version:** 2.42.x 
   - **Example:** Automate EC2 alarm creation that triggers an OpsItem when in "ALARM" state
   - **Example Version:** 2.0
-  - **OS:** Amazon Linux 2
+  - **OS:** Amazon Linux 2023
   - **Language:** Python
 
 
