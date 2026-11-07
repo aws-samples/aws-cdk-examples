@@ -63,6 +63,7 @@ $ cdk destroy
 | [ecs-cross-stack-load-balancer](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/ecs/cross-stack-load-balancer/) | Shows how to use a single load balancer with services in other stacks |
 | [lambda-cron](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/lambda-cron/) | Running a Lambda on a schedule |
 | [lambda-layer](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/lambda-layer/) | Running a Lambda with a lambda layer |
+| [marketplace-cdn-cache](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/marketplace-cdn-cache/) | Two-layer caching for a marketplace storefront: CloudFront with per-content-type cache behaviors, ElastiCache Serverless (Valkey) behind ECS Fargate, Secrets Manager origin verification, and an ALB default-action escape hatch |
 | [my-widget-service](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/my-widget-service/) | Use Lambda to serve up widgets |
 | [resource-overrides](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/resource-overrides/) | Shows how to override generated CloudFormation code |
 | [s3-object-lambda](https://github.com/aws-samples/aws-cdk-examples/tree/master/typescript/s3-object-lambda/) | Creating an S3 Object Lambda and access point |
