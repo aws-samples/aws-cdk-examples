@@ -16,17 +16,17 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/jest": "^30",
-    "@types/node": "^24.10.1",
-    "aws-cdk": "2.1133.0",
-    "jest": "^30",
+    "@types/node": "^26",
+    "aws-cdk": "2.1148.1",
+    "jest": "^30.5.2",
     "typescript": "~7.0.2",
     "@swc/core": "^1.15.0",
     "@swc/jest": "^0.2.39",
     "tsx": "^4.23.0"
   },
   "dependencies": {
-    "@aws-cdk/lambda-layer-kubectl-v34": "^2.0.0",
-    "aws-cdk-lib": "2.262.1",
+    "@aws-cdk/lambda-layer-kubectl-v37": "^2.0.0",
+    "aws-cdk-lib": "2.277.0",
     "constructs": "^10.0.0"
   }
 }
