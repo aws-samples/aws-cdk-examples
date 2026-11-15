@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
-import software.amazon.awscdk.cdk.lambdalayer.kubectl.v34.KubectlV34Layer;
+import software.amazon.awscdk.cdk.lambdalayer.kubectl.v37.KubectlV37Layer;
 import software.amazon.awscdk.services.ec2.BastionHostLinux;
 import software.amazon.awscdk.services.ec2.BlockDevice;
 import software.amazon.awscdk.services.ec2.BlockDeviceVolume;
@@ -90,12 +90,12 @@ public class EksPrivateClusterStack extends Stack {
     this.cluster =
         Cluster.Builder.create(this, "eks")
             .vpc(vpc)
-            .version(KubernetesVersion.V1_34)
+            .version(KubernetesVersion.V1_37)
             .vpcSubnets(
                 List.of(SubnetSelection.builder().subnetType(SubnetType.PRIVATE_ISOLATED).build()))
             .endpointAccess(EndpointAccess.PRIVATE)
             .clusterName("eks-private")
-            .kubectlLayer(new KubectlV34Layer(this, "KubectlLayer"))
+            .kubectlLayer(new KubectlV37Layer(this, "KubectlLayer"))
             .defaultCapacity(0)
             .mastersRole(clusterAdmin)
             .placeClusterHandlerInVpc(true)

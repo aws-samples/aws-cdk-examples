@@ -95,10 +95,10 @@ For other packages or tools like `kubectl`, create an S3 bucket accessible from 
 Sample cloudshell session:
 
 ```
-[cloudshell-user@ip-10-2-84-204 ~]$ curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.34.2/2025-11-13/bin/linux/amd64/kubectl
+[cloudshell-user@ip-10-2-84-204 ~]$ curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.37.1/2026-11-12/bin/linux/amd64/kubectl
 
-[cloudshell-user@ip-10-2-84-204 ~]$ aws s3 cp kubectl s3://my-bucket/kubectl-1.34.2
-upload: ./kubectl to s3://my-bucket/kubectl-1.34.2
+[cloudshell-user@ip-10-2-84-204 ~]$ aws s3 cp kubectl s3://my-bucket/kubectl-1.37.1
+upload: ./kubectl to s3://my-bucket/kubectl-1.37.1
 ```
 
 ## Accessing the EKS cluster with kubectl
