@@ -30,7 +30,7 @@ const executeWithDelay = async (command) => {
 // Function to process cars data
 const processCarsData = async () => {
     for (let i = 0; i < carsData.length; i++) {
-        console.log(`[${i + 1}/${carsData.length + 1}] - Pushing car with license plate ${carsData[i].licenseplate.S} to DynamoDB.`);
+        console.log(`[${i + 1}/${carsData.length}] - Pushing car with license plate ${carsData[i].licenseplate.S} to DynamoDB.`);
         const input = convertToPutItemInput(carsTableName, carsData[i]);
         const command = new PutItemCommand(input);
         await executeWithDelay(command);
@@ -40,7 +40,7 @@ const processCarsData = async () => {
 // Function to process cars data
 const processDefectsData = async () => {
     for (let i = 0; i < defectsData.length; i++) {
-        console.log(`[${i + 1}/${defectsData.length + 1}] - Pushing defect with license plate ${defectsData[i].licenseplate.S} to DynamoDB.`);
+        console.log(`[${i + 1}/${defectsData.length}] - Pushing defect with license plate ${defectsData[i].licenseplate.S} to DynamoDB.`);
         const input = convertToPutItemInput(defectsTableName, defectsData[i]);
         const command = new PutItemCommand(input);
         await executeWithDelay(command);
