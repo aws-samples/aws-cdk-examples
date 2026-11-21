@@ -1,0 +1,10 @@
+{
+  "name": "marketplace-cdn-cache-app",
+  "version": "1.0.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "dependencies": {
+    "express": "^4.21.0",
+    "iovalkey": "^0.3.0"
+  }
+}
