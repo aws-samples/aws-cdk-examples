@@ -17,9 +17,7 @@
     "inlineSources": true,
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
-    "typeRoots": ["./node_modules/@types"],
-    "outDir": "./cdk.out",
-    "rootDir": "."
+    "typeRoots": ["./node_modules/@types"]
   },
   "exclude": ["node_modules", "cdk.out"]
 }

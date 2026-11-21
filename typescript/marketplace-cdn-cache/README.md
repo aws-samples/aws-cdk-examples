@@ -16,22 +16,19 @@ This AWS CDK (TypeScript) project deploys a two-layer caching architecture for m
 - **Edge layer** — Amazon CloudFront with four cache behaviors (static assets, product images, API responses, dynamic pages), each with its own TTL policy.
 - **Application layer** — Amazon ElastiCache Serverless (Valkey) as an in-Region cache between the application and database.
 
-The architecture is covered step by step in the companion AWS cross-service tutorial, *Multi-tier CDN caching for marketplace storefronts on AWS* (link to be added when the tutorial publishes).
-
-This example also demonstrates a less-obvious CDK pattern: overriding the default action of a listener created by the `ApplicationLoadBalancedFargateService` pattern construct. `listener.addAction()` adds rules rather than replacing the default, so the example uses an L1 escape hatch (`addPropertyOverride` on `CfnListener`) to swap the default forward action for a fixed `403`.
-
 ## Architecture
 
 ```
 Buyer → CloudFront ─┬─ /static/*        → S3 (OAC, year-long TTL)
                      ├─ /images/*        → S3 (OAC, 30-day TTL)
-                     ├─ /api/products/*  → ALB → ECS Fargate → Valkey → DB
-                     └─ default          → ALB → ECS Fargate (no cache)
+                     ├─ /api/products/*  → VPC origin → internal ALB → ECS Fargate → Valkey
+                     └─ default          → VPC origin → internal ALB → ECS Fargate (no cache)
 ```
 
 ## Prerequisites
 
-- AWS account with VPC, EC2, ElastiCache, S3, CloudFront, ECS, Secrets Manager, and IAM permissions
+- AWS account with VPC, EC2, ElastiCache, S3, CloudFront, ECS, and IAM permissions
+- Docker running locally (CDK builds the sample application image from `app/`)
 - Node.js 18+
 - AWS CDK CLI v2 (`npm install -g aws-cdk`)
 - AWS CLI configured with valid credentials
@@ -43,8 +40,6 @@ Buyer → CloudFront ─┬─ /static/*        → S3 (OAC, year-long TTL)
 npm install
 npx cdk deploy
 ```
-
-Estimated time: ~60 minutes for deployment, ~30 minutes for verification.
 
 ## Verify
 
@@ -58,13 +53,10 @@ curl -sI "$CDN/static/app.css" | grep -i "x-cache"
 curl -sI "$CDN/images/product-001.png" | grep -iE "x-cache|age"
 
 # Product API — 60-second TTL
-curl -sI "$CDN/api/products/123" | grep -iE "x-cache|age"
+curl -sI "$CDN/api/products/Product-1" | grep -iE "x-cache|age"
 
 # Dynamic page — always MISS (CACHING_DISABLED)
 curl -sI "$CDN/cart" | grep -i "x-cache"
-
-# Direct ALB access — should return 403 (origin lock-down)
-curl -sI "http://<alb-dns-name>/api/products/123" -o /dev/null -w "%{http_code}\n"
 ```
 
 ## Clean Up
@@ -73,19 +65,12 @@ curl -sI "http://<alb-dns-name>/api/products/123" -o /dev/null -w "%{http_code}\
 npx cdk destroy
 ```
 
+The assets bucket and the CloudFront log bucket are configured with `removalPolicy: DESTROY` and `autoDeleteObjects: true` so `cdk destroy` removes them. Use a retention policy for production data.
+
 ## Security
 
 - S3 bucket access restricted to CloudFront via Origin Access Control (OAC)
-- ALB protected by a custom `X-Origin-Verify` header (generated in Secrets Manager at deploy time)
-- Direct ALB access returns 403
+- The ALB is internal (no public address) and CloudFront reaches it through a VPC origin, so the application is not reachable except through CloudFront
+- The ALB security group allows HTTP only from the VPC CIDR
 - ElastiCache deployed in isolated subnets, accessible only from the application security group
 - ElastiCache Serverless requires TLS — application clients must connect with TLS enabled
-
-## Contributors
-
-- Gopal Surapaneni, Sr. SSA, AWS Marketplace
-- Nathan Bigman, Sr. Technical Writer
-
-## License
-
-This library is licensed under the MIT-0 License. See the [LICENSE](LICENSE) file.

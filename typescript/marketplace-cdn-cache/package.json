@@ -1,7 +1,7 @@
 {
   "name": "marketplace-cdn-cache",
   "version": "1.0.0",
-  "description": "Two-layer CDN caching architecture for marketplace storefronts using CloudFront, ElastiCache (Valkey), and ECS Fargate — deployed with AWS CDK.",
+  "description": "Two-layer CDN caching architecture for marketplace storefronts using CloudFront, ElastiCache (Valkey), and ECS Fargate \u2014 deployed with AWS CDK.",
   "bin": {
     "marketplace-cdn-cache": "bin/marketplace-cdn-cache.js"
   },
@@ -22,8 +22,8 @@
     "typescript": "~5.6.0"
   },
   "dependencies": {
-    "aws-cdk-lib": "^2.170.0",
+    "aws-cdk-lib": "^2.275.0",
     "constructs": "^10.4.2"
   },
-  "license": "MIT-0"
+  "license": "Apache-2.0"
 }

@@ -1,3 +1,4 @@
+import * as path from 'path';
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
@@ -5,10 +6,9 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as elasticache from 'aws-cdk-lib/aws-elasticache';
-import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as ecsPatterns from 'aws-cdk-lib/aws-ecs-patterns';
-import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
+import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
 
 export class MarketplaceCdnCacheStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -33,22 +33,11 @@ export class MarketplaceCdnCacheStack extends cdk.Stack {
       autoDeleteObjects: true,
     });
 
-    // --- Origin-verification secret (Secrets Manager) ---
-    // Generate at deploy time so the value never appears in source control
-    // or the synthesized CloudFormation template in plaintext.
-    const originVerifySecret = new secretsmanager.Secret(this, 'OriginVerifySecret', {
-      secretName: 'marketplace/origin-verify',
-      generateSecretString: {
-        secretStringTemplate: JSON.stringify({}),
-        generateStringKey: 'headerValue',
-        excludePunctuation: true,
-        passwordLength: 32,
-      },
+    // Upload sample files so the Verify steps return cache hits on a fresh deploy.
+    new s3deploy.BucketDeployment(this, 'SampleAssets', {
+      sources: [s3deploy.Source.asset(path.join(__dirname, '..', 'assets'))],
+      destinationBucket: assetsBucket,
     });
-
-    const originVerifyHeaderValue = originVerifySecret
-      .secretValueFromJson('headerValue')
-      .unsafeUnwrap(); // resolved at deploy time, not stored in source
 
     // --- ElastiCache Serverless (Valkey) ---
     const cacheSecurityGroup = new ec2.SecurityGroup(this, 'CacheSG', {
@@ -74,14 +63,17 @@ export class MarketplaceCdnCacheStack extends cdk.Stack {
       minHealthyPercent: 100, // keep both tasks serving during deployments
       circuitBreaker: { rollback: true }, // fail fast and roll back if tasks can't start
       taskImageOptions: {
-        image: ecs.ContainerImage.fromRegistry('amazon/amazon-ecs-sample'),
-        containerPort: 80,
+        // Sample cache-aside app in ../app. Replace with your own application.
+        image: ecs.ContainerImage.fromAsset(path.join(__dirname, '..', 'app')),
+        containerPort: 8080,
         environment: {
           CACHE_ENDPOINT: cacheCluster.attrEndpointAddress,
           CACHE_PORT: cacheCluster.attrEndpointPort,
         },
       },
-      publicLoadBalancer: true,
+      // Internal ALB in private subnets. CloudFront reaches it through a VPC origin.
+      publicLoadBalancer: false,
+      openListener: false,
     });
 
     // Allow app to access cache (port 6379 for Valkey)
@@ -91,45 +83,32 @@ export class MarketplaceCdnCacheStack extends cdk.Stack {
       'Allow app to access Valkey cache'
     );
 
-    // --- ALB origin-verification: lock down the listener ---
-    //
-    // The pattern construct created a listener whose default action forwards
-    // to the target group. We need to:
-    //   1. Add a priority-1 rule that forwards ONLY when X-Origin-Verify matches.
-    //   2. Change the default action to return 403 for everything else.
-    //
-    // Step 1: Add the header-match forwarding rule (L2 construct).
-    new elbv2.ApplicationListenerRule(this, 'OriginVerifyRule', {
-      listener: appService.listener,
-      priority: 1,
-      conditions: [
-        elbv2.ListenerCondition.httpHeader('X-Origin-Verify', [originVerifyHeaderValue]),
-      ],
-      action: elbv2.ListenerAction.forward([appService.targetGroup]),
-    });
-
-    // Step 2: Override the default action to 403 via the L1 escape hatch.
-    // The pattern's listener default action forwards all traffic. We replace
-    // it with a fixed 403 so requests that bypass CloudFront are rejected.
-    const cfnListener = appService.listener.node.defaultChild as elbv2.CfnListener;
-    cfnListener.addPropertyOverride('DefaultActions', [
-      {
-        Type: 'fixed-response',
-        FixedResponseConfig: {
-          StatusCode: '403',
-          ContentType: 'text/plain',
-          MessageBody: 'Forbidden — access this application through CloudFront.',
-        },
-      },
-    ]);
+    // CloudFront connects to the internal ALB through ENIs in the VPC, so allow
+    // HTTP from the VPC CIDR only. The ALB has no internet-facing address.
+    appService.loadBalancer.connections.allowFrom(
+      ec2.Peer.ipv4(vpc.vpcCidrBlock),
+      ec2.Port.tcp(80),
+      'Allow CloudFront VPC origin to reach the ALB'
+    );
 
     // --- CloudFront Distribution ---
+    // --- CloudFront Distribution ---
+    const logBucket = new s3.Bucket(this, 'LogBucket', {
+      objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_PREFERRED, // CloudFront standard logs need ACLs
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      encryption: s3.BucketEncryption.S3_MANAGED,
+      enforceSSL: true,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
+    });
+
+    const appOrigin = origins.VpcOrigin.withApplicationLoadBalancer(appService.loadBalancer, {
+      protocolPolicy: cloudfront.OriginProtocolPolicy.HTTP_ONLY, // traffic stays inside the VPC
+    });
+
     const distribution = new cloudfront.Distribution(this, 'MarketplaceCDN', {
       defaultBehavior: {
-        origin: new origins.LoadBalancerV2Origin(appService.loadBalancer, {
-          protocolPolicy: cloudfront.OriginProtocolPolicy.HTTP_ONLY,
-          customHeaders: { 'X-Origin-Verify': originVerifyHeaderValue },
-        }),
+        origin: appOrigin,
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
         originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER,
@@ -150,10 +129,7 @@ export class MarketplaceCdnCacheStack extends cdk.Stack {
           }),
         },
         '/api/products/*': {
-          origin: new origins.LoadBalancerV2Origin(appService.loadBalancer, {
-            protocolPolicy: cloudfront.OriginProtocolPolicy.HTTP_ONLY,
-            customHeaders: { 'X-Origin-Verify': originVerifyHeaderValue },
-          }),
+          origin: appOrigin,
           viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
           cachePolicy: new cloudfront.CachePolicy(this, 'ProductApiCachePolicy', {
             defaultTtl: cdk.Duration.seconds(60),
@@ -164,6 +140,7 @@ export class MarketplaceCdnCacheStack extends cdk.Stack {
         },
       },
       enableLogging: true,
+      logBucket,
     });
 
     // --- Outputs ---
@@ -175,11 +152,6 @@ export class MarketplaceCdnCacheStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'AssetsBucketName', {
       value: assetsBucket.bucketName,
       description: 'S3 bucket for static assets',
-    });
-
-    new cdk.CfnOutput(this, 'ALBDomain', {
-      value: appService.loadBalancer.loadBalancerDnsName,
-      description: 'Application Load Balancer DNS name',
     });
   }
 }

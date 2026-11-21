@@ -24,37 +24,19 @@ describe('MarketplaceCdnCacheStack', () => {
     });
   });
 
-  test('origin-verify secret is generated in Secrets Manager, not hardcoded', () => {
-    template.resourceCountIs('AWS::SecretsManager::Secret', 1);
-    template.hasResourceProperties('AWS::SecretsManager::Secret', {
-      GenerateSecretString: Match.objectLike({ GenerateStringKey: 'headerValue' }),
+  test('CloudFront reaches an internal ALB through a VPC origin', () => {
+    template.resourceCountIs('AWS::CloudFront::VpcOrigin', 1);
+    template.hasResourceProperties('AWS::ElasticLoadBalancingV2::LoadBalancer', {
+      Scheme: 'internal',
     });
-    // The placeholder from the original draft must never appear in the template.
-    expect(JSON.stringify(template.toJSON())).not.toContain('your-secret-value-here');
+    template.resourceCountIs('AWS::SecretsManager::Secret', 0);
   });
 
-  test('ALB listener default action is a 403 fixed response', () => {
-    template.hasResourceProperties('AWS::ElasticLoadBalancingV2::Listener', {
-      DefaultActions: [
-        Match.objectLike({
-          Type: 'fixed-response',
-          FixedResponseConfig: Match.objectLike({ StatusCode: '403' }),
-        }),
-      ],
-    });
-  });
-
-  test('ALB listener rule forwards only when X-Origin-Verify header matches', () => {
-    template.hasResourceProperties('AWS::ElasticLoadBalancingV2::ListenerRule', {
-      Priority: 1,
-      Conditions: Match.arrayWith([
-        Match.objectLike({
-          Field: 'http-header',
-          HttpHeaderConfig: Match.objectLike({ HttpHeaderName: 'X-Origin-Verify' }),
-        }),
-      ]),
-      Actions: [Match.objectLike({ Type: 'forward' })],
-    });
+  test('no security group allows ingress from 0.0.0.0/0', () => {
+    const groups = Object.values(template.findResources('AWS::EC2::SecurityGroup'));
+    const inline = groups.map((g) => g.Properties.SecurityGroupIngress ?? []);
+    const rules = template.findResources('AWS::EC2::SecurityGroupIngress');
+    expect(JSON.stringify({ inline, rules })).not.toContain('0.0.0.0/0');
   });
 
   test('S3 assets bucket blocks all public access', () => {
